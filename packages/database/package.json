@@ -3,26 +3,25 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
+    ".": "./src/client.ts",
     "./client": "./src/client.ts",
     "./schema": "./src/schema.ts"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
-    "generate": "drizzle-kit generate:pg",
+    "generate": "drizzle-kit generate",
     "migrate": "drizzle-kit migrate"
   },
   "dependencies": {
     "@vercel/postgres": "^0.10.0",
     "dotenv": "^16.4.5",
-    "drizzle-orm": "^0.30.0",
-    "pg": "^8.16.3"
+    "drizzle-orm": "^0.45.1"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^20.11.24",
-    "@types/pg": "^8.16.0",
-    "drizzle-kit": "^0.20.14",
+    "drizzle-kit": "^0.31.8",
     "eslint": "^8.57.0",
     "typescript": "^5.3.3"
   }

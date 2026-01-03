@@ -8,7 +8,8 @@ import {
   Package, 
   ShoppingCart, 
   Users, 
-  Settings 
+  Settings,
+  FolderTree
 } from "lucide-react";
 import {
   Sidebar as SidebarUI,
@@ -24,11 +25,12 @@ import {
 } from "@repo/ui/ui/sidebar";
 
 const navigation = [
-  { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
-  { name: "Products", href: "/admin/products", icon: Package },
-  { name: "Orders", href: "/admin/orders", icon: ShoppingCart },
-  { name: "Customers", href: "/admin/customers", icon: Users },
-  { name: "Settings", href: "/admin/settings", icon: Settings },
+  { name: "Dashboard", href: "/", icon: LayoutDashboard },
+  { name: "Catalogs", href: "/catalogs", icon: FolderTree },
+  { name: "Products", href: "/products", icon: Package },
+  { name: "Orders", href: "/orders", icon: ShoppingCart },
+  { name: "Customers", href: "/customers", icon: Users },
+  { name: "Settings", href: "/settings", icon: Settings },
 ];
 
 export function Sidebar() {

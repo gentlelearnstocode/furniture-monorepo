@@ -265,3 +265,6 @@ export const variantAssetsRelations = relations(variantAssets, ({ one }) => ({
     references: [assets.id],
   }),
 }));
+
+export type InsertProduct = typeof products.$inferInsert;
+export type SelectProduct = typeof products.$inferSelect;
