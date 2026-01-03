@@ -1,0 +1,267 @@
+import {
+  pgTable,
+  text,
+  boolean,
+  timestamp,
+  decimal,
+  integer,
+  uuid,
+  jsonb,
+  primaryKey,
+} from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
+
+// --- Media / Assets ---
+
+export const assets = pgTable("assets", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  url: text("url").notNull(),
+  filename: text("filename").notNull(),
+  mimeType: text("mime_type"),
+  size: integer("size"), // in bytes
+  altText: text("alt_text"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const assetsRelations = relations(assets, ({ many }) => ({
+  productAssets: many(productAssets),
+  variantAssets: many(variantAssets),
+  catalogs: many(catalogs),
+  collections: many(collections),
+}));
+
+// --- Core Organization ---
+
+export const catalogs = pgTable("catalogs", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  name: text("name").notNull(),
+  slug: text("slug").notNull().unique(),
+  parentId: uuid("parent_id"), // Self-referencing FK
+  imageId: uuid("image_id").references(() => assets.id),
+  description: text("description"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const catalogsRelations = relations(catalogs, ({ one, many }) => ({
+  parent: one(catalogs, {
+    fields: [catalogs.parentId],
+    references: [catalogs.id],
+    relationName: "catalog_parent",
+  }),
+  children: many(catalogs, { relationName: "catalog_parent" }),
+  products: many(products),
+  image: one(assets, {
+    fields: [catalogs.imageId],
+    references: [assets.id],
+  }),
+}));
+
+export const collections = pgTable("collections", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  name: text("name").notNull(),
+  slug: text("slug").notNull().unique(),
+  description: text("description"),
+  bannerId: uuid("banner_id").references(() => assets.id),
+  isActive: boolean("is_active").default(true).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const collectionsRelations = relations(collections, ({ one, many }) => ({
+  banner: one(assets, {
+    fields: [collections.bannerId],
+    references: [assets.id],
+  }),
+  products: many(collectionProducts),
+}));
+
+// Join table for Collections <-> Products (Many-to-Many)
+export const collectionProducts = pgTable(
+  "collection_products",
+  {
+    collectionId: uuid("collection_id")
+      .notNull()
+      .references(() => collections.id, { onDelete: "cascade" }),
+    productId: uuid("product_id")
+      .notNull()
+      .references(() => products.id, { onDelete: "cascade" }),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.collectionId, t.productId] }),
+  })
+);
+
+export const collectionProductsRelations = relations(collectionProducts, ({ one }) => ({
+  collection: one(collections, {
+    fields: [collectionProducts.collectionId],
+    references: [collections.id],
+  }),
+  product: one(products, {
+    fields: [collectionProducts.productId],
+    references: [products.id],
+  }),
+}));
+
+// --- Products ---
+
+export const products = pgTable("products", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  name: text("name").notNull(),
+  slug: text("slug").notNull().unique(),
+  catalogId: uuid("catalog_id").references(() => catalogs.id),
+  description: text("description"),
+  shortDescription: text("short_description"),
+  basePrice: decimal("base_price", { precision: 10, scale: 2 }).notNull(),
+  isActive: boolean("is_active").default(true).notNull(),
+  dimensions: jsonb("dimensions"), // { width, height, depth, unit }
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const productsRelations = relations(products, ({ one, many }) => ({
+  catalog: one(catalogs, {
+    fields: [products.catalogId],
+    references: [catalogs.id],
+  }),
+  variants: many(variants),
+  gallery: many(productAssets),
+  collections: many(collectionProducts),
+}));
+
+// --- Options & Variants ---
+
+export const options = pgTable("options", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  name: text("name").notNull(), // e.g. "Color"
+  code: text("code").notNull().unique(), // e.g. "color"
+});
+
+export const optionsRelations = relations(options, ({ many }) => ({
+  values: many(optionValues),
+}));
+
+export const optionValues = pgTable("option_values", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  optionId: uuid("option_id")
+    .notNull()
+    .references(() => options.id, { onDelete: "cascade" }),
+  label: text("label").notNull(), // e.g. "Red"
+  value: text("value").notNull(), // e.g. "#FF0000" or "red"
+  metadata: jsonb("metadata"), // { textureUrl: "..." }
+});
+
+export const optionValuesRelations = relations(optionValues, ({ one, many }) => ({
+  option: one(options, {
+    fields: [optionValues.optionId],
+    references: [options.id],
+  }),
+  // Usage in variants via join table
+  variantValues: many(variantOptionValues),
+}));
+
+export const variants = pgTable("variants", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  productId: uuid("product_id")
+    .notNull()
+    .references(() => products.id, { onDelete: "cascade" }),
+  sku: text("sku").notNull().unique(),
+  price: decimal("price", { precision: 10, scale: 2 }), // Override base price if present
+  stockQuantity: integer("stock_quantity").default(0).notNull(),
+  isDefault: boolean("is_default").default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const variantsRelations = relations(variants, ({ one, many }) => ({
+  product: one(products, {
+    fields: [variants.productId],
+    references: [products.id],
+  }),
+  optionValues: many(variantOptionValues),
+  assets: many(variantAssets),
+}));
+
+export const variantOptionValues = pgTable(
+  "variant_option_values",
+  {
+    variantId: uuid("variant_id")
+      .notNull()
+      .references(() => variants.id, { onDelete: "cascade" }),
+    optionValueId: uuid("option_value_id")
+      .notNull()
+      .references(() => optionValues.id, { onDelete: "cascade" }),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.variantId, t.optionValueId] }),
+  })
+);
+
+export const variantOptionValuesRelations = relations(variantOptionValues, ({ one }) => ({
+  variant: one(variants, {
+    fields: [variantOptionValues.variantId],
+    references: [variants.id],
+  }),
+  optionValue: one(optionValues, {
+    fields: [variantOptionValues.optionValueId],
+    references: [optionValues.id],
+  }),
+}));
+
+// --- Asset Links ---
+
+export const productAssets = pgTable(
+  "product_assets",
+  {
+    productId: uuid("product_id")
+      .notNull()
+      .references(() => products.id, { onDelete: "cascade" }),
+    assetId: uuid("asset_id")
+      .notNull()
+      .references(() => assets.id, { onDelete: "cascade" }),
+    position: integer("position").default(0).notNull(),
+    isPrimary: boolean("is_primary").default(false).notNull(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.productId, t.assetId] }),
+  })
+);
+
+export const productAssetsRelations = relations(productAssets, ({ one }) => ({
+  product: one(products, {
+    fields: [productAssets.productId],
+    references: [products.id],
+  }),
+  asset: one(assets, {
+    fields: [productAssets.assetId],
+    references: [assets.id],
+  }),
+}));
+
+export const variantAssets = pgTable(
+  "variant_assets",
+  {
+    variantId: uuid("variant_id")
+      .notNull()
+      .references(() => variants.id, { onDelete: "cascade" }),
+    assetId: uuid("asset_id")
+      .notNull()
+      .references(() => assets.id, { onDelete: "cascade" }),
+    position: integer("position").default(0).notNull(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.variantId, t.assetId] }),
+  })
+);
+
+export const variantAssetsRelations = relations(variantAssets, ({ one }) => ({
+  variant: one(variants, {
+    fields: [variantAssets.variantId],
+    references: [variants.id],
+  }),
+  asset: one(assets, {
+    fields: [variantAssets.assetId],
+    references: [assets.id],
+  }),
+}));

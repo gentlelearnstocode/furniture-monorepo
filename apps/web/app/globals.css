@@ -1,6 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;900&display=swap');
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Brand Primary (Monza) */
+  --brand-primary-50: 349 55% 97%;
+  --brand-primary-100: 349 55% 93%;
+  --brand-primary-200: 349 55% 87%;
+  --brand-primary-300: 349 100% 80%;
+  --brand-primary-400: 349 55% 55%;
+  --brand-primary-500: 349 100% 36%;
+  --brand-primary-600: 349 100% 29%;
+  --brand-primary-700: 349 100% 15%;
+  --brand-primary-800: 349 100% 11%;
+  --brand-primary-900: 350 100% 8%;
+
+  /* Brand Accent 1 (Amber Gold) */
+  --brand-accent1-50: 43 100% 98%;
+  --brand-accent1-100: 43 100% 96%;
+  --brand-accent1-200: 43 95% 94%;
+  --brand-accent1-300: 43 97% 87%;
+  --brand-accent1-400: 43 96% 58%;
+  --brand-accent1-500: 39 76% 52%;
+  --brand-accent1-600: 43 70% 47%;
+  --brand-accent1-700: 43 69% 35%;
+  --brand-accent1-800: 43 70% 26%;
+  --brand-accent1-900: 43 69% 21%;
+
+  /* Brand Accent 2 (Digital Blue) */
+  --brand-accent2-50: 214 82% 99%;
+  --brand-accent2-100: 214 82% 97%;
+  --brand-accent2-200: 214 82% 94%;
+  --brand-accent2-300: 214 82% 87%;
+  --brand-accent2-400: 214 82% 51%;
+  --brand-accent2-500: 216 67% 47%;
+  --brand-accent2-600: 216 67% 40%;
+  --brand-accent2-700: 216 66% 30%;
+  --brand-accent2-800: 216 66% 23%;
+  --brand-accent2-900: 216 66% 15%;
+
+  /* Brand Neutral (Mine Shaft) */
+  --brand-neutral-50: 0 0% 98%;
+  --brand-neutral-100: 0 0% 96%;
+  --brand-neutral-200: 0 0% 90%;
+  --brand-neutral-300: 0 0% 83%;
+  --brand-neutral-400: 0 0% 64%;
+  --brand-neutral-500: 0 0% 45%;
+  --brand-neutral-600: 0 0% 32%;
+  --brand-neutral-700: 0 0% 25%;
+  --brand-neutral-800: 0 0% 13%;
+  --brand-neutral-900: 0 0% 9%;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -14,6 +64,11 @@ html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
+  font-family: 'Inter', sans-serif;
+}
+
+h1, h2, h3, h4, .font-serif {
+  font-family: 'Playfair Display', serif;
 }
 
 body {
@@ -32,19 +87,8 @@ a {
   text-decoration: none;
 }
 
-.imgDark {
-  display: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-
-  .imgLight {
-    display: none;
-  }
-  .imgDark {
-    display: unset;
+@layer utilities {
+  .tracking-widest {
+    letter-spacing: 0.25em;
   }
 }

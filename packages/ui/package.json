@@ -3,6 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
+    "./globals.css": "./src/globals.css",
+    "./lib/utils": "./src/lib/utils.ts",
+    "./ui/*": "./src/components/ui/*.tsx",
+    "./hooks/*": "./src/hooks/*.tsx",
     "./*": "./src/*.tsx"
   },
   "scripts": {
@@ -12,15 +16,33 @@
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
+    "@repo/tailwind-config": "workspace:^",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^22.15.3",
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",
+    "autoprefixer": "^10.4.22",
     "eslint": "^9.39.1",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.0",
     "typescript": "5.9.2"
   },
-  "dependencies": {
+  "peerDependencies": {
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
+  },
+  "dependencies": {
+    "@radix-ui/react-avatar": "^1.1.11",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-separator": "^1.1.8",
+    "@radix-ui/react-slot": "^1.2.4",
+    "@radix-ui/react-tooltip": "^1.2.8",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.555.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tailwind-merge": "^3.4.0",
+    "tailwindcss-animate": "^1.0.7"
   }
 }

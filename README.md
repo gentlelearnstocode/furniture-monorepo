@@ -1,135 +1,183 @@
-# Turborepo starter
+# Thien An Furniture Monorepo
 
-This Turborepo starter is maintained by the Turborepo core team.
+Replacement repository for [thienanfurniture.com](https://thienanfurniture.com/). This project uses a modern monorepo structure to manage the customer-facing website and the administrative dashboard.
 
-## Using this example
+## Architecture
 
-Run the following command:
+### 1. Database Diagram (ERD)
+Modeling the core entities for product management and customer inquiries.
 
-```sh
-npx create-turbo@latest
+```mermaid
+erDiagram
+    CATEGORY ||--o{ PRODUCT : contains
+    CATEGORY ||--o{ CATEGORY : "sub-category"
+    PRODUCT ||--o{ PRODUCT_IMAGE : has
+    PRODUCT ||--o{ SEO_METADATA : has
+    PROJECT ||--o{ SEO_METADATA : has
+    NEWS_POST ||--o{ NEWS_CATEGORY : belongs_to
+    NEWS_POST ||--o{ SEO_METADATA : has
+    SERVICE ||--o{ SEO_METADATA : has
+    INQUIRY }o--|| PRODUCT : "inquires about"
+    SETTING ||--o{ BRANCH_ADDRESS : contains
+
+    PRODUCT {
+        string title_vi
+        string title_en
+        string slug
+        text short_desc_vi
+        text short_desc_en
+        text content_vi
+        text content_en
+        string status "VISIBLE | FEATURED"
+        uuid category1_id FK
+        uuid category2_id FK
+    }
+
+    CATEGORY {
+        string title_vi
+        string title_en
+        string slug
+        uuid parent_id FK
+    }
+
+    PROJECT {
+        string title_vi
+        string title_en
+        text content_vi
+        text content_en
+    }
+
+    NEWS_POST {
+        string title_vi
+        string title_en
+        uuid category_id FK
+    }
+
+    INQUIRY {
+        string full_name
+        string email
+        string phone
+        string address
+        string subject
+        text content
+        datetime created_at
+    }
+
+    SEO_METADATA {
+        string title
+        string keywords
+        text description
+    }
 ```
 
-## What's inside?
+### 2. User Story Diagram
+Visualizing the primary actors and their interactions with the system.
 
-This Turborepo includes the following packages/apps:
+```mermaid
+graph TD
+    subgraph "Customer Journey (Web App)"
+        C[Customer/Visitor] --> |"Browses"| PC[Product Catalog]
+        C --> |"Filters by"| CAT[Categories]
+        C --> |"Views"| PD[Product Details]
+        C --> |"Sends"| IQ[Inquiry/Contact]
+        C --> |"Reads"| NP[News/Projects/Services]
+        C --> |"Subscribes"| NS[Newsletter]
+    end
 
-### Apps and Packages
+    subgraph "Admin Management (Admin App)"
+        A[Admin] --> |"Manages"| MP[Products & Categories]
+        A --> |"Publishes"| MN[News/Projects/Services]
+        A --> |"Reviews"| MO[Inquiries & Contacts]
+        A --> |"Updates"| MG[Gallery/Sliders]
+        A --> |"Configures"| MS[Site & SEO Settings]
+    end
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+    IQ --> |"Notifies"| MO
+    MN --> |"Updates"| NP
 ```
 
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+### 3. OOP Diagram
+High-level class structure for the core business logic.
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
+```mermaid
+classDiagram
+    class BasePost {
+        <<abstract>>
+        +String title_vi
+        +String title_en
+        +String slug
+        +String image_url
+        +Boolean status
+        +SEOMetadata seo
+    }
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
+    class Product {
+        +Category level1
+        +Category level2
+        +String short_desc_vi
+        +String short_desc_en
+        +String content_vi
+        +String content_en
+    }
 
-### Develop
+    class Category {
+        +String title_vi
+        +String title_en
+        +Category parent
+    }
 
-To develop all apps and packages, run the following command:
+    class Inquiry {
+        +String fullName
+        +String email
+        +String phone
+        +String content
+        +DateTime createdAt
+    }
 
-```
-cd my-turborepo
+    class SEOMetadata {
+        +String title
+        +String keywords
+        +String description
+    }
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
-```
-
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
+    BasePost <|-- Product
+    BasePost <|-- NewsPost
+    BasePost <|-- Project
+    BasePost <|-- Service
+    Product "*" --o "1" Category
+    NewsPost "*" --o "1" NewsCategory
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+## User Stories: Who Does What?
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+### Customer / Visitor (Web App)
+- **Browse Furniture**: Browse high-quality furniture collections categorized by room and style.
+- **Project Inspiration**: View completed interior design projects to see work quality.
+- **Service Details**: Learn about design, manufacturing, and installation services.
+- **Direct Inquiry**: Contact the team about specific products or general design needs.
+- **Stay Updated**: Read news and subscribe to the newsletter for latest designs.
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
+### Administrator (Admin App)
+- **Content Engine**: Manage Products, News, Projects, Services, and Home Introduction.
+- **Bilingual Control**: Manage all content in both Vietnamese and English.
+- **Inquiry Management**: Monitor and respond to customer contacts and newsletter signups.
+- **Visual Assets**: Control home sliders, partner logos, and gallery banners.
+- **SEO & Settings**: Fine-tune SEO metadata for every post and configure site-wide contact info.
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
-```
+---
 
-## Useful Links
+## Tech Stack
 
-Learn more about the power of Turborepo:
+This Turborepo includes the following:
 
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+- `apps/web`: [Next.js](https://nextjs.org/) app for customers.
+- `apps/admin`: [Next.js](https://nextjs.org/) app for administration.
+- `packages/ui`: Shared React components.
+- `packages/database`: Database schema and client.
+- `packages/tailwind-config`: Shared Tailwind configurations.
+
+## Development
+
+1. Install dependencies: `pnpm install`
+2. Run development servers: `pnpm dev`
+3. Build all apps: `pnpm build`
