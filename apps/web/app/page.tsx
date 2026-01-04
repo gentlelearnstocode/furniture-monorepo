@@ -1,4 +1,4 @@
-import { Hero } from './components/hero';
+import { Hero } from './components/hero-section';
 
 import { FeaturedCollections } from './components/featured-collection';
 
