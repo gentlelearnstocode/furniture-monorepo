@@ -13,8 +13,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Admin Portal | Furniture Monorepo",
-  description: "Administrative dashboard for the furniture monorepo project.",
+  title: "Admin Portal | ThienAn Furniture",
+  description: "Administrative dashboard for the ThienAn Furniture.",
 };
 
 import { auth } from "@/auth";

@@ -9,6 +9,7 @@ import { Label } from "@repo/ui/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui/ui/card";
 import { toast } from "sonner";
 import { LogIn, Loader2 } from "lucide-react";
+import Image from "next/image";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -46,8 +47,14 @@ export default function LoginPage() {
       <Card className="w-full max-w-md shadow-xl border-t-4 border-t-primary animate-in fade-in zoom-in duration-300">
         <CardHeader className="space-y-1 text-center">
           <div className="flex justify-center mb-4">
-            <div className="p-3 bg-primary/10 rounded-full">
-              <LogIn className="w-8 h-8 text-primary" />
+            <div className="p-2 bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden size-16 flex items-center justify-center">
+              <Image 
+                src="/icon.png" 
+                alt="ThienAn Furniture" 
+                width={64} 
+                height={64} 
+                className="size-full object-contain"
+              />
             </div>
           </div>
           <CardTitle className="text-2xl font-bold tracking-tight">Admin Portal</CardTitle>

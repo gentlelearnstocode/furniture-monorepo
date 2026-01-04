@@ -24,7 +24,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
             </main>
             <footer className="px-6 py-4 border-t border-gray-100 bg-white/50 mt-auto">
               <p className="text-xs text-center text-gray-500">
-                &copy; {new Date().getFullYear()} Furniture Monorepo Admin.
+                &copy; {new Date().getFullYear()} ThienAn Furniture Admin.
               </p>
             </footer>
           </div>
