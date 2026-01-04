@@ -1,5 +1,5 @@
 import { db } from '@repo/database';
-import { CollectionSection } from './CollectionSection';
+import { CollectionSection } from './collection-section';
 
 export const FeaturedCollections = async () => {
   // Fetch collections marked to be shown on home

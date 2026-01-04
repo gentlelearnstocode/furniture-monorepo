@@ -1,5 +1,5 @@
-import { Hero } from './components/Hero';
-import { FeaturedCollections } from './components/FeaturedCollections';
+import { Hero } from './components/hero';
+import { FeaturedCollections } from './components/featured-collection';
 
 export default function Home() {
   return (
