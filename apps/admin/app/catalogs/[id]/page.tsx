@@ -1,17 +1,13 @@
-import { db } from "@repo/database";
-import { notFound } from "next/navigation";
-import { CatalogForm } from "../components/catalog-form";
-import { MoveLeft } from "lucide-react";
-import Link from "next/link";
-import { Button } from "@repo/ui/ui/button";
+import { db } from '@repo/database';
+import { notFound } from 'next/navigation';
+import { CatalogForm } from '../components/catalog-form';
+import { MoveLeft } from 'lucide-react';
+import Link from 'next/link';
+import { Button } from '@repo/ui/ui/button';
 
-interface EditCatalogPageProps {
-  params: {
-    id: string;
-  };
-}
+import { PageProps } from '@/types';
 
-export default async function EditCatalogPage({ params }: EditCatalogPageProps) {
+export default async function EditCatalogPage({ params }: PageProps<{ id: string }>) {
   const { id: catalogId } = await params;
 
   const catalog = await db.query.catalogs.findFirst({
@@ -23,19 +19,19 @@ export default async function EditCatalogPage({ params }: EditCatalogPageProps) 
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Link href="/catalogs">
-            <Button variant="outline" size="icon">
-                <MoveLeft className="h-4 w-4" />
-            </Button>
+    <div className='space-y-6'>
+      <div className='flex items-center gap-4'>
+        <Link href='/catalogs'>
+          <Button variant='outline' size='icon'>
+            <MoveLeft className='h-4 w-4' />
+          </Button>
         </Link>
         <div>
-            <h1 className="text-2xl font-bold tracking-tight">Edit Catalog</h1>
-            <p className="text-sm text-gray-500">Update catalog category details.</p>
+          <h1 className='text-2xl font-bold tracking-tight'>Edit Catalog</h1>
+          <p className='text-sm text-gray-500'>Update catalog category details.</p>
         </div>
       </div>
-      <div className="max-w-4xl">
+      <div className='max-w-4xl'>
         <CatalogForm initialData={catalog} />
       </div>
     </div>

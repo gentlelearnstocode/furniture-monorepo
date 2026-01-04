@@ -1,19 +1,15 @@
-import { db } from "@repo/database";
-import { notFound } from "next/navigation";
-import { CollectionForm } from "../components/collection-form";
-import { MoveLeft } from "lucide-react";
-import Link from "next/link";
-import { Button } from "@repo/ui/ui/button";
+import { db } from '@repo/database';
+import { notFound } from 'next/navigation';
+import { CollectionForm } from '../components/collection-form';
+import { MoveLeft } from 'lucide-react';
+import Link from 'next/link';
+import { Button } from '@repo/ui/ui/button';
 
 export const dynamic = 'force-dynamic';
 
-interface EditCollectionPageProps {
-  params: Promise<{
-    id: string;
-  }>;
-}
+import { PageProps } from '@/types';
 
-export default async function EditCollectionPage({ params }: EditCollectionPageProps) {
+export default async function EditCollectionPage({ params }: PageProps<{ id: string }>) {
   const { id } = await params;
 
   const collection = await db.query.collections.findFirst({
@@ -33,22 +29,19 @@ export default async function EditCollectionPage({ params }: EditCollectionPageP
   });
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Link href="/collections">
-            <Button variant="outline" size="icon">
-                <MoveLeft className="h-4 w-4" />
-            </Button>
+    <div className='space-y-6'>
+      <div className='flex items-center gap-4'>
+        <Link href='/collections'>
+          <Button variant='outline' size='icon'>
+            <MoveLeft className='h-4 w-4' />
+          </Button>
         </Link>
         <div>
-            <h1 className="text-2xl font-bold tracking-tight">Edit Collection</h1>
-            <p className="text-sm text-gray-500">Update collection details and manage products.</p>
+          <h1 className='text-2xl font-bold tracking-tight'>Edit Collection</h1>
+          <p className='text-sm text-gray-500'>Update collection details and manage products.</p>
         </div>
       </div>
-      <CollectionForm 
-        initialData={collection} 
-        availableProducts={allProducts} 
-      />
+      <CollectionForm initialData={collection} availableProducts={allProducts} />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { db } from "@repo/database";
 import { Button } from "@repo/ui/ui/button";
-import { Plus, MoreHorizontal, Search, Settings } from "lucide-react";
+import { Plus, Search, Settings } from "lucide-react";
 import Link from "next/link";
 import {
   Table,

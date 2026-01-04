@@ -1,9 +1,11 @@
-"use client";
+'use client';
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { Button } from "@repo/ui/ui/button";
+import { useTransition } from 'react';
+import { Loader2, ShieldCheck } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Button } from '@repo/ui/ui/button';
 import {
   Form,
   FormControl,
@@ -12,26 +14,18 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/ui/form";
-import { Input } from "@repo/ui/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@repo/ui/ui/select";
-import { createUser } from "@/lib/actions/users";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
-import { Loader2, ShieldCheck } from "lucide-react";
+} from '@repo/ui/ui/form';
+import { Input } from '@repo/ui/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/ui/select';
+import { createUser } from '@/lib/actions/users';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  username: z.string().min(3, "Username must be at least 3 characters"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-  role: z.enum(["admin", "editor"]),
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  username: z.string().min(3, 'Username must be at least 3 characters'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+  role: z.enum(['admin', 'editor']),
 });
 
 export function UserForm() {
@@ -41,10 +35,10 @@ export function UserForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      username: "",
-      password: "",
-      role: "editor",
+      name: '',
+      username: '',
+      password: '',
+      role: 'editor',
     },
   });
 
@@ -55,8 +49,8 @@ export function UserForm() {
       if (result.error) {
         toast.error(result.error);
       } else {
-        toast.success("User created successfully");
-        router.push("/users");
+        toast.success('User created successfully');
+        router.push('/users');
         router.refresh();
       }
     });
@@ -64,83 +58,83 @@ export function UserForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
+      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+          <FormField
             control={form.control}
-            name="name"
+            name='name'
             render={({ field }) => (
-                <FormItem>
+              <FormItem>
                 <FormLabel>Full Name</FormLabel>
                 <FormControl>
-                    <Input placeholder="John Doe" {...field} />
+                  <Input placeholder='John Doe' {...field} />
                 </FormControl>
                 <FormMessage />
-                </FormItem>
+              </FormItem>
             )}
-            />
-            <FormField
+          />
+          <FormField
             control={form.control}
-            name="username"
+            name='username'
             render={({ field }) => (
-                <FormItem>
+              <FormItem>
                 <FormLabel>Username</FormLabel>
                 <FormControl>
-                    <Input placeholder="johndoe" {...field} />
+                  <Input placeholder='johndoe' {...field} />
                 </FormControl>
                 <FormDescription>Used for login. Must be unique.</FormDescription>
                 <FormMessage />
-                </FormItem>
+              </FormItem>
             )}
-            />
+          />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+          <FormField
             control={form.control}
-            name="password"
+            name='password'
             render={({ field }) => (
-                <FormItem>
+              <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                    <Input type="password" placeholder="••••••••" {...field} />
+                  <Input type='password' placeholder='••••••••' {...field} />
                 </FormControl>
                 <FormMessage />
-                </FormItem>
+              </FormItem>
             )}
-            />
-            <FormField
+          />
+          <FormField
             control={form.control}
-            name="role"
+            name='role'
             render={({ field }) => (
-                <FormItem>
+              <FormItem>
                 <FormLabel>Access Role</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
+                  <FormControl>
                     <SelectTrigger>
-                        <SelectValue placeholder="Select a role" />
+                      <SelectValue placeholder='Select a role' />
                     </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                    <SelectItem value="editor">Editor (Product Management)</SelectItem>
-                    <SelectItem value="admin">Admin (Full Access & User Mgmt)</SelectItem>
-                    </SelectContent>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value='editor'>Editor (Product Management)</SelectItem>
+                    <SelectItem value='admin'>Admin (Full Access & User Mgmt)</SelectItem>
+                  </SelectContent>
                 </Select>
                 <FormMessage />
-                </FormItem>
+              </FormItem>
             )}
-            />
+          />
         </div>
 
-        <div className="pt-4 border-t">
-            <Button type="submit" className="w-full md:w-auto min-w-[150px]" disabled={isPending}>
-                {isPending ? (
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                ) : (
-                    <ShieldCheck className="w-4 h-4 mr-2" />
-                )}
-                Create User
-            </Button>
+        <div className='pt-4 border-t'>
+          <Button type='submit' className='w-full md:w-auto min-w-[150px]' disabled={isPending}>
+            {isPending ? (
+              <Loader2 className='w-4 h-4 mr-2 animate-spin' />
+            ) : (
+              <ShieldCheck className='w-4 h-4 mr-2' />
+            )}
+            Create User
+          </Button>
         </div>
       </form>
     </Form>

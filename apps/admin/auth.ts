@@ -1,18 +1,16 @@
-/// <reference types="next-auth" />
-import NextAuth from "next-auth";
-import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { db } from "@repo/database";
-import { users } from "@repo/database/schema";
-import Credentials from "next-auth/providers/credentials";
-import { authConfig } from "./auth.config";
-import { z } from "zod";
-import bcrypt from "bcryptjs";
-import { eq } from "drizzle-orm";
+import NextAuth from 'next-auth';
+import { DrizzleAdapter } from '@auth/drizzle-adapter';
+import { db } from '@repo/database';
+import Credentials from 'next-auth/providers/credentials';
+import { z } from 'zod';
+import bcrypt from 'bcryptjs';
+import type { NextAuthResult } from 'next-auth';
+import { authConfig } from './auth.config';
 
 const result = NextAuth({
   ...authConfig,
   adapter: DrizzleAdapter(db),
-  session: { strategy: "jwt" },
+  session: { strategy: 'jwt' },
   providers: [
     Credentials({
       async authorize(credentials) {
@@ -22,7 +20,7 @@ const result = NextAuth({
 
         if (parsedCredentials.success) {
           const { username, password } = parsedCredentials.data;
-          
+
           const user = await db.query.users.findFirst({
             where: (users, { eq }) => eq(users.username, username),
           });
@@ -37,7 +35,7 @@ const result = NextAuth({
               id: user.id,
               name: user.name,
               username: user.username as string,
-              role: user.role as "admin" | "editor",
+              role: user.role as 'admin' | 'editor',
               isActive: user.isActive,
             };
           }
@@ -49,7 +47,7 @@ const result = NextAuth({
   ],
 });
 
-export const auth: any = result.auth;
-export const signIn: any = result.signIn;
-export const signOut: any = result.signOut;
-export const handlers: any = result.handlers;
+export const auth: NextAuthResult['auth'] = result.auth;
+export const signIn: NextAuthResult['signIn'] = result.signIn;
+export const signOut: NextAuthResult['signOut'] = result.signOut;
+export const handlers: NextAuthResult['handlers'] = result.handlers;
