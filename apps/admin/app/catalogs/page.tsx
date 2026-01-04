@@ -12,15 +12,8 @@ import {
 } from "@repo/ui/ui/table";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui/ui/card";
 import { Input } from "@repo/ui/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@repo/ui/ui/dropdown-menu";
 import { Badge } from "@repo/ui/ui/badge";
+import { CatalogActions } from "./components/catalog-actions";
 
 export const dynamic = 'force-dynamic';
 
@@ -109,21 +102,7 @@ export default async function CatalogsPage() {
                                     {catalog.description || <span className="text-gray-300 italic">No description</span>}
                                 </TableCell>
                                 <TableCell className="text-right">
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button variant="ghost" className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <span className="sr-only">Open menu</span>
-                                                <MoreHorizontal className="h-4 w-4" />
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end">
-                                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                            <DropdownMenuItem>View Details</DropdownMenuItem>
-                                            <DropdownMenuItem>Edit Catalog</DropdownMenuItem>
-                                            <DropdownMenuSeparator />
-                                            <DropdownMenuItem className="text-red-600 focus:text-red-600">Delete</DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
+                                    <CatalogActions id={catalog.id} name={catalog.name} />
                                 </TableCell>
                              </TableRow>
                         ))

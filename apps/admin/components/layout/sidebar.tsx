@@ -9,8 +9,11 @@ import {
   ShoppingCart, 
   Users, 
   Settings,
-  FolderTree
+  FolderTree,
+  Layers,
+  UserCog
 } from "lucide-react";
+import { useSession } from "next-auth/react";
 import {
   Sidebar as SidebarUI,
   SidebarContent,
@@ -24,17 +27,22 @@ import {
   SidebarRail,
 } from "@repo/ui/ui/sidebar";
 
-const navigation = [
-  { name: "Dashboard", href: "/", icon: LayoutDashboard },
-  { name: "Catalogs", href: "/catalogs", icon: FolderTree },
-  { name: "Products", href: "/products", icon: Package },
-  { name: "Orders", href: "/orders", icon: ShoppingCart },
-  { name: "Customers", href: "/customers", icon: Users },
-  { name: "Settings", href: "/settings", icon: Settings },
-];
-
 export function Sidebar() {
   const pathname = usePathname();
+  const { data: session } = useSession();
+
+  const isAdmin = session?.user?.role === "admin";
+
+  const navigation = [
+    { name: "Dashboard", href: "/", icon: LayoutDashboard },
+    { name: "Catalogs", href: "/catalogs", icon: FolderTree },
+    { name: "Collections", href: "/collections", icon: Layers },
+    { name: "Products", href: "/products", icon: Package },
+    // { name: "Orders", href: "/orders", icon: ShoppingCart },
+    // { name: "Customers", href: "/customers", icon: Users },
+    ...(isAdmin ? [{ name: "Admin Users", href: "/users", icon: UserCog }] : []),
+    // { name: "Settings", href: "/settings", icon: Settings },
+  ];
 
   return (
     <SidebarUI collapsible="icon">

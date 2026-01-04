@@ -4,7 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useTransition } from "react";
-import { createCatalog } from "@/lib/actions/catalogs";
+import { useRouter } from "next/navigation";
+import { createCatalog, updateCatalog } from "@/lib/actions/catalogs";
 import { createCatalogSchema, type CreateCatalogInput } from "@/lib/validations/catalogs";
 
 import { Button } from "@repo/ui/ui/button";
@@ -20,25 +21,40 @@ import {
 import { Input } from "@repo/ui/ui/input";
 import { Textarea } from "@repo/ui/ui/textarea";
 
-export function CreateCatalogForm() {
+interface CatalogFormProps {
+  initialData?: {
+    id: string;
+    name: string;
+    slug: string;
+    description: string | null;
+  };
+}
+
+export function CatalogForm({ initialData }: CatalogFormProps) {
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const form = useForm<CreateCatalogInput>({
     resolver: zodResolver(createCatalogSchema),
     defaultValues: {
-      name: "",
-      slug: "",
-      description: "",
+      name: initialData?.name || "",
+      slug: initialData?.slug || "",
+      description: initialData?.description || "",
     },
   });
 
   function onSubmit(data: CreateCatalogInput) {
     startTransition(async () => {
-      const result = await createCatalog(data);
+      const result = initialData 
+        ? await updateCatalog(initialData.id, data)
+        : await createCatalog(data);
+
       if (result?.error) {
         toast.error(result.error);
       } else {
-        toast.success("Catalog created successfully");
+        toast.success(initialData ? "Catalog updated" : "Catalog created");
+        router.push("/catalogs");
+        router.refresh();
       }
     });
   }
@@ -59,12 +75,14 @@ export function CreateCatalogForm() {
                     {...field} 
                     onChange={(e) => {
                         field.onChange(e);
-                        // Simple slug generation
-                        const slug = e.target.value
-                        .toLowerCase()
-                        .replace(/[^a-z0-9]+/g, '-')
-                        .replace(/(^-|-$)/g, '');
-                        form.setValue("slug", slug);
+                        // Simple slug generation only if not editing or slug is empty
+                        if (!initialData) {
+                          const slug = e.target.value
+                          .toLowerCase()
+                          .replace(/[^a-z0-9]+/g, '-')
+                          .replace(/(^-|-$)/g, '');
+                          form.setValue("slug", slug);
+                        }
                     }} 
                     />
                 </FormControl>
@@ -83,10 +101,11 @@ export function CreateCatalogForm() {
                         placeholder="e.g. living-room" 
                         {...field} 
                         className="font-mono text-sm"
+                        disabled={!!initialData} // Usually slug shouldn't change for SEO after creation
                     />
                 </FormControl>
                 <FormDescription className="text-xs">
-                    URL-friendly unique identifier.
+                    URL-friendly unique identifier. {initialData && "(Slug cannot be changed after creation)"}
                 </FormDescription>
                 <FormMessage />
                 </FormItem>
@@ -117,7 +136,7 @@ export function CreateCatalogForm() {
         
         <div className="flex justify-end pt-4 border-t">
             <Button type="submit" disabled={isPending} className="w-full md:w-auto">
-            {isPending ? "Creating Catalog..." : "Create Catalog"}
+            {isPending ? (initialData ? "Updating..." : "Creating...") : (initialData ? "Update Catalog" : "Create Catalog")}
             </Button>
         </div>
       </form>

@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { Search, Bell } from "lucide-react";
+import { Search, Bell, LogOut, User, Settings as SettingsIcon } from "lucide-react";
+import { useSession, signOut } from "next-auth/react";
 import {
   SidebarTrigger,
 } from "@repo/ui/ui/sidebar";
@@ -16,8 +17,24 @@ import {
 import { Separator } from "@repo/ui/ui/separator";
 import { Button } from "@repo/ui/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/ui/dropdown-menu";
 
 export function Header() {
+  const { data: session } = useSession();
+  const user = session?.user;
+
+  const initials = user?.name
+    ? user.name.split(" ").map(n => n[0]).join("").toUpperCase()
+    : "??";
+
   return (
     <header className="sticky top-0 z-30 flex items-center h-16 px-4 bg-white border-b border-gray-100 shadow-sm gap-4">
       <div className="flex items-center gap-2">
@@ -26,7 +43,7 @@ export function Header() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem className="hidden md:block">
-              <BreadcrumbLink href="/admin">Admin</BreadcrumbLink>
+              <BreadcrumbLink href="/">Admin</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator className="hidden md:block" />
             <BreadcrumbItem>
@@ -49,10 +66,52 @@ export function Header() {
         
         <Separator orientation="vertical" className="mx-2 h-6" />
 
-        <Avatar className="h-8 w-8 transition-transform hover:scale-110 cursor-pointer">
-          <AvatarImage src="" alt="JD" />
-          <AvatarFallback className="bg-brand-primary-600 text-white text-xs">JD</AvatarFallback>
-        </Avatar>
+        <div className="flex items-center gap-3">
+          <div className="flex flex-col items-end hidden md:flex">
+            <span className="text-sm font-semibold text-gray-900">{user?.name || "User"}</span>
+            <span className="text-xs text-gray-500 capitalize">{user?.role || "Role"}</span>
+          </div>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Avatar className="h-9 w-9 transition-transform hover:scale-105 cursor-pointer border-2 border-transparent hover:border-brand-primary-100">
+                <AvatarImage src={user?.image || ""} alt={user?.name || ""} />
+                <AvatarFallback className="bg-brand-primary-600 text-white text-xs font-bold">
+                  {initials}
+                </AvatarFallback>
+              </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="end" forceMount>
+              <DropdownMenuLabel className="font-normal font-inter">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">{user?.name}</p>
+                  <p className="text-xs leading-none text-muted-foreground">
+                    @{user?.username || "username"}
+                  </p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem>
+                  <User className="mr-2 h-4 w-4" />
+                  <span>Profile</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <SettingsIcon className="mr-2 h-4 w-4" />
+                  <span>Settings</span>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem 
+                className="text-red-600 focus:text-red-700 cursor-pointer" 
+                onClick={() => signOut({ callbackUrl: "/login" })}
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Log out</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
     </header>
   );

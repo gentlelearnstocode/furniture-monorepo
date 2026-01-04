@@ -1,4 +1,4 @@
-import { CreateCatalogForm } from "../components/create-catalog-form";
+import { CatalogForm } from "../components/catalog-form";
 import { MoveLeft } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@repo/ui/ui/button";
@@ -17,7 +17,7 @@ export default function NewCatalogPage() {
             <p className="text-sm text-gray-500">Add a new catalog category to the store.</p>
         </div>
       </div>
-      <CreateCatalogForm />
+      <CatalogForm />
     </div>
   );
 }

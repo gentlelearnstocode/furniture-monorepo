@@ -17,17 +17,30 @@ export const metadata: Metadata = {
   description: "Administrative dashboard for the furniture monorepo project.",
 };
 
-export default function RootLayout({
+import { auth } from "@/auth";
+import { Providers } from "../components/providers";
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+  
+  // If no session and not on login, redirect happens in middleware.
+  // We just need to decide if we show the AdminLayout (sidebar/header) or not.
+  const showAdminLayout = !!session;
+
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <AdminLayout>
-          {children}
-        </AdminLayout>
+        <Providers>
+          {showAdminLayout ? (
+            <AdminLayout>{children}</AdminLayout>
+          ) : (
+            <main>{children}</main>
+          )}
+        </Providers>
       </body>
     </html>
   );

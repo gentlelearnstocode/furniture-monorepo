@@ -29,6 +29,7 @@ import {
 import { Checkbox } from "@repo/ui/ui/checkbox";
 
 import { ImageUpload } from "./image-upload";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 
 interface CatalogOption {
     id: string;
@@ -196,14 +197,14 @@ export function ProductForm({ catalogs, initialData }: ProductFormProps) {
             <FormItem>
               <FormLabel>Full Description</FormLabel>
               <FormControl>
-                <Textarea 
+                <RichTextEditor 
                     placeholder="Comprehensive product details..." 
-                    className="min-h-[120px] resize-none"
-                    {...field} 
+                    value={field.value || ""}
+                    onChange={field.onChange}
                 />
               </FormControl>
               <FormDescription className="text-xs">
-                    Detailed information shown on the product page.
+                    Detailed information shown on the product page. Supports rich text formatting.
               </FormDescription>
               <FormMessage />
             </FormItem>
