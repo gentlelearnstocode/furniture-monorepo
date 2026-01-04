@@ -65,6 +65,7 @@ export const collections = pgTable('collections', {
   description: text('description'),
   bannerId: uuid('banner_id').references(() => assets.id),
   isActive: boolean('is_active').default(true).notNull(),
+  showOnHome: boolean('show_on_home').default(false).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -342,6 +343,17 @@ export const sessionsRelations = relations(sessions, ({ one }) => ({
     references: [users.id],
   }),
 }));
+
+// --- Site Settings ---
+
+export const siteSettings = pgTable('site_settings', {
+  key: text('key').primaryKey(),
+  value: jsonb('value').notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export type InsertSiteSetting = typeof siteSettings.$inferInsert;
+export type SelectSiteSetting = typeof siteSettings.$inferSelect;
 
 export type InsertProduct = typeof products.$inferInsert;
 export type SelectProduct = typeof products.$inferSelect;

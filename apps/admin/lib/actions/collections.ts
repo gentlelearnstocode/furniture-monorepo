@@ -13,7 +13,7 @@ export async function createCollection(data: CreateCollectionInput) {
     return { error: 'Invalid fields' };
   }
 
-  const { name, slug, description, bannerId, isActive, productIds } = validated.data;
+  const { name, slug, description, bannerId, isActive, showOnHome, productIds } = validated.data;
 
   try {
     // Check for existing slug
@@ -33,6 +33,7 @@ export async function createCollection(data: CreateCollectionInput) {
         description: description || null,
         bannerId: bannerId || null,
         isActive: isActive ?? true,
+        showOnHome: showOnHome ?? false,
       })
       .returning();
 
@@ -60,7 +61,7 @@ export async function updateCollection(id: string, data: CreateCollectionInput) 
     return { error: 'Invalid fields' };
   }
 
-  const { name, slug, description, bannerId, isActive, productIds } = validated.data;
+  const { name, slug, description, bannerId, isActive, showOnHome, productIds } = validated.data;
 
   try {
     // Check if slug is taken by another collection
@@ -81,6 +82,7 @@ export async function updateCollection(id: string, data: CreateCollectionInput) 
         description: description || null,
         bannerId: bannerId || null,
         isActive: isActive ?? true,
+        showOnHome: showOnHome ?? false,
         updatedAt: new Date(),
       })
       .where(eq(collections.id, id));
@@ -115,5 +117,24 @@ export async function deleteCollection(id: string) {
   }
 
   revalidatePath('/collections');
+  return { success: true };
+}
+
+export async function toggleCollectionHomeVisibility(id: string, value: boolean) {
+  try {
+    await db
+      .update(collections)
+      .set({
+        showOnHome: value,
+        updatedAt: new Date(),
+      })
+      .where(eq(collections.id, id));
+  } catch (error) {
+    console.error('Failed to toggle collection home visibility:', error);
+    return { error: 'Database error: Failed to update visibility.' };
+  }
+
+  revalidatePath('/collections');
+  revalidatePath('/homepage/collections');
   return { success: true };
 }

@@ -7,6 +7,7 @@ export interface Collection {
   description: string | null;
   bannerId: string | null;
   isActive: boolean;
+  showOnHome: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

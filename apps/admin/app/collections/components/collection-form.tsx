@@ -45,6 +45,7 @@ export function CollectionForm({ initialData, availableProducts }: CollectionFor
       description: initialData?.description || '',
       bannerId: initialData?.bannerId || null,
       isActive: initialData?.isActive ?? true,
+      showOnHome: initialData?.showOnHome ?? false,
       productIds: initialData?.products?.map((p) => p.productId) || [],
     },
   });
@@ -196,6 +197,24 @@ export function CollectionForm({ initialData, availableProducts }: CollectionFor
               <div className='space-y-0.5'>
                 <FormLabel>Active Status</FormLabel>
                 <FormDescription>Make this collection visible on the storefront.</FormDescription>
+              </div>
+              <FormControl>
+                <Switch checked={field.value} onCheckedChange={field.onChange} />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name='showOnHome'
+          render={({ field }) => (
+            <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm'>
+              <div className='space-y-0.5'>
+                <FormLabel>Show on Home Page</FormLabel>
+                <FormDescription>
+                  Display this collection in the featured section on the home page.
+                </FormDescription>
               </div>
               <FormControl>
                 <Switch checked={field.value} onCheckedChange={field.onChange} />

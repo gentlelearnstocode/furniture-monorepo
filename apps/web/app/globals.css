@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;900&family=Alex+Brush&display=swap');
 
 :root {
   --background: #ffffff;
@@ -65,9 +65,14 @@ body {
   max-width: 100vw;
   overflow-x: hidden;
   font-family: 'Inter', sans-serif;
+  min-height: 100vh;
 }
 
-h1, h2, h3, h4, .font-serif {
+h1,
+h2,
+h3,
+h4,
+.font-serif {
   font-family: 'Playfair Display', serif;
 }
 
@@ -90,5 +95,19 @@ a {
 @layer utilities {
   .tracking-widest {
     letter-spacing: 0.25em;
+  }
+  .font-cursive {
+    font-family: 'Alex Brush', cursive;
+    line-height: 1;
+  }
+}
+
+@layer base {
+  .container {
+    max-width: 1440px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
 }
