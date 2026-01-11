@@ -10,6 +10,7 @@ export const createCollectionSchema = z.object({
   bannerId: z.string().uuid().optional().nullable(),
   isActive: z.boolean(),
   showOnHome: z.boolean(),
+  homeLayout: z.enum(['full', 'half', 'third']),
   productIds: z.array(z.string().uuid()),
 });
 

@@ -57,6 +57,7 @@ export function Sidebar() {
       href: '/homepage',
       icon: Home,
       items: [
+        { name: 'Hero Section', href: '/homepage/hero' },
         { name: 'Collection Section', href: '/homepage/collections' },
         { name: 'Intro Section', href: '/homepage/intro' },
       ],

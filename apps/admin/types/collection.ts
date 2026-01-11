@@ -8,6 +8,7 @@ export interface Collection {
   bannerId: string | null;
   isActive: boolean;
   showOnHome: boolean;
+  homeLayout: 'full' | 'half' | 'third';
   createdAt: Date;
   updatedAt: Date;
 }

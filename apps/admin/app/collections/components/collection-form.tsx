@@ -21,6 +21,7 @@ import {
 } from '@repo/ui/ui/form';
 import { Input } from '@repo/ui/ui/input';
 import { Switch } from '@repo/ui/ui/switch';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/ui/select';
 import { SingleImageUpload } from './single-image-upload';
 import { ProductSelector } from './product-selector';
 import { RichTextEditor } from '@/components/ui/rich-text-editor';
@@ -33,9 +34,7 @@ interface CollectionFormProps {
 export function CollectionForm({ initialData, availableProducts }: CollectionFormProps) {
   const [isPending, startTransition] = useTransition();
   const [banner, setBanner] = useState<{ assetId: string; url: string } | null>(
-    initialData?.banner
-      ? { assetId: initialData.bannerId as string, url: initialData.banner.url }
-      : null
+    initialData?.banner ? { assetId: initialData.banner.id, url: initialData.banner.url } : null
   );
   const form = useForm<CreateCollectionInput>({
     resolver: zodResolver(createCollectionSchema),
@@ -46,6 +45,7 @@ export function CollectionForm({ initialData, availableProducts }: CollectionFor
       bannerId: initialData?.bannerId || null,
       isActive: initialData?.isActive ?? true,
       showOnHome: initialData?.showOnHome ?? false,
+      homeLayout: initialData?.homeLayout || 'full',
       productIds: initialData?.products?.map((p) => p.productId) || [],
     },
   });
@@ -222,6 +222,33 @@ export function CollectionForm({ initialData, availableProducts }: CollectionFor
             </FormItem>
           )}
         />
+
+        {form.watch('showOnHome') && (
+          <FormField
+            control={form.control}
+            name='homeLayout'
+            render={({ field }) => (
+              <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm'>
+                <div className='space-y-0.5'>
+                  <FormLabel>Home Page Layout</FormLabel>
+                  <FormDescription>Choose how this collection looks on home page.</FormDescription>
+                </div>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger className='w-[180px]'>
+                      <SelectValue placeholder='Select layout' />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value='full'>Full Width</SelectItem>
+                    <SelectItem value='half'>Half Width (1/2)</SelectItem>
+                    <SelectItem value='third'>Third Width (1/3)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormItem>
+            )}
+          />
+        )}
 
         <div className='flex justify-end pt-4 border-t gap-3'>
           <Button

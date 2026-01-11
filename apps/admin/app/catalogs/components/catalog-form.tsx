@@ -8,6 +8,8 @@ import { useRouter } from 'next/navigation';
 import { createCatalog, updateCatalog } from '@/lib/actions/catalogs';
 import { createCatalogSchema, type CreateCatalogInput } from '@/lib/validations/catalogs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/ui/select';
+import { useState } from 'react';
+import { SingleImageUpload } from '../../collections/components/single-image-upload';
 
 import { Button } from '@repo/ui/ui/button';
 import {
@@ -29,6 +31,10 @@ interface CatalogFormProps {
     slug: string;
     description: string | null;
     parentId: string | null;
+    imageId?: string | null;
+    image?: {
+      url: string;
+    } | null;
   };
   hasChildren?: boolean;
   parentCatalogs?: {
@@ -52,8 +58,15 @@ export function CatalogForm({
       slug: initialData?.slug || '',
       description: initialData?.description || '',
       parentId: initialData?.parentId || null,
+      imageId: initialData?.imageId || null,
     },
   });
+
+  const [banner, setBanner] = useState<{ assetId: string; url: string } | null>(
+    initialData?.image
+      ? { assetId: initialData.imageId as string, url: initialData.image.url }
+      : null
+  );
 
   function onSubmit(data: CreateCatalogInput) {
     // Transform "none" back to null for the server
@@ -188,6 +201,29 @@ export function CatalogForm({
             </FormItem>
           )}
         />
+
+        <div className='space-y-4 pt-4 border-t'>
+          <h3 className='text-sm font-medium'>Catalog Image</h3>
+          <FormField
+            control={form.control}
+            name='imageId'
+            render={() => (
+              <FormItem>
+                <FormControl>
+                  <SingleImageUpload
+                    value={banner}
+                    onChange={(val) => {
+                      setBanner(val);
+                      form.setValue('imageId', val?.assetId || null);
+                    }}
+                    folder={`catalogs/${form.getValues('slug') || 'general'}`}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         <div className='flex justify-end pt-4 border-t'>
           <Button type='submit' disabled={isPending} className='w-full md:w-auto'>

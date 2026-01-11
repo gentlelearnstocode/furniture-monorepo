@@ -99,9 +99,9 @@ export default async function CollectionsPage() {
                   <TableRow key={collection.id} className='group'>
                     <TableCell>
                       <div className='relative h-12 w-20 rounded-md overflow-hidden bg-gray-100 border border-gray-200'>
-                        {collection.banner?.url ? (
+                        {collection.banner && (collection.banner as any).url ? (
                           <Image
-                            src={collection.banner.url}
+                            src={(collection.banner as any).url}
                             alt={collection.name}
                             fill
                             className='object-cover'

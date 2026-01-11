@@ -10,8 +10,9 @@ const nextConfig = {
   },
   experimental: {
     serverActions: {
-      bodySizeLimit: '20mb',
+      bodySizeLimit: '100mb',
     },
+    middlewareClientMaxBodySize: '100mb',
   },
 };
 

@@ -17,18 +17,29 @@ export const FeaturedCollections = async () => {
   if (activeCollections.length === 0) return null;
 
   return (
-    <div className='flex flex-col'>
+    <div className='grid grid-cols-12'>
       {activeCollections.map((collection, index) => (
-        <CollectionSection
+        <div
           key={collection.id}
-          name={collection.name}
-          imageUrl={
-            collection.banner?.url ||
-            'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=1200'
-          }
-          isFirst={index === 0}
-        />
+          className={cn(
+            collection.homeLayout === 'full' && 'col-span-12',
+            collection.homeLayout === 'half' && 'col-span-12 md:col-span-6',
+            collection.homeLayout === 'third' && 'col-span-12 md:col-span-4'
+          )}
+        >
+          <CollectionSection
+            name={collection.name}
+            imageUrl={
+              collection.banner?.url ||
+              'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=1200'
+            }
+            isFirst={index === 0}
+            layout={collection.homeLayout as 'full' | 'half' | 'third'}
+          />
+        </div>
       ))}
     </div>
   );
 };
+
+import { cn } from '@repo/ui/lib/utils';

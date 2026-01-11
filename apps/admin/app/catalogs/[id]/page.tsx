@@ -16,6 +16,7 @@ export default async function EditCatalogPage({ params }: PageProps<{ id: string
     where: (catalogs, { eq }) => eq(catalogs.id, catalogId),
     with: {
       children: true,
+      image: true,
     },
   });
 

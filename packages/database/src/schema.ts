@@ -31,14 +31,14 @@ export const assetsRelations = relations(assets, ({ many }) => ({
   collections: many(collections),
 }));
 
-// --- Core Organization ---
+import { AnyPgColumn } from 'drizzle-orm/pg-core';
 
 export const catalogs = pgTable('catalogs', {
   id: uuid('id').defaultRandom().primaryKey(),
   name: text('name').notNull(),
   slug: text('slug').notNull().unique(),
-  parentId: uuid('parent_id'), // Self-referencing FK
-  imageId: uuid('image_id').references(() => assets.id),
+  parentId: uuid('parent_id').references((): AnyPgColumn => catalogs.id, { onDelete: 'cascade' }), // Self-referencing FK
+  imageId: uuid('image_id').references(() => assets.id, { onDelete: 'set null' }),
   description: text('description'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
@@ -66,6 +66,7 @@ export const collections = pgTable('collections', {
   bannerId: uuid('banner_id').references(() => assets.id),
   isActive: boolean('is_active').default(true).notNull(),
   showOnHome: boolean('show_on_home').default(false).notNull(),
+  homeLayout: text('home_layout').$type<'full' | 'half' | 'third'>().default('full').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -111,7 +112,7 @@ export const products = pgTable('products', {
   id: uuid('id').defaultRandom().primaryKey(),
   name: text('name').notNull(),
   slug: text('slug').notNull().unique(),
-  catalogId: uuid('catalog_id').references(() => catalogs.id),
+  catalogId: uuid('catalog_id').references(() => catalogs.id, { onDelete: 'set null' }),
   description: text('description'),
   shortDescription: text('short_description'),
   basePrice: decimal('base_price', { precision: 10, scale: 2 }).notNull(),
@@ -376,6 +377,36 @@ export const siteIntrosRelations = relations(siteIntros, ({ one }) => ({
     references: [assets.id],
   }),
 }));
+
+// --- Site Hero ---
+
+export const siteHeros = pgTable('site_heros', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  title: text('title').notNull(),
+  subtitle: text('subtitle'),
+  buttonText: text('button_text'),
+  buttonLink: text('button_link'),
+  backgroundType: text('background_type').$type<'image' | 'video'>().default('image').notNull(),
+  backgroundImageId: uuid('background_image_id').references(() => assets.id),
+  backgroundVideoId: uuid('background_video_id').references(() => assets.id),
+  isActive: boolean('is_active').default(true).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const siteHerosRelations = relations(siteHeros, ({ one }) => ({
+  backgroundImage: one(assets, {
+    fields: [siteHeros.backgroundImageId],
+    references: [assets.id],
+  }),
+  backgroundVideo: one(assets, {
+    fields: [siteHeros.backgroundVideoId],
+    references: [assets.id],
+  }),
+}));
+
+export type InsertSiteHero = typeof siteHeros.$inferInsert;
+export type SelectSiteHero = typeof siteHeros.$inferSelect;
 
 export type InsertSiteSetting = typeof siteSettings.$inferInsert;
 export type SelectSiteSetting = typeof siteSettings.$inferSelect;

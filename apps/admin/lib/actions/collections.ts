@@ -13,7 +13,8 @@ export async function createCollection(data: CreateCollectionInput) {
     return { error: 'Invalid fields' };
   }
 
-  const { name, slug, description, bannerId, isActive, showOnHome, productIds } = validated.data;
+  const { name, slug, description, bannerId, isActive, showOnHome, homeLayout, productIds } =
+    validated.data;
 
   try {
     // Check for existing slug
@@ -34,6 +35,7 @@ export async function createCollection(data: CreateCollectionInput) {
         bannerId: bannerId || null,
         isActive: isActive ?? true,
         showOnHome: showOnHome ?? false,
+        homeLayout: homeLayout || 'full',
       })
       .returning();
 
@@ -61,7 +63,8 @@ export async function updateCollection(id: string, data: CreateCollectionInput) 
     return { error: 'Invalid fields' };
   }
 
-  const { name, slug, description, bannerId, isActive, showOnHome, productIds } = validated.data;
+  const { name, slug, description, bannerId, isActive, showOnHome, homeLayout, productIds } =
+    validated.data;
 
   try {
     // Check if slug is taken by another collection
@@ -83,6 +86,7 @@ export async function updateCollection(id: string, data: CreateCollectionInput) 
         bannerId: bannerId || null,
         isActive: isActive ?? true,
         showOnHome: showOnHome ?? false,
+        homeLayout: homeLayout || 'full',
         updatedAt: new Date(),
       })
       .where(eq(collections.id, id));

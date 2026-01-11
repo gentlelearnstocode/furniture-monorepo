@@ -12,7 +12,7 @@ export async function createCatalog(data: CreateCatalogInput) {
     return { error: 'Invalid fields' };
   }
 
-  const { name, slug, description, parentId } = validated.data;
+  const { name, slug, description, parentId, imageId } = validated.data;
 
   try {
     // Check for existing slug
@@ -29,6 +29,7 @@ export async function createCatalog(data: CreateCatalogInput) {
       slug,
       description: description || null,
       parentId: parentId || null,
+      imageId: imageId || null,
     });
   } catch (error) {
     console.error('Failed to create catalog:', error);
@@ -46,7 +47,7 @@ export async function updateCatalog(id: string, data: CreateCatalogInput) {
     return { error: 'Invalid fields' };
   }
 
-  const { name, slug, description, parentId } = validated.data;
+  const { name, slug, description, parentId, imageId } = validated.data;
 
   try {
     // Check for existing slug on other catalogs
@@ -65,6 +66,7 @@ export async function updateCatalog(id: string, data: CreateCatalogInput) {
         slug,
         description: description || null,
         parentId: parentId || null,
+        imageId: imageId || null,
         updatedAt: new Date(),
       })
       .where(eq(catalogs.id, id));
@@ -79,14 +81,14 @@ export async function updateCatalog(id: string, data: CreateCatalogInput) {
 
 export async function deleteCatalog(id: string) {
   try {
-    // Check if catalog has products?
-    // Usually we just delete it if the schema allows (cascade).
     await db.delete(catalogs).where(eq(catalogs.id, id));
+    revalidatePath('/catalogs');
+    return { success: true };
   } catch (error) {
     console.error('Failed to delete catalog:', error);
+    if (error instanceof Error && error.message.includes('foreign key constraint')) {
+      return { error: 'This catalog cannot be deleted because it is still being referenced.' };
+    }
     return { error: 'Database error: Failed to delete catalog.' };
   }
-
-  revalidatePath('/catalogs');
-  return { success: true };
 }

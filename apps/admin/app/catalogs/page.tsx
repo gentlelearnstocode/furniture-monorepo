@@ -2,6 +2,7 @@ import { db } from '@repo/database';
 import { Button } from '@repo/ui/ui/button';
 import { Plus, Search, Settings } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@repo/ui/ui/table';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/ui/card';
 import { Input } from '@repo/ui/ui/input';
@@ -16,6 +17,7 @@ export default async function CatalogsPage() {
     orderBy: (catalogs, { desc }) => [desc(catalogs.createdAt)],
     with: {
       parent: true,
+      image: true,
     },
   });
 
@@ -69,6 +71,7 @@ export default async function CatalogsPage() {
           <Table>
             <TableHeader>
               <TableRow className='hover:bg-gray-50/50'>
+                <TableHead className='w-[80px]'>Image</TableHead>
                 <TableHead className='w-[300px]'>Name</TableHead>
                 <TableHead>Slug</TableHead>
                 <TableHead>Level</TableHead>
@@ -89,6 +92,22 @@ export default async function CatalogsPage() {
               ) : (
                 allCatalogs.map((catalog) => (
                   <TableRow key={catalog.id} className='group'>
+                    <TableCell>
+                      {catalog.image ? (
+                        <div className='relative h-10 w-10 rounded-md overflow-hidden bg-gray-100 border'>
+                          <Image
+                            src={catalog.image.url}
+                            alt={catalog.name}
+                            fill
+                            className='object-cover'
+                          />
+                        </div>
+                      ) : (
+                        <div className='h-10 w-10 rounded-md bg-gray-50 border border-dashed flex items-center justify-center'>
+                          <Settings className='h-4 w-4 text-gray-300' />
+                        </div>
+                      )}
+                    </TableCell>
                     <TableCell>
                       <div className='flex flex-col'>
                         <span className='font-medium text-gray-900'>{catalog.name}</span>
