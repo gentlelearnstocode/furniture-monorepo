@@ -14,6 +14,9 @@ export const dynamic = 'force-dynamic';
 export default async function CatalogsPage() {
   const allCatalogs = await db.query.catalogs.findMany({
     orderBy: (catalogs, { desc }) => [desc(catalogs.createdAt)],
+    with: {
+      parent: true,
+    },
   });
 
   return (
@@ -68,6 +71,7 @@ export default async function CatalogsPage() {
               <TableRow className='hover:bg-gray-50/50'>
                 <TableHead className='w-[300px]'>Name</TableHead>
                 <TableHead>Slug</TableHead>
+                <TableHead>Level</TableHead>
                 <TableHead className='hidden md:table-cell'>Description</TableHead>
                 <TableHead className='w-[100px] text-right'>Actions</TableHead>
               </TableRow>
@@ -97,6 +101,28 @@ export default async function CatalogsPage() {
                       <Badge variant='secondary' className='font-normal font-mono text-xs'>
                         {catalog.slug}
                       </Badge>
+                    </TableCell>
+                    <TableCell>
+                      {catalog.parentId ? (
+                        <div className='flex flex-col gap-1'>
+                          <Badge
+                            variant='outline'
+                            className='w-fit bg-blue-50 text-blue-700 border-blue-200'
+                          >
+                            Level 2
+                          </Badge>
+                          <span className='text-[10px] text-gray-400'>
+                            Under: {catalog.parent?.name}
+                          </span>
+                        </div>
+                      ) : (
+                        <Badge
+                          variant='outline'
+                          className='bg-purple-50 text-purple-700 border-purple-200 uppercase tracking-wider text-[10px] font-bold'
+                        >
+                          Level 1
+                        </Badge>
+                      )}
                     </TableCell>
                     <TableCell className='hidden md:table-cell text-gray-500 max-w-xs truncate'>
                       {catalog.description || (

@@ -12,11 +12,25 @@ export default async function EditCatalogPage({ params }: PageProps<{ id: string
 
   const catalog = await db.query.catalogs.findFirst({
     where: (catalogs, { eq }) => eq(catalogs.id, catalogId),
+    with: {
+      children: true,
+    },
   });
 
   if (!catalog) {
     notFound();
   }
+
+  const hasChildren = catalog.children.length > 0;
+
+  const rootCatalogs = await db.query.catalogs.findMany({
+    where: (catalogs, { isNull, and, ne }) =>
+      and(isNull(catalogs.parentId), ne(catalogs.id, catalogId)),
+    columns: {
+      id: true,
+      name: true,
+    },
+  });
 
   return (
     <div className='space-y-6'>
@@ -32,7 +46,11 @@ export default async function EditCatalogPage({ params }: PageProps<{ id: string
         </div>
       </div>
       <div className='max-w-4xl'>
-        <CatalogForm initialData={catalog} />
+        <CatalogForm
+          initialData={catalog}
+          parentCatalogs={rootCatalogs}
+          hasChildren={hasChildren}
+        />
       </div>
     </div>
   );

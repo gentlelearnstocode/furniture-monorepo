@@ -7,11 +7,14 @@ export async function uploadAsset(file: File | Blob, filename: string, prefix?: 
     const pathname = prefix ? `${prefix}/${filename}` : filename;
 
     // 1. Upload to Vercel Blob
+    console.log('[uploadAsset] Uploading to Vercel Blob:', pathname);
     const blob = await put(pathname, file, {
       access: 'public',
     });
+    console.log('[uploadAsset] Vercel Blob success:', blob.url);
 
     // 2. Create database record
+    console.log('[uploadAsset] Creating DB record');
     const [asset] = await db
       .insert(assets)
       .values({
@@ -22,6 +25,12 @@ export async function uploadAsset(file: File | Blob, filename: string, prefix?: 
       })
       .returning();
 
+    if (!asset) {
+      console.error('[uploadAsset] DB insertion failed - no asset returned');
+      throw new Error('Database insertion failed');
+    }
+
+    console.log('[uploadAsset] DB success:', asset.id);
     return asset;
   } catch (error) {
     console.error('Failed to upload asset:', error);

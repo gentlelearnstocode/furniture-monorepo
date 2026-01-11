@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import '@repo/ui/globals.css';
 import { Navbar } from './components/navbar-section';
+import { db } from '@repo/database';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -17,15 +18,23 @@ export const metadata: Metadata = {
   description: 'Luxury furniture and decor for your home.',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const rootCatalogs = await db.query.catalogs.findMany({
+    where: (catalogs, { isNull }) => isNull(catalogs.parentId),
+    with: {
+      children: true,
+    },
+    orderBy: (catalogs, { asc }) => [asc(catalogs.name)],
+  });
+
   return (
     <html lang='en'>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Navbar />
+        <Navbar catalogs={rootCatalogs} />
         <main>{children}</main>
       </body>
     </html>

@@ -15,6 +15,13 @@
       "when": 1767536690656,
       "tag": "0001_unknown_masque",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1768100103417,
+      "tag": "0002_far_wolf_cub",
+      "breakpoints": true
     }
   ]
 }

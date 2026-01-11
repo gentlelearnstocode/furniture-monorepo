@@ -352,6 +352,31 @@ export const siteSettings = pgTable('site_settings', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
+// --- Store Intro ---
+
+export const siteIntros = pgTable('site_intros', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  title: text('title').notNull(),
+  subtitle: text('subtitle'),
+  contentHtml: text('content_html').notNull(),
+  introImageId: uuid('intro_image_id').references(() => assets.id),
+  backgroundImageId: uuid('background_image_id').references(() => assets.id),
+  isActive: boolean('is_active').default(true).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const siteIntrosRelations = relations(siteIntros, ({ one }) => ({
+  introImage: one(assets, {
+    fields: [siteIntros.introImageId],
+    references: [assets.id],
+  }),
+  backgroundImage: one(assets, {
+    fields: [siteIntros.backgroundImageId],
+    references: [assets.id],
+  }),
+}));
+
 export type InsertSiteSetting = typeof siteSettings.$inferInsert;
 export type SelectSiteSetting = typeof siteSettings.$inferSelect;
 
