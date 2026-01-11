@@ -34,10 +34,10 @@ export default async function HeroPage() {
           initialData={
             hero
               ? {
-                  title: hero.title,
-                  subtitle: hero.subtitle || '',
-                  buttonText: hero.buttonText || '',
-                  buttonLink: hero.buttonLink || '',
+                  title: hero.title ?? undefined,
+                  subtitle: hero.subtitle ?? undefined,
+                  buttonText: hero.buttonText ?? undefined,
+                  buttonLink: hero.buttonLink ?? undefined,
                   backgroundType: hero.backgroundType,
                   backgroundImageId: hero.backgroundImageId,
                   backgroundVideoId: hero.backgroundVideoId,
