@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { db } from '@repo/database';
 import { notFound } from 'next/navigation';
 import { CatalogForm } from '../components/catalog-form';

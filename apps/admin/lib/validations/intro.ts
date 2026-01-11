@@ -6,7 +6,7 @@ export const introSchema = z.object({
   contentHtml: z.string().min(1, 'Content is required'),
   introImageId: z.string().uuid().optional().nullable(),
   backgroundImageId: z.string().uuid().optional().nullable(),
-  isActive: z.boolean().default(true),
+  isActive: z.boolean(),
 });
 
 export type IntroInput = z.infer<typeof introSchema>;

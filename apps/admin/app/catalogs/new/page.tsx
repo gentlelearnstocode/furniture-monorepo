@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { CatalogForm } from '../components/catalog-form';
 import { MoveLeft } from 'lucide-react';
 import Link from 'next/link';
