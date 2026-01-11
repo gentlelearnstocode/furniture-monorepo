@@ -1,6 +1,6 @@
-import { db, products } from '@repo/database';
+import { db } from '@repo/database';
 import { Button } from '@repo/ui/ui/button';
-import { Plus, MoreHorizontal, Search, Settings } from 'lucide-react';
+import { Plus, MoreHorizontal, Search, Settings, Pencil } from 'lucide-react';
 import Link from 'next/link';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@repo/ui/ui/table';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/ui/card';
@@ -168,7 +168,13 @@ export default async function ProductsPage() {
                           <DropdownMenuContent align='end'>
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuItem asChild>
-                              <Link href={`/products/${product.id}/edit`}>Edit Product</Link>
+                              <Link
+                                href={`/products/${product.id}/edit`}
+                                className='cursor-pointer w-full flex items-center'
+                              >
+                                <Pencil className='mr-2 h-4 w-4' />
+                                Edit Product
+                              </Link>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DeleteProductButton
