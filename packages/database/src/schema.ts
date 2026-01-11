@@ -382,7 +382,7 @@ export const siteIntrosRelations = relations(siteIntros, ({ one }) => ({
 
 export const siteHeros = pgTable('site_heros', {
   id: uuid('id').defaultRandom().primaryKey(),
-  title: text('title').notNull(),
+  title: text('title'),
   subtitle: text('subtitle'),
   buttonText: text('button_text'),
   buttonLink: text('button_link'),

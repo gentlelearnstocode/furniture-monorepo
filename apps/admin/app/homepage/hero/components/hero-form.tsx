@@ -40,7 +40,7 @@ export function HeroForm({ initialData }: HeroFormProps) {
     defaultValues: initialData
       ? {
           id: initialData.id,
-          title: initialData.title,
+          title: initialData.title ?? '',
           subtitle: initialData.subtitle ?? '',
           buttonText: initialData.buttonText ?? '',
           buttonLink: initialData.buttonLink ?? '',
@@ -96,7 +96,11 @@ export function HeroForm({ initialData }: HeroFormProps) {
                     <FormItem>
                       <FormLabel>Title</FormLabel>
                       <FormControl>
-                        <Input placeholder='e.g. Excellence in Craftsmanship' {...field} />
+                        <Input
+                          placeholder='e.g. Excellence in Craftsmanship'
+                          {...field}
+                          value={field.value || ''}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -251,6 +255,11 @@ export function HeroForm({ initialData }: HeroFormProps) {
                             label='Upload Hero Image'
                           />
                         </FormControl>
+                        {form.formState.errors.backgroundImageId && (
+                          <p className='text-sm font-medium text-destructive'>
+                            {form.formState.errors.backgroundImageId.message}
+                          </p>
+                        )}
                         <FormMessage />
                       </FormItem>
                     )}
@@ -270,6 +279,17 @@ export function HeroForm({ initialData }: HeroFormProps) {
                             label='Upload Hero Video'
                           />
                         </FormControl>
+                        {form.formState.errors.backgroundVideoId && (
+                          <p className='text-sm font-medium text-destructive'>
+                            {form.formState.errors.backgroundVideoId.message}
+                          </p>
+                        )}
+                        {/* If the refine error is on the root or other path, we might want to show it here too */}
+                        {form.formState.errors.backgroundImageId && backgroundType === 'video' && (
+                          <p className='text-sm font-medium text-destructive'>
+                            {form.formState.errors.backgroundImageId.message}
+                          </p>
+                        )}
                         <FormMessage />
                       </FormItem>
                     )}
