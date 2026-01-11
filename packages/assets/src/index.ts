@@ -59,3 +59,34 @@ export async function deleteAsset(id: string) {
     throw new Error('Failed to delete asset');
   }
 }
+
+export async function createAssetRecord(
+  url: string,
+  filename: string,
+  mimeType: string,
+  size: number
+) {
+  try {
+    console.log('[createAssetRecord] Creating DB record');
+    const [asset] = await db
+      .insert(assets)
+      .values({
+        url,
+        filename,
+        mimeType,
+        size,
+      })
+      .returning();
+
+    if (!asset) {
+      console.error('[createAssetRecord] DB insertion failed - no asset returned');
+      throw new Error('Database insertion failed');
+    }
+
+    console.log('[createAssetRecord] DB success:', asset.id);
+    return asset;
+  } catch (error) {
+    console.error('Failed to create asset record:', error);
+    throw new Error('Failed to create asset record');
+  }
+}

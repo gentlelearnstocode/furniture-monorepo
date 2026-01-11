@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { ImagePlus, X, Check } from 'lucide-react';
 import { Button } from '@repo/ui/ui/button';
-import { uploadAssetAction } from '@/lib/actions/assets';
+import { createAssetAction } from '@/lib/actions/assets';
+import { upload } from '@vercel/blob/client';
 import { toast } from 'sonner';
 import Image from 'next/image';
 
@@ -27,12 +28,14 @@ export function SingleImageUpload({
     setIsUploading(true);
 
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      if (folder) {
-        formData.append('folder', folder);
-      }
-      const asset = await uploadAssetAction(formData);
+      const filename = folder ? `${folder}/${file.name}` : file.name;
+
+      const blob = await upload(filename, file, {
+        access: 'public',
+        handleUploadUrl: '/api/assets/upload',
+      });
+
+      const asset = await createAssetAction(blob.url, file.name, file.type, file.size);
 
       if (asset) {
         onChange({

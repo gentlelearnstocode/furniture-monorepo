@@ -6,6 +6,8 @@ import { Button } from '@repo/ui/ui/button';
 import { toast } from 'sonner';
 import Image from 'next/image';
 import { Progress } from '@repo/ui/ui/progress';
+import { upload } from '@vercel/blob/client';
+import { createAssetAction } from '@/lib/actions/assets';
 
 interface SingleImageUploadProps {
   url?: string | null;
@@ -40,41 +42,32 @@ export function SingleImageUpload({
     setIsUploading(true);
     setUploadProgress(0);
 
-    const formData = new FormData();
-    formData.append('file', file);
-    if (folder) {
-      formData.append('folder', folder);
-    }
+    setIsUploading(true);
+    setUploadProgress(0);
 
-    const xhr = new XMLHttpRequest();
+    try {
+      const filename = folder ? `${folder}/${file.name}` : file.name;
 
-    xhr.upload.addEventListener('progress', (event) => {
-      if (event.lengthComputable) {
-        const percentComplete = Math.round((event.loaded / event.total) * 100);
-        setUploadProgress(percentComplete);
-      }
-    });
+      const blob = await upload(filename, file, {
+        access: 'public',
+        handleUploadUrl: '/api/assets/upload',
+        onUploadProgress: (progressEvent) => {
+          setUploadProgress(progressEvent.percentage);
+        },
+      });
 
-    xhr.addEventListener('load', () => {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        const asset = JSON.parse(xhr.responseText);
-        onChange(asset.id);
-        setUploadedUrl(asset.url);
-        setIsRemoved(false);
-        toast.success('Image uploaded successfully');
-      } else {
-        toast.error('Failed to upload image');
-      }
-      setIsUploading(false);
-    });
+      const asset = await createAssetAction(blob.url, file.name, file.type, file.size);
 
-    xhr.addEventListener('error', () => {
+      onChange(asset.id);
+      setUploadedUrl(asset.url);
+      setIsRemoved(false);
+      toast.success('Image uploaded successfully');
+    } catch (error) {
+      console.error(error);
       toast.error('Failed to upload image');
+    } finally {
       setIsUploading(false);
-    });
-
-    xhr.open('POST', '/api/assets/upload');
-    xhr.send(formData);
+    }
   };
 
   const onRemove = () => {

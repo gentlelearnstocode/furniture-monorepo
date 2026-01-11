@@ -7,6 +7,8 @@ import { toast } from 'sonner';
 import Image from 'next/image';
 import { cn } from '@repo/ui/lib/utils';
 import { Progress } from '@repo/ui/ui/progress';
+import { upload } from '@vercel/blob/client';
+import { createAssetAction } from '@/lib/actions/assets';
 
 interface SingleAssetUploadProps {
   url?: string | null;
@@ -60,41 +62,29 @@ export function SingleAssetUpload({
     setIsUploading(true);
     setUploadProgress(0);
 
-    const formData = new FormData();
-    formData.append('file', file);
-    if (folder) {
-      formData.append('folder', folder);
-    }
+    try {
+      const filename = folder ? `${folder}/${file.name}` : file.name;
 
-    const xhr = new XMLHttpRequest();
+      const blob = await upload(filename, file, {
+        access: 'public',
+        handleUploadUrl: '/api/assets/upload',
+        onUploadProgress: (progressEvent) => {
+          setUploadProgress(progressEvent.percentage);
+        },
+      });
 
-    xhr.upload.addEventListener('progress', (event) => {
-      if (event.lengthComputable) {
-        const percentComplete = Math.round((event.loaded / event.total) * 100);
-        setUploadProgress(percentComplete);
-      }
-    });
+      const asset = await createAssetAction(blob.url, file.name, file.type, file.size);
 
-    xhr.addEventListener('load', () => {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        const asset = JSON.parse(xhr.responseText);
-        onChange(asset.id);
-        setUploadedUrl(asset.url);
-        setIsRemoved(false);
-        toast.success(`${type === 'image' ? 'Image' : 'Video'} uploaded successfully`);
-      } else {
-        toast.error(`Failed to upload ${type}`);
-      }
-      setIsUploading(false);
-    });
-
-    xhr.addEventListener('error', () => {
+      onChange(asset.id);
+      setUploadedUrl(asset.url);
+      setIsRemoved(false);
+      toast.success(`${type === 'image' ? 'Image' : 'Video'} uploaded successfully`);
+    } catch (error) {
+      console.error(error);
       toast.error(`Failed to upload ${type}`);
+    } finally {
       setIsUploading(false);
-    });
-
-    xhr.open('POST', '/api/assets/upload');
-    xhr.send(formData);
+    }
   };
 
   const onRemove = () => {

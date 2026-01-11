@@ -1,26 +1,43 @@
+import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
 import { NextResponse } from 'next/server';
-import { uploadAsset } from '@repo/assets';
 import { auth } from '@/auth';
 
-export async function POST(req: Request) {
+export async function POST(request: Request): Promise<NextResponse> {
+  const body = (await request.json()) as HandleUploadBody;
+
   try {
-    const session = await auth();
-    if (!session) {
-      return new NextResponse('Unauthorized', { status: 401 });
-    }
+    const jsonResponse = await handleUpload({
+      body,
+      request,
+      onBeforeGenerateToken: async () => {
+        const session = await auth();
+        if (!session) {
+          throw new Error('Unauthorized');
+        }
 
-    const formData = await req.formData();
-    const file = formData.get('file') as File;
-    const folder = formData.get('folder') as string | undefined;
+        return {
+          allowedContentTypes: [
+            'image/jpeg',
+            'image/png',
+            'image/gif',
+            'image/webp',
+            'video/mp4',
+            'video/webm',
+            'video/ogg',
+          ],
+          tokenPayload: JSON.stringify({
+            userId: session.user?.id,
+          }),
+        };
+      },
+      onUploadCompleted: async () => {
+        // We handle DB record creation on the client side for now via createAssetAction
+        // This avoids webhooks complexity in local dev
+      },
+    });
 
-    if (!file) {
-      return new NextResponse('No file provided', { status: 400 });
-    }
-
-    const asset = await uploadAsset(file, file.name, folder);
-    return NextResponse.json(asset);
+    return NextResponse.json(jsonResponse);
   } catch (error) {
-    console.error('[ASSETS_UPLOAD_POST] Error:', error);
-    return new NextResponse('Internal Error', { status: 500 });
+    return NextResponse.json({ error: (error as Error).message }, { status: 400 });
   }
 }
