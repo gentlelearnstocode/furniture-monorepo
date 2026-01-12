@@ -12,6 +12,7 @@ export default async function NewCatalogPage() {
     columns: {
       id: true,
       name: true,
+      slug: true,
     },
   });
 
