@@ -63,6 +63,7 @@ export function Sidebar() {
         { name: 'Hero Section', href: '/homepage/hero' },
         { name: 'Collection Section', href: '/homepage/collections' },
         { name: 'Intro Section', href: '/homepage/intro' },
+        { name: 'Footer Section', href: '/homepage/footer' },
       ],
     },
     { name: 'Catalogs', href: '/catalogs', icon: FolderTree },

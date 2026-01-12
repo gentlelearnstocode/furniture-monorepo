@@ -592,6 +592,40 @@ export const postAssetsRelations = relations(postAssets, ({ one }) => ({
   }),
 }));
 
+// --- Site Footer Settings ---
+
+export const siteFooter = pgTable('site_footer', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  intro: text('intro').notNull(),
+  description: text('description'),
+  mapEmbedUrl: text('map_embed_url'),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const footerAddresses = pgTable('footer_addresses', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  label: text('label').notNull(),
+  address: text('address').notNull(),
+  position: integer('position').default(0).notNull(),
+});
+
+export const footerContacts = pgTable('footer_contacts', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  type: text('type').$type<'phone' | 'email'>().notNull(),
+  label: text('label'),
+  value: text('value').notNull(),
+  position: integer('position').default(0).notNull(),
+});
+
+export type InsertSiteFooter = typeof siteFooter.$inferInsert;
+export type SelectSiteFooter = typeof siteFooter.$inferSelect;
+
+export type InsertFooterAddress = typeof footerAddresses.$inferInsert;
+export type SelectFooterAddress = typeof footerAddresses.$inferSelect;
+
+export type InsertFooterContact = typeof footerContacts.$inferInsert;
+export type SelectFooterContact = typeof footerContacts.$inferSelect;
+
 export type InsertSiteHero = typeof siteHeros.$inferInsert;
 export type SelectSiteHero = typeof siteHeros.$inferSelect;
 

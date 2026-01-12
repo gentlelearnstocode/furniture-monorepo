@@ -50,6 +50,13 @@
       "when": 1768209581871,
       "tag": "0006_regular_epoch",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1768217183760,
+      "tag": "0007_optimal_screwball",
+      "breakpoints": true
     }
   ]
 }

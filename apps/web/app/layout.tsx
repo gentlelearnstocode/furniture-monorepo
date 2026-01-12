@@ -5,6 +5,7 @@ import localFont from 'next/font/local';
 import { Playfair_Display } from 'next/font/google';
 import '@repo/ui/globals.css';
 import { Navbar } from './components/navbar-section';
+import { Footer } from './components/footer-section';
 import { db } from '@repo/database';
 
 const geistSans = localFont({
@@ -49,6 +50,7 @@ export default async function RootLayout({
       >
         <Navbar catalogs={rootCatalogs} />
         <main>{children}</main>
+        <Footer />
       </body>
     </html>
   );
