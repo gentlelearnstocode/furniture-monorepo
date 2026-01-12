@@ -8,6 +8,7 @@ export const createCatalogSchema = z.object({
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug must be lowercase and kebab-case'),
   description: z.string().optional(),
   parentId: z.string().uuid().optional().nullable(),
+  level: z.number().int().min(1).max(2).optional(),
   imageId: z.string().uuid().optional().nullable(),
 });
 

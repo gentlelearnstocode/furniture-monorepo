@@ -15,9 +15,10 @@ interface SubCatalog {
 
 interface SubCatalogGridProps {
   subCatalogs: SubCatalog[];
+  parentSlug: string;
 }
 
-export const SubCatalogGrid = ({ subCatalogs }: SubCatalogGridProps) => {
+export const SubCatalogGrid = ({ subCatalogs, parentSlug }: SubCatalogGridProps) => {
   if (!subCatalogs || subCatalogs.length === 0) return null;
 
   return (
@@ -41,7 +42,7 @@ export const SubCatalogGrid = ({ subCatalogs }: SubCatalogGridProps) => {
           {subCatalogs.map((sub) => (
             <Link
               key={sub.id}
-              href={`/catalog/${sub.slug}`}
+              href={`/catalog/${parentSlug}/${sub.slug}`}
               className='group flex flex-col gap-4 transition-transform duration-300 hover:-translate-y-1'
             >
               <div className='relative aspect-[3/4] overflow-hidden bg-gray-100 rounded-lg shadow-md shadow-black/5 group-hover:shadow-xl group-hover:shadow-black/10 transition-all duration-500'>

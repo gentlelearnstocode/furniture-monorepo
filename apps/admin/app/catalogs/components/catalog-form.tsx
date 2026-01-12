@@ -40,6 +40,7 @@ interface CatalogFormProps {
   parentCatalogs?: {
     id: string;
     name: string;
+    slug: string;
   }[];
 }
 
@@ -58,6 +59,7 @@ export function CatalogForm({
       slug: initialData?.slug || '',
       description: initialData?.description || '',
       parentId: initialData?.parentId || null,
+      level: initialData?.parentId ? 2 : 1,
       imageId: initialData?.imageId || null,
     },
   });
@@ -69,10 +71,12 @@ export function CatalogForm({
   );
 
   function onSubmit(data: CreateCatalogInput) {
-    // Transform "none" back to null for the server
+    // Transform "none" back to null for the server and compute level
+    const parentId = data.parentId === 'none' ? null : data.parentId;
     const processedData = {
       ...data,
-      parentId: data.parentId === 'none' ? null : data.parentId,
+      parentId,
+      level: parentId ? 2 : 1,
     };
 
     startTransition(async () => {
@@ -108,10 +112,20 @@ export function CatalogForm({
                       field.onChange(e);
                       // Simple slug generation only if not editing or slug is empty
                       if (!initialData) {
-                        const slug = e.target.value
+                        const parentId = form.getValues('parentId');
+                        let slug = e.target.value
                           .toLowerCase()
                           .replace(/[^a-z0-9]+/g, '-')
                           .replace(/(^-|-$)/g, '');
+
+                        // If parent is selected, prefix slug with parent slug
+                        if (parentId && parentId !== 'none') {
+                          const parent = parentCatalogs.find((c) => c.id === parentId);
+                          if (parent) {
+                            slug = `${parent.slug}-${slug}`;
+                          }
+                        }
+
                         form.setValue('slug', slug);
                       }
                     }}

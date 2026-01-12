@@ -32,6 +32,7 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const pathname = usePathname();
 
+  // All catalog pages (level 1 and level 2) now use /catalog/ prefix
   const isCatalogPage = pathname.startsWith('/catalog/');
   const isWhiteNavbar = isMenuOpen || isCatalogPage;
 
@@ -157,7 +158,7 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
                           {catalog.children.map((child) => (
                             <Link
                               key={child.id}
-                              href={`/${catalog.slug}/${child.slug}`}
+                              href={`/catalog/${catalog.slug}/${child.slug}`}
                               className='text-[16px] text-white/60 hover:text-white tracking-[0.1em] transition-colors whitespace-nowrap uppercase italic font-serif'
                             >
                               {child.name}
@@ -223,7 +224,7 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
                       {catalog.children.map((child) => (
                         <Link
                           key={child.id}
-                          href={`/${catalog.slug}/${child.slug}`}
+                          href={`/catalog/${catalog.slug}/${child.slug}`}
                           className='text-[18px] text-black/60 hover:text-black transition-colors uppercase italic font-serif tracking-[0.1em]'
                         >
                           {child.name}

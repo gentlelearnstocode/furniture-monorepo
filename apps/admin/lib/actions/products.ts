@@ -35,6 +35,21 @@ export async function createProduct(data: CreateProductInput) {
       return { error: 'Slug already exists. Please choose a unique name or slug.' };
     }
 
+    // Validate that catalog is level 2 (subcatalog) if provided
+    if (catalogId) {
+      const catalog = await db.query.catalogs.findFirst({
+        where: (catalogs, { eq }) => eq(catalogs.id, catalogId),
+      });
+
+      if (!catalog) {
+        return { error: 'Selected catalog does not exist.' };
+      }
+
+      if (catalog.level !== 2) {
+        return { error: 'Products can only be assigned to level 2 catalogs (subcatalogs).' };
+      }
+    }
+
     const [product] = await db
       .insert(products)
       .values({
@@ -95,6 +110,21 @@ export async function updateProduct(id: string, data: CreateProductInput) {
 
     if (existing) {
       return { error: 'Slug already exists. Please choose a unique name or slug.' };
+    }
+
+    // Validate that catalog is level 2 (subcatalog) if provided
+    if (catalogId) {
+      const catalog = await db.query.catalogs.findFirst({
+        where: (catalogs, { eq }) => eq(catalogs.id, catalogId),
+      });
+
+      if (!catalog) {
+        return { error: 'Selected catalog does not exist.' };
+      }
+
+      if (catalog.level !== 2) {
+        return { error: 'Products can only be assigned to level 2 catalogs (subcatalogs).' };
+      }
     }
 
     await db

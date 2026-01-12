@@ -38,6 +38,7 @@ export const catalogs = pgTable('catalogs', {
   name: text('name').notNull(),
   slug: text('slug').notNull().unique(),
   parentId: uuid('parent_id').references((): AnyPgColumn => catalogs.id, { onDelete: 'cascade' }), // Self-referencing FK
+  level: integer('level').notNull().default(1), // 1 = parent catalog, 2 = subcatalog
   imageId: uuid('image_id').references(() => assets.id, { onDelete: 'set null' }),
   description: text('description'),
   createdAt: timestamp('created_at').defaultNow().notNull(),

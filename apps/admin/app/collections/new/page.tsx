@@ -13,6 +13,7 @@ export default async function NewCollectionPage() {
   });
 
   const allCatalogs = await db.query.catalogs.findMany({
+    where: (catalogs, { eq }) => eq(catalogs.level, 1),
     orderBy: (catalogs, { asc }) => [asc(catalogs.name)],
   });
 

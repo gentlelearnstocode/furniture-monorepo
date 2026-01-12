@@ -24,11 +24,15 @@ export async function createCatalog(data: CreateCatalogInput) {
       return { error: 'Slug already exists.' };
     }
 
+    // Determine level: if parentId is set, it's level 2, otherwise level 1
+    const level = parentId ? 2 : 1;
+
     await db.insert(catalogs).values({
       name,
       slug,
       description: description || null,
       parentId: parentId || null,
+      level,
       imageId: imageId || null,
     });
   } catch (error) {
@@ -59,6 +63,9 @@ export async function updateCatalog(id: string, data: CreateCatalogInput) {
       return { error: 'Slug already exists.' };
     }
 
+    // Determine level: if parentId is set, it's level 2, otherwise level 1
+    const level = parentId ? 2 : 1;
+
     await db
       .update(catalogs)
       .set({
@@ -66,6 +73,7 @@ export async function updateCatalog(id: string, data: CreateCatalogInput) {
         slug,
         description: description || null,
         parentId: parentId || null,
+        level,
         imageId: imageId || null,
         updatedAt: new Date(),
       })

@@ -25,6 +25,8 @@ export async function createCollection(data: CreateCollectionInput) {
     catalogIds,
   } = validated.data;
 
+  console.log('Creating collection with catalogIds:', catalogIds);
+
   try {
     // Check for existing slug
     const existing = await db.query.collections.findFirst({
@@ -58,12 +60,15 @@ export async function createCollection(data: CreateCollectionInput) {
     }
 
     if (collection && catalogIds && catalogIds.length > 0) {
+      console.log('Inserting catalog associations:', catalogIds);
       await db.insert(catalogCollections).values(
         catalogIds.map((catalogId) => ({
           collectionId: collection.id,
           catalogId,
         }))
       );
+    } else {
+      console.log('No catalogIds to insert');
     }
   } catch (error) {
     console.error('Failed to create collection:', error);
@@ -92,6 +97,8 @@ export async function updateCollection(id: string, data: CreateCollectionInput) 
     productIds,
     catalogIds,
   } = validated.data;
+
+  console.log('Updating collection with catalogIds:', catalogIds);
 
   try {
     // Check if slug is taken by another collection
@@ -134,12 +141,15 @@ export async function updateCollection(id: string, data: CreateCollectionInput) 
     await db.delete(catalogCollections).where(eq(catalogCollections.collectionId, id));
 
     if (catalogIds && catalogIds.length > 0) {
+      console.log('Inserting catalog associations for update:', catalogIds);
       await db.insert(catalogCollections).values(
         catalogIds.map((catalogId) => ({
           collectionId: id,
           catalogId,
         }))
       );
+    } else {
+      console.log('No catalogIds to update');
     }
   } catch (error) {
     console.error('Failed to update collection:', error);

@@ -8,7 +8,11 @@ export const dynamic = 'force-dynamic';
 
 export default async function NewProductPage() {
   const catalogs = await db.query.catalogs.findMany({
+    where: (catalogs, { eq }) => eq(catalogs.level, 2),
     orderBy: (catalogs, { asc }) => [asc(catalogs.name)],
+    with: {
+      parent: true,
+    },
   });
 
   return (
@@ -27,7 +31,12 @@ export default async function NewProductPage() {
         </div>
       </div>
 
-      <ProductForm catalogs={catalogs.map((c) => ({ id: c.id, name: c.name }))} />
+      <ProductForm
+        catalogs={catalogs.map((c) => ({
+          id: c.id,
+          name: c.parent ? `${c.parent.name} > ${c.name}` : c.name,
+        }))}
+      />
     </div>
   );
 }

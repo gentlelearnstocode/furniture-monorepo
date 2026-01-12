@@ -32,6 +32,7 @@ export default async function EditCatalogPage({ params }: PageProps<{ id: string
     columns: {
       id: true,
       name: true,
+      slug: true,
     },
   });
 
