@@ -12,6 +12,7 @@ export const createCollectionSchema = z.object({
   showOnHome: z.boolean(),
   homeLayout: z.enum(['full', 'half', 'third']),
   productIds: z.array(z.string().uuid()),
+  catalogIds: z.array(z.string().uuid()),
 });
 
 export type CreateCollectionInput = z.infer<typeof createCollectionSchema>;

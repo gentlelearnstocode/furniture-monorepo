@@ -36,6 +36,13 @@
       "when": 1768143515782,
       "tag": "0004_free_lethal_legion",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1768195991831,
+      "tag": "0005_wide_chamber",
+      "breakpoints": true
     }
   ]
 }

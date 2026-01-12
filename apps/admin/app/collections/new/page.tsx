@@ -12,6 +12,10 @@ export default async function NewCollectionPage() {
     orderBy: (products, { asc }) => [asc(products.name)],
   });
 
+  const allCatalogs = await db.query.catalogs.findMany({
+    orderBy: (catalogs, { asc }) => [asc(catalogs.name)],
+  });
+
   return (
     <div className='space-y-6'>
       <div className='flex items-center gap-4'>
@@ -25,7 +29,7 @@ export default async function NewCollectionPage() {
           <p className='text-sm text-gray-500'>Add a new product collection to the store.</p>
         </div>
       </div>
-      <CollectionForm availableProducts={allProducts} />
+      <CollectionForm availableProducts={allProducts} availableCatalogs={allCatalogs} />
     </div>
   );
 }

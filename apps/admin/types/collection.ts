@@ -1,4 +1,5 @@
 import { Product } from './product';
+import { Catalog } from './catalog';
 
 export interface Collection {
   id: string;
@@ -23,5 +24,10 @@ export interface CollectionWithRelations extends Collection {
     productId: string;
     collectionId: string;
     product?: Product;
+  }[];
+  catalogs?: {
+    catalogId: string;
+    collectionId: string;
+    catalog?: Catalog;
   }[];
 }

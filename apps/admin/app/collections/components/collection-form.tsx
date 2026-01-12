@@ -1,6 +1,6 @@
 'use client';
 
-import { CollectionWithRelations, Product } from '@/types';
+import { CollectionWithRelations, Product, Catalog } from '@/types';
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -24,14 +24,20 @@ import { Switch } from '@repo/ui/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/ui/select';
 import { SingleImageUpload } from './single-image-upload';
 import { ProductSelector } from './product-selector';
+import { CatalogSelector } from './catalog-selector';
 import { RichTextEditor } from '@/components/ui/rich-text-editor';
 
 interface CollectionFormProps {
   initialData?: CollectionWithRelations;
   availableProducts: Product[];
+  availableCatalogs: Catalog[];
 }
 
-export function CollectionForm({ initialData, availableProducts }: CollectionFormProps) {
+export function CollectionForm({
+  initialData,
+  availableProducts,
+  availableCatalogs,
+}: CollectionFormProps) {
   const [isPending, startTransition] = useTransition();
   const [banner, setBanner] = useState<{ assetId: string; url: string } | null>(
     initialData?.banner ? { assetId: initialData.banner.id, url: initialData.banner.url } : null
@@ -47,6 +53,7 @@ export function CollectionForm({ initialData, availableProducts }: CollectionFor
       showOnHome: initialData?.showOnHome ?? false,
       homeLayout: initialData?.homeLayout || 'full',
       productIds: initialData?.products?.map((p) => p.productId) || [],
+      catalogIds: initialData?.catalogs?.map((c) => c.catalogId) || [],
     },
   });
 
@@ -160,6 +167,32 @@ export function CollectionForm({ initialData, availableProducts }: CollectionFor
                     folder={`collections/${form.getValues('slug') || 'general'}`}
                   />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div className='space-y-4 pt-4 border-t'>
+          <div className='flex items-center justify-between'>
+            <h3 className='text-sm font-medium'>Catalogs for this Collection</h3>
+          </div>
+
+          <FormField
+            control={form.control}
+            name='catalogIds'
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <CatalogSelector
+                    availableCatalogs={availableCatalogs}
+                    value={field.value || []}
+                    onChange={field.onChange}
+                  />
+                </FormControl>
+                <FormDescription className='text-xs'>
+                  Choose which catalogs this collection belongs to. (Optional)
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}

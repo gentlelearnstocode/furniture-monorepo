@@ -52,6 +52,7 @@ export const catalogsRelations = relations(catalogs, ({ one, many }) => ({
   }),
   children: many(catalogs, { relationName: 'catalog_parent' }),
   products: many(products),
+  collections: many(catalogCollections),
   image: one(assets, {
     fields: [catalogs.imageId],
     references: [assets.id],
@@ -77,6 +78,7 @@ export const collectionsRelations = relations(collections, ({ one, many }) => ({
     references: [assets.id],
   }),
   products: many(collectionProducts),
+  catalogs: many(catalogCollections),
 }));
 
 // Join table for Collections <-> Products (Many-to-Many)
@@ -103,6 +105,33 @@ export const collectionProductsRelations = relations(collectionProducts, ({ one 
   product: one(products, {
     fields: [collectionProducts.productId],
     references: [products.id],
+  }),
+}));
+
+// Join table for Catalogs <-> Collections (Many-to-Many)
+export const catalogCollections = pgTable(
+  'catalog_collections',
+  {
+    catalogId: uuid('catalog_id')
+      .notNull()
+      .references(() => catalogs.id, { onDelete: 'cascade' }),
+    collectionId: uuid('collection_id')
+      .notNull()
+      .references(() => collections.id, { onDelete: 'cascade' }),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.catalogId, t.collectionId] }),
+  })
+);
+
+export const catalogCollectionsRelations = relations(catalogCollections, ({ one }) => ({
+  catalog: one(catalogs, {
+    fields: [catalogCollections.catalogId],
+    references: [catalogs.id],
+  }),
+  collection: one(collections, {
+    fields: [catalogCollections.collectionId],
+    references: [collections.id],
   }),
 }));
 

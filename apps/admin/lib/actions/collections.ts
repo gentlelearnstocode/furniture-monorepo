@@ -1,6 +1,6 @@
 'use server';
 
-import { db, collections, collectionProducts } from '@repo/database';
+import { db, collections, collectionProducts, catalogCollections } from '@repo/database';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -13,8 +13,17 @@ export async function createCollection(data: CreateCollectionInput) {
     return { error: 'Invalid fields' };
   }
 
-  const { name, slug, description, bannerId, isActive, showOnHome, homeLayout, productIds } =
-    validated.data;
+  const {
+    name,
+    slug,
+    description,
+    bannerId,
+    isActive,
+    showOnHome,
+    homeLayout,
+    productIds,
+    catalogIds,
+  } = validated.data;
 
   try {
     // Check for existing slug
@@ -47,6 +56,15 @@ export async function createCollection(data: CreateCollectionInput) {
         }))
       );
     }
+
+    if (collection && catalogIds && catalogIds.length > 0) {
+      await db.insert(catalogCollections).values(
+        catalogIds.map((catalogId) => ({
+          collectionId: collection.id,
+          catalogId,
+        }))
+      );
+    }
   } catch (error) {
     console.error('Failed to create collection:', error);
     return { error: 'Database error: Failed to create collection.' };
@@ -63,8 +81,17 @@ export async function updateCollection(id: string, data: CreateCollectionInput) 
     return { error: 'Invalid fields' };
   }
 
-  const { name, slug, description, bannerId, isActive, showOnHome, homeLayout, productIds } =
-    validated.data;
+  const {
+    name,
+    slug,
+    description,
+    bannerId,
+    isActive,
+    showOnHome,
+    homeLayout,
+    productIds,
+    catalogIds,
+  } = validated.data;
 
   try {
     // Check if slug is taken by another collection
@@ -99,6 +126,18 @@ export async function updateCollection(id: string, data: CreateCollectionInput) 
         productIds.map((productId) => ({
           collectionId: id,
           productId,
+        }))
+      );
+    }
+
+    // Sync catalogs
+    await db.delete(catalogCollections).where(eq(catalogCollections.collectionId, id));
+
+    if (catalogIds && catalogIds.length > 0) {
+      await db.insert(catalogCollections).values(
+        catalogIds.map((catalogId) => ({
+          collectionId: id,
+          catalogId,
         }))
       );
     }

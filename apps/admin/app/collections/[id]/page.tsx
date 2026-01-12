@@ -17,6 +17,7 @@ export default async function EditCollectionPage({ params }: PageProps<{ id: str
     with: {
       banner: true,
       products: true,
+      catalogs: true,
     },
   });
 
@@ -26,6 +27,10 @@ export default async function EditCollectionPage({ params }: PageProps<{ id: str
 
   const allProducts = await db.query.products.findMany({
     orderBy: (products, { asc }) => [asc(products.name)],
+  });
+
+  const allCatalogs = await db.query.catalogs.findMany({
+    orderBy: (catalogs, { asc }) => [asc(catalogs.name)],
   });
 
   return (
@@ -41,7 +46,11 @@ export default async function EditCollectionPage({ params }: PageProps<{ id: str
           <p className='text-sm text-gray-500'>Update collection details and manage products.</p>
         </div>
       </div>
-      <CollectionForm initialData={collection} availableProducts={allProducts} />
+      <CollectionForm
+        initialData={collection as any}
+        availableProducts={allProducts}
+        availableCatalogs={allCatalogs}
+      />
     </div>
   );
 }
