@@ -1,6 +1,8 @@
 import { Hero } from './components/hero-section';
 import { FeaturedCollections } from './components/featured-collection';
 import { IntroSection } from './components/intro-section';
+import { ServicesSection } from './components/services-section';
+import { ProjectsSection } from './components/projects-section';
 import { db } from '@repo/database';
 
 export const dynamic = 'force-dynamic';
@@ -39,7 +41,9 @@ export default async function Home() {
         }
       />
       <IntroSection />
+      <ServicesSection />
       <FeaturedCollections />
+      <ProjectsSection />
     </div>
   );
 }

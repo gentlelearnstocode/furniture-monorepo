@@ -435,6 +435,163 @@ export const siteHerosRelations = relations(siteHeros, ({ one }) => ({
   }),
 }));
 
+// --- Services ---
+
+export const services = pgTable('services', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  title: text('title').notNull(),
+  slug: text('slug').notNull().unique(),
+  descriptionHtml: text('description_html').notNull(),
+  imageId: uuid('image_id').references(() => assets.id),
+  isActive: boolean('is_active').default(true).notNull(),
+  seoTitle: text('seo_title'),
+  seoDescription: text('seo_description'),
+  seoKeywords: text('seo_keywords'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const servicesRelations = relations(services, ({ one, many }) => ({
+  image: one(assets, {
+    fields: [services.imageId],
+    references: [assets.id],
+  }),
+  gallery: many(serviceAssets),
+}));
+
+export const serviceAssets = pgTable(
+  'service_assets',
+  {
+    serviceId: uuid('service_id')
+      .notNull()
+      .references(() => services.id, { onDelete: 'cascade' }),
+    assetId: uuid('asset_id')
+      .notNull()
+      .references(() => assets.id, { onDelete: 'cascade' }),
+    position: integer('position').default(0).notNull(),
+    isPrimary: boolean('is_primary').default(false).notNull(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.serviceId, t.assetId] }),
+  })
+);
+
+export const serviceAssetsRelations = relations(serviceAssets, ({ one }) => ({
+  service: one(services, {
+    fields: [serviceAssets.serviceId],
+    references: [services.id],
+  }),
+  asset: one(assets, {
+    fields: [serviceAssets.assetId],
+    references: [assets.id],
+  }),
+}));
+
+// --- Projects ---
+
+export const projects = pgTable('projects', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  title: text('title').notNull(),
+  slug: text('slug').notNull().unique(),
+  contentHtml: text('content_html').notNull(),
+  imageId: uuid('image_id').references(() => assets.id),
+  isActive: boolean('is_active').default(true).notNull(),
+  seoTitle: text('seo_title'),
+  seoDescription: text('seo_description'),
+  seoKeywords: text('seo_keywords'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const projectsRelations = relations(projects, ({ one, many }) => ({
+  image: one(assets, {
+    fields: [projects.imageId],
+    references: [assets.id],
+  }),
+  gallery: many(projectAssets),
+}));
+
+export const projectAssets = pgTable(
+  'project_assets',
+  {
+    projectId: uuid('project_id')
+      .notNull()
+      .references(() => projects.id, { onDelete: 'cascade' }),
+    assetId: uuid('asset_id')
+      .notNull()
+      .references(() => assets.id, { onDelete: 'cascade' }),
+    position: integer('position').default(0).notNull(),
+    isPrimary: boolean('is_primary').default(false).notNull(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.projectId, t.assetId] }),
+  })
+);
+
+export const projectAssetsRelations = relations(projectAssets, ({ one }) => ({
+  project: one(projects, {
+    fields: [projectAssets.projectId],
+    references: [projects.id],
+  }),
+  asset: one(assets, {
+    fields: [projectAssets.assetId],
+    references: [assets.id],
+  }),
+}));
+
+// --- Blog Posts ---
+
+export const posts = pgTable('posts', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  title: text('title').notNull(),
+  slug: text('slug').notNull().unique(),
+  excerpt: text('excerpt'),
+  contentHtml: text('content_html').notNull(),
+  featuredImageId: uuid('featured_image_id').references(() => assets.id),
+  isActive: boolean('is_active').default(true).notNull(),
+  seoTitle: text('seo_title'),
+  seoDescription: text('seo_description'),
+  seoKeywords: text('seo_keywords'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const postsRelations = relations(posts, ({ one, many }) => ({
+  featuredImage: one(assets, {
+    fields: [posts.featuredImageId],
+    references: [assets.id],
+  }),
+  gallery: many(postAssets),
+}));
+
+export const postAssets = pgTable(
+  'post_assets',
+  {
+    postId: uuid('post_id')
+      .notNull()
+      .references(() => posts.id, { onDelete: 'cascade' }),
+    assetId: uuid('asset_id')
+      .notNull()
+      .references(() => assets.id, { onDelete: 'cascade' }),
+    position: integer('position').default(0).notNull(),
+    isPrimary: boolean('is_primary').default(false).notNull(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.postId, t.assetId] }),
+  })
+);
+
+export const postAssetsRelations = relations(postAssets, ({ one }) => ({
+  post: one(posts, {
+    fields: [postAssets.postId],
+    references: [posts.id],
+  }),
+  asset: one(assets, {
+    fields: [postAssets.assetId],
+    references: [assets.id],
+  }),
+}));
+
 export type InsertSiteHero = typeof siteHeros.$inferInsert;
 export type SelectSiteHero = typeof siteHeros.$inferSelect;
 

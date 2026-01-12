@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic';
 
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
+import { Playfair_Display } from 'next/font/google';
 import '@repo/ui/globals.css';
 import { Navbar } from './components/navbar-section';
 import { db } from '@repo/database';
@@ -13,6 +14,11 @@ const geistSans = localFont({
 const geistMono = localFont({
   src: './fonts/GeistMonoVF.woff',
   variable: '--font-geist-mono',
+});
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-playfair',
 });
 
 export const metadata: Metadata = {
@@ -38,7 +44,9 @@ export default async function RootLayout({
 
   return (
     <html lang='en'>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} font-playfair antialiased`}
+      >
         <Navbar catalogs={rootCatalogs} />
         <main>{children}</main>
       </body>

@@ -14,6 +14,9 @@ import {
   ChevronsUpDown,
   Home,
   ChevronRight,
+  Briefcase,
+  DraftingCompass,
+  Newspaper,
 } from 'lucide-react';
 import Image from 'next/image';
 import { useSession, signOut } from 'next-auth/react';
@@ -65,6 +68,9 @@ export function Sidebar() {
     { name: 'Catalogs', href: '/catalogs', icon: FolderTree },
     { name: 'Collections', href: '/collections', icon: Layers },
     { name: 'Products', href: '/products', icon: Package },
+    { name: 'Services', href: '/services', icon: Briefcase },
+    { name: 'Projects', href: '/projects', icon: DraftingCompass },
+    { name: 'Blogs', href: '/blogs', icon: Newspaper },
     // { name: "Orders", href: "/orders", icon: ShoppingCart },
     // { name: "Customers", href: "/customers", icon: Users },
     ...(isAdmin ? [{ name: 'Admin Users', href: '/users', icon: UserCog }] : []),
