@@ -35,6 +35,11 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
   const isCatalogPage = pathname.startsWith('/catalog/');
   const isWhiteNavbar = isMenuOpen || isCatalogPage;
 
+  // Auto-close menu when navigating to a new page
+  React.useEffect(() => {
+    setIsMenuOpen(false);
+  }, [pathname]);
+
   return (
     <>
       <nav
@@ -170,9 +175,12 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
         {/* Sliding Menu Down */}
         <div
           className={cn(
-            'overflow-hidden transition-all duration-700 ease-in-out bg-white border-t border-black/5',
+            'overflow-hidden bg-white border-t border-black/5',
             isMenuOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
           )}
+          style={{
+            transition: 'max-height 2500ms ease-out, opacity 2500ms ease-out',
+          }}
         >
           <div className='container mx-auto px-4 py-12'>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12'>

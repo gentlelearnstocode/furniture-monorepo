@@ -11,25 +11,41 @@ interface ProductSliderProps {
 
 export const ProductSlider = ({ images }: ProductSliderProps) => {
   const [currentIndex, setCurrentIndex] = React.useState(0);
+  const [isHovered, setIsHovered] = React.useState(false);
 
-  if (images.length === 0) return null;
-
-  const nextSlide = () => {
+  const nextSlide = React.useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % images.length);
-  };
+  }, [images.length]);
 
   const prevSlide = () => {
     setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
   };
 
+  // Auto-play functionality
+  React.useEffect(() => {
+    if (images.length <= 1 || isHovered) return;
+
+    const interval = setInterval(() => {
+      nextSlide();
+    }, 5000); // Change slide every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [currentIndex, isHovered, images.length, nextSlide]);
+
+  if (images.length === 0) return null;
+
   return (
-    <div className='relative w-full aspect-[21/9] md:aspect-[24/10] overflow-hidden bg-gray-100 group'>
+    <div
+      className='relative w-full aspect-[21/9] md:aspect-[24/10] overflow-hidden rounded-2xl shadow-2xl shadow-black/10 bg-gray-100 group'
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       {images.map((image, index) => (
         <div
           key={index}
           className={cn(
-            'absolute inset-0 transition-opacity duration-1000 ease-in-out',
-            index === currentIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
+            'absolute inset-0 transition-all duration-[1200ms] ease-out',
+            index === currentIndex ? 'opacity-100 z-10 scale-100' : 'opacity-0 z-0 scale-105'
           )}
         >
           <Image
@@ -43,36 +59,42 @@ export const ProductSlider = ({ images }: ProductSliderProps) => {
         </div>
       ))}
 
+      {/* Gradient overlay for better button visibility */}
+      <div className='absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/10 z-[15] pointer-events-none' />
+
       {/* Navigation Arrows */}
       {images.length > 1 && (
         <>
           <button
             onClick={prevSlide}
-            className='absolute left-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-white/40 bg-black/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white hover:text-black transition-all duration-300'
+            className='absolute left-6 md:left-10 top-1/2 -translate-y-1/2 z-20 w-14 h-14 rounded-full border border-white/30 bg-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-white hover:text-black hover:border-white hover:scale-110 transition-all duration-300 opacity-0 group-hover:opacity-100 shadow-lg'
             aria-label='Previous slide'
           >
-            <ChevronLeft size={24} strokeWidth={2} />
+            <ChevronLeft size={26} strokeWidth={1.5} />
           </button>
           <button
             onClick={nextSlide}
-            className='absolute right-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-white/40 bg-black/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white hover:text-black transition-all duration-300'
+            className='absolute right-6 md:right-10 top-1/2 -translate-y-1/2 z-20 w-14 h-14 rounded-full border border-white/30 bg-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-white hover:text-black hover:border-white hover:scale-110 transition-all duration-300 opacity-0 group-hover:opacity-100 shadow-lg'
             aria-label='Next slide'
           >
-            <ChevronRight size={24} strokeWidth={2} />
+            <ChevronRight size={26} strokeWidth={1.5} />
           </button>
         </>
       )}
 
-      {/* Pagination dots (Optional, but good for UX) */}
-      <div className='absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2'>
+      {/* Pagination dots */}
+      <div className='absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 z-20 flex gap-2.5 bg-black/20 backdrop-blur-md px-4 py-2.5 rounded-full'>
         {images.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentIndex(index)}
             className={cn(
-              'w-2 h-2 rounded-full transition-all duration-300',
-              index === currentIndex ? 'bg-white w-8' : 'bg-white/40'
+              'rounded-full transition-all duration-500 hover:scale-110',
+              index === currentIndex
+                ? 'bg-white w-10 h-2.5 shadow-lg shadow-white/30'
+                : 'bg-white/50 w-2.5 h-2.5 hover:bg-white/70'
             )}
+            aria-label={`Go to slide ${index + 1}`}
           />
         ))}
       </div>

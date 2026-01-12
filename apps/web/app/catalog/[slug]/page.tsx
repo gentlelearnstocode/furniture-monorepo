@@ -71,31 +71,46 @@ export default async function CatalogPage({ params }: Props) {
     .filter((url): url is string => !!url);
 
   return (
-    <div className='min-h-screen bg-[#FDFCFB]'>
+    <div className='min-h-screen bg-gradient-to-b from-[#FDFCFB] via-white to-[#FDFCFB]'>
       {/* Breadcrumb & Catalog Title */}
-      <div className='container mx-auto px-4 pt-12 pb-4'>
-        <div className='flex items-center gap-2 text-[14px] font-serif italic text-gray-500 mb-8'>
-          <Link href='/' className='hover:text-black transition-colors'>
+      <div className='container mx-auto px-4 pt-8 pb-4'>
+        <div className='flex items-center gap-2.5 text-[13px] font-serif italic text-gray-400 mb-6'>
+          <Link href='/' className='hover:text-black transition-colors duration-300'>
             Home Page
           </Link>
-          <ChevronRight size={12} className='text-gray-300' />
-          <span className='text-black'>{catalog.name}</span>
+          <ChevronRight size={14} className='text-gray-300' />
+          <span className='text-black font-medium'>{catalog.name}</span>
         </div>
-        <div className='h-px bg-red-800/20 w-full mb-12' />
+
+        {/* Decorative divider */}
+        <div className='relative mb-10'>
+          <div className='h-px bg-gradient-to-r from-transparent via-red-800/30 to-transparent w-full' />
+          <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-red-800/40 rotate-45' />
+        </div>
       </div>
 
       {/* Hero Slider */}
-      <div className='container mx-auto px-4 mb-24'>
+      <div className='container mx-auto px-4 mb-16'>
         <ProductSlider images={sliderImages.slice(0, 5)} />
       </div>
 
       {/* Shop the look Section */}
-      <div className='container mx-auto px-4 pb-32'>
-        <h2 className='text-4xl md:text-5xl font-serif italic text-center mb-16 text-black/80'>
-          Shop the look
-        </h2>
+      <div className='container mx-auto px-4 pb-20'>
+        {/* Section Header with decorative elements */}
+        <div className='relative mb-12'>
+          <div className='flex items-center justify-center gap-6 mb-3'>
+            <div className='h-px w-16 bg-gradient-to-r from-transparent to-black/20' />
+            <h2 className='text-5xl md:text-6xl font-serif italic text-center text-black/85 tracking-wide'>
+              Shop the look
+            </h2>
+            <div className='h-px w-16 bg-gradient-to-l from-transparent to-black/20' />
+          </div>
+          <p className='text-center text-sm font-serif italic text-gray-400 tracking-widest uppercase'>
+            Curated Collection
+          </p>
+        </div>
 
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16'>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-16'>
           {uniqueProducts.map((product) => {
             const primaryAsset = product.gallery.find((g) => g.isPrimary) || product.gallery[0];
             return (
