@@ -48,17 +48,17 @@ export const ProductSlider = ({ images }: ProductSliderProps) => {
         <>
           <button
             onClick={prevSlide}
-            className='absolute left-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-white/50 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all duration-300'
+            className='absolute left-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-white/40 bg-black/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white hover:text-black transition-all duration-300'
             aria-label='Previous slide'
           >
-            <ChevronLeft size={24} strokeWidth={1} />
+            <ChevronLeft size={24} strokeWidth={2} />
           </button>
           <button
             onClick={nextSlide}
-            className='absolute right-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-white/50 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all duration-300'
+            className='absolute right-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-white/40 bg-black/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white hover:text-black transition-all duration-300'
             aria-label='Next slide'
           >
-            <ChevronRight size={24} strokeWidth={1} />
+            <ChevronRight size={24} strokeWidth={2} />
           </button>
         </>
       )}

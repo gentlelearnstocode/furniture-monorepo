@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { db } from '@repo/database';
 import { ProductSlider } from './components/product-slider';
 import { ProductCard } from './components/product-card';
+import { SubCatalogGrid } from './components/sub-catalog-grid';
 import { ChevronRight } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
@@ -20,6 +21,11 @@ export default async function CatalogPage({ params }: Props) {
   const catalog = await db.query.catalogs.findFirst({
     where: (catalogs, { eq }) => eq(catalogs.slug, slug),
     with: {
+      children: {
+        with: {
+          image: true,
+        },
+      },
       collections: {
         with: {
           collection: {
@@ -67,7 +73,7 @@ export default async function CatalogPage({ params }: Props) {
   return (
     <div className='min-h-screen bg-[#FDFCFB]'>
       {/* Breadcrumb & Catalog Title */}
-      <div className='container mx-auto px-4 pt-44 pb-4'>
+      <div className='container mx-auto px-4 pt-12 pb-4'>
         <div className='flex items-center gap-2 text-[14px] font-serif italic text-gray-500 mb-8'>
           <Link href='/' className='hover:text-black transition-colors'>
             Home Page
@@ -107,6 +113,9 @@ export default async function CatalogPage({ params }: Props) {
           })}
         </div>
       </div>
+
+      {/* Catalog Level 2 Section */}
+      <SubCatalogGrid subCatalogs={catalog.children} />
     </div>
   );
 }
