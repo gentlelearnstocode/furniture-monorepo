@@ -32,9 +32,9 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const pathname = usePathname();
 
-  // All catalog pages (level 1 and level 2) now use /catalog/ prefix
-  const isCatalogPage = pathname.startsWith('/catalog/');
-  const isWhiteNavbar = isMenuOpen || isCatalogPage;
+  // Catalog and product pages should use the white navbar
+  const isWhiteNavbarPath = pathname.startsWith('/catalog/') || pathname.startsWith('/product/');
+  const isWhiteNavbar = isMenuOpen || isWhiteNavbarPath;
 
   // Auto-close menu when navigating to a new page
   React.useEffect(() => {
