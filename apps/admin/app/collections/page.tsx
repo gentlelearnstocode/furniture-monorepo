@@ -1,6 +1,6 @@
 import { db } from '@repo/database';
 import { Button } from '@repo/ui/ui/button';
-import { Plus, MoreHorizontal, Search, Layers } from 'lucide-react';
+import { Plus, MoreHorizontal, Search, Layers, Pencil } from 'lucide-react';
 import Link from 'next/link';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@repo/ui/ui/table';
 import Image from 'next/image';
@@ -170,7 +170,10 @@ function CollectionActions({ collection }: { collection: CollectionWithRelations
       <DropdownMenuContent align='end'>
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuItem asChild>
-          <Link href={`/collections/${collection.id}`}>Edit Collection</Link>
+          <Link href={`/collections/${collection.id}`} className='cursor-pointer'>
+            <Pencil className='mr-2 h-4 w-4' />
+            Edit Collection
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DeleteCollectionItem id={collection.id} />

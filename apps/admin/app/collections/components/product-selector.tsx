@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { Search, Plus, X, ChevronLeft, ChevronRight, Package } from 'lucide-react';
+import Link from 'next/link';
 import {
   Sheet,
   SheetContent,
@@ -218,7 +219,12 @@ export function ProductSelector({ availableProducts, value, onChange }: ProductS
               >
                 <div className='flex items-center gap-2 overflow-hidden'>
                   <Package className='h-3 w-3 text-gray-400 flex-shrink-0' />
-                  <span className='truncate font-medium'>{product.name}</span>
+                  <Link
+                    href={`/products/${product.id}/edit`}
+                    className='truncate font-medium hover:text-brand-primary-600 hover:underline transition-colors'
+                  >
+                    {product.name}
+                  </Link>
                 </div>
                 <Button
                   variant='ghost'
