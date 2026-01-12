@@ -28,7 +28,10 @@ export default async function RootLayout({
   const rootCatalogs = await db.query.catalogs.findMany({
     where: (catalogs, { isNull }) => isNull(catalogs.parentId),
     with: {
-      children: true,
+      children: {
+        orderBy: (children, { asc }) => [asc(children.name)],
+      },
+      image: true,
     },
     orderBy: (catalogs, { asc }) => [asc(catalogs.name)],
   });
