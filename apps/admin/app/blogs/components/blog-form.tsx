@@ -98,7 +98,18 @@ export function BlogForm({ initialData }: BlogFormProps) {
                     <FormItem>
                       <FormLabel>Title</FormLabel>
                       <FormControl>
-                        <Input placeholder='Post title' {...field} />
+                        <Input
+                          placeholder='Post title'
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            const slug = e.target.value
+                              .toLowerCase()
+                              .replace(/[^a-z0-9]+/g, '-')
+                              .replace(/(^-|-$)/g, '');
+                            form.setValue('slug', slug);
+                          }}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

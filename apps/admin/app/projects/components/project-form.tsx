@@ -96,7 +96,18 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
                     <FormItem>
                       <FormLabel>Title</FormLabel>
                       <FormControl>
-                        <Input placeholder='Project title' {...field} />
+                        <Input
+                          placeholder='Project title'
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            const slug = e.target.value
+                              .toLowerCase()
+                              .replace(/[^a-z0-9]+/g, '-')
+                              .replace(/(^-|-$)/g, '');
+                            form.setValue('slug', slug);
+                          }}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

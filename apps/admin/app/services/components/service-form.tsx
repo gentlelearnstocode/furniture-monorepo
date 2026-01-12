@@ -96,7 +96,18 @@ export function ServiceForm({ initialData }: ServiceFormProps) {
                     <FormItem>
                       <FormLabel>Title</FormLabel>
                       <FormControl>
-                        <Input placeholder='Service title' {...field} />
+                        <Input
+                          placeholder='Service title'
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            const slug = e.target.value
+                              .toLowerCase()
+                              .replace(/[^a-z0-9]+/g, '-')
+                              .replace(/(^-|-$)/g, '');
+                            form.setValue('slug', slug);
+                          }}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
