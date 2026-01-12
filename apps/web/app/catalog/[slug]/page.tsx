@@ -68,7 +68,7 @@ export default async function CatalogPage({ params }: Props) {
     notFound();
   }
 
-  let uniqueProducts: any[] = [];
+  let uniqueProducts: typeof catalog.products = [];
   let sliderImages: string[] = [];
 
   // Level 1 catalog: Show products from associated collections
@@ -82,7 +82,9 @@ export default async function CatalogPage({ params }: Props) {
     // Gather images for the slider
     sliderImages = uniqueProducts
       .map((product) => {
-        const primaryAsset = product.gallery.find((g) => g.isPrimary) || product.gallery[0];
+        const primaryAsset =
+          product.gallery.find((g: (typeof product.gallery)[number]) => g.isPrimary) ||
+          product.gallery[0];
         return primaryAsset?.asset?.url;
       })
       .filter((url): url is string => !!url);
@@ -94,7 +96,9 @@ export default async function CatalogPage({ params }: Props) {
     // Gather images for the slider
     sliderImages = uniqueProducts
       .map((product) => {
-        const primaryAsset = product.gallery.find((g) => g.isPrimary) || product.gallery[0];
+        const primaryAsset =
+          product.gallery.find((g: (typeof product.gallery)[number]) => g.isPrimary) ||
+          product.gallery[0];
         return primaryAsset?.asset?.url;
       })
       .filter((url): url is string => !!url);
@@ -145,7 +149,9 @@ export default async function CatalogPage({ params }: Props) {
 
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-16'>
             {uniqueProducts.map((product) => {
-              const primaryAsset = product.gallery.find((g) => g.isPrimary) || product.gallery[0];
+              const primaryAsset =
+                product.gallery.find((g: (typeof product.gallery)[number]) => g.isPrimary) ||
+                product.gallery[0];
               return (
                 <ProductCard
                   key={product.id}
