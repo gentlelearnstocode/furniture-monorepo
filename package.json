@@ -10,7 +10,11 @@
     "db:push": "dotenv -e apps/web/.env.development.local -- pnpm --filter @repo/database drizzle-kit push",
     "db:generate": "pnpm --filter @repo/database drizzle-kit generate",
     "dev:web": "pnpm --filter web dev",
-    "dev:admin": "pnpm --filter admin dev"
+    "dev:admin": "pnpm --filter admin dev",
+    "start": "turbo run start",
+    "prod": "pnpm build && pnpm start",
+    "start:web": "pnpm --filter web start",
+    "start:admin": "pnpm --filter admin start"
   },
   "devDependencies": {
     "prettier": "^3.6.2",

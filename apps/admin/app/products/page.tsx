@@ -1,21 +1,13 @@
 import { db } from '@repo/database';
 import { Button } from '@repo/ui/ui/button';
-import { Plus, MoreHorizontal, Search, Settings, Pencil } from 'lucide-react';
+import { Plus, Search, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@repo/ui/ui/table';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/ui/card';
 import { Input } from '@repo/ui/ui/input';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@repo/ui/ui/dropdown-menu';
 import { Badge } from '@repo/ui/ui/badge';
 import Image from 'next/image';
-import { DeleteProductButton } from './components/delete-product-button';
+import { ProductActions } from './components/product-actions';
 
 export const dynamic = 'force-dynamic';
 
@@ -155,34 +147,7 @@ export default async function ProductsPage() {
                         </Badge>
                       </TableCell>
                       <TableCell className='text-right'>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button
-                              variant='ghost'
-                              className='h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity'
-                            >
-                              <span className='sr-only'>Open menu</span>
-                              <MoreHorizontal className='h-4 w-4' />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align='end'>
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem asChild>
-                              <Link
-                                href={`/products/${product.id}/edit`}
-                                className='cursor-pointer w-full flex items-center'
-                              >
-                                <Pencil className='mr-2 h-4 w-4' />
-                                Edit Product
-                              </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DeleteProductButton
-                              productId={product.id}
-                              productName={product.name}
-                            />
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                        <ProductActions product={product} />
                       </TableCell>
                     </TableRow>
                   );

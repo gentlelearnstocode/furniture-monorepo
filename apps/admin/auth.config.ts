@@ -1,27 +1,27 @@
-import type { NextAuthConfig, DefaultSession } from "next-auth";
-import "next-auth/jwt";
-import "next-auth/jwt";
+import type { NextAuthConfig, DefaultSession } from 'next-auth';
+import 'next-auth/jwt';
+import 'next-auth/jwt';
 
-declare module "next-auth" {
+declare module 'next-auth' {
   interface Session {
     user: {
       id: string;
-      role: "admin" | "editor";
+      role: 'admin' | 'editor';
       username: string;
       isActive: boolean;
-    } & DefaultSession["user"];
+    } & DefaultSession['user'];
   }
 
   interface User {
-    role?: "admin" | "editor";
+    role?: 'admin' | 'editor';
     username?: string;
     isActive?: boolean;
   }
 }
 
-declare module "next-auth/jwt" {
+declare module 'next-auth/jwt' {
   interface JWT {
-    role?: "admin" | "editor";
+    role?: 'admin' | 'editor';
     id?: string;
     username?: string;
     isActive?: boolean;
@@ -29,20 +29,21 @@ declare module "next-auth/jwt" {
 }
 
 export const authConfig: NextAuthConfig = {
+  trustHost: true,
   pages: {
-    signIn: "/login",
+    signIn: '/login',
   },
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
-      const isOnLoginPage = nextUrl.pathname.startsWith("/login");
+      const isOnLoginPage = nextUrl.pathname.startsWith('/login');
 
       if (!isLoggedIn && !isOnLoginPage) {
-        return Response.redirect(new URL("/login", nextUrl));
+        return Response.redirect(new URL('/login', nextUrl));
       }
 
       if (isLoggedIn && isOnLoginPage) {
-        return Response.redirect(new URL("/", nextUrl));
+        return Response.redirect(new URL('/', nextUrl));
       }
 
       return true;
@@ -58,7 +59,7 @@ export const authConfig: NextAuthConfig = {
     },
     session({ session, token }) {
       if (session.user) {
-        session.user.role = token.role as "admin" | "editor";
+        session.user.role = token.role as 'admin' | 'editor';
         session.user.id = token.id as string;
         session.user.username = token.username as string;
         session.user.isActive = token.isActive as boolean;
