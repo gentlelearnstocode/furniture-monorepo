@@ -101,7 +101,7 @@ export function MultiImageUpload({ value, onChange, folder = 'general' }: MultiI
         {value.map((image) => (
           <div
             key={image.assetId}
-            className='relative aspect-square rounded-md overflow-hidden border bg-gray-50 group'
+            className='relative aspect-square rounded-md overflow-hidden border bg-gray-50 flex items-center justify-center group'
           >
             <Image src={image.url} alt='Uploaded Image' fill className='object-cover' />
             <div className='absolute top-1 right-1 flex gap-1'>
@@ -125,7 +125,7 @@ export function MultiImageUpload({ value, onChange, folder = 'general' }: MultiI
               </Button>
             </div>
             {image.isPrimary && (
-              <div className='absolute bottom-1 left-1 bg-black/50 text-white text-[10px] px-1.5 py-0.5 rounded flex items-center gap-1'>
+              <div className='absolute bottom-1 left-1 bg-black/50 text-white text-[10px] px-1.5 py-0.5 rounded flex items-center gap-1 leading-none'>
                 <Check className='h-2 w-2' /> Primary
               </div>
             )}
@@ -139,7 +139,7 @@ export function MultiImageUpload({ value, onChange, folder = 'general' }: MultiI
           >
             <Loader2 className='h-6 w-6 text-gray-400 animate-spin mb-2' />
             <div className='w-full space-y-1'>
-              <Progress value={percent} className='h-1 shadow-none' />
+              <Progress value={percent} className='h-1' />
               <p className='text-[10px] text-gray-500 text-center truncate w-full'>{percent}%</p>
             </div>
           </div>

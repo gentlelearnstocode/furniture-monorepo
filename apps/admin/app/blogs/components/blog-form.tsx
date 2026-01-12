@@ -219,31 +219,6 @@ export function BlogForm({ initialData }: BlogFormProps) {
           <div className='space-y-6'>
             <Card>
               <CardHeader>
-                <CardTitle>Images</CardTitle>
-                <CardDescription>Upload and manage images for this blog post.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <FormField
-                  control={form.control}
-                  name='images'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <MultiImageUpload
-                          value={field.value}
-                          onChange={field.onChange}
-                          folder='blogs'
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
                 <CardTitle>Status</CardTitle>
                 <CardDescription>Control visibility on the website.</CardDescription>
               </CardHeader>
@@ -269,6 +244,31 @@ export function BlogForm({ initialData }: BlogFormProps) {
             </Card>
           </div>
         </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Images</CardTitle>
+            <CardDescription>Upload and manage images for this blog post.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <FormField
+              control={form.control}
+              name='images'
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <MultiImageUpload
+                      value={field.value}
+                      onChange={field.onChange}
+                      folder='blogs'
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </CardContent>
+        </Card>
 
         <div className='flex justify-end pt-4 border-t'>
           <Button type='submit' disabled={isPending} className='w-full md:w-auto'>

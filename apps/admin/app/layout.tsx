@@ -32,7 +32,7 @@ export default async function RootLayout({
   const showAdminLayout = !!session;
 
   return (
-    <html lang='en'>
+    <html lang='en' suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Providers>
           {showAdminLayout ? <AdminLayout>{children}</AdminLayout> : <main>{children}</main>}

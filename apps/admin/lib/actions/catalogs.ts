@@ -100,3 +100,20 @@ export async function deleteCatalog(id: string) {
     return { error: 'Database error: Failed to delete catalog.' };
   }
 }
+
+export async function bulkDeleteCatalogs(ids: string[]) {
+  try {
+    const { inArray } = await import('drizzle-orm');
+    await db.delete(catalogs).where(inArray(catalogs.id, ids));
+    revalidatePath('/catalogs');
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to bulk delete catalogs:', error);
+    if (error instanceof Error && error.message.includes('foreign key constraint')) {
+      return {
+        error: 'One or more catalogs cannot be deleted because they are still being referenced.',
+      };
+    }
+    return { error: 'Failed to bulk delete catalogs' };
+  }
+}

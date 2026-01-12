@@ -173,6 +173,18 @@ export async function deleteCollection(id: string) {
   return { success: true };
 }
 
+export async function bulkDeleteCollections(ids: string[]) {
+  try {
+    const { inArray } = await import('drizzle-orm');
+    await db.delete(collections).where(inArray(collections.id, ids));
+    revalidatePath('/collections');
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to bulk delete collections:', error);
+    return { error: 'Failed to bulk delete collections' };
+  }
+}
+
 export async function toggleCollectionHomeVisibility(id: string, value: boolean) {
   try {
     await db

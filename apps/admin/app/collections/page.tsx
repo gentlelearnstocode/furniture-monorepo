@@ -1,30 +1,60 @@
-import { db } from '@repo/database';
 import { Button } from '@repo/ui/ui/button';
-import { Plus, MoreHorizontal, Search, Layers, Pencil } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import Link from 'next/link';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@repo/ui/ui/table';
-import Image from 'next/image';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/ui/card';
-import { Input } from '@repo/ui/ui/input';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@repo/ui/ui/dropdown-menu';
-import { Badge } from '@repo/ui/ui/badge';
+import { collections } from '@repo/database/schema';
+import { getListingData } from '@/lib/listing-utils';
+import { ListingControls } from '@/components/ui/listing-controls';
+import { CollectionList } from './components/collection-list';
+import { eq } from 'drizzle-orm';
 
 export const dynamic = 'force-dynamic';
 
-export default async function CollectionsPage() {
-  const allCollections = await db.query.collections.findMany({
+interface CollectionsPageProps {
+  searchParams: Promise<{
+    page?: string;
+    search?: string;
+    status?: string;
+    home?: string;
+  }>;
+}
+
+export default async function CollectionsPage({ searchParams }: CollectionsPageProps) {
+  const resolvedSearchParams = await searchParams;
+  const page = Number(resolvedSearchParams.page) || 1;
+  const search = resolvedSearchParams.search || '';
+  const status = resolvedSearchParams.status;
+  const home = resolvedSearchParams.home;
+
+  const filters = [];
+  if (status && status !== 'all') {
+    filters.push(eq(collections.isActive, status === 'active'));
+  }
+  if (home && home !== 'all') {
+    filters.push(eq(collections.showOnHome, home === 'show'));
+  }
+
+  const { data: allCollections, meta } = await getListingData(collections, {
+    page,
+    limit: 10,
+    search,
+    searchColumns: [collections.name, collections.slug],
+    filters,
+    orderBy: (t: any, { desc }: any) => [desc(t.createdAt)],
     with: {
       banner: true,
     },
-    orderBy: (collections, { desc }) => [desc(collections.createdAt)],
   });
+
+  const statusOptions = [
+    { label: 'Active', value: 'active' },
+    { label: 'Inactive', value: 'inactive' },
+  ];
+
+  const homeOptions = [
+    { label: 'Shown on Home', value: 'show' },
+    { label: 'Hidden from Home', value: 'hidden' },
+  ];
 
   return (
     <div className='space-y-6'>
@@ -55,131 +85,36 @@ export default async function CollectionsPage() {
       <div className='grid gap-4 md:grid-cols-4 lg:grid-cols-4'>
         <Card className='p-4 flex flex-col justify-between'>
           <span className='text-sm font-medium text-gray-500'>Total Collections</span>
-          <span className='text-2xl font-bold'>{allCollections.length}</span>
+          <span className='text-2xl font-bold'>{meta.totalItems}</span>
         </Card>
       </div>
 
       <Card className='shadow-sm border-gray-200'>
         <CardHeader className='pb-3'>
-          <div className='flex items-center justify-between'>
+          <div className='flex flex-col md:flex-row md:items-center justify-between gap-4'>
             <div>
               <CardTitle>Collection List</CardTitle>
               <CardDescription>View and manage your collections.</CardDescription>
             </div>
-            <div className='relative w-64'>
-              <Search className='absolute left-2 top-2.5 h-4 w-4 text-gray-400' />
-              <Input placeholder='Search collections...' className='pl-8' />
+            <div className='flex flex-col sm:flex-row gap-2'>
+              <ListingControls
+                placeholder='Search collections...'
+                filterKey='status'
+                filterOptions={statusOptions}
+                filterPlaceholder='Filter by Status'
+              />
+              <ListingControls
+                filterKey='home'
+                filterOptions={homeOptions}
+                filterPlaceholder='Filter by Home'
+              />
             </div>
           </div>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow className='hover:bg-gray-50/50'>
-                <TableHead className='w-[100px]'>Banner</TableHead>
-                <TableHead className='min-w-[200px]'>Name</TableHead>
-                <TableHead>Slug</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className='hidden md:table-cell'>Description</TableHead>
-                <TableHead className='w-[100px] text-right'>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {allCollections.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={6} className='h-48 text-center text-gray-500'>
-                    <div className='flex flex-col items-center justify-center gap-2'>
-                      <Layers className='h-8 w-8 text-gray-300' />
-                      <p>No collections found. Create your first one to get started.</p>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ) : (
-                allCollections.map((collection) => (
-                  <TableRow key={collection.id} className='group'>
-                    <TableCell>
-                      <div className='relative h-12 w-20 rounded-md overflow-hidden bg-gray-100 border border-gray-200'>
-                        {collection.banner && (collection.banner as any).url ? (
-                          <Image
-                            src={(collection.banner as any).url}
-                            alt={collection.name}
-                            fill
-                            className='object-cover'
-                          />
-                        ) : (
-                          <div className='flex items-center justify-center h-full w-full'>
-                            <Layers className='h-4 w-4 text-gray-400' />
-                          </div>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className='flex flex-col'>
-                        <span className='font-medium text-gray-900'>{collection.name}</span>
-                        <div className='md:hidden text-xs text-gray-500 truncate max-w-[150px]'>
-                          {collection.slug}
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant='secondary' className='font-normal font-mono text-xs'>
-                        {collection.slug}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={collection.isActive ? 'success' : ('secondary' as any)}
-                        className='font-medium text-[10px] uppercase tracking-wider'
-                      >
-                        {collection.isActive ? 'Active' : 'Inactive'}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className='hidden md:table-cell text-gray-500 max-w-xs truncate'>
-                      {collection.description || (
-                        <span className='text-gray-300 italic'>No description</span>
-                      )}
-                    </TableCell>
-                    <TableCell className='text-right'>
-                      <CollectionActions collection={collection} />
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+          <CollectionList collections={allCollections} meta={meta} />
         </CardContent>
       </Card>
     </div>
   );
 }
-
-import { CollectionWithRelations } from '@/types';
-
-function CollectionActions({ collection }: { collection: CollectionWithRelations }) {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant='ghost'
-          className='h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity'
-        >
-          <span className='sr-only'>Open menu</span>
-          <MoreHorizontal className='h-4 w-4' />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align='end'>
-        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-        <DropdownMenuItem asChild>
-          <Link href={`/collections/${collection.id}`} className='cursor-pointer'>
-            <Pencil className='mr-2 h-4 w-4' />
-            Edit Collection
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DeleteCollectionItem id={collection.id} />
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-}
-
-import { DeleteCollectionItem } from './components/delete-collection-item';

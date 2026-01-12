@@ -22,7 +22,7 @@ import { Textarea } from '@repo/ui/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/ui/select';
 import { Checkbox } from '@repo/ui/ui/checkbox';
 
-import { ImageUpload } from './image-upload';
+import { MultiImageUpload } from '@/components/ui/multi-image-upload';
 import { RichTextEditor } from '@/components/ui/rich-text-editor';
 
 interface CatalogOption {
@@ -310,7 +310,7 @@ export function ProductForm({ catalogs, initialData }: ProductFormProps) {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <ImageUpload
+                  <MultiImageUpload
                     value={field.value as any}
                     onChange={field.onChange}
                     folder={`products/${form.getValues('slug') || 'general'}`}

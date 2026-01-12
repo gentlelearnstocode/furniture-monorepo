@@ -176,3 +176,15 @@ export async function deleteProduct(id: string) {
     return { error: 'Failed to delete product' };
   }
 }
+
+export async function bulkDeleteProducts(ids: string[]) {
+  try {
+    const { inArray } = await import('drizzle-orm');
+    await db.delete(products).where(inArray(products.id, ids));
+    revalidatePath('/products');
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to bulk delete products:', error);
+    return { error: 'Failed to bulk delete products' };
+  }
+}

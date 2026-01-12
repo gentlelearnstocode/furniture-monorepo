@@ -1,0 +1,193 @@
+'use client';
+
+import { useState } from 'react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@repo/ui/ui/table';
+import { Checkbox } from '@repo/ui/ui/checkbox';
+import { Badge } from '@repo/ui/ui/badge';
+import Image from 'next/image';
+import { Layers, MoreHorizontal, Pencil, Home } from 'lucide-react';
+import { Pagination } from '@/components/ui/pagination';
+import { BulkActions } from '@/components/ui/bulk-actions';
+import { bulkDeleteCollections } from '@/lib/actions/collections';
+import Link from 'next/link';
+import { Button } from '@repo/ui/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@repo/ui/ui/dropdown-menu';
+import { DeleteCollectionItem } from './delete-collection-item';
+
+interface CollectionListProps {
+  collections: any[];
+  meta: {
+    totalItems: number;
+    totalPages: number;
+    currentPage: number;
+    limit: number;
+  };
+}
+
+export function CollectionList({ collections, meta }: CollectionListProps) {
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+
+  const toggleSelectAll = () => {
+    if (selectedIds.length === collections.length) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(collections.map((c) => c.id));
+    }
+  };
+
+  const toggleSelect = (id: string) => {
+    setSelectedIds((prev) => (prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]));
+  };
+
+  return (
+    <>
+      <div className='relative overflow-x-auto'>
+        <Table>
+          <TableHeader>
+            <TableRow className='hover:bg-gray-50/50'>
+              <TableHead className='w-[40px]'>
+                <Checkbox
+                  checked={selectedIds.length === collections.length && collections.length > 0}
+                  onCheckedChange={toggleSelectAll}
+                />
+              </TableHead>
+              <TableHead className='w-[100px]'>Banner</TableHead>
+              <TableHead className='min-w-[200px]'>Name</TableHead>
+              <TableHead>Slug</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Home</TableHead>
+              <TableHead className='hidden md:table-cell'>Description</TableHead>
+              <TableHead className='w-[100px] text-right'>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {collections.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={8} className='h-48 text-center text-gray-500'>
+                  <div className='flex flex-col items-center justify-center gap-2'>
+                    <Layers className='h-8 w-8 text-gray-300' />
+                    <p>No collections found matched your criteria.</p>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ) : (
+              collections.map((collection) => (
+                <TableRow key={collection.id} className='group'>
+                  <TableCell>
+                    <Checkbox
+                      checked={selectedIds.includes(collection.id)}
+                      onCheckedChange={() => toggleSelect(collection.id)}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <div className='relative h-12 w-20 rounded-md overflow-hidden bg-gray-100 border border-gray-200'>
+                      {collection.banner && collection.banner.url ? (
+                        <Image
+                          src={collection.banner.url}
+                          alt={collection.name}
+                          fill
+                          className='object-cover'
+                        />
+                      ) : (
+                        <div className='flex items-center justify-center h-full w-full'>
+                          <Layers className='h-4 w-4 text-gray-400' />
+                        </div>
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className='flex flex-col'>
+                      <span className='font-medium text-gray-900'>{collection.name}</span>
+                      <div className='md:hidden text-xs text-gray-500 truncate max-w-[150px]'>
+                        {collection.slug}
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant='secondary' className='font-normal font-mono text-xs'>
+                      {collection.slug}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={collection.isActive ? 'default' : 'secondary'}
+                      className={
+                        collection.isActive
+                          ? 'bg-green-100 text-green-700 hover:bg-green-100'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-100'
+                      }
+                    >
+                      {collection.isActive ? 'Active' : 'Inactive'}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    {collection.showOnHome && (
+                      <Badge
+                        variant='outline'
+                        className='bg-amber-50 text-amber-700 border-amber-200 gap-1 capitalize'
+                      >
+                        <Home className='h-3 w-3' />
+                        Home
+                      </Badge>
+                    )}
+                  </TableCell>
+                  <TableCell className='hidden md:table-cell text-gray-500 max-w-xs truncate'>
+                    {collection.description || (
+                      <span className='text-gray-300 italic'>No description</span>
+                    )}
+                  </TableCell>
+                  <TableCell className='text-right'>
+                    <CollectionActions collection={collection} />
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </div>
+
+      <Pagination currentPage={meta.currentPage} totalPages={meta.totalPages} />
+
+      <BulkActions
+        selectedIds={selectedIds}
+        onClear={() => setSelectedIds([])}
+        onDelete={bulkDeleteCollections}
+        resourceName='Collection'
+      />
+    </>
+  );
+}
+
+function CollectionActions({ collection }: { collection: any }) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant='ghost'
+          className='h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity'
+        >
+          <span className='sr-only'>Open menu</span>
+          <MoreHorizontal className='h-4 w-4' />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align='end'>
+        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuItem asChild>
+          <Link href={`/collections/${collection.id}`} className='cursor-pointer'>
+            <Pencil className='mr-2 h-4 w-4' />
+            Edit Collection
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DeleteCollectionItem id={collection.id} />
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}

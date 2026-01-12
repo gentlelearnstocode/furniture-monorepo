@@ -85,3 +85,28 @@ export async function deleteUser(id: string) {
   revalidatePath('/users');
   return { success: true };
 }
+
+export async function bulkDeleteUsers(ids: string[]) {
+  const session = await auth();
+
+  if (session?.user?.role !== 'admin') {
+    throw new Error('Unauthorized');
+  }
+
+  // Filter out the current user's ID
+  const targetIds = ids.filter((id) => id !== session.user.id);
+
+  if (targetIds.length === 0) {
+    return { error: 'No valid user IDs providing for deletion' };
+  }
+
+  try {
+    const { inArray } = await import('drizzle-orm');
+    await db.delete(users).where(inArray(users.id, targetIds));
+    revalidatePath('/users');
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to bulk delete users:', error);
+    return { error: 'Failed to bulk delete users' };
+  }
+}

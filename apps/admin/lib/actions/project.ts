@@ -123,3 +123,16 @@ export async function deleteProject(id: string) {
     return { error: 'Database error: Failed to delete project.' };
   }
 }
+
+export async function bulkDeleteProjects(ids: string[]) {
+  try {
+    const { inArray } = await import('drizzle-orm');
+    await db.delete(projects).where(inArray(projects.id, ids));
+    revalidatePath('/projects');
+    revalidatePath('/');
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to bulk delete projects:', error);
+    return { error: 'Failed to bulk delete projects' };
+  }
+}
