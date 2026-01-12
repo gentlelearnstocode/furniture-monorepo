@@ -15,7 +15,6 @@ interface CollectionsPageProps {
     page?: string;
     search?: string;
     status?: string;
-    home?: string;
   }>;
 }
 
@@ -24,14 +23,10 @@ export default async function CollectionsPage({ searchParams }: CollectionsPageP
   const page = Number(resolvedSearchParams.page) || 1;
   const search = resolvedSearchParams.search || '';
   const status = resolvedSearchParams.status;
-  const home = resolvedSearchParams.home;
 
   const filters = [];
   if (status && status !== 'all') {
     filters.push(eq(collections.isActive, status === 'active'));
-  }
-  if (home && home !== 'all') {
-    filters.push(eq(collections.showOnHome, home === 'show'));
   }
 
   const { data: allCollections, meta } = await getListingData(collections, {
@@ -49,11 +44,6 @@ export default async function CollectionsPage({ searchParams }: CollectionsPageP
   const statusOptions = [
     { label: 'Active', value: 'active' },
     { label: 'Inactive', value: 'inactive' },
-  ];
-
-  const homeOptions = [
-    { label: 'Shown on Home', value: 'show' },
-    { label: 'Hidden from Home', value: 'hidden' },
   ];
 
   return (
@@ -102,11 +92,6 @@ export default async function CollectionsPage({ searchParams }: CollectionsPageP
                 filterKey='status'
                 filterOptions={statusOptions}
                 filterPlaceholder='Filter by Status'
-              />
-              <ListingControls
-                filterKey='home'
-                filterOptions={homeOptions}
-                filterPlaceholder='Filter by Home'
               />
             </div>
           </div>

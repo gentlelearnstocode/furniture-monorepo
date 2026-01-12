@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Checkbox } from '@repo/ui/ui/checkbox';
 import { Badge } from '@repo/ui/ui/badge';
 import Image from 'next/image';
-import { Layers, MoreHorizontal, Pencil, Home } from 'lucide-react';
+import { Layers, MoreHorizontal, Pencil } from 'lucide-react';
 import { Pagination } from '@/components/ui/pagination';
 import { BulkActions } from '@/components/ui/bulk-actions';
 import { bulkDeleteCollections } from '@/lib/actions/collections';
@@ -62,7 +62,6 @@ export function CollectionList({ collections, meta }: CollectionListProps) {
               <TableHead className='min-w-[200px]'>Name</TableHead>
               <TableHead>Slug</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead>Home</TableHead>
               <TableHead className='hidden md:table-cell'>Description</TableHead>
               <TableHead className='w-[100px] text-right'>Actions</TableHead>
             </TableRow>
@@ -70,7 +69,7 @@ export function CollectionList({ collections, meta }: CollectionListProps) {
           <TableBody>
             {collections.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={8} className='h-48 text-center text-gray-500'>
+                <TableCell colSpan={7} className='h-48 text-center text-gray-500'>
                   <div className='flex flex-col items-center justify-center gap-2'>
                     <Layers className='h-8 w-8 text-gray-300' />
                     <p>No collections found matched your criteria.</p>
@@ -127,17 +126,7 @@ export function CollectionList({ collections, meta }: CollectionListProps) {
                       {collection.isActive ? 'Active' : 'Inactive'}
                     </Badge>
                   </TableCell>
-                  <TableCell>
-                    {collection.showOnHome && (
-                      <Badge
-                        variant='outline'
-                        className='bg-amber-50 text-amber-700 border-amber-200 gap-1 capitalize'
-                      >
-                        <Home className='h-3 w-3' />
-                        Home
-                      </Badge>
-                    )}
-                  </TableCell>
+
                   <TableCell className='hidden md:table-cell text-gray-500 max-w-xs truncate'>
                     {collection.description || (
                       <span className='text-gray-300 italic'>No description</span>
