@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Menu, Search, X } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -29,17 +30,21 @@ interface NavbarProps {
 export const Navbar = ({ catalogs }: NavbarProps) => {
   const [activeMenu, setActiveMenu] = React.useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const pathname = usePathname();
+
+  const isCatalogPage = pathname.startsWith('/catalog/');
+  const isWhiteNavbar = isMenuOpen || isCatalogPage;
 
   return (
     <>
       <nav
         className={cn(
           'top-0 left-0 w-full z-[100] transition-all duration-500 ease-in-out',
-          isMenuOpen ? 'bg-white shadow-xl relative' : 'absolute text-white'
+          isWhiteNavbar ? 'bg-white shadow-sm relative' : 'absolute text-white'
         )}
       >
-        {!isMenuOpen && (
-          /* Gradient Background Layer - only show when menu is closed */
+        {!isWhiteNavbar && (
+          /* Gradient Background Layer - only show when menu is closed AND not a white navbar */
           <div className='absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-transparent -z-10 h-64' />
         )}
 
@@ -52,7 +57,9 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className={cn(
                   'transition-colors duration-300',
-                  isMenuOpen ? 'text-black hover:text-gray-600' : 'text-white hover:text-gray-300'
+                  isWhiteNavbar
+                    ? 'text-black hover:text-gray-600'
+                    : 'text-white hover:text-gray-300'
                 )}
               >
                 {isMenuOpen ? <X size={24} strokeWidth={1} /> : <Menu size={24} strokeWidth={1} />}
@@ -60,7 +67,9 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
               <button
                 className={cn(
                   'transition-colors duration-300',
-                  isMenuOpen ? 'text-black hover:text-gray-600' : 'text-white hover:text-gray-300'
+                  isWhiteNavbar
+                    ? 'text-black hover:text-gray-600'
+                    : 'text-white hover:text-gray-300'
                 )}
               >
                 <Search size={24} strokeWidth={1} />
@@ -76,7 +85,7 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
                   width={140}
                   height={140}
                   className='h-24 w-auto brightness-0 invert-0'
-                  style={!isMenuOpen ? { filter: 'brightness(0) invert(1)' } : {}}
+                  style={!isWhiteNavbar ? { filter: 'brightness(0) invert(1)' } : {}}
                   priority
                 />
               </Link>
@@ -87,15 +96,17 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
               <div
                 className={cn(
                   'flex items-center text-[20px] tracking-[0.1em] gap-3 font-serif italic',
-                  isMenuOpen ? 'text-black' : 'text-white'
+                  isWhiteNavbar ? 'text-black' : 'text-white'
                 )}
               >
                 <button className='font-bold'>ENG</button>
-                <span className={isMenuOpen ? 'text-black/20' : 'text-white/40'}>|</span>
+                <span className={isWhiteNavbar ? 'text-black/20' : 'text-white/40'}>|</span>
                 <button
                   className={cn(
                     'transition-colors uppercase',
-                    isMenuOpen ? 'text-black/40 hover:text-black' : 'text-white/60 hover:text-white'
+                    isWhiteNavbar
+                      ? 'text-black/40 hover:text-black'
+                      : 'text-white/60 hover:text-white'
                   )}
                 >
                   Vie
@@ -108,7 +119,7 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
           <div
             className={cn(
               'hidden lg:flex items-center justify-between w-full py-6 border-t transition-colors duration-300',
-              isMenuOpen ? 'border-black/10' : 'border-white/10'
+              isWhiteNavbar ? 'border-black/10' : 'border-white/10'
             )}
           >
             {catalogs.map((catalog) => (
@@ -119,10 +130,12 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
                 onMouseLeave={() => setActiveMenu(null)}
               >
                 <Link
-                  href={`/${catalog.slug}`}
+                  href={`/catalog/${catalog.slug}`}
                   className={cn(
                     'text-[20px] font-serif italic tracking-[0.1em] transition-colors whitespace-nowrap block uppercase',
-                    isMenuOpen ? 'text-black hover:text-gray-600' : 'text-white hover:text-gray-300'
+                    isWhiteNavbar
+                      ? 'text-black hover:text-gray-600'
+                      : 'text-white hover:text-gray-300'
                   )}
                 >
                   {catalog.name}
@@ -170,7 +183,7 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
                 >
                   {/* Catalog Level 1 Banner */}
                   <Link
-                    href={`/${catalog.slug}`}
+                    href={`/catalog/${catalog.slug}`}
                     className='group overflow-hidden relative aspect-[4/3]'
                   >
                     {catalog.image ? (
@@ -190,7 +203,7 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
                   </Link>
 
                   {/* Catalog Level 1 Title */}
-                  <Link href={`/${catalog.slug}`} className='group'>
+                  <Link href={`/catalog/${catalog.slug}`} className='group'>
                     <h3 className='text-[24px] font-serif italic uppercase tracking-[0.1em] text-black group-hover:text-gray-600 transition-colors'>
                       {catalog.name}
                     </h3>
