@@ -32,8 +32,13 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const pathname = usePathname();
 
-  // Catalog and product pages should use the white navbar
-  const isWhiteNavbarPath = pathname.startsWith('/catalog/') || pathname.startsWith('/product/');
+  // Catalog, product, project, service, and blog detail pages should use the white navbar
+  const isWhiteNavbarPath =
+    pathname.startsWith('/catalog/') ||
+    pathname.startsWith('/product/') ||
+    pathname.startsWith('/projects/') ||
+    pathname.startsWith('/services/') ||
+    pathname.startsWith('/blogs/');
   const isWhiteNavbar = isMenuOpen || isWhiteNavbarPath;
 
   // Auto-close menu when navigating to a new page
