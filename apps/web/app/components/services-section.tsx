@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { db } from '@repo/database';
 import { ArrowRight } from 'lucide-react';
 
@@ -29,8 +30,9 @@ export const ServicesSection = async () => {
 
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
           {allServices.map((service) => (
-            <div
+            <Link
               key={service.id}
+              href={`/services/${service.slug}`}
               className='group bg-white rounded-sm overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1'
             >
               <div className='relative aspect-[16/10] overflow-hidden'>
@@ -58,12 +60,12 @@ export const ServicesSection = async () => {
                   className='text-gray-600 line-clamp-3 mb-6 text-sm leading-relaxed font-light'
                   dangerouslySetInnerHTML={{ __html: service.descriptionHtml }}
                 />
-                <button className='flex items-center text-sm font-semibold tracking-wider uppercase text-[#7B0C0C] group/btn'>
+                <span className='flex items-center text-sm font-semibold tracking-wider uppercase text-[#7B0C0C] group/btn'>
                   Explore More
-                  <ArrowRight className='ml-2 h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1' />
-                </button>
+                  <ArrowRight className='ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1' />
+                </span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

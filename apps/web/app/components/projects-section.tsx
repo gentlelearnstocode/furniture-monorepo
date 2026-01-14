@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { db } from '@repo/database';
 import { ArrowRight } from 'lucide-react';
 
@@ -26,15 +27,22 @@ export const ProjectsSection = async () => {
               Capturing Timeless <br /> Elegance in Every Project
             </h2>
           </div>
-          <button className='flex items-center text-sm font-semibold tracking-wider uppercase border-b border-white/20 pb-2 hover:border-white transition-colors'>
+          <Link
+            href='/projects'
+            className='flex items-center text-sm font-semibold tracking-wider uppercase border-b border-white/20 pb-2 hover:border-white transition-colors'
+          >
             View All Projects
             <ArrowRight className='ml-2 h-4 w-4' />
-          </button>
+          </Link>
         </div>
 
         <div className='grid grid-cols-1 md:grid-cols-2 gap-12'>
           {allProjects.map((project, index) => (
-            <div key={project.id} className={`group relative ${index % 2 === 1 ? 'md:mt-24' : ''}`}>
+            <Link
+              key={project.id}
+              href={`/projects/${project.slug}`}
+              className={`group relative block ${index % 2 === 1 ? 'md:mt-24' : ''}`}
+            >
               <div className='relative aspect-[4/5] overflow-hidden rounded-sm mb-6'>
                 {project.image ? (
                   <Image
@@ -58,11 +66,12 @@ export const ProjectsSection = async () => {
                   {project.title}
                 </h3>
                 <div className='h-px flex-grow mx-6 bg-white/10 group-hover:bg-white/30 transition-colors' />
-                <span className='text-sm font-light text-white/50 group-hover:text-[#7B0C0C] transition-colors'>
+                <span className='flex items-center text-sm font-light text-white/50 group-hover:text-[#7B0C0C] transition-colors'>
                   Explore
+                  <ArrowRight className='ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1' />
                 </span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
