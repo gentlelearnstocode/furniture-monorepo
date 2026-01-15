@@ -4,6 +4,7 @@ import { db, siteIntros } from '@repo/database';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { introSchema, type IntroInput } from '@/lib/validations/intro';
+import { revalidateStorefront } from '../revalidate-storefront';
 
 export async function getIntro() {
   try {
@@ -51,6 +52,7 @@ export async function upsertIntro(data: IntroInput) {
     revalidatePath('/');
     revalidatePath('/homepage/intro');
     revalidatePath('/intro'); // legacy if still used
+    await revalidateStorefront(['intro']);
 
     console.log('[upsertIntro] Success');
     return { success: true };

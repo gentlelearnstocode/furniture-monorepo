@@ -4,6 +4,7 @@ import { db, catalogs } from '@repo/database';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { createCatalogSchema, type CreateCatalogInput } from '@/lib/validations/catalogs';
+import { revalidateStorefront } from '../revalidate-storefront';
 
 export async function createCatalog(data: CreateCatalogInput) {
   const validated = createCatalogSchema.safeParse(data);
@@ -43,6 +44,7 @@ export async function createCatalog(data: CreateCatalogInput) {
   }
 
   revalidatePath('/catalogs');
+  await revalidateStorefront(['catalogs']);
   return { success: true };
 }
 
@@ -88,6 +90,7 @@ export async function updateCatalog(id: string, data: CreateCatalogInput) {
   }
 
   revalidatePath('/catalogs');
+  await revalidateStorefront(['catalogs']);
   return { success: true };
 }
 
@@ -95,6 +98,7 @@ export async function deleteCatalog(id: string) {
   try {
     await db.delete(catalogs).where(eq(catalogs.id, id));
     revalidatePath('/catalogs');
+    await revalidateStorefront(['catalogs']);
     return { success: true };
   } catch (error) {
     console.error('Failed to delete catalog:', error);
@@ -110,6 +114,7 @@ export async function bulkDeleteCatalogs(ids: string[]) {
     const { inArray } = await import('drizzle-orm');
     await db.delete(catalogs).where(inArray(catalogs.id, ids));
     revalidatePath('/catalogs');
+    await revalidateStorefront(['catalogs']);
     return { success: true };
   } catch (error) {
     console.error('Failed to bulk delete catalogs:', error);

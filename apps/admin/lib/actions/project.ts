@@ -4,6 +4,7 @@ import { db, projects, projectAssets } from '@repo/database';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { projectSchema, type ProjectInput } from '@/lib/validations/project';
+import { revalidateStorefront } from '../revalidate-storefront';
 
 export async function getProjects() {
   try {
@@ -102,6 +103,7 @@ export async function upsertProject(data: ProjectInput & { id?: string }) {
 
     revalidatePath('/projects');
     revalidatePath('/'); // Revalidate homepage if projects are displayed there
+    await revalidateStorefront(['projects']);
     return { success: true };
   } catch (error) {
     if (error && typeof error === 'object' && 'code' in error && error.code === '23505') {
@@ -117,6 +119,7 @@ export async function deleteProject(id: string) {
     await db.delete(projects).where(eq(projects.id, id));
     revalidatePath('/projects');
     revalidatePath('/');
+    await revalidateStorefront(['projects']);
     return { success: true };
   } catch (error) {
     console.error('Failed to delete project:', error);
@@ -130,6 +133,7 @@ export async function bulkDeleteProjects(ids: string[]) {
     await db.delete(projects).where(inArray(projects.id, ids));
     revalidatePath('/projects');
     revalidatePath('/');
+    await revalidateStorefront(['projects']);
     return { success: true };
   } catch (error) {
     console.error('Failed to bulk delete projects:', error);

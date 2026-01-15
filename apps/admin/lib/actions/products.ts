@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { createProductSchema, type CreateProductInput } from '@/lib/validations/products';
 import { eq } from 'drizzle-orm';
+import { revalidateStorefront } from '../revalidate-storefront';
 
 export async function createProduct(data: CreateProductInput) {
   const validated = createProductSchema.safeParse(data);
@@ -80,6 +81,7 @@ export async function createProduct(data: CreateProductInput) {
   }
 
   revalidatePath('/products');
+  await revalidateStorefront(['products', 'catalogs']);
   redirect('/products');
 }
 
@@ -163,6 +165,7 @@ export async function updateProduct(id: string, data: CreateProductInput) {
 
   revalidatePath('/products');
   revalidatePath(`/products/${id}/edit`);
+  await revalidateStorefront(['products', 'catalogs']);
   redirect('/products');
 }
 
@@ -170,6 +173,7 @@ export async function deleteProduct(id: string) {
   try {
     await db.delete(products).where(eq(products.id, id));
     revalidatePath('/products');
+    await revalidateStorefront(['products', 'catalogs']);
     return { success: true };
   } catch (error) {
     console.error('Failed to delete product:', error);
@@ -182,6 +186,7 @@ export async function bulkDeleteProducts(ids: string[]) {
     const { inArray } = await import('drizzle-orm');
     await db.delete(products).where(inArray(products.id, ids));
     revalidatePath('/products');
+    await revalidateStorefront(['products', 'catalogs']);
     return { success: true };
   } catch (error) {
     console.error('Failed to bulk delete products:', error);

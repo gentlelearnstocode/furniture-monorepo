@@ -4,6 +4,7 @@ import { db, siteHeros } from '@repo/database';
 import { eq, desc } from 'drizzle-orm';
 import { heroSchema, type HeroInput } from '../validations/hero';
 import { revalidatePath } from 'next/cache';
+import { revalidateStorefront } from '../revalidate-storefront';
 
 export async function getHero() {
   try {
@@ -47,6 +48,10 @@ export async function upsertHero(data: HeroInput) {
 
     revalidatePath('/homepage/hero');
     revalidatePath('/');
+
+    // Revalidate storefront cache
+    await revalidateStorefront(['hero']);
+
     return { success: true };
   } catch (error) {
     console.error('[upsertHero] Error:', error);

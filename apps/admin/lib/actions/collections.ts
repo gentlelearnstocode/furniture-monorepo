@@ -5,6 +5,7 @@ import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { createCollectionSchema, type CreateCollectionInput } from '@/lib/validations/collections';
+import { revalidateStorefront } from '../revalidate-storefront';
 
 export async function createCollection(data: CreateCollectionInput) {
   const validated = createCollectionSchema.safeParse(data);
@@ -64,6 +65,7 @@ export async function createCollection(data: CreateCollectionInput) {
   }
 
   revalidatePath('/collections');
+  await revalidateStorefront(['collections', 'catalogs']);
   redirect('/collections');
 }
 
@@ -134,6 +136,7 @@ export async function updateCollection(id: string, data: CreateCollectionInput) 
 
   revalidatePath('/collections');
   revalidatePath(`/collections/${id}`);
+  await revalidateStorefront(['collections', 'catalogs']);
   return { success: true };
 }
 
@@ -146,6 +149,7 @@ export async function deleteCollection(id: string) {
   }
 
   revalidatePath('/collections');
+  await revalidateStorefront(['collections']);
   return { success: true };
 }
 
@@ -154,6 +158,7 @@ export async function bulkDeleteCollections(ids: string[]) {
     const { inArray } = await import('drizzle-orm');
     await db.delete(collections).where(inArray(collections.id, ids));
     revalidatePath('/collections');
+    await revalidateStorefront(['collections']);
     return { success: true };
   } catch (error) {
     console.error('Failed to bulk delete collections:', error);

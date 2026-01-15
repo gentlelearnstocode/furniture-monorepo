@@ -4,6 +4,7 @@ import { db, siteContacts } from '@repo/database';
 import { asc } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
+import { revalidateStorefront } from '../revalidate-storefront';
 
 const siteContactSchema = z.object({
   id: z.string().uuid().optional(),
@@ -61,6 +62,7 @@ export async function upsertSiteContacts(data: SiteContactsUpdateInput) {
 
     revalidatePath('/', 'layout');
     revalidatePath('/homepage/contacts');
+    await revalidateStorefront(['contacts']);
     return { success: true };
   } catch (error) {
     console.error('[upsertSiteContacts] Error:', error);

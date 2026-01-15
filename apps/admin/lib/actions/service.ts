@@ -4,6 +4,7 @@ import { db, services, serviceAssets } from '@repo/database';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { serviceSchema, type ServiceInput } from '@/lib/validations/service';
+import { revalidateStorefront } from '../revalidate-storefront';
 
 export async function getServices() {
   try {
@@ -102,6 +103,7 @@ export async function upsertService(data: ServiceInput & { id?: string }) {
 
     revalidatePath('/services');
     revalidatePath('/'); // Revalidate homepage if services are displayed there
+    await revalidateStorefront(['services']);
     return { success: true };
   } catch (error) {
     if (error && typeof error === 'object' && 'code' in error && error.code === '23505') {
@@ -117,6 +119,7 @@ export async function deleteService(id: string) {
     await db.delete(services).where(eq(services.id, id));
     revalidatePath('/services');
     revalidatePath('/');
+    await revalidateStorefront(['services']);
     return { success: true };
   } catch (error) {
     console.error('Failed to delete service:', error);
@@ -130,6 +133,7 @@ export async function bulkDeleteServices(ids: string[]) {
     await db.delete(services).where(inArray(services.id, ids));
     revalidatePath('/services');
     revalidatePath('/');
+    await revalidateStorefront(['services']);
     return { success: true };
   } catch (error) {
     console.error('Failed to bulk delete services:', error);

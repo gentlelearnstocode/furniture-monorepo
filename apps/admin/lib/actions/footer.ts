@@ -4,6 +4,7 @@ import { db, siteFooter, footerAddresses, footerContacts } from '@repo/database'
 import { eq, asc } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
+import { revalidateStorefront } from '../revalidate-storefront';
 
 // Validation schemas
 const footerAddressSchema = z.object({
@@ -113,6 +114,7 @@ export async function upsertFooterSettings(data: FooterSettingsInput) {
 
     revalidatePath('/');
     revalidatePath('/homepage/footer');
+    await revalidateStorefront(['footer']);
     return { success: true };
   } catch (error) {
     console.error('[upsertFooterSettings] Error:', error);

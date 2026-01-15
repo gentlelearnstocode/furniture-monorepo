@@ -4,6 +4,7 @@ import { db } from '@repo/database';
 import { featuredCatalogRows, featuredCatalogRowItems, catalogs } from '@repo/database/schema';
 import { eq, asc } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
+import { revalidateStorefront } from '../revalidate-storefront';
 
 export type LayoutRow = {
   id?: string;
@@ -80,6 +81,7 @@ export async function saveFeaturedLayout(layoutRows: LayoutRow[]) {
 
     revalidatePath('/');
     revalidatePath('/homepage/featured');
+    await revalidateStorefront(['catalogs']);
 
     return { success: true };
   } catch (error) {

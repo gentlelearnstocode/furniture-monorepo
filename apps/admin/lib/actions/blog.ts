@@ -4,6 +4,7 @@ import { db, posts, postAssets } from '@repo/database';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { blogSchema, type BlogInput } from '@/lib/validations/blog';
+import { revalidateStorefront } from '../revalidate-storefront';
 
 export async function getPosts() {
   try {
@@ -102,6 +103,7 @@ export async function upsertPost(data: BlogInput & { id?: string }) {
 
     revalidatePath('/blogs');
     revalidatePath('/'); // Revalidate homepage if blog posts are displayed there
+    await revalidateStorefront(['posts']);
     return { success: true };
   } catch (error) {
     if (error && typeof error === 'object' && 'code' in error && error.code === '23505') {
@@ -117,6 +119,7 @@ export async function deletePost(id: string) {
     await db.delete(posts).where(eq(posts.id, id));
     revalidatePath('/blogs');
     revalidatePath('/');
+    await revalidateStorefront(['posts']);
     return { success: true };
   } catch (error) {
     console.error('Failed to delete post:', error);
@@ -130,6 +133,7 @@ export async function bulkDeletePosts(ids: string[]) {
     await db.delete(posts).where(inArray(posts.id, ids));
     revalidatePath('/blogs');
     revalidatePath('/');
+    await revalidateStorefront(['posts']);
     return { success: true };
   } catch (error) {
     console.error('Failed to bulk delete posts:', error);
