@@ -7,11 +7,8 @@ import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { Plus, Trash2, GripVertical, MapPin, Phone, Mail, Share2 } from 'lucide-react';
 
-import {
-  upsertFooterSettings,
-  footerSettingsSchema,
-  type FooterSettingsInput,
-} from '@/lib/actions/footer';
+import { upsertFooterSettings } from '@/lib/actions/footer';
+import { footerSettingsSchema, type FooterSettingsInput } from '@/lib/validations/footer';
 
 import { Button } from '@repo/ui/ui/button';
 import {
