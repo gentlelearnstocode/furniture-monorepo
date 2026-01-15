@@ -210,7 +210,7 @@ export function CatalogSelector({ availableCatalogs, value, onChange }: CatalogS
                 <div className='flex items-center gap-2 overflow-hidden'>
                   <LayoutGrid className='h-3 w-3 text-gray-400 flex-shrink-0' />
                   <Link
-                    href={`/catalogs/${catalog.id}/edit`}
+                    href={`/catalogs/${catalog.id}`}
                     className='truncate font-medium hover:text-brand-primary-600 hover:underline transition-colors'
                   >
                     {catalog.name}

@@ -220,7 +220,7 @@ export function ProductSelector({ availableProducts, value, onChange }: ProductS
                 <div className='flex items-center gap-2 overflow-hidden'>
                   <Package className='h-3 w-3 text-gray-400 flex-shrink-0' />
                   <Link
-                    href={`/products/${product.id}/edit`}
+                    href={`/products/${product.id}`}
                     className='truncate font-medium hover:text-brand-primary-600 hover:underline transition-colors'
                   >
                     {product.name}

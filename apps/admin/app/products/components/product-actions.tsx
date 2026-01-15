@@ -36,7 +36,7 @@ export function ProductActions({ product }: ProductActionsProps) {
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuItem asChild>
           <Link
-            href={`/products/${product.id}/edit`}
+            href={`/products/${product.id}`}
             className='cursor-pointer w-full flex items-center'
           >
             <Pencil className='mr-2 h-4 w-4' />

@@ -164,7 +164,7 @@ export async function updateProduct(id: string, data: CreateProductInput) {
   }
 
   revalidatePath('/products');
-  revalidatePath(`/products/${id}/edit`);
+  revalidatePath(`/products/${id}`);
   await revalidateStorefront(['products', 'catalogs']);
   redirect('/products');
 }
