@@ -1,13 +1,16 @@
 import { Button } from '@repo/ui/ui/button';
 import { Plus, FileUp } from 'lucide-react';
 import Link from 'next/link';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/ui/card';
 import { products, catalogs as catalogsTable } from '@repo/database/schema';
 import { getListingData } from '@/lib/listing-utils';
-import { ListingControls } from '@/components/ui/listing-controls';
 import { ProductList } from './components/product-list';
 import { eq } from 'drizzle-orm';
 import { db } from '@repo/database';
+import { PageHeader } from '@/components/layout/page-header';
+import { StatsCard } from '@/components/listing/stats-card';
+import { ListingCard } from '@/components/listing/listing-card';
+import { parseListingParams } from '@/lib/listing-params';
+import { STATUS_FILTER_OPTIONS } from '@/constants';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,15 +24,13 @@ interface ProductsPageProps {
 }
 
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
-  const resolvedSearchParams = await searchParams;
-  const page = Number(resolvedSearchParams.page) || 1;
-  const search = resolvedSearchParams.search || '';
-  const catalogId = resolvedSearchParams.catalogId;
-  const status = resolvedSearchParams.status;
+  const { page, search, catalogId, status } = await parseListingParams(searchParams, {
+    filterKeys: ['catalogId', 'status'],
+  });
 
   const filters = [];
   if (catalogId && catalogId !== 'all') {
-    filters.push(eq(products.catalogId, catalogId));
+    filters.push(eq(products.catalogId, catalogId as string));
   }
   if (status && status !== 'all') {
     filters.push(eq(products.isActive, status === 'active'));
@@ -65,76 +66,45 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     value: c.id,
   }));
 
-  const statusOptions = [
-    { label: 'Active', value: 'active' },
-    { label: 'Draft', value: 'inactive' },
-  ];
-
   return (
     <div className='space-y-6'>
-      <div className='flex items-center justify-between'>
-        <div>
-          <nav className='flex items-center text-sm text-gray-500 mb-1'>
-            <Link href='/' className='hover:text-gray-900 transition-colors'>
-              Dashboard
+      <PageHeader
+        breadcrumbs={[{ label: 'Dashboard', href: '/' }, { label: 'Products' }]}
+        title='Products'
+        description='Manage your inventory, pricing, and variants.'
+        actions={
+          <>
+            <Link href='/products/import'>
+              <Button size='sm' variant='outline'>
+                <FileUp className='mr-2 h-4 w-4' />
+                Import from Excel
+              </Button>
             </Link>
-            <span className='mx-2'>/</span>
-            <span className='font-medium text-gray-900'>Products</span>
-          </nav>
-          <h1 className='text-3xl font-bold tracking-tight text-gray-900'>Products</h1>
-          <p className='text-base text-gray-500 mt-1'>
-            Manage your inventory, pricing, and variants.
-          </p>
-        </div>
-        <div className='flex gap-3'>
-          <Link href='/products/import'>
-            <Button size='sm' variant='outline'>
-              <FileUp className='mr-2 h-4 w-4' />
-              Import from Excel
-            </Button>
-          </Link>
-          <Link href='/products/new'>
-            <Button size='sm' className='bg-brand-primary-600 hover:bg-brand-primary-700'>
-              <Plus className='mr-2 h-4 w-4' />
-              Add Product
-            </Button>
-          </Link>
-        </div>
-      </div>
+            <Link href='/products/new'>
+              <Button size='sm' className='bg-brand-primary-600 hover:bg-brand-primary-700'>
+                <Plus className='mr-2 h-4 w-4' />
+                Add Product
+              </Button>
+            </Link>
+          </>
+        }
+      />
 
       <div className='grid gap-4 md:grid-cols-4 lg:grid-cols-4'>
-        <Card className='p-4 flex flex-col justify-between'>
-          <span className='text-sm font-medium text-gray-500'>Total Products</span>
-          <span className='text-2xl font-bold'>{meta.totalItems}</span>
-        </Card>
+        <StatsCard label='Total Products' value={meta.totalItems} />
       </div>
 
-      <Card className='shadow-sm border-gray-200'>
-        <CardHeader className='pb-3'>
-          <div className='flex flex-col md:flex-row md:items-center justify-between gap-4'>
-            <div>
-              <CardTitle>Product List</CardTitle>
-              <CardDescription>View and manage your products.</CardDescription>
-            </div>
-            <div className='flex flex-col sm:flex-row gap-2'>
-              <ListingControls
-                placeholder='Search products...'
-                filterKey='catalogId'
-                filterOptions={catalogOptions}
-                filterPlaceholder='Filter by Catalog'
-              />
-              <ListingControls
-                filterKey='status'
-                filterOptions={statusOptions}
-                filterPlaceholder='Filter by Status'
-              />
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <ProductList products={allProducts} meta={meta} />
-        </CardContent>
-      </Card>
+      <ListingCard
+        title='Product List'
+        description='View and manage your products.'
+        searchPlaceholder='Search products...'
+        filters={[
+          { key: 'catalogId', options: catalogOptions, placeholder: 'Filter by Catalog' },
+          { key: 'status', options: STATUS_FILTER_OPTIONS, placeholder: 'Filter by Status' },
+        ]}
+      >
+        <ProductList products={allProducts} meta={meta} />
+      </ListingCard>
     </div>
   );
 }

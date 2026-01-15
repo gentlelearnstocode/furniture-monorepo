@@ -1,15 +1,12 @@
 import type { Metadata } from 'next';
-import localFont from 'next/font/local';
+import { Inter } from 'next/font/google';
 import '@repo/ui/globals.css';
 import { AdminLayout } from '../components/layout/admin-layout';
 
-const geistSans = localFont({
-  src: './fonts/GeistVF.woff',
-  variable: '--font-geist-sans',
-});
-const geistMono = localFont({
-  src: './fonts/GeistMonoVF.woff',
-  variable: '--font-geist-mono',
+const inter = Inter({
+  subsets: ['latin', 'vietnamese'],
+  variable: '--font-inter',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -33,7 +30,7 @@ export default async function RootLayout({
 
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${inter.variable} font-sans antialiased`}>
         <Providers>
           {showAdminLayout ? <AdminLayout>{children}</AdminLayout> : <main>{children}</main>}
         </Providers>
