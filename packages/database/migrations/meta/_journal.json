@@ -71,6 +71,13 @@
       "when": 1768453175040,
       "tag": "0009_busy_rictor",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1768455164441,
+      "tag": "0010_last_skrulls",
+      "breakpoints": true
     }
   ]
 }

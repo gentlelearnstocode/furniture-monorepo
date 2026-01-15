@@ -1,5 +1,5 @@
 import { Button } from '@repo/ui/ui/button';
-import { Plus } from 'lucide-react';
+import { Plus, FileUp } from 'lucide-react';
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/ui/card';
 import { products, catalogs as catalogsTable } from '@repo/database/schema';
@@ -87,6 +87,12 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
           </p>
         </div>
         <div className='flex gap-3'>
+          <Link href='/products/import'>
+            <Button size='sm' variant='outline'>
+              <FileUp className='mr-2 h-4 w-4' />
+              Import from Excel
+            </Button>
+          </Link>
           <Link href='/products/new'>
             <Button size='sm' className='bg-brand-primary-600 hover:bg-brand-primary-700'>
               <Plus className='mr-2 h-4 w-4' />

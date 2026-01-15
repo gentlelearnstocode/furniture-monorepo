@@ -679,3 +679,31 @@ export type SelectProduct = typeof products.$inferSelect;
 
 export type InsertUser = typeof users.$inferInsert;
 export type SelectUser = typeof users.$inferSelect;
+
+// --- Product Import Jobs ---
+
+export const productImportJobs = pgTable('product_import_jobs', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  status: text('status')
+    .$type<'pending' | 'processing' | 'completed' | 'failed'>()
+    .default('pending')
+    .notNull(),
+  totalRows: integer('total_rows').default(0).notNull(),
+  processedRows: integer('processed_rows').default(0).notNull(),
+  successCount: integer('success_count').default(0).notNull(),
+  errorCount: integer('error_count').default(0).notNull(),
+  errors: jsonb('errors').$type<{ row: number; field: string; message: string }[]>(),
+  createdBy: uuid('created_by').references(() => users.id),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  completedAt: timestamp('completed_at'),
+});
+
+export const productImportJobsRelations = relations(productImportJobs, ({ one }) => ({
+  user: one(users, {
+    fields: [productImportJobs.createdBy],
+    references: [users.id],
+  }),
+}));
+
+export type InsertProductImportJob = typeof productImportJobs.$inferInsert;
+export type SelectProductImportJob = typeof productImportJobs.$inferSelect;
