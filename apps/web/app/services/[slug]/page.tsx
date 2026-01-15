@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic';
-
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -8,10 +6,46 @@ import { notFound } from 'next/navigation';
 import { ChevronLeft } from 'lucide-react';
 import type { Metadata } from 'next';
 import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
+import { createCachedQuery } from '@/lib/cache';
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
+
+// Revalidate every hour
+export const revalidate = 3600;
+
+// Generate static params for all services at build time
+export async function generateStaticParams() {
+  const services = await db.query.services.findMany({
+    where: (services, { eq }) => eq(services.isActive, true),
+    columns: { slug: true },
+  });
+
+  return services.map((service) => ({
+    slug: service.slug,
+  }));
+}
+
+const getServiceBySlug = (slug: string) =>
+  createCachedQuery(
+    async () => {
+      return await db.query.services.findFirst({
+        where: (services, { eq }) => eq(services.slug, slug),
+        with: {
+          image: true,
+          gallery: {
+            with: {
+              asset: true,
+            },
+            orderBy: (gallery, { asc }) => [asc(gallery.position)],
+          },
+        },
+      });
+    },
+    ['service-detail', slug],
+    { revalidate: 3600, tags: ['services', `service-${slug}`] }
+  );
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -34,18 +68,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ServiceDetailPage({ params }: Props) {
   const { slug } = await params;
-  const service = await db.query.services.findFirst({
-    where: (services, { eq }) => eq(services.slug, slug),
-    with: {
-      image: true,
-      gallery: {
-        with: {
-          asset: true,
-        },
-        orderBy: (gallery, { asc }) => [asc(gallery.position)],
-      },
-    },
-  });
+  const service = await getServiceBySlug(slug)();
 
   if (!service || !service.isActive) {
     notFound();

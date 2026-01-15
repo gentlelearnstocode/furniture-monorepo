@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic';
-
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { Playfair_Display } from 'next/font/google';
@@ -7,6 +5,7 @@ import '@repo/ui/globals.css';
 import { Navbar } from './components/navbar-section';
 import { Footer } from './components/footer-section';
 import { db } from '@repo/database';
+import { createCachedQuery } from '@/lib/cache';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -27,21 +26,32 @@ export const metadata: Metadata = {
   description: 'Luxury furniture and decor for your home.',
 };
 
+// Revalidate every hour (catalogs don't change frequently)
+export const revalidate = 3600;
+
+const getRootCatalogs = createCachedQuery(
+  async () => {
+    return await db.query.catalogs.findMany({
+      where: (catalogs, { isNull }) => isNull(catalogs.parentId),
+      with: {
+        children: {
+          orderBy: (children, { asc }) => [asc(children.name)],
+        },
+        image: true,
+      },
+      orderBy: (catalogs, { asc }) => [asc(catalogs.name)],
+    });
+  },
+  ['root-catalogs'],
+  { revalidate: 3600, tags: ['catalogs'] }
+);
+
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const rootCatalogs = await db.query.catalogs.findMany({
-    where: (catalogs, { isNull }) => isNull(catalogs.parentId),
-    with: {
-      children: {
-        orderBy: (children, { asc }) => [asc(children.name)],
-      },
-      image: true,
-    },
-    orderBy: (catalogs, { asc }) => [asc(catalogs.name)],
-  });
+  const rootCatalogs = await getRootCatalogs();
 
   return (
     <html lang='en'>

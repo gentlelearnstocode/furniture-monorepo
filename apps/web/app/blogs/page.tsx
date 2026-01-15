@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic';
-
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -7,20 +5,32 @@ import { db } from '@repo/database';
 import { format } from 'date-fns';
 import { Calendar, User, ArrowRight } from 'lucide-react';
 import type { Metadata } from 'next';
+import { createCachedQuery } from '@/lib/cache';
 
 export const metadata: Metadata = {
   title: 'Blog | Thien An Furniture',
   description: 'Design inspirations, furniture care tips, and stories from Thien An Furniture.',
 };
 
+// Revalidate every 30 minutes (blogs update more frequently)
+export const revalidate = 1800;
+
+const getPosts = createCachedQuery(
+  async () => {
+    return await db.query.posts.findMany({
+      where: (posts, { eq }) => eq(posts.isActive, true),
+      orderBy: (posts, { desc }) => [desc(posts.updatedAt)],
+      with: {
+        featuredImage: true,
+      },
+    });
+  },
+  ['posts-list'],
+  { revalidate: 1800, tags: ['posts'] }
+);
+
 export default async function BlogListingPage() {
-  const posts = await db.query.posts.findMany({
-    where: (posts, { eq }) => eq(posts.isActive, true),
-    orderBy: (posts, { desc }) => [desc(posts.updatedAt)],
-    with: {
-      featuredImage: true,
-    },
-  });
+  const posts = await getPosts();
 
   return (
     <div className='min-h-screen bg-white'>

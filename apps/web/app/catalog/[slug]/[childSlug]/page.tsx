@@ -4,8 +4,35 @@ import { db } from '@repo/database';
 import { ChevronRight, Grid3x3, List } from 'lucide-react';
 import Image from 'next/image';
 import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
+import { createCachedQuery } from '@/lib/cache';
 
-export const dynamic = 'force-dynamic';
+// Revalidate every hour
+export const revalidate = 3600;
+
+// Generate static params for all catalog combinations at build time
+export async function generateStaticParams() {
+  const catalogs = await db.query.catalogs.findMany({
+    where: (catalogs, { isNull }) => isNull(catalogs.parentId),
+    with: {
+      children: {
+        columns: { slug: true },
+      },
+    },
+    columns: { slug: true },
+  });
+
+  const params: { slug: string; childSlug: string }[] = [];
+  for (const catalog of catalogs) {
+    for (const child of catalog.children) {
+      params.push({
+        slug: catalog.slug,
+        childSlug: child.slug,
+      });
+    }
+  }
+
+  return params;
+}
 
 interface Props {
   params: Promise<{
@@ -13,6 +40,32 @@ interface Props {
     childSlug: string;
   }>;
 }
+
+const getChildCatalog = (slug: string, childSlug: string, parentId: string) =>
+  createCachedQuery(
+    async () => {
+      return await db.query.catalogs.findFirst({
+        where: (catalogs, { eq, and }) =>
+          and(eq(catalogs.slug, childSlug), eq(catalogs.parentId, parentId)),
+        with: {
+          image: true,
+          products: {
+            with: {
+              gallery: {
+                with: {
+                  asset: true,
+                },
+                orderBy: (gallery, { asc }) => [asc(gallery.position)],
+              },
+            },
+            where: (products, { eq }) => eq(products.isActive, true),
+          },
+        },
+      });
+    },
+    ['catalog-child', slug, childSlug],
+    { revalidate: 3600, tags: ['catalogs', `catalog-${slug}-${childSlug}`] }
+  );
 
 export default async function CatalogLevel2Page({ params }: Props) {
   const { slug, childSlug } = await params;
@@ -27,24 +80,7 @@ export default async function CatalogLevel2Page({ params }: Props) {
   }
 
   // Fetch the child catalog (level 2) with its products
-  const catalog = await db.query.catalogs.findFirst({
-    where: (catalogs, { eq, and }) =>
-      and(eq(catalogs.slug, childSlug), eq(catalogs.parentId, parentCatalog.id)),
-    with: {
-      image: true,
-      products: {
-        with: {
-          gallery: {
-            with: {
-              asset: true,
-            },
-            orderBy: (gallery, { asc }) => [asc(gallery.position)],
-          },
-        },
-        where: (products, { eq }) => eq(products.isActive, true),
-      },
-    },
-  });
+  const catalog = await getChildCatalog(slug, childSlug, parentCatalog.id)();
 
   if (!catalog) {
     notFound();

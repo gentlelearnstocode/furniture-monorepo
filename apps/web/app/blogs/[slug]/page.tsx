@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic';
-
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -8,10 +6,40 @@ import { notFound } from 'next/navigation';
 import { format } from 'date-fns';
 import { Calendar, User, ChevronLeft } from 'lucide-react';
 import type { Metadata } from 'next';
+import { createCachedQuery } from '@/lib/cache';
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
+
+// Revalidate every 30 minutes (blogs update more frequently)
+export const revalidate = 1800;
+
+// Generate static params for all posts at build time
+export async function generateStaticParams() {
+  const posts = await db.query.posts.findMany({
+    where: (posts, { eq }) => eq(posts.isActive, true),
+    columns: { slug: true },
+  });
+
+  return posts.map((post) => ({
+    slug: post.slug,
+  }));
+}
+
+const getPostBySlug = (slug: string) =>
+  createCachedQuery(
+    async () => {
+      return await db.query.posts.findFirst({
+        where: (posts, { eq }) => eq(posts.slug, slug),
+        with: {
+          featuredImage: true,
+        },
+      });
+    },
+    ['post-detail', slug],
+    { revalidate: 1800, tags: ['posts', `post-${slug}`] }
+  );
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -34,12 +62,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
-  const post = await db.query.posts.findFirst({
-    where: (posts, { eq }) => eq(posts.slug, slug),
-    with: {
-      featuredImage: true,
-    },
-  });
+  const post = await getPostBySlug(slug)();
 
   if (!post || !post.isActive) {
     notFound();

@@ -5,18 +5,28 @@ import { IntroSection } from './components/intro-section';
 import { ProjectsSection } from './components/projects-section';
 import { BlogsSection } from './components/blogs-section';
 import { db } from '@repo/database';
+import { createCachedQuery } from '@/lib/cache';
 
-export const dynamic = 'force-dynamic';
+// Revalidate every 30 minutes (hero content may change occasionally)
+export const revalidate = 1800;
+
+const getHeroData = createCachedQuery(
+  async () => {
+    return await db.query.siteHeros.findFirst({
+      where: (heros, { eq }) => eq(heros.isActive, true),
+      orderBy: (heros, { desc }) => [desc(heros.updatedAt)],
+      with: {
+        backgroundImage: true,
+        backgroundVideo: true,
+      },
+    });
+  },
+  ['hero-data'],
+  { revalidate: 1800, tags: ['hero'] }
+);
 
 export default async function Home() {
-  const hero = await db.query.siteHeros.findFirst({
-    where: (heros, { eq }) => eq(heros.isActive, true),
-    orderBy: (heros, { desc }) => [desc(heros.updatedAt)],
-    with: {
-      backgroundImage: true,
-      backgroundVideo: true,
-    },
-  });
+  const hero = await getHeroData();
 
   return (
     <div className='relative min-h-screen bg-white'>

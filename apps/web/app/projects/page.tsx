@@ -1,31 +1,41 @@
-export const dynamic = 'force-dynamic';
-
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { db } from '@repo/database';
 import { ArrowRight } from 'lucide-react';
 import type { Metadata } from 'next';
+import { createCachedQuery } from '@/lib/cache';
 
 export const metadata: Metadata = {
   title: 'Projects | Thien An Furniture',
   description: 'Explore our portfolio of completed interior design and furniture projects.',
 };
 
-export default async function ProjectsListingPage() {
-  const projects = await db.query.projects.findMany({
-    where: (projects, { eq }) => eq(projects.isActive, true),
-    orderBy: (projects, { desc }) => [desc(projects.updatedAt)],
-    with: {
-      image: true,
-      gallery: {
-        with: {
-          asset: true,
+// Revalidate every hour
+export const revalidate = 3600;
+
+const getProjects = createCachedQuery(
+  async () => {
+    return await db.query.projects.findMany({
+      where: (projects, { eq }) => eq(projects.isActive, true),
+      orderBy: (projects, { desc }) => [desc(projects.updatedAt)],
+      with: {
+        image: true,
+        gallery: {
+          with: {
+            asset: true,
+          },
+          orderBy: (gallery, { asc }) => [asc(gallery.position)],
         },
-        orderBy: (gallery, { asc }) => [asc(gallery.position)],
       },
-    },
-  });
+    });
+  },
+  ['projects-list'],
+  { revalidate: 3600, tags: ['projects'] }
+);
+
+export default async function ProjectsListingPage() {
+  const projects = await getProjects();
 
   return (
     <div className='min-h-screen bg-white'>

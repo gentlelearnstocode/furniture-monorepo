@@ -1,11 +1,10 @@
-export const dynamic = 'force-dynamic';
-
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { db } from '@repo/database';
 import { ArrowRight } from 'lucide-react';
 import type { Metadata } from 'next';
+import { createCachedQuery } from '@/lib/cache';
 
 export const metadata: Metadata = {
   title: 'Services | Thien An Furniture',
@@ -13,20 +12,31 @@ export const metadata: Metadata = {
     'Explore our comprehensive range of interior design and furniture services tailored to your needs.',
 };
 
-export default async function ServicesListingPage() {
-  const services = await db.query.services.findMany({
-    where: (services, { eq }) => eq(services.isActive, true),
-    orderBy: (services, { desc }) => [desc(services.updatedAt)],
-    with: {
-      image: true,
-      gallery: {
-        with: {
-          asset: true,
+// Revalidate every hour
+export const revalidate = 3600;
+
+const getServices = createCachedQuery(
+  async () => {
+    return await db.query.services.findMany({
+      where: (services, { eq }) => eq(services.isActive, true),
+      orderBy: (services, { desc }) => [desc(services.updatedAt)],
+      with: {
+        image: true,
+        gallery: {
+          with: {
+            asset: true,
+          },
+          orderBy: (gallery, { asc }) => [asc(gallery.position)],
         },
-        orderBy: (gallery, { asc }) => [asc(gallery.position)],
       },
-    },
-  });
+    });
+  },
+  ['services-list'],
+  { revalidate: 3600, tags: ['services'] }
+);
+
+export default async function ServicesListingPage() {
+  const services = await getServices();
 
   return (
     <div className='min-h-screen bg-white'>

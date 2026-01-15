@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic';
-
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -8,10 +6,46 @@ import { notFound } from 'next/navigation';
 import { ChevronLeft } from 'lucide-react';
 import type { Metadata } from 'next';
 import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
+import { createCachedQuery } from '@/lib/cache';
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
+
+// Revalidate every hour
+export const revalidate = 3600;
+
+// Generate static params for all projects at build time
+export async function generateStaticParams() {
+  const projects = await db.query.projects.findMany({
+    where: (projects, { eq }) => eq(projects.isActive, true),
+    columns: { slug: true },
+  });
+
+  return projects.map((project) => ({
+    slug: project.slug,
+  }));
+}
+
+const getProjectBySlug = (slug: string) =>
+  createCachedQuery(
+    async () => {
+      return await db.query.projects.findFirst({
+        where: (projects, { eq }) => eq(projects.slug, slug),
+        with: {
+          image: true,
+          gallery: {
+            with: {
+              asset: true,
+            },
+            orderBy: (gallery, { asc }) => [asc(gallery.position)],
+          },
+        },
+      });
+    },
+    ['project-detail', slug],
+    { revalidate: 3600, tags: ['projects', `project-${slug}`] }
+  );
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -34,18 +68,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProjectDetailPage({ params }: Props) {
   const { slug } = await params;
-  const project = await db.query.projects.findFirst({
-    where: (projects, { eq }) => eq(projects.slug, slug),
-    with: {
-      image: true,
-      gallery: {
-        with: {
-          asset: true,
-        },
-        orderBy: (gallery, { asc }) => [asc(gallery.position)],
-      },
-    },
-  });
+  const project = await getProjectBySlug(slug)();
 
   if (!project || !project.isActive) {
     notFound();

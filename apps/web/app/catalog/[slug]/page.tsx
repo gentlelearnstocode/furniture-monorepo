@@ -3,8 +3,21 @@ import { db } from '@repo/database';
 import { CatalogDetailWrapper } from './components/catalog-detail-wrapper';
 import { SubCatalogGrid } from './components/sub-catalog-grid';
 import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
+import { createCachedQuery } from '@/lib/cache';
 
-export const dynamic = 'force-dynamic';
+// Revalidate every hour
+export const revalidate = 3600;
+
+// Generate static params for all catalogs at build time
+export async function generateStaticParams() {
+  const catalogs = await db.query.catalogs.findMany({
+    columns: { slug: true },
+  });
+
+  return catalogs.map((catalog) => ({
+    slug: catalog.slug,
+  }));
+}
 
 interface Props {
   params: Promise<{
@@ -12,32 +25,33 @@ interface Props {
   }>;
 }
 
-export default async function CatalogPage({ params }: Props) {
-  const { slug } = await params;
-
-  // Fetch the catalog and its linked collections/products
-  const catalog = await db.query.catalogs.findFirst({
-    where: (catalogs, { eq }) => eq(catalogs.slug, slug),
-    with: {
-      children: {
+const getCatalogBySlug = (slug: string) =>
+  createCachedQuery(
+    async () => {
+      return await db.query.catalogs.findFirst({
+        where: (catalogs, { eq }) => eq(catalogs.slug, slug),
         with: {
-          image: true,
-        },
-      },
-      collections: {
-        with: {
-          collection: {
+          children: {
             with: {
-              banner: true,
-              products: {
+              image: true,
+            },
+          },
+          collections: {
+            with: {
+              collection: {
                 with: {
-                  product: {
+                  banner: true,
+                  products: {
                     with: {
-                      gallery: {
+                      product: {
                         with: {
-                          asset: true,
+                          gallery: {
+                            with: {
+                              asset: true,
+                            },
+                            orderBy: (gallery, { asc }) => [asc(gallery.position)],
+                          },
                         },
-                        orderBy: (gallery, { asc }) => [asc(gallery.position)],
                       },
                     },
                   },
@@ -45,20 +59,28 @@ export default async function CatalogPage({ params }: Props) {
               },
             },
           },
-        },
-      },
-      products: {
-        with: {
-          gallery: {
+          products: {
             with: {
-              asset: true,
+              gallery: {
+                with: {
+                  asset: true,
+                },
+                orderBy: (gallery, { asc }) => [asc(gallery.position)],
+              },
             },
-            orderBy: (gallery, { asc }) => [asc(gallery.position)],
           },
         },
-      },
+      });
     },
-  });
+    ['catalog-detail', slug],
+    { revalidate: 3600, tags: ['catalogs', `catalog-${slug}`] }
+  );
+
+export default async function CatalogPage({ params }: Props) {
+  const { slug } = await params;
+
+  // Fetch the catalog and its linked collections/products
+  const catalog = await getCatalogBySlug(slug)();
 
   if (!catalog) {
     notFound();

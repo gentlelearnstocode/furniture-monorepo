@@ -3,8 +3,22 @@ import { db } from '@repo/database';
 import { ProductGallery } from './components/product-gallery';
 import { ProductInfo } from './components/product-info';
 import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
+import { createCachedQuery } from '@/lib/cache';
 
-export const dynamic = 'force-dynamic';
+// Revalidate every hour
+export const revalidate = 3600;
+
+// Generate static params for all products at build time
+export async function generateStaticParams() {
+  const products = await db.query.products.findMany({
+    where: (products, { eq }) => eq(products.isActive, true),
+    columns: { slug: true },
+  });
+
+  return products.map((product) => ({
+    slug: product.slug,
+  }));
+}
 
 interface Props {
   params: Promise<{
@@ -12,25 +26,34 @@ interface Props {
   }>;
 }
 
+const getProductBySlug = (slug: string) =>
+  createCachedQuery(
+    async () => {
+      return await db.query.products.findFirst({
+        where: (products, { eq }) => eq(products.slug, slug),
+        with: {
+          catalog: {
+            with: {
+              parent: true,
+            },
+          },
+          gallery: {
+            with: {
+              asset: true,
+            },
+            orderBy: (gallery, { asc }) => [asc(gallery.position)],
+          },
+        },
+      });
+    },
+    ['product-detail', slug],
+    { revalidate: 3600, tags: ['products', `product-${slug}`] }
+  );
+
 export default async function ProductDetailPage({ params }: Props) {
   const { slug } = await params;
 
-  const product = await db.query.products.findFirst({
-    where: (products, { eq }) => eq(products.slug, slug),
-    with: {
-      catalog: {
-        with: {
-          parent: true,
-        },
-      },
-      gallery: {
-        with: {
-          asset: true,
-        },
-        orderBy: (gallery, { asc }) => [asc(gallery.position)],
-      },
-    },
-  });
+  const product = await getProductBySlug(slug)();
 
   if (!product) {
     notFound();
