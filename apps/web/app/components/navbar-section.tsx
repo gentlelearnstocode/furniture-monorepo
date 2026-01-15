@@ -60,7 +60,8 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
           className={cn(
             'relative z-30 transition-all duration-700 ease-in-out',
             forceShow ? 'text-[#49000D]' : 'text-white hover:text-[#49000D]',
-            isMenuOpen
+            // Apply shadow on menu open OR on non-homepage pages by default
+            isMenuOpen || isWhiteNavbarPath
               ? 'shadow-[0_2px_4px_rgba(34,34,34,0.12),0_6px_6px_rgba(34,34,34,0.10),0_14px_9px_rgba(34,34,34,0.06),0_26px_10px_rgba(34,34,34,0.02)] border-b border-black/[0.03]'
               : 'border-b border-transparent'
           )}
