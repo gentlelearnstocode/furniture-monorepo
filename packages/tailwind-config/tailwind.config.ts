@@ -4,6 +4,8 @@ const config: Omit<Config, 'content'> = {
   theme: {
     extend: {
       fontFamily: {
+        sans: ['var(--font-playfair)', 'system-ui', 'sans-serif'],
+        serif: ['var(--font-playfair)', 'serif'],
         playfair: ['var(--font-playfair)'],
       },
       colors: {

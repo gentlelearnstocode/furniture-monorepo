@@ -46,7 +46,7 @@ export default async function RootLayout({
   return (
     <html lang='en'>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} font-playfair antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} font-sans antialiased`}
       >
         <Navbar catalogs={rootCatalogs} />
         <main>{children}</main>
