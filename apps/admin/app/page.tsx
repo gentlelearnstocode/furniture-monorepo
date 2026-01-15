@@ -5,10 +5,8 @@ import {
   LayoutGrid,
   Plus,
   ArrowUpRight,
-  CreditCard,
-  ShoppingBag,
-  Clock,
   TrendingUp,
+  Clock,
   CheckCircle2,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -19,9 +17,16 @@ import { Badge } from '@repo/ui/ui/badge';
 export const dynamic = 'force-dynamic';
 
 export default async function DashboardPage() {
-  // Fetch real metrics
-  const productCount = await db.query.products.findMany().then((res) => res.length);
-  const collectionCount = await db.query.collections.findMany().then((res) => res.length);
+  // Fetch real counts
+  const [productCount, collectionCount, catalogCount, postCount, serviceCount, projectCount] =
+    await Promise.all([
+      db.query.products.findMany().then((res) => res.length),
+      db.query.collections.findMany().then((res) => res.length),
+      db.query.catalogs.findMany().then((res) => res.length),
+      db.query.posts.findMany().then((res) => res.length),
+      db.query.services.findMany().then((res) => res.length),
+      db.query.projects.findMany().then((res) => res.length),
+    ]);
 
   // Recent additions
   const recentProducts = await db.query.products.findMany({
@@ -31,31 +36,20 @@ export default async function DashboardPage() {
 
   const stats = [
     {
-      title: 'Total Revenue',
-      value: '$12,450.00',
-      description: '+12% from last month',
-      icon: CreditCard,
-      color: 'text-blue-600',
-      bg: 'bg-blue-50',
-      mock: true,
-    },
-    {
-      title: 'Pending Orders',
-      value: '24',
-      description: '5 since yesterday',
-      icon: ShoppingBag,
-      color: 'text-orange-600',
-      bg: 'bg-orange-50',
-      mock: true,
-    },
-    {
       title: 'Active Products',
       value: productCount.toString(),
-      description: 'Across all catalogs',
+      description: 'Items in inventory',
       icon: Package,
-      color: 'text-emerald-600',
-      bg: 'bg-emerald-50',
-      mock: false,
+      color: 'text-blue-600',
+      bg: 'bg-blue-50',
+    },
+    {
+      title: 'Catalogs',
+      value: catalogCount.toString(),
+      description: 'Categories & series',
+      icon: LayoutGrid,
+      color: 'text-orange-600',
+      bg: 'bg-orange-50',
     },
     {
       title: 'Collections',
@@ -64,7 +58,22 @@ export default async function DashboardPage() {
       icon: Layers,
       color: 'text-purple-600',
       bg: 'bg-purple-50',
-      mock: false,
+    },
+    {
+      title: 'Blog Posts',
+      value: postCount.toString(),
+      description: 'Published articles',
+      icon: TrendingUp,
+      color: 'text-emerald-600',
+      bg: 'bg-emerald-50',
+    },
+    {
+      title: 'Services & Projects',
+      value: (serviceCount + projectCount).toString(),
+      description: 'Total active services',
+      icon: Plus,
+      color: 'text-blue-600',
+      bg: 'bg-blue-50',
     },
   ];
 
@@ -76,7 +85,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* Stats Grid */}
-      <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
+      <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-5'>
         {stats.map((stat) => (
           <Card
             key={stat.title}
@@ -91,21 +100,9 @@ export default async function DashboardPage() {
             <CardContent>
               <div className='text-2xl font-bold'>{stat.value}</div>
               <p className='text-xs text-gray-400 mt-1 flex items-center gap-1'>
-                {stat.mock ? (
-                  <TrendingUp className='h-3 w-3' />
-                ) : (
-                  <CheckCircle2 className='h-3 w-3' />
-                )}
+                <CheckCircle2 className='h-3 w-3' />
                 {stat.description}
               </p>
-              {stat.mock && (
-                <Badge
-                  variant='secondary'
-                  className='mt-2 text-[10px] py-0 px-1 bg-gray-100 text-gray-400 border-none'
-                >
-                  Forecast
-                </Badge>
-              )}
             </CardContent>
           </Card>
         ))}
@@ -145,7 +142,7 @@ export default async function DashboardPage() {
                     </div>
                     <div className='text-right'>
                       <p className='text-sm font-semibold'>
-                        ${parseFloat(product.basePrice as any).toFixed(2)}
+                        ${Number(product.basePrice).toFixed(2)}
                       </p>
                       <p className='text-[10px] text-gray-400 flex items-center gap-1 justify-end'>
                         <Clock className='h-3 w-3' />
