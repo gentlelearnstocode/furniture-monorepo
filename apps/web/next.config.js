@@ -7,6 +7,10 @@ const nextConfig = {
         hostname: '**',
       },
     ],
+    // Cache optimized images for 1 year (reduces Blob data transfer)
+    minimumCacheTTL: 31536000,
+    // Use modern, smaller formats
+    formats: ['image/avif', 'image/webp'],
   },
 };
 

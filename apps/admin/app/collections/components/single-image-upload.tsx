@@ -7,6 +7,7 @@ import { createAssetAction } from '@/lib/actions/assets';
 import { upload } from '@vercel/blob/client';
 import { toast } from 'sonner';
 import Image from 'next/image';
+import { compressImage } from '@/lib/utils/compress-image';
 
 interface SingleImageUploadProps {
   value?: { assetId: string; url: string } | null;
@@ -28,9 +29,11 @@ export function SingleImageUpload({
     setIsUploading(true);
 
     try {
-      const filename = folder ? `${folder}/${file.name}` : file.name;
+      // Compress image before upload to reduce storage and bandwidth
+      const compressedFile = await compressImage(file);
+      const filename = folder ? `${folder}/${compressedFile.name}` : compressedFile.name;
 
-      const blob = await upload(filename, file, {
+      const blob = await upload(filename, compressedFile, {
         access: 'public',
         handleUploadUrl: '/api/assets/upload',
       });

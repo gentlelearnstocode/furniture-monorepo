@@ -8,6 +8,7 @@ import { upload } from '@vercel/blob/client';
 import { toast } from 'sonner';
 import Image from 'next/image';
 import { Progress } from '@repo/ui/ui/progress';
+import { compressImage } from '@/lib/utils/compress-image';
 
 interface MultiImageUploadProps {
   value: { assetId: string; url: string; isPrimary: boolean }[];
@@ -32,9 +33,11 @@ export function MultiImageUpload({ value, onChange, folder = 'general' }: MultiI
 
     try {
       for (const file of Array.from(files)) {
-        const filename = folder ? `${folder}/${file.name}` : file.name;
+        // Compress image before upload to reduce storage and bandwidth
+        const compressedFile = await compressImage(file);
+        const filename = folder ? `${folder}/${compressedFile.name}` : compressedFile.name;
 
-        const blob = await upload(filename, file, {
+        const blob = await upload(filename, compressedFile, {
           access: 'public',
           handleUploadUrl: '/api/assets/upload',
           onUploadProgress: (progressEvent) => {

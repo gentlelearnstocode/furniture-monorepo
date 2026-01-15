@@ -9,6 +9,7 @@ import { cn } from '@repo/ui/lib/utils';
 import { Progress } from '@repo/ui/ui/progress';
 import { upload } from '@vercel/blob/client';
 import { createAssetAction } from '@/lib/actions/assets';
+import { compressImage } from '@/lib/utils/compress-image';
 
 interface SingleAssetUploadProps {
   url?: string | null;
@@ -63,9 +64,11 @@ export function SingleAssetUpload({
     setUploadProgress(0);
 
     try {
-      const filename = folder ? `${folder}/${file.name}` : file.name;
+      // Compress image before upload (compression utility handles type checking)
+      const fileToUpload = type === 'image' ? await compressImage(file) : file;
+      const filename = folder ? `${folder}/${fileToUpload.name}` : fileToUpload.name;
 
-      const blob = await upload(filename, file, {
+      const blob = await upload(filename, fileToUpload, {
         access: 'public',
         handleUploadUrl: '/api/assets/upload',
         onUploadProgress: (progressEvent) => {
