@@ -6,20 +6,7 @@ import { toast } from 'sonner';
 import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { z } from 'zod';
-import {
-  Plus,
-  Trash2,
-  GripVertical,
-  Phone,
-  Mail,
-  Facebook,
-  MessageSquare,
-  CheckCircle2,
-  XCircle,
-  MessageCircle,
-  Youtube,
-  Instagram,
-} from 'lucide-react';
+import { Plus, Trash2, Phone, Mail, Facebook, MessageSquare, MessageCircle } from 'lucide-react';
 
 import { upsertSiteContacts, SiteContactsUpdateInput } from '@/lib/actions/contacts';
 

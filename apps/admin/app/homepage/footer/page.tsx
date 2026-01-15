@@ -17,6 +17,10 @@ export default async function FooterPage() {
     orderBy: (contact, { asc }) => [asc(contact.position)],
   });
 
+  const socialLinks = await db.query.footerSocialLinks.findMany({
+    orderBy: (link, { asc }) => [asc(link.position)],
+  });
+
   return (
     <div className='space-y-6'>
       <div className='flex items-center justify-between'>
@@ -58,6 +62,13 @@ export default async function FooterPage() {
               label: contact.label || '',
               value: contact.value,
               position: contact.position,
+            })),
+            socialLinks: socialLinks.map((link) => ({
+              id: link.id,
+              platform: link.platform,
+              url: link.url,
+              isActive: link.isActive,
+              position: link.position,
             })),
           }}
         />

@@ -78,6 +78,13 @@
       "when": 1768455164441,
       "tag": "0010_last_skrulls",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1768480398003,
+      "tag": "0011_nappy_squadron_supreme",
+      "breakpoints": true
     }
   ]
 }

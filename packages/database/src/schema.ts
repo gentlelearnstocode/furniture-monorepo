@@ -617,6 +617,16 @@ export const footerContacts = pgTable('footer_contacts', {
   position: integer('position').default(0).notNull(),
 });
 
+export const footerSocialLinks = pgTable('footer_social_links', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  platform: text('platform')
+    .$type<'facebook' | 'instagram' | 'youtube' | 'zalo' | 'tiktok' | 'linkedin' | 'twitter'>()
+    .notNull(),
+  url: text('url').notNull(),
+  isActive: boolean('is_active').default(true).notNull(),
+  position: integer('position').default(0).notNull(),
+});
+
 // --- Site Contacts (Site-wide contact points) ---
 
 export const siteContacts = pgTable('site_contacts', {
@@ -685,6 +695,9 @@ export type SelectFooterAddress = typeof footerAddresses.$inferSelect;
 
 export type InsertFooterContact = typeof footerContacts.$inferInsert;
 export type SelectFooterContact = typeof footerContacts.$inferSelect;
+
+export type InsertFooterSocialLink = typeof footerSocialLinks.$inferInsert;
+export type SelectFooterSocialLink = typeof footerSocialLinks.$inferSelect;
 
 export type InsertSiteHero = typeof siteHeros.$inferInsert;
 export type SelectSiteHero = typeof siteHeros.$inferSelect;

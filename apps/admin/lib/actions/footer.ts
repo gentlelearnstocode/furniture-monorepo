@@ -1,37 +1,47 @@
 'use server';
 
-import { db, siteFooter, footerAddresses, footerContacts } from '@repo/database';
+import { db, siteFooter, footerAddresses, footerContacts, footerSocialLinks } from '@repo/database';
 import { eq, asc } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { revalidateStorefront } from '../revalidate-storefront';
 
 // Validation schemas
-const footerAddressSchema = z.object({
+export const footerAddressSchema = z.object({
   id: z.string().uuid().optional(),
   label: z.string().min(1, 'Label is required'),
   address: z.string().min(1, 'Address is required'),
-  position: z.number().default(0),
+  position: z.number(),
 });
 
-const footerContactSchema = z.object({
+export const footerContactSchema = z.object({
   id: z.string().uuid().optional(),
   type: z.enum(['phone', 'email']),
   label: z.string().optional(),
   value: z.string().min(1, 'Value is required'),
-  position: z.number().default(0),
+  position: z.number(),
 });
 
-const footerSettingsSchema = z.object({
+export const footerSocialLinkSchema = z.object({
+  id: z.string().uuid().optional(),
+  platform: z.enum(['facebook', 'instagram', 'youtube', 'zalo', 'tiktok', 'linkedin', 'twitter']),
+  url: z.string().min(1, 'URL is required'),
+  isActive: z.boolean(),
+  position: z.number(),
+});
+
+export const footerSettingsSchema = z.object({
   intro: z.string().min(1, 'Intro is required'),
   description: z.string().optional(),
   mapEmbedUrl: z.string().optional(),
   addresses: z.array(footerAddressSchema),
   contacts: z.array(footerContactSchema),
+  socialLinks: z.array(footerSocialLinkSchema),
 });
 
 export type FooterAddressInput = z.infer<typeof footerAddressSchema>;
 export type FooterContactInput = z.infer<typeof footerContactSchema>;
+export type FooterSocialLinkInput = z.infer<typeof footerSocialLinkSchema>;
 export type FooterSettingsInput = z.infer<typeof footerSettingsSchema>;
 
 export async function getFooterSettings() {
@@ -48,14 +58,19 @@ export async function getFooterSettings() {
       orderBy: [asc(footerContacts.position)],
     });
 
+    const socialLinks = await db.query.footerSocialLinks.findMany({
+      orderBy: [asc(footerSocialLinks.position)],
+    });
+
     return {
       footer,
       addresses,
       contacts,
+      socialLinks,
     };
   } catch (error) {
     console.error('[getFooterSettings] Error:', error);
-    return { footer: null, addresses: [], contacts: [] };
+    return { footer: null, addresses: [], contacts: [], socialLinks: [] };
   }
 }
 
@@ -68,7 +83,7 @@ export async function upsertFooterSettings(data: FooterSettingsInput) {
   }
 
   try {
-    const { addresses, contacts, ...footerData } = validated.data;
+    const { addresses, contacts, socialLinks, ...footerData } = validated.data;
 
     // Upsert main footer settings
     const existing = await db.query.siteFooter.findFirst({
@@ -107,6 +122,19 @@ export async function upsertFooterSettings(data: FooterSettingsInput) {
           type: contact.type,
           label: contact.label || null,
           value: contact.value,
+          position: index,
+        }))
+      );
+    }
+
+    // Handle social links - delete all and re-insert
+    await db.delete(footerSocialLinks);
+    if (socialLinks.length > 0) {
+      await db.insert(footerSocialLinks).values(
+        socialLinks.map((link, index) => ({
+          platform: link.platform,
+          url: link.url,
+          isActive: link.isActive ?? true,
           position: index,
         }))
       );

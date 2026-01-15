@@ -5,10 +5,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { z } from 'zod';
-import { Plus, Trash2, GripVertical, MapPin, Phone, Mail } from 'lucide-react';
+import { Plus, Trash2, GripVertical, MapPin, Phone, Mail, Share2 } from 'lucide-react';
 
-import { upsertFooterSettings } from '@/lib/actions/footer';
+import {
+  upsertFooterSettings,
+  footerSettingsSchema,
+  type FooterSettingsInput,
+} from '@/lib/actions/footer';
 
 import { Button } from '@repo/ui/ui/button';
 import {
@@ -24,31 +27,9 @@ import { Input } from '@repo/ui/ui/input';
 import { Textarea } from '@repo/ui/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/ui/select';
+import { Switch } from '@repo/ui/ui/switch';
 
-const footerAddressSchema = z.object({
-  id: z.string().uuid().optional(),
-  label: z.string().min(1, 'Label is required'),
-  address: z.string().min(1, 'Address is required'),
-  position: z.number(),
-});
-
-const footerContactSchema = z.object({
-  id: z.string().uuid().optional(),
-  type: z.enum(['phone', 'email']),
-  label: z.string().optional(),
-  value: z.string().min(1, 'Value is required'),
-  position: z.number(),
-});
-
-const footerSchema = z.object({
-  intro: z.string().min(1, 'Intro is required'),
-  description: z.string().optional(),
-  mapEmbedUrl: z.string().optional(),
-  addresses: z.array(footerAddressSchema),
-  contacts: z.array(footerContactSchema),
-});
-
-type FooterFormData = z.infer<typeof footerSchema>;
+type FooterFormData = FooterSettingsInput;
 
 interface FooterFormProps {
   initialData: FooterFormData;
@@ -59,7 +40,7 @@ export function FooterForm({ initialData }: FooterFormProps) {
   const router = useRouter();
 
   const form = useForm<FooterFormData>({
-    resolver: zodResolver(footerSchema),
+    resolver: zodResolver(footerSettingsSchema),
     defaultValues: initialData,
   });
 
@@ -79,6 +60,15 @@ export function FooterForm({ initialData }: FooterFormProps) {
   } = useFieldArray({
     control: form.control,
     name: 'contacts',
+  });
+
+  const {
+    fields: socialLinkFields,
+    append: appendSocialLink,
+    remove: removeSocialLink,
+  } = useFieldArray({
+    control: form.control,
+    name: 'socialLinks',
   });
 
   function onSubmit(data: FooterFormData) {
@@ -365,6 +355,119 @@ export function FooterForm({ initialData }: FooterFormProps) {
                         size='icon'
                         className='text-red-500 hover:text-red-700 hover:bg-red-50'
                         onClick={() => removeContact(index)}
+                      >
+                        <Trash2 className='h-4 w-4' />
+                      </Button>
+                    </div>
+                  ))
+                )}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-4'>
+                <div>
+                  <CardTitle className='flex items-center gap-2'>
+                    <Share2 className='h-5 w-5' />
+                    Social Media Links
+                  </CardTitle>
+                  <CardDescription>Add social media links for the footer.</CardDescription>
+                </div>
+                <Button
+                  type='button'
+                  variant='outline'
+                  size='sm'
+                  onClick={() =>
+                    appendSocialLink({
+                      platform: 'facebook',
+                      url: '',
+                      isActive: true,
+                      position: socialLinkFields.length,
+                    })
+                  }
+                >
+                  <Plus className='h-4 w-4 mr-1' />
+                  Add
+                </Button>
+              </CardHeader>
+              <CardContent className='space-y-4'>
+                {socialLinkFields.length === 0 ? (
+                  <p className='text-sm text-gray-500 text-center py-4'>
+                    No social links added yet. Click &quot;Add&quot; to add one.
+                  </p>
+                ) : (
+                  socialLinkFields.map((field, index) => (
+                    <div
+                      key={field.id}
+                      className='flex gap-3 items-start p-4 bg-gray-50 rounded-lg'
+                    >
+                      <GripVertical className='h-5 w-5 text-gray-400 mt-2 flex-shrink-0' />
+                      <div className='flex-1 space-y-3'>
+                        <div className='grid grid-cols-2 gap-3'>
+                          <FormField
+                            control={form.control}
+                            name={`socialLinks.${index}.platform`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Platform</FormLabel>
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                  <FormControl>
+                                    <SelectTrigger>
+                                      <SelectValue placeholder='Select platform' />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                    <SelectItem value='facebook'>Facebook</SelectItem>
+                                    <SelectItem value='instagram'>Instagram</SelectItem>
+                                    <SelectItem value='youtube'>YouTube</SelectItem>
+                                    <SelectItem value='zalo'>Zalo</SelectItem>
+                                    <SelectItem value='tiktok'>TikTok</SelectItem>
+                                    <SelectItem value='linkedin'>LinkedIn</SelectItem>
+                                    <SelectItem value='twitter'>Twitter</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name={`socialLinks.${index}.isActive`}
+                            render={({ field }) => (
+                              <FormItem className='flex flex-row items-center justify-between space-y-0 rounded-lg border p-3'>
+                                <div className='space-y-0.5'>
+                                  <FormLabel>Active</FormLabel>
+                                  <FormDescription className='text-xs'>
+                                    Show on website
+                                  </FormDescription>
+                                </div>
+                                <FormControl>
+                                  <Switch checked={field.value} onCheckedChange={field.onChange} />
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        <FormField
+                          control={form.control}
+                          name={`socialLinks.${index}.url`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>URL</FormLabel>
+                              <FormControl>
+                                <Input placeholder='https://facebook.com/yourpage' {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <Button
+                        type='button'
+                        variant='ghost'
+                        size='icon'
+                        className='text-red-500 hover:text-red-700 hover:bg-red-50'
+                        onClick={() => removeSocialLink(index)}
                       >
                         <Trash2 className='h-4 w-4' />
                       </Button>
