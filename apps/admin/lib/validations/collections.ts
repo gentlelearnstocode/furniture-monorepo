@@ -9,8 +9,6 @@ export const createCollectionSchema = z.object({
   description: z.string().optional(),
   bannerId: z.string().uuid().optional().nullable(),
   isActive: z.boolean(),
-  showOnHome: z.boolean(),
-  homeLayout: z.enum(['full', 'half', 'third']),
   productIds: z.array(z.string().uuid()),
   catalogIds: z.array(z.string().uuid()),
 });

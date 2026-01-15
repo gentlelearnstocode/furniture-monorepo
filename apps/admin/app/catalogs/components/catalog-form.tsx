@@ -23,6 +23,7 @@ import {
 } from '@repo/ui/ui/form';
 import { Input } from '@repo/ui/ui/input';
 import { Textarea } from '@repo/ui/ui/textarea';
+import { Switch } from '@repo/ui/ui/switch';
 
 interface CatalogFormProps {
   initialData?: {
@@ -35,6 +36,8 @@ interface CatalogFormProps {
     image?: {
       url: string;
     } | null;
+    showOnHome?: boolean;
+    displayOrder?: number;
   };
   hasChildren?: boolean;
   parentCatalogs?: {
@@ -61,6 +64,8 @@ export function CatalogForm({
       parentId: initialData?.parentId || null,
       level: initialData?.parentId ? 2 : 1,
       imageId: initialData?.imageId || null,
+      showOnHome: initialData?.showOnHome ?? false,
+      displayOrder: initialData?.displayOrder ?? 0,
     },
   });
 
@@ -238,6 +243,56 @@ export function CatalogForm({
             )}
           />
         </div>
+
+        {/* Show on Home Settings - Only for Level 1 catalogs */}
+        {!form.watch('parentId') && (
+          <div className='space-y-4 pt-4 border-t'>
+            <h3 className='text-sm font-medium'>Homepage Display</h3>
+            <FormField
+              control={form.control}
+              name='showOnHome'
+              render={({ field }) => (
+                <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm'>
+                  <div className='space-y-0.5'>
+                    <FormLabel>Show on Home Page</FormLabel>
+                    <FormDescription>
+                      Display this catalog in the featured section on the home page.
+                    </FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            {form.watch('showOnHome') && (
+              <FormField
+                control={form.control}
+                name='displayOrder'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Display Order</FormLabel>
+                    <FormControl>
+                      <Input
+                        type='number'
+                        min={0}
+                        placeholder='0'
+                        {...field}
+                        onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                        value={field.value ?? 0}
+                      />
+                    </FormControl>
+                    <FormDescription className='text-xs'>
+                      Lower numbers appear first on the homepage (0, 1, 2...).
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+          </div>
+        )}
 
         <div className='flex justify-end pt-4 border-t'>
           <Button type='submit' disabled={isPending} className='w-full md:w-auto'>

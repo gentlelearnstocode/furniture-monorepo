@@ -41,6 +41,8 @@ export const catalogs = pgTable('catalogs', {
   level: integer('level').notNull().default(1), // 1 = parent catalog, 2 = subcatalog
   imageId: uuid('image_id').references(() => assets.id, { onDelete: 'set null' }),
   description: text('description'),
+  showOnHome: boolean('show_on_home').default(false).notNull(),
+  displayOrder: integer('display_order').default(0).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -67,8 +69,6 @@ export const collections = pgTable('collections', {
   description: text('description'),
   bannerId: uuid('banner_id').references(() => assets.id),
   isActive: boolean('is_active').default(true).notNull(),
-  showOnHome: boolean('show_on_home').default(false).notNull(),
-  homeLayout: text('home_layout').$type<'full' | 'half' | 'third'>().default('full').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -616,6 +616,48 @@ export const footerContacts = pgTable('footer_contacts', {
   value: text('value').notNull(),
   position: integer('position').default(0).notNull(),
 });
+
+// --- Featured Catalog Layout ---
+
+export const featuredCatalogRows = pgTable('featured_catalog_rows', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  position: integer('position').notNull().default(0), // Row order (0, 1, 2...)
+  columns: integer('columns').notNull().default(1), // 1-4 catalogs per row
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const featuredCatalogRowsRelations = relations(featuredCatalogRows, ({ many }) => ({
+  items: many(featuredCatalogRowItems),
+}));
+
+export const featuredCatalogRowItems = pgTable('featured_catalog_row_items', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  rowId: uuid('row_id')
+    .notNull()
+    .references(() => featuredCatalogRows.id, { onDelete: 'cascade' }),
+  catalogId: uuid('catalog_id')
+    .notNull()
+    .references(() => catalogs.id, { onDelete: 'cascade' }),
+  position: integer('position').notNull().default(0), // Position within row
+});
+
+export const featuredCatalogRowItemsRelations = relations(featuredCatalogRowItems, ({ one }) => ({
+  row: one(featuredCatalogRows, {
+    fields: [featuredCatalogRowItems.rowId],
+    references: [featuredCatalogRows.id],
+  }),
+  catalog: one(catalogs, {
+    fields: [featuredCatalogRowItems.catalogId],
+    references: [catalogs.id],
+  }),
+}));
+
+export type InsertFeaturedCatalogRow = typeof featuredCatalogRows.$inferInsert;
+export type SelectFeaturedCatalogRow = typeof featuredCatalogRows.$inferSelect;
+
+export type InsertFeaturedCatalogRowItem = typeof featuredCatalogRowItems.$inferInsert;
+export type SelectFeaturedCatalogRowItem = typeof featuredCatalogRowItems.$inferSelect;
 
 export type InsertSiteFooter = typeof siteFooter.$inferInsert;
 export type SelectSiteFooter = typeof siteFooter.$inferSelect;

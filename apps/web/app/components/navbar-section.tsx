@@ -185,7 +185,7 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
             isMenuOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
           )}
           style={{
-            transition: 'max-height 2500ms ease-out, opacity 2500ms ease-out',
+            transition: 'max-height 1000ms ease-out, opacity 800ms ease-out',
           }}
         >
           <div className='container mx-auto px-4 py-12'>

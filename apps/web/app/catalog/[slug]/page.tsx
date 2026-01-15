@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { db } from '@repo/database';
-import { ProductSlider } from './components/product-slider';
-import { ProductCard } from './components/product-card';
+import { CatalogDetailWrapper } from './components/catalog-detail-wrapper';
 import { SubCatalogGrid } from './components/sub-catalog-grid';
 import { ChevronRight } from 'lucide-react';
 
@@ -62,46 +61,62 @@ export default async function CatalogPage({ params }: Props) {
     },
   });
 
-  console.log('catalog', catalog);
-
   if (!catalog) {
     notFound();
   }
 
-  let uniqueProducts: typeof catalog.products = [];
-  let sliderImages: string[] = [];
+  // Prepare collections data for the client component (Level 1 catalogs)
+  type CollectionData = {
+    id: string;
+    name: string;
+    bannerUrl: string | null;
+    products: {
+      id: string;
+      name: string;
+      slug: string;
+      gallery: {
+        isPrimary: boolean;
+        asset: { url: string } | null;
+      }[];
+    }[];
+  };
 
-  // Level 1 catalog: Show products from associated collections
+  let collectionsData: CollectionData[] = [];
+
   if (catalog.level === 1) {
-    const collections = catalog.collections.map((cc) => cc.collection);
-    const allProducts = collections.flatMap((c) => c.products.map((cp) => cp.product));
-
-    // Remove duplicates based on ID
-    uniqueProducts = Array.from(new Map(allProducts.map((p) => [p.id, p])).values());
-
-    // Gather images for the slider
-    sliderImages = uniqueProducts
-      .map((product) => {
-        const primaryAsset =
-          product.gallery.find((g: (typeof product.gallery)[number]) => g.isPrimary) ||
-          product.gallery[0];
-        return primaryAsset?.asset?.url;
-      })
-      .filter((url): url is string => !!url);
-  }
-  // Level 2 catalog: Show products directly assigned to this catalog
-  else if (catalog.level === 2) {
-    uniqueProducts = catalog.products;
-
-    // Gather images for the slider
-    sliderImages = uniqueProducts
-      .map((product) => {
-        const primaryAsset =
-          product.gallery.find((g: (typeof product.gallery)[number]) => g.isPrimary) ||
-          product.gallery[0];
-        return primaryAsset?.asset?.url;
-      })
-      .filter((url): url is string => !!url);
+    // Level 1 catalog: Use collections with their banner images
+    collectionsData = catalog.collections.map((cc) => ({
+      id: cc.collection.id,
+      name: cc.collection.name,
+      bannerUrl: cc.collection.banner?.url || null,
+      products: cc.collection.products.map((cp) => ({
+        id: cp.product.id,
+        name: cp.product.name,
+        slug: cp.product.slug,
+        gallery: cp.product.gallery.map((g) => ({
+          isPrimary: g.isPrimary,
+          asset: g.asset ? { url: g.asset.url } : null,
+        })),
+      })),
+    }));
+  } else if (catalog.level === 2) {
+    // Level 2 catalog: Create a single virtual collection with products directly assigned
+    collectionsData = [
+      {
+        id: catalog.id,
+        name: catalog.name,
+        bannerUrl: null, // Level 2 catalogs don't have banner images in the same way
+        products: catalog.products.map((product) => ({
+          id: product.id,
+          name: product.name,
+          slug: product.slug,
+          gallery: product.gallery.map((g) => ({
+            isPrimary: g.isPrimary,
+            asset: g.asset ? { url: g.asset.url } : null,
+          })),
+        })),
+      },
+    ];
   }
 
   return (
@@ -123,51 +138,8 @@ export default async function CatalogPage({ params }: Props) {
         </div>
       </div>
 
-      {/* Hero Slider */}
-      {sliderImages.length > 0 && (
-        <div className='container mx-auto px-4 mb-16'>
-          <ProductSlider images={sliderImages.slice(0, 5)} />
-        </div>
-      )}
-
-      {/* Shop the look Section */}
-      {uniqueProducts.length > 0 && (
-        <div className='container mx-auto px-4 pb-20'>
-          {/* Section Header with decorative elements */}
-          <div className='relative mb-12'>
-            <div className='flex items-center justify-center gap-6 mb-3'>
-              <div className='h-px w-16 bg-gradient-to-r from-transparent to-black/20' />
-              <h2 className='text-5xl md:text-6xl font-serif italic text-center text-black/85 tracking-wide'>
-                Shop the look
-              </h2>
-              <div className='h-px w-16 bg-gradient-to-l from-transparent to-black/20' />
-            </div>
-            <p className='text-center text-sm font-serif italic text-gray-400 tracking-widest uppercase'>
-              Curated Collection
-            </p>
-          </div>
-
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-16'>
-            {uniqueProducts.map((product) => {
-              const primaryAsset =
-                product.gallery.find((g: (typeof product.gallery)[number]) => g.isPrimary) ||
-                product.gallery[0];
-              return (
-                <ProductCard
-                  key={product.id}
-                  id={product.id}
-                  name={product.name}
-                  slug={product.slug}
-                  imageUrl={
-                    primaryAsset?.asset?.url ||
-                    'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=800'
-                  }
-                />
-              );
-            })}
-          </div>
-        </div>
-      )}
+      {/* Client component handles slider + shop the look with collection state */}
+      <CatalogDetailWrapper collections={collectionsData} />
 
       {/* Catalog Level 2 Section - Only show for Level 1 catalogs */}
       {catalog.level === 1 && catalog.children.length > 0 && (

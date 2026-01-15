@@ -57,6 +57,20 @@
       "when": 1768217183760,
       "tag": "0007_optimal_screwball",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1768452257948,
+      "tag": "0008_military_peter_quill",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1768453175040,
+      "tag": "0009_busy_rictor",
+      "breakpoints": true
     }
   ]
 }

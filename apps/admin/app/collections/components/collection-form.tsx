@@ -50,8 +50,6 @@ export function CollectionForm({
       description: initialData?.description || '',
       bannerId: initialData?.bannerId || null,
       isActive: initialData?.isActive ?? true,
-      showOnHome: initialData?.showOnHome ?? false,
-      homeLayout: initialData?.homeLayout || 'full',
       productIds: initialData?.products?.map((p) => p.productId) || [],
       catalogIds: initialData?.catalogs?.map((c) => c.catalogId) || [],
     },
@@ -237,51 +235,6 @@ export function CollectionForm({
             </FormItem>
           )}
         />
-
-        <FormField
-          control={form.control}
-          name='showOnHome'
-          render={({ field }) => (
-            <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm'>
-              <div className='space-y-0.5'>
-                <FormLabel>Show on Home Page</FormLabel>
-                <FormDescription>
-                  Display this collection in the featured section on the home page.
-                </FormDescription>
-              </div>
-              <FormControl>
-                <Switch checked={field.value} onCheckedChange={field.onChange} />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-
-        {form.watch('showOnHome') && (
-          <FormField
-            control={form.control}
-            name='homeLayout'
-            render={({ field }) => (
-              <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm'>
-                <div className='space-y-0.5'>
-                  <FormLabel>Home Page Layout</FormLabel>
-                  <FormDescription>Choose how this collection looks on home page.</FormDescription>
-                </div>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger className='w-[180px]'>
-                      <SelectValue placeholder='Select layout' />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value='full'>Full Width</SelectItem>
-                    <SelectItem value='half'>Half Width (1/2)</SelectItem>
-                    <SelectItem value='third'>Third Width (1/3)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </FormItem>
-            )}
-          />
-        )}
 
         <div className='flex justify-end pt-4 border-t gap-3'>
           <Button
