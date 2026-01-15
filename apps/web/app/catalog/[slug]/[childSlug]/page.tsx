@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { db } from '@repo/database';
 import { ChevronRight, Grid3x3, List } from 'lucide-react';
 import Image from 'next/image';
+import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
 
 export const dynamic = 'force-dynamic';
 
@@ -51,24 +52,15 @@ export default async function CatalogLevel2Page({ params }: Props) {
 
   return (
     <div className='min-h-screen bg-gradient-to-b from-[#FDFCFB] via-white to-[#FDFCFB]'>
-      {/* Breadcrumb & Title Section */}
-      <div className='container mx-auto px-4 pt-4 pb-6'>
-        {/* Breadcrumb */}
-        <div className='flex items-center gap-2.5 text-[13px] font-serif italic text-gray-400 mb-8'>
-          <Link href='/' className='hover:text-black transition-colors duration-300'>
-            Home Page
-          </Link>
-          <ChevronRight size={14} className='text-gray-300' />
-          <Link
-            href={`/catalog/${slug}`}
-            className='hover:text-black transition-colors duration-300'
-          >
-            {parentCatalog.name}
-          </Link>
-          <ChevronRight size={14} className='text-gray-300' />
-          <span className='text-black font-medium'>{catalog.name}</span>
-        </div>
+      <AppBreadcrumb
+        items={[
+          { label: 'Home Page', href: '/' },
+          { label: parentCatalog.name, href: `/catalog/${slug}` },
+          { label: catalog.name },
+        ]}
+      />
 
+      <div className='container mx-auto px-4 pt-4 pb-6'>
         {/* Title & Description */}
         <div className='mb-8'>
           <h1 className='text-5xl md:text-6xl font-serif italic text-black/90 tracking-wide mb-4'>
@@ -79,12 +71,6 @@ export default async function CatalogLevel2Page({ params }: Props) {
               {catalog.description}
             </p>
           )}
-        </div>
-
-        {/* Decorative divider */}
-        <div className='relative mb-8'>
-          <div className='h-px bg-gradient-to-r from-transparent via-red-800/30 to-transparent w-full' />
-          <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-red-800/40 rotate-45' />
         </div>
 
         {/* Filter Bar */}

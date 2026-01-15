@@ -5,8 +5,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { db } from '@repo/database';
 import { notFound } from 'next/navigation';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import type { Metadata } from 'next';
+import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -67,20 +68,13 @@ export default async function ServiceDetailPage({ params }: Props) {
         </Link>
       </div>
 
-      {/* Breadcrumb */}
-      <div className='container mx-auto px-4 mb-8'>
-        <div className='flex items-center gap-2.5 text-[13px] font-serif italic text-gray-400'>
-          <Link href='/' className='hover:text-black transition-colors duration-300'>
-            Home Page
-          </Link>
-          <ChevronRight size={14} className='text-gray-300' />
-          <Link href='/services' className='hover:text-black transition-colors duration-300'>
-            Services
-          </Link>
-          <ChevronRight size={14} className='text-gray-300' />
-          <span className='text-black font-medium'>{service.title}</span>
-        </div>
-      </div>
+      <AppBreadcrumb
+        items={[
+          { label: 'Home Page', href: '/' },
+          { label: 'Services', href: '/services' },
+          { label: service.title },
+        ]}
+      />
 
       {/* Header */}
       <div className='container mx-auto px-4 mb-12'>
