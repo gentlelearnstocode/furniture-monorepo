@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { db } from '@repo/database';
 import { notFound } from 'next/navigation';
 import { ChevronLeft } from 'lucide-react';
+import { ContactButton } from '@/components/ui/contact-button';
 import type { Metadata } from 'next';
 import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
 import { createCachedQuery } from '@/lib/cache';
@@ -47,6 +48,8 @@ const getServiceBySlug = (slug: string) =>
     { revalidate: 3600, tags: ['services', `service-${slug}`] }
   );
 
+import { getSiteContacts } from '@/lib/queries';
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const service = await db.query.services.findFirst({
@@ -69,6 +72,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ServiceDetailPage({ params }: Props) {
   const { slug } = await params;
   const service = await getServiceBySlug(slug)();
+  const contacts = await getSiteContacts();
 
   if (!service || !service.isActive) {
     notFound();
@@ -134,6 +138,14 @@ export default async function ServiceDetailPage({ params }: Props) {
               prose-p:text-gray-700 prose-strong:text-gray-900 prose-a:text-[#7B0C0C] hover:prose-a:underline'
             dangerouslySetInnerHTML={{ __html: service.descriptionHtml }}
           />
+
+          <div className='mt-12 flex justify-center'>
+            <ContactButton
+              contacts={contacts}
+              label='Tư vấn dịch vụ này'
+              className='w-full max-w-sm'
+            />
+          </div>
         </div>
       </div>
 

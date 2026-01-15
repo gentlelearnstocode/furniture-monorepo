@@ -10,10 +10,45 @@ interface ProductInfoProps {
     description: string | null;
     shortDescription: string | null;
   };
+  contacts: {
+    type: string;
+    label: string | null;
+    value: string;
+  }[];
 }
 
-export function ProductInfo({ product }: ProductInfoProps) {
+export function ProductInfo({ product, contacts }: ProductInfoProps) {
   const [isDetailsOpen, setIsDetailsOpen] = useState(true);
+
+  const handleContact = () => {
+    // console.log('[ProductInfo] Contacts:', contacts);
+    const zaloContact = contacts.find((c) => c.type === 'zalo');
+    const phoneContact = contacts.find((c) => c.type === 'phone');
+
+    if (zaloContact) {
+      const cleanValue = zaloContact.value.replace(/\s/g, '');
+      window.open(`https://zalo.me/${cleanValue}`, '_blank');
+      return;
+    }
+
+    if (phoneContact) {
+      const cleanValue = phoneContact.value.replace(/\s/g, '');
+      window.location.href = `tel:${cleanValue}`;
+      return;
+    }
+
+    // Fallback to any active contact if neither Zalo nor Phone is found
+    if (contacts.length > 0) {
+      const firstContact = contacts[0];
+      if (firstContact) {
+        let href = firstContact.value;
+        if (!href.startsWith('http') && !href.startsWith('mailto') && !href.startsWith('tel')) {
+          href = `https://${href}`;
+        }
+        window.open(href, '_blank');
+      }
+    }
+  };
 
   return (
     <div className='flex flex-col gap-8'>
@@ -64,7 +99,10 @@ export function ProductInfo({ product }: ProductInfoProps) {
       </div>
 
       {/* Contact Button */}
-      <button className='w-full bg-[#8B0000] hover:bg-[#A00000] text-white py-5 px-8 rounded-sm flex items-center justify-center gap-3 transition-all duration-300 group shadow-lg shadow-red-900/10 hover:shadow-red-900/20'>
+      <button
+        onClick={handleContact}
+        className='w-full bg-[#8B0000] hover:bg-[#A00000] text-white py-5 px-8 rounded-sm flex items-center justify-center gap-3 transition-all duration-300 group shadow-lg shadow-red-900/10 hover:shadow-red-900/20'
+      >
         <ShoppingBag size={20} className='group-hover:scale-110 transition-transform' />
         <span className='text-[15px] font-serif uppercase tracking-[0.2em] font-medium'>
           Liên hệ ngay để được tư vấn

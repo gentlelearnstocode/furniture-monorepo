@@ -63,6 +63,7 @@ export function Sidebar() {
         { name: 'Hero Section', href: '/homepage/hero' },
         { name: 'Featured Catalogs Section', href: '/homepage/featured' },
         { name: 'Intro Section', href: '/homepage/intro' },
+        { name: 'Contact Management', href: '/homepage/contacts' },
         { name: 'Footer Section', href: '/homepage/footer' },
       ],
     },

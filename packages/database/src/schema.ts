@@ -617,6 +617,24 @@ export const footerContacts = pgTable('footer_contacts', {
   position: integer('position').default(0).notNull(),
 });
 
+// --- Site Contacts (Site-wide contact points) ---
+
+export const siteContacts = pgTable('site_contacts', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  type: text('type')
+    .$type<'phone' | 'zalo' | 'facebook' | 'messenger' | 'email' | 'whatsapp'>()
+    .notNull(),
+  label: text('label'),
+  value: text('value').notNull(),
+  isActive: boolean('is_active').default(true).notNull(),
+  position: integer('position').default(0).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export type InsertSiteContact = typeof siteContacts.$inferInsert;
+export type SelectSiteContact = typeof siteContacts.$inferSelect;
+
 // --- Featured Catalog Layout ---
 
 export const featuredCatalogRows = pgTable('featured_catalog_rows', {

@@ -4,6 +4,7 @@ import { ProductGallery } from './components/product-gallery';
 import { ProductInfo } from './components/product-info';
 import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
 import { createCachedQuery } from '@/lib/cache';
+import { getSiteContacts } from '@/lib/queries';
 
 // Revalidate every hour
 export const revalidate = 3600;
@@ -54,6 +55,7 @@ export default async function ProductDetailPage({ params }: Props) {
   const { slug } = await params;
 
   const product = await getProductBySlug(slug)();
+  const contacts = await getSiteContacts();
 
   if (!product) {
     notFound();
@@ -94,7 +96,7 @@ export default async function ProductDetailPage({ params }: Props) {
           />
 
           {/* Right: Info */}
-          <ProductInfo product={product} />
+          <ProductInfo product={product} contacts={contacts} />
         </div>
       </div>
     </div>
