@@ -27,10 +27,22 @@ export const IntroSection = async () => {
 
       <div className='container mx-auto px-4 relative z-10'>
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center'>
-          {/* Left: Intro Image */}
+          {/* Left: Intro Image - "Painting on wall" effect */}
           <div className='relative group'>
             {intro.introImage && (
-              <div className='relative aspect-[4/3] w-full overflow-hidden rounded-sm shadow-2xl'>
+              <div
+                className='relative aspect-[4/3] w-full overflow-hidden'
+                style={{
+                  borderRadius: '4px',
+                  boxShadow: `
+                    0 67px 19px 0 rgba(0, 0, 0, 0.01),
+                    0 43px 17px 0 rgba(0, 0, 0, 0.12),
+                    0 24px 15px 0 rgba(0, 0, 0, 0.40),
+                    0 11px 11px 0 rgba(0, 0, 0, 0.68),
+                    0 3px 6px 0 rgba(0, 0, 0, 0.79)
+                  `,
+                }}
+              >
                 <Image
                   src={intro.introImage.url}
                   alt={intro.title}
@@ -40,8 +52,6 @@ export const IntroSection = async () => {
                 />
               </div>
             )}
-            {/* Elegant border accent */}
-            <div className='absolute -inset-4 border border-white/10 -z-10 rounded-sm' />
           </div>
 
           {/* Right: Content */}
