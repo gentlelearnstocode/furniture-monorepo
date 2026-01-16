@@ -736,5 +736,37 @@ export const productImportJobsRelations = relations(productImportJobs, ({ one })
   }),
 }));
 
+// --- Notifications ---
+
+export const notifications = pgTable('notifications', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }), // Recipient (null for broadcast)
+  creatorId: uuid('creator_id').references(() => users.id, { onDelete: 'set null' }), // Who triggered it
+  type: text('type')
+    .$type<'entity_created' | 'entity_updated' | 'entity_deleted' | 'system'>()
+    .notNull(),
+  title: text('title').notNull(),
+  message: text('message').notNull(),
+  link: text('link'),
+  isRead: boolean('is_read').default(false).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export const notificationsRelations = relations(notifications, ({ one }) => ({
+  user: one(users, {
+    fields: [notifications.userId],
+    references: [users.id],
+    relationName: 'notification_recipient',
+  }),
+  creator: one(users, {
+    fields: [notifications.creatorId],
+    references: [users.id],
+    relationName: 'notification_creator',
+  }),
+}));
+
+export type InsertNotification = typeof notifications.$inferInsert;
+export type SelectNotification = typeof notifications.$inferSelect;
+
 export type InsertProductImportJob = typeof productImportJobs.$inferInsert;
 export type SelectProductImportJob = typeof productImportJobs.$inferSelect;

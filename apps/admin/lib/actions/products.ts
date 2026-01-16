@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation';
 import { createProductSchema, type CreateProductInput } from '@/lib/validations/products';
 import { eq } from 'drizzle-orm';
 import { revalidateStorefront } from '../revalidate-storefront';
+import { createNotification } from '../notifications';
 
 export async function createProduct(data: CreateProductInput) {
   const validated = createProductSchema.safeParse(data);
@@ -64,6 +65,15 @@ export async function createProduct(data: CreateProductInput) {
         dimensions: dimensions || null,
       })
       .returning();
+
+    if (product) {
+      await createNotification({
+        type: 'entity_created',
+        title: 'New Product Created',
+        message: `Product "${name}" has been created successfully.`,
+        link: `/products/${product.id}`,
+      });
+    }
 
     if (product && images && images.length > 0) {
       await db.insert(productAssets).values(
@@ -143,6 +153,13 @@ export async function updateProduct(id: string, data: CreateProductInput) {
         updatedAt: new Date(),
       })
       .where(eq(products.id, id));
+
+    await createNotification({
+      type: 'entity_updated',
+      title: 'Product Updated',
+      message: `Product "${name}" has been updated.`,
+      link: `/products/${id}`,
+    });
 
     // Update images: delete old ones and insert new ones
     // A more efficient way would be to diff, but for now this is simpler

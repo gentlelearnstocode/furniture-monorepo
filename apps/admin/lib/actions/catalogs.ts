@@ -5,6 +5,7 @@ import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { createCatalogSchema, type CreateCatalogInput } from '@/lib/validations/catalogs';
 import { revalidateStorefront } from '../revalidate-storefront';
+import { createNotification } from '../notifications';
 
 export async function createCatalog(data: CreateCatalogInput) {
   const validated = createCatalogSchema.safeParse(data);
@@ -35,8 +36,14 @@ export async function createCatalog(data: CreateCatalogInput) {
       parentId: parentId || null,
       level,
       imageId: imageId || null,
-      showOnHome: showOnHome ?? false,
       displayOrder: displayOrder ?? 0,
+    });
+
+    await createNotification({
+      type: 'entity_created',
+      title: 'New Catalog Created',
+      message: `Catalog "${name}" has been created successfully.`,
+      link: '/catalogs',
     });
   } catch (error) {
     console.error('Failed to create catalog:', error);
@@ -84,6 +91,13 @@ export async function updateCatalog(id: string, data: CreateCatalogInput) {
         updatedAt: new Date(),
       })
       .where(eq(catalogs.id, id));
+
+    await createNotification({
+      type: 'entity_updated',
+      title: 'Catalog Updated',
+      message: `Catalog "${name}" has been updated.`,
+      link: '/catalogs',
+    });
   } catch (error) {
     console.error('Failed to update catalog:', error);
     return { error: 'Database error: Failed to update catalog.' };

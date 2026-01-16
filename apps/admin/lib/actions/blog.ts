@@ -5,6 +5,7 @@ import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { blogSchema, type BlogInput } from '@/lib/validations/blog';
 import { revalidateStorefront } from '../revalidate-storefront';
+import { createNotification } from '../notifications';
 
 export async function getPosts() {
   try {
@@ -81,6 +82,15 @@ export async function upsertPost(data: BlogInput & { id?: string }) {
         },
       })
       .returning();
+
+    if (result) {
+      await createNotification({
+        type: data.id ? 'entity_updated' : 'entity_created',
+        title: data.id ? 'Blog Post Updated' : 'New Blog Post Created',
+        message: `Blog post "${result.title}" has been ${data.id ? 'updated' : 'created'}.`,
+        link: '/blogs',
+      });
+    }
 
     if (!result) {
       throw new Error('Failed to upsert post');

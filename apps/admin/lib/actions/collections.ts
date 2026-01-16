@@ -6,6 +6,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { createCollectionSchema, type CreateCollectionInput } from '@/lib/validations/collections';
 import { revalidateStorefront } from '../revalidate-storefront';
+import { createNotification } from '../notifications';
 
 export async function createCollection(data: CreateCollectionInput) {
   const validated = createCollectionSchema.safeParse(data);
@@ -38,6 +39,15 @@ export async function createCollection(data: CreateCollectionInput) {
         isActive: isActive ?? true,
       })
       .returning();
+
+    if (collection) {
+      await createNotification({
+        type: 'entity_created',
+        title: 'New Collection Created',
+        message: `Collection "${name}" has been created successfully.`,
+        link: '/collections',
+      });
+    }
 
     if (collection && productIds && productIds.length > 0) {
       await db.insert(collectionProducts).values(
@@ -102,6 +112,13 @@ export async function updateCollection(id: string, data: CreateCollectionInput) 
         updatedAt: new Date(),
       })
       .where(eq(collections.id, id));
+
+    await createNotification({
+      type: 'entity_updated',
+      title: 'Collection Updated',
+      message: `Collection "${name}" has been updated.`,
+      link: `/collections/${id}`,
+    });
 
     // Sync products
     await db.delete(collectionProducts).where(eq(collectionProducts.collectionId, id));

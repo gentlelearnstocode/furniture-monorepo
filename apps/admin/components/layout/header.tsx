@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Bell, LogOut, User, Settings as SettingsIcon } from 'lucide-react';
+import { LogOut, User, Settings as SettingsIcon } from 'lucide-react';
 import { useSession, signOut } from 'next-auth/react';
 import { SidebarTrigger } from '@repo/ui/ui/sidebar';
 import {
@@ -13,7 +13,6 @@ import {
   BreadcrumbSeparator,
 } from '@repo/ui/ui/breadcrumb';
 import { Separator } from '@repo/ui/ui/separator';
-import { Button } from '@repo/ui/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui/ui/avatar';
 import {
   DropdownMenu,
@@ -25,6 +24,7 @@ import {
   DropdownMenuTrigger,
 } from '@repo/ui/ui/dropdown-menu';
 import { CommandMenu } from './command-menu';
+import { NotificationDropdown } from './notification-dropdown';
 
 export function Header() {
   const { data: session } = useSession();
@@ -60,10 +60,7 @@ export function Header() {
 
       <div className='flex items-center gap-2'>
         <CommandMenu />
-        <Button variant='ghost' size='icon' className='relative text-gray-400'>
-          <Bell className='w-5 h-5' />
-          <span className='absolute top-2.5 right-2.5 w-2 h-2 bg-brand-primary-500 rounded-full border-2 border-white' />
-        </Button>
+        <NotificationDropdown />
 
         <Separator orientation='vertical' className='mx-2 h-6' />
 
