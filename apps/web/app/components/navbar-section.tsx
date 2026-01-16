@@ -199,7 +199,7 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
               )}
             >
               {catalogs.map((catalog) => (
-                <div key={catalog.id} className='relative'>
+                <div key={catalog.id} className='relative group/dropdown'>
                   <Link
                     href={`/catalog/${catalog.slug}`}
                     className={cn(
@@ -218,10 +218,40 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
                     />
                   </Link>
 
-                  {/* Mega Menu Dropdown removed */}
+                  {/* Hover Dropdown Menu */}
+                  <div className='absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 invisible group-hover/dropdown:opacity-100 group-hover/dropdown:visible transition-all duration-300 z-50'>
+                    <div
+                      className='min-w-[200px] py-4 px-6 shadow-lg border border-black/5'
+                      style={{
+                        backgroundImage:
+                          'linear-gradient(rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.96)), url(/nav-bg.png)',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        backgroundColor: 'white',
+                      }}
+                    >
+                      <div className='flex flex-col gap-3'>
+                        {catalog.children?.map((child) => (
+                          <Link
+                            key={child.id}
+                            href={`/catalog/${catalog.slug}/${child.slug}`}
+                            className='text-[16px] text-[#49000D]/70 hover:text-[#49000D] transition-colors uppercase font-serif tracking-[0.05em] whitespace-nowrap'
+                          >
+                            {child.name}
+                          </Link>
+                        ))}
+                        <div className='border-t border-[#49000D]/10 my-1' />
+                        <Link
+                          href={`/catalog/${catalog.slug}/sale`}
+                          className='text-[16px] text-red-600/80 hover:text-red-600 transition-colors uppercase font-serif tracking-[0.05em] font-medium'
+                        >
+                          SALE
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               ))}
-              {/* Global SALE link removed from Tier 2 */}
             </div>
           </div>
         </div>
