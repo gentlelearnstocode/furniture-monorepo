@@ -160,6 +160,8 @@ export const products = pgTable('products', {
   description: text('description'),
   shortDescription: text('short_description'),
   basePrice: decimal('base_price', { precision: 10, scale: 2 }).notNull(),
+  discountPrice: decimal('discount_price', { precision: 10, scale: 2 }),
+  showPrice: boolean('show_price').default(true).notNull(),
   isActive: boolean('is_active').default(true).notNull(),
   dimensions: jsonb('dimensions'), // { width, height, depth, unit }
   createdById: uuid('created_by_id').references((): AnyPgColumn => users.id, {
@@ -812,3 +814,34 @@ export type SelectNotification = typeof notifications.$inferSelect;
 
 export type InsertProductImportJob = typeof productImportJobs.$inferInsert;
 export type SelectProductImportJob = typeof productImportJobs.$inferSelect;
+
+// --- Sale Section ---
+
+export const saleSectionSettings = pgTable('sale_section_settings', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  title: text('title').notNull().default('SALE'),
+  isActive: boolean('is_active').default(true).notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const homepageSaleProducts = pgTable('homepage_sale_products', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  productId: uuid('product_id')
+    .notNull()
+    .references(() => products.id, { onDelete: 'cascade' }),
+  position: integer('position').default(0).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export const homepageSaleProductsRelations = relations(homepageSaleProducts, ({ one }) => ({
+  product: one(products, {
+    fields: [homepageSaleProducts.productId],
+    references: [products.id],
+  }),
+}));
+
+export type InsertSaleSectionSettings = typeof saleSectionSettings.$inferInsert;
+export type SelectSaleSectionSettings = typeof saleSectionSettings.$inferSelect;
+
+export type InsertHomepageSaleProduct = typeof homepageSaleProducts.$inferInsert;
+export type SelectHomepageSaleProduct = typeof homepageSaleProducts.$inferSelect;

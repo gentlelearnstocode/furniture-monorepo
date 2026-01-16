@@ -46,6 +46,10 @@ export function ProductForm({ catalogs, initialData }: ProductFormProps) {
       ? {
           ...initialData,
           basePrice: parseFloat(initialData.basePrice as any),
+          discountPrice: initialData.discountPrice
+            ? parseFloat(initialData.discountPrice as any)
+            : undefined,
+          showPrice: initialData.showPrice ?? true,
           description: initialData.description || '',
           shortDescription: initialData.shortDescription || '',
         }
@@ -55,6 +59,8 @@ export function ProductForm({ catalogs, initialData }: ProductFormProps) {
           description: '',
           shortDescription: '',
           basePrice: 0,
+          discountPrice: undefined,
+          showPrice: true,
           isActive: true,
           catalogId: undefined,
           dimensions: {
@@ -66,6 +72,9 @@ export function ProductForm({ catalogs, initialData }: ProductFormProps) {
           images: [],
         },
   });
+
+  const basePrice = form.watch('basePrice') as number | undefined;
+  const isDiscountDisabled = (basePrice ?? 0) <= 0;
 
   function onSubmit(data: CreateProductInput) {
     startTransition(async () => {
@@ -149,6 +158,45 @@ export function ProductForm({ catalogs, initialData }: ProductFormProps) {
           />
           <FormField
             control={form.control}
+            name='discountPrice'
+            render={({ field }) => (
+              <FormItem>
+                <div className='flex items-center justify-between'>
+                  <FormLabel className={isDiscountDisabled ? 'text-muted-foreground' : ''}>
+                    Discount Price ($)
+                  </FormLabel>
+                </div>
+                <FormControl>
+                  <Input
+                    type='number'
+                    step='0.01'
+                    min='0'
+                    disabled={isDiscountDisabled}
+                    placeholder={
+                      isDiscountDisabled ? 'Set base price first' : 'Leave empty for no discount'
+                    }
+                    {...field}
+                    value={(field.value as any) ?? ''}
+                    onChange={(e) => {
+                      const val = e.target.value === '' ? null : parseFloat(e.target.value);
+                      field.onChange(val);
+                    }}
+                  />
+                </FormControl>
+                <FormDescription className='text-xs'>
+                  {isDiscountDisabled
+                    ? 'Discount cannot be applied to a product with $0 price.'
+                    : 'If set, this will be shown as the current price.'}
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
+          <FormField
+            control={form.control}
             name='catalogId'
             render={({ field }) => (
               <FormItem>
@@ -171,6 +219,25 @@ export function ProductForm({ catalogs, initialData }: ProductFormProps) {
               </FormItem>
             )}
           />
+          <div className='flex flex-col gap-4'>
+            <FormField
+              control={form.control}
+              name='showPrice'
+              render={({ field }) => (
+                <FormItem className='flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4 h-full'>
+                  <FormControl>
+                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                  </FormControl>
+                  <div className='space-y-1 leading-none'>
+                    <FormLabel>Show Price on Storefront</FormLabel>
+                    <FormDescription className='text-xs'>
+                      If unchecked, the price will be hidden on the product details page.
+                    </FormDescription>
+                  </div>
+                </FormItem>
+              )}
+            />
+          </div>
         </div>
 
         <FormField

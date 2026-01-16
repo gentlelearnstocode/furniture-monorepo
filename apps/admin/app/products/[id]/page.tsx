@@ -45,6 +45,8 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
     description: product.description || undefined,
     shortDescription: product.shortDescription || undefined,
     basePrice: parseFloat(product.basePrice as any),
+    discountPrice: product.discountPrice ? parseFloat(product.discountPrice as any) : undefined,
+    showPrice: product.showPrice,
     catalogId: product.catalogId || undefined,
     isActive: product.isActive,
     dimensions: product.dimensions as any,

@@ -1,6 +1,6 @@
 'use server';
 
-import { db, products, productAssets } from '@repo/database';
+import { db, products, productAssets, homepageSaleProducts } from '@repo/database';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { createProductSchema, type CreateProductInput } from '@/lib/validations/products';
@@ -23,6 +23,8 @@ export async function createProduct(data: CreateProductInput) {
     description,
     shortDescription,
     basePrice,
+    discountPrice,
+    showPrice,
     catalogId,
     isActive,
     dimensions,
@@ -62,6 +64,8 @@ export async function createProduct(data: CreateProductInput) {
         description: description || null,
         shortDescription: shortDescription || null,
         basePrice: basePrice.toString(), // Decimal types often expect strings in ORMs to preserve precision
+        discountPrice: discountPrice?.toString() || null,
+        showPrice,
         catalogId: catalogId || null,
         isActive,
         dimensions: dimensions || null,
@@ -88,6 +92,15 @@ export async function createProduct(data: CreateProductInput) {
         }))
       );
     }
+
+    // Auto-add to sale section if product has discountPrice
+    if (product && discountPrice) {
+      const currentSaleProducts = await db.query.homepageSaleProducts.findMany();
+      await db.insert(homepageSaleProducts).values({
+        productId: product.id,
+        position: currentSaleProducts.length,
+      });
+    }
   } catch (error) {
     console.error('Failed to create product:', error);
     return { error: 'Database error: Failed to create product.' };
@@ -111,6 +124,8 @@ export async function updateProduct(id: string, data: CreateProductInput) {
     description,
     shortDescription,
     basePrice,
+    discountPrice,
+    showPrice,
     catalogId,
     isActive,
     dimensions,
@@ -150,6 +165,8 @@ export async function updateProduct(id: string, data: CreateProductInput) {
         description: description || null,
         shortDescription: shortDescription || null,
         basePrice: basePrice.toString(),
+        discountPrice: discountPrice?.toString() || null,
+        showPrice,
         catalogId: catalogId || null,
         isActive,
         dimensions: dimensions || null,
@@ -177,6 +194,26 @@ export async function updateProduct(id: string, data: CreateProductInput) {
           isPrimary: img.isPrimary,
         }))
       );
+    }
+
+    // Auto-sync with sale section based on discountPrice
+    if (discountPrice) {
+      // Add to sale section if not already there
+      const existingInSale = await db.query.homepageSaleProducts.findFirst({
+        where: (hsp, { eq }) => eq(hsp.productId, id),
+      });
+
+      if (!existingInSale) {
+        // Get current count for position
+        const currentSaleProducts = await db.query.homepageSaleProducts.findMany();
+        await db.insert(homepageSaleProducts).values({
+          productId: id,
+          position: currentSaleProducts.length,
+        });
+      }
+    } else {
+      // Remove from sale section if discountPrice is cleared
+      await db.delete(homepageSaleProducts).where(eq(homepageSaleProducts.productId, id));
     }
   } catch (error) {
     console.error('Failed to update product:', error);

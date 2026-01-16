@@ -27,34 +27,33 @@ interface Props {
   }>;
 }
 
-const getProductBySlug = (slug: string) =>
-  createCachedQuery(
-    async () => {
-      return await db.query.products.findFirst({
-        where: (products, { eq }) => eq(products.slug, slug),
-        with: {
-          catalog: {
-            with: {
-              parent: true,
-            },
-          },
-          gallery: {
-            with: {
-              asset: true,
-            },
-            orderBy: (gallery, { asc }) => [asc(gallery.position)],
+const getProductBySlug = createCachedQuery(
+  async (slug: string) => {
+    return await db.query.products.findFirst({
+      where: (products, { eq }) => eq(products.slug, slug),
+      with: {
+        catalog: {
+          with: {
+            parent: true,
           },
         },
-      });
-    },
-    ['product-detail', slug],
-    { revalidate: 3600, tags: ['products', `product-${slug}`] }
-  );
+        gallery: {
+          with: {
+            asset: true,
+          },
+          orderBy: (gallery, { asc }) => [asc(gallery.position)],
+        },
+      },
+    });
+  },
+  ['product-detail'],
+  { revalidate: 3600, tags: ['products'] }
+);
 
 export default async function ProductDetailPage({ params }: Props) {
   const { slug } = await params;
 
-  const product = await getProductBySlug(slug)();
+  const product = await getProductBySlug(slug);
   const contacts = await getSiteContacts();
 
   if (!product) {
@@ -91,12 +90,14 @@ export default async function ProductDetailPage({ params }: Props) {
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20'>
           {/* Left: Gallery */}
           <ProductGallery
-            images={product.gallery.map((g) => g.asset?.url).filter((url): url is string => !!url)}
+            images={product.gallery
+              .map((g: any) => g.asset?.url)
+              .filter((url): url is string => !!url)}
             name={product.name}
           />
 
           {/* Right: Info */}
-          <ProductInfo product={product} contacts={contacts} />
+          <ProductInfo product={product as any} contacts={contacts as any} />
         </div>
       </div>
     </div>

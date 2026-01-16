@@ -9,6 +9,9 @@ interface ProductInfoProps {
     name: string;
     description: string | null;
     shortDescription: string | null;
+    basePrice: string;
+    discountPrice?: string | null;
+    showPrice?: boolean;
   };
   contacts: {
     type: string;
@@ -19,6 +22,11 @@ interface ProductInfoProps {
 
 export function ProductInfo({ product, contacts }: ProductInfoProps) {
   const [isDetailsOpen, setIsDetailsOpen] = useState(true);
+
+  const hasDiscount = !!product.discountPrice;
+  const displayPrice = hasDiscount ? product.discountPrice : product.basePrice;
+  const originalPrice = product.basePrice;
+  const showPrice = product.showPrice ?? true;
 
   const handleContact = () => {
     // console.log('[ProductInfo] Contacts:', contacts);
@@ -64,6 +72,22 @@ export function ProductInfo({ product, contacts }: ProductInfoProps) {
           />
         )}
       </div>
+
+      {/* Price */}
+      {showPrice && (
+        <div className='flex items-center gap-4'>
+          {hasDiscount ? (
+            <>
+              <span className='text-3xl font-serif font-bold text-[#49000D]'>${displayPrice}</span>
+              <span className='text-xl font-serif line-through text-gray-400'>
+                ${originalPrice}
+              </span>
+            </>
+          ) : (
+            <span className='text-3xl font-serif text-black font-medium'>${originalPrice}</span>
+          )}
+        </div>
+      )}
 
       {/* Accordion */}
       <div className='border-t border-b border-gray-200 py-4'>

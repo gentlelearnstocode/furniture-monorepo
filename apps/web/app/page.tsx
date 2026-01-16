@@ -2,31 +2,20 @@ import { Hero } from './components/hero-section';
 import { FeaturedCatalogs } from './components/featured-catalogs';
 import { IntroSection } from './components/intro-section';
 // import { ServicesSection } from './components/services-section';
+import { SaleSection } from './components/sale-section';
 import { ProjectsSection } from './components/projects-section';
 import { BlogsSection } from './components/blogs-section';
-import { db } from '@repo/database';
-import { createCachedQuery } from '@/lib/cache';
+import { getHeroData, getHomepageSaleProducts, getSaleSettings } from '@/lib/queries';
 
 // Revalidate every 30 minutes (hero content may change occasionally)
 export const revalidate = 1800;
 
-const getHeroData = createCachedQuery(
-  async () => {
-    return await db.query.siteHeros.findFirst({
-      where: (heros, { eq }) => eq(heros.isActive, true),
-      orderBy: (heros, { desc }) => [desc(heros.updatedAt)],
-      with: {
-        backgroundImage: true,
-        backgroundVideo: true,
-      },
-    });
-  },
-  ['hero-data'],
-  { revalidate: 1800, tags: ['hero'] }
-);
-
 export default async function Home() {
-  const hero = await getHeroData();
+  const [hero, saleProducts, saleSettings] = await Promise.all([
+    getHeroData(),
+    getHomepageSaleProducts(),
+    getSaleSettings(),
+  ]);
 
   return (
     <div className='relative min-h-screen bg-white'>
@@ -52,6 +41,7 @@ export default async function Home() {
         }
       />
       <IntroSection />
+      <SaleSection products={saleProducts} settings={saleSettings} />
       {/* <ServicesSection /> */}
       <FeaturedCatalogs />
       <ProjectsSection />

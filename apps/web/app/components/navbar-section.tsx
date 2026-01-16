@@ -29,7 +29,6 @@ interface NavbarProps {
 }
 
 export const Navbar = ({ catalogs }: NavbarProps) => {
-  const [activeMenu, setActiveMenu] = React.useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
   const pathname = usePathname();
@@ -40,7 +39,8 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
     pathname.startsWith('/product/') ||
     pathname.startsWith('/projects/') ||
     pathname.startsWith('/services/') ||
-    pathname.startsWith('/blogs/');
+    pathname.startsWith('/blogs/') ||
+    pathname === '/sale';
 
   const forceShow = isMenuOpen || isWhiteNavbarPath;
 
@@ -196,12 +196,7 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
               )}
             >
               {catalogs.map((catalog) => (
-                <div
-                  key={catalog.id}
-                  className='relative'
-                  onMouseEnter={() => setActiveMenu(catalog.id)}
-                  onMouseLeave={() => setActiveMenu(null)}
-                >
+                <div key={catalog.id} className='relative'>
                   <Link
                     href={`/catalog/${catalog.slug}`}
                     className={cn(
@@ -220,29 +215,10 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
                     />
                   </Link>
 
-                  {/* Mega Menu Dropdown (Standard Nav) */}
-                  {catalog.children &&
-                    catalog.children.length > 0 &&
-                    activeMenu === catalog.id &&
-                    !isMenuOpen && (
-                      <div className='absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50'>
-                        <div className='bg-black/95 backdrop-blur-sm border border-white/5 rounded-none py-4 px-6 min-w-[200px] shadow-2xl animate-in fade-in slide-in-from-top-1 duration-200'>
-                          <div className='flex flex-col gap-3'>
-                            {catalog.children.map((child) => (
-                              <Link
-                                key={child.id}
-                                href={`/catalog/${catalog.slug}/${child.slug}`}
-                                className='text-[16px] text-white/60 hover:text-white tracking-[0.1em] transition-colors whitespace-nowrap uppercase font-serif'
-                              >
-                                {child.name}
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    )}
+                  {/* Mega Menu Dropdown removed */}
                 </div>
               ))}
+              {/* Global SALE link removed from Tier 2 */}
             </div>
           </div>
         </div>
@@ -303,21 +279,35 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
                   </Link>
 
                   {/* Catalog Level 2 List */}
-                  {catalog.children && catalog.children.length > 0 && (
-                    <div className='flex flex-col gap-3'>
-                      {catalog.children.map((child) => (
-                        <Link
-                          key={child.id}
-                          href={`/catalog/${catalog.slug}/${child.slug}`}
-                          className='text-[18px] text-[#49000D]/60 hover:text-[#49000D] transition-colors uppercase font-serif tracking-[0.1em]'
-                        >
-                          {child.name}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
+                  <div className='flex flex-col gap-3'>
+                    {catalog.children?.map((child) => (
+                      <Link
+                        key={child.id}
+                        href={`/catalog/${catalog.slug}/${child.slug}`}
+                        className='text-[18px] text-[#49000D]/60 hover:text-[#49000D] transition-colors uppercase font-serif tracking-[0.1em]'
+                      >
+                        {child.name}
+                      </Link>
+                    ))}
+                    <Link
+                      href={`/catalog/${catalog.slug}/sale`}
+                      className='text-[18px] text-red-600/60 hover:text-red-600 transition-colors uppercase font-serif tracking-[0.1em]'
+                    >
+                      SALE
+                    </Link>
+                  </div>
                 </div>
               ))}
+              <div className='flex flex-col gap-6 animate-in fade-in slide-in-from-top-4 duration-1000'>
+                <div className='h-[24px] invisible md:block' />{' '}
+                {/* Spacer to align with titles on desktop grid */}
+                <Link
+                  href='/sale'
+                  className='text-[24px] font-serif font-[444] tracking-normal leading-none uppercase text-red-600 hover:text-red-700 transition-colors'
+                >
+                  ALL SALE
+                </Link>
+              </div>
             </div>
           </div>
         </div>

@@ -9,7 +9,8 @@ import { ProductActions } from './product-actions';
 import { Pagination } from '@/components/ui/pagination';
 import { BulkActions } from '@/components/ui/bulk-actions';
 import { bulkDeleteProducts } from '@/lib/actions/products';
-import { Settings } from 'lucide-react';
+import { Settings, Percent, EyeOff } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@repo/ui/ui/tooltip';
 
 interface ProductListProps {
   products: any[];
@@ -123,16 +124,50 @@ export function ProductList({ products, meta }: ProductListProps) {
                       )}
                     </TableCell>
                     <TableCell>
-                      <Badge
-                        variant={product.isActive ? 'default' : 'secondary'}
-                        className={
-                          product.isActive
-                            ? 'bg-green-100 text-green-700 hover:bg-green-100'
-                            : 'bg-gray-100 text-gray-700 hover:bg-gray-100'
-                        }
-                      >
-                        {product.isActive ? 'Active' : 'Draft'}
-                      </Badge>
+                      <div className='flex items-center gap-2'>
+                        <Badge
+                          variant={product.isActive ? 'default' : 'secondary'}
+                          className={
+                            product.isActive
+                              ? 'bg-green-100 text-green-700 hover:bg-green-100'
+                              : 'bg-gray-100 text-gray-700 hover:bg-gray-100'
+                          }
+                        >
+                          {product.isActive ? 'Active' : 'Draft'}
+                        </Badge>
+
+                        {/* Sale indicator */}
+                        {product.discountPrice && (
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <div className='w-6 h-6 rounded-full bg-red-100 flex items-center justify-center'>
+                                  <Percent className='h-3.5 w-3.5 text-red-600' />
+                                </div>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>On Sale (${product.discountPrice})</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        )}
+
+                        {/* Price hidden indicator */}
+                        {product.showPrice === false && (
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <div className='w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center'>
+                                  <EyeOff className='h-3.5 w-3.5 text-gray-500' />
+                                </div>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>Price Hidden</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        )}
+                      </div>
                     </TableCell>
                     <TableCell className='text-right'>
                       <ProductActions product={product} />
