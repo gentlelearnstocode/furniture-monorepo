@@ -27,22 +27,26 @@ export const BlogsSection = async () => {
   if (posts.length === 0) return null;
 
   return (
-    <section className='py-24 bg-white'>
+    <section className='py-24 bg-gray-50'>
       <div className='container mx-auto px-4'>
-        <div className='flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8'>
-          <div className='max-w-2xl'>
-            <span className='block text-[#7B0C0C] font-serif italic text-xl mb-4'>Our Journal</span>
-            <h2 className='text-4xl md:text-6xl font-serif font-bold leading-tight text-gray-900'>
-              Stories & Insights <br /> from Our Studio
-            </h2>
+        {/* Section Header */}
+        <div className='flex flex-col items-center mb-12'>
+          <h2 className='text-3xl md:text-4xl lg:text-5xl font-serif italic text-[#49000D] tracking-wide uppercase'>
+            Our Blog
+          </h2>
+
+          {/* Decorative divider with symbol */}
+          <div className='flex items-center gap-3 mt-4'>
+            <div className='w-16 h-[2px] bg-[#8B0000]' />
+            <Image
+              src='/symbol.svg'
+              alt='decorative symbol'
+              width={24}
+              height={24}
+              className='opacity-80'
+            />
+            <div className='w-16 h-[2px] bg-[#8B0000]' />
           </div>
-          <Link
-            href='/blogs'
-            className='flex items-center text-sm font-semibold tracking-wider uppercase border-b border-gray-900/20 pb-2 hover:border-gray-900 transition-colors text-gray-900'
-          >
-            View All Articles
-            <ArrowRight className='ml-2 h-4 w-4' />
-          </Link>
         </div>
 
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12'>
@@ -94,6 +98,19 @@ export const BlogsSection = async () => {
               </div>
             </article>
           ))}
+        </div>
+
+        {/* Expand Your View Link */}
+        <div className='flex justify-center mt-10'>
+          <Link
+            href='/blogs'
+            className='group flex items-center gap-2 text-[13px] font-medium tracking-wider text-gray-700 hover:text-[#49000D] transition-colors'
+          >
+            <span>Expand Your View</span>
+            <div className='w-5 h-5 rounded-full border border-current flex items-center justify-center transition-transform group-hover:translate-x-1'>
+              <ArrowRight size={12} />
+            </div>
+          </Link>
         </div>
       </div>
     </section>

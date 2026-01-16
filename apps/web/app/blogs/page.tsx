@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 import { Calendar, User, ArrowRight } from 'lucide-react';
 import type { Metadata } from 'next';
 import { createCachedQuery } from '@/lib/cache';
+import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
 
 export const metadata: Metadata = {
   title: 'Blog | Thien An Furniture',
@@ -33,20 +34,31 @@ export default async function BlogListingPage() {
   const posts = await getPosts();
 
   return (
-    <div className='min-h-screen bg-white'>
-      {/* Hero Header */}
-      <div className='bg-gray-50 py-20 border-b border-gray-100'>
-        <div className='container mx-auto px-4'>
-          <h1 className='text-5xl md:text-6xl font-serif font-bold text-gray-900 mb-6'>Our Blog</h1>
-          <p className='text-xl text-gray-600 font-light max-w-2xl leading-relaxed'>
+    <div className='min-h-screen bg-gradient-to-b from-[#FDFCFB] via-white to-[#FDFCFB]'>
+      <AppBreadcrumb items={[{ label: 'Home Page', href: '/' }, { label: 'Our Blog' }]} />
+
+      <div className='container mx-auto px-4 pt-12 pb-6'>
+        {/* Title & Description */}
+        <div className='mb-8'>
+          <h1 className='text-5xl md:text-6xl font-serif italic text-black/90 tracking-wide mb-4'>
+            Our Blog
+          </h1>
+          <p className='text-[15px] leading-relaxed text-gray-600 max-w-4xl font-serif'>
             Discover stories of craftsmanship, design trends, and tips for creating your perfect
             living space.
           </p>
         </div>
+
+        {/* Filter Bar */}
+        <div className='flex items-center justify-between mb-8 pb-4 border-b border-black/5'>
+          <div className='text-[13px] font-serif italic text-black/50 uppercase tracking-[0.1em]'>
+            Showing {posts.length} results
+          </div>
+        </div>
       </div>
 
       {/* Blog Grid */}
-      <div className='container mx-auto px-4 py-20'>
+      <div className='container mx-auto px-4 pb-20'>
         {posts.length === 0 ? (
           <div className='text-center py-20'>
             <p className='text-gray-500 text-lg'>No blog posts found. Check back soon!</p>
