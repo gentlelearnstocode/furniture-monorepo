@@ -63,18 +63,18 @@ export const Footer = async () => {
 
   const catalogs = await getFooterCatalogs();
 
-  // Fetch active services
-  const getFooterServices = createCachedQuery(
+  // Fetch active projects
+  const getFooterProjects = createCachedQuery(
     async () =>
-      await db.query.services.findMany({
-        where: (services, { eq }) => eq(services.isActive, true),
-        orderBy: (services, { asc }) => [asc(services.title)],
+      await db.query.projects.findMany({
+        where: (projects, { eq }) => eq(projects.isActive, true),
+        orderBy: (projects, { asc }) => [asc(projects.title)],
       }),
-    ['footer-services'],
-    { revalidate: 3600, tags: ['services'] }
+    ['footer-projects'],
+    { revalidate: 3600, tags: ['projects'] }
   );
 
-  const services = await getFooterServices();
+  const projects = await getFooterProjects();
 
   const phoneContacts = contacts.filter((c) => c.type === 'phone');
   const emailContacts = contacts.filter((c) => c.type === 'email');
@@ -266,17 +266,17 @@ export const Footer = async () => {
                 </ul>
               </div>
 
-              {/* Services Links */}
+              {/* Projects Links */}
               <div>
-                <h4 className='text-lg font-serif font-bold text-gray-900 mb-6'>Services</h4>
+                <h4 className='text-lg font-serif font-bold text-gray-900 mb-6'>Projects</h4>
                 <ul className='space-y-3'>
-                  {services.map((service) => (
-                    <li key={service.id}>
+                  {projects.map((project) => (
+                    <li key={project.id}>
                       <Link
-                        href={`/services/${service.slug}`}
+                        href={`/projects/${project.slug}`}
                         className='text-sm text-gray-600 hover:text-[#7B0C0C] transition-colors'
                       >
-                        {service.title}
+                        {project.title}
                       </Link>
                     </li>
                   ))}
