@@ -5,6 +5,7 @@ import { db } from '@repo/database';
 import { ArrowRight } from 'lucide-react';
 import type { Metadata } from 'next';
 import { createCachedQuery } from '@/lib/cache';
+import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
 
 export const metadata: Metadata = {
   title: 'Projects | Thien An Furniture',
@@ -38,69 +39,71 @@ export default async function ProjectsListingPage() {
   const projects = await getProjects();
 
   return (
-    <div className='min-h-screen bg-white'>
-      {/* Hero Header */}
-      <div className='bg-black text-white py-24'>
-        <div className='container mx-auto px-4'>
-          <span className='block text-[#7B0C0C] font-serif italic text-xl mb-4'>Our Portfolio</span>
-          <h1 className='text-5xl md:text-7xl font-serif font-bold mb-6 leading-tight'>
-            Capturing Timeless
-            <br />
-            Elegance in Every Project
+    <div className='min-h-screen bg-gradient-to-b from-[#FDFCFB] via-white to-[#FDFCFB]'>
+      <AppBreadcrumb items={[{ label: 'Home Page', href: '/' }, { label: 'Our Projects' }]} />
+
+      <div className='container mx-auto px-4 pt-12 pb-6'>
+        {/* Title & Description */}
+        <div className='mb-8'>
+          <h1 className='text-5xl md:text-6xl font-serif italic text-black/90 tracking-wide mb-4'>
+            Our Projects
           </h1>
-          <p className='text-xl text-gray-400 font-light max-w-2xl leading-relaxed'>
-            Discover our collection of meticulously crafted interior design projects that blend
-            artistry with functionality.
+          <p className='text-[15px] leading-relaxed text-gray-600 max-w-4xl font-serif'>
+            Explore our portfolio of completed interior design and furniture projects that showcase
+            our craftsmanship and attention to detail.
           </p>
+        </div>
+
+        {/* Filter Bar */}
+        <div className='flex items-center justify-between mb-8 pb-4 border-b border-black/5'>
+          <div className='text-[13px] font-serif italic text-black/50 uppercase tracking-[0.1em]'>
+            Showing {projects.length} results
+          </div>
         </div>
       </div>
 
       {/* Projects Grid */}
-      <div className='container mx-auto px-4 py-20'>
+      <div className='container mx-auto px-4 pb-20'>
         {projects.length === 0 ? (
           <div className='text-center py-20'>
-            <p className='text-gray-500 text-lg'>No projects found. Check back soon!</p>
+            <p className='text-xl font-serif italic text-gray-400'>
+              No projects found. Check back soon!
+            </p>
           </div>
         ) : (
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-12'>
-            {projects.map((project, index) => {
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
+            {projects.map((project) => {
               const primaryImage = project.gallery.find((g) => g.isPrimary)?.asset || project.image;
 
               return (
                 <Link
                   key={project.id}
                   href={`/projects/${project.slug}`}
-                  className={`group relative block ${index % 2 === 1 ? 'md:mt-24' : ''}`}
+                  className='group bg-white rounded-sm overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1'
                 >
-                  <div className='relative aspect-[4/5] overflow-hidden rounded-sm mb-6'>
+                  <div className='relative aspect-[4/3] overflow-hidden'>
                     {primaryImage ? (
                       <Image
                         src={primaryImage.url}
                         alt={project.title}
                         fill
-                        className='object-cover grayscale hover:grayscale-0 transition-all duration-1000 group-hover:scale-105'
-                        sizes='(max-width: 768px) 100vw, 50vw'
+                        className='object-cover transition-transform duration-700 group-hover:scale-105'
+                        sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
                       />
                     ) : (
                       <div className='absolute inset-0 bg-gray-200 flex items-center justify-center text-gray-400'>
                         No Image
                       </div>
                     )}
-                    <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700' />
-                    <div className='absolute bottom-8 left-8 right-8 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-700'>
-                      <p className='text-sm font-serif italic text-white/80 mb-2'>
-                        Project Showcase
-                      </p>
-                      <h3 className='text-3xl font-serif font-bold text-white'>{project.title}</h3>
-                    </div>
+                    <div className='absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500' />
                   </div>
-                  <div className='flex items-center justify-between'>
-                    <h3 className='text-xl md:text-2xl font-serif font-medium text-gray-900 group-hover:text-[#7B0C0C] transition-colors'>
+
+                  <div className='p-6'>
+                    <h3 className='text-xl md:text-2xl font-serif font-semibold text-[#222222] mb-3 group-hover:text-[#7B0C0C] transition-colors line-clamp-2'>
                       {project.title}
                     </h3>
-                    <div className='h-px flex-grow mx-6 bg-gray-200 group-hover:bg-gray-400 transition-colors' />
-                    <span className='flex items-center text-sm font-light text-gray-500 group-hover:text-[#7B0C0C] transition-colors'>
-                      Explore
+                    <span className='inline-flex items-center text-sm font-semibold text-[#7B0C0C]'>
+                      View Project
                       <ArrowRight className='ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1' />
                     </span>
                   </div>

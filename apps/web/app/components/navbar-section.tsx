@@ -33,12 +33,15 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
   const pathname = usePathname();
 
-  // Catalog, product, project, service, and blog detail pages should use the white navbar
+  // Catalog, product, project, service, and blog pages should use the white navbar
   const isWhiteNavbarPath =
     pathname.startsWith('/catalog/') ||
     pathname.startsWith('/product/') ||
+    pathname === '/projects' ||
     pathname.startsWith('/projects/') ||
+    pathname === '/services' ||
     pathname.startsWith('/services/') ||
+    pathname === '/blogs' ||
     pathname.startsWith('/blogs/') ||
     pathname === '/sale';
 

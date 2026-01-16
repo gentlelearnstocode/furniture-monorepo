@@ -84,6 +84,19 @@ export const ProjectsSection = async () => {
             </Link>
           ))}
         </div>
+
+        {/* Expand Your View Link */}
+        <div className='flex justify-center mt-10'>
+          <Link
+            href='/projects'
+            className='group flex items-center gap-2 text-[13px] font-medium tracking-wider text-gray-700 hover:text-[#49000D] transition-colors'
+          >
+            <span>Expand Your View</span>
+            <div className='w-5 h-5 rounded-full border border-current flex items-center justify-center transition-transform group-hover:translate-x-1'>
+              <ArrowRight size={12} />
+            </div>
+          </Link>
+        </div>
       </div>
     </section>
   );
