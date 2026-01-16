@@ -4,15 +4,24 @@ import Link from 'next/link';
 import { db } from '@repo/database';
 import { ArrowRight } from 'lucide-react';
 
+import { createCachedQuery } from '@/lib/cache';
+
 export const ProjectsSection = async () => {
-  const allProjects = await db.query.projects.findMany({
-    where: (projects, { eq }) => eq(projects.isActive, true),
-    orderBy: (projects, { desc }) => [desc(projects.updatedAt)],
-    limit: 4,
-    with: {
-      image: true,
-    },
-  });
+  const getProjects = createCachedQuery(
+    async () =>
+      await db.query.projects.findMany({
+        where: (projects, { eq }) => eq(projects.isActive, true),
+        orderBy: (projects, { desc }) => [desc(projects.updatedAt)],
+        limit: 4,
+        with: {
+          image: true,
+        },
+      }),
+    ['projects-section-home'],
+    { revalidate: 3600, tags: ['projects'] }
+  );
+
+  const allProjects = await getProjects();
 
   if (allProjects.length === 0) return null;
 

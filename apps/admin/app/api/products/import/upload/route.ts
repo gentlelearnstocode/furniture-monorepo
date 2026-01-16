@@ -203,6 +203,10 @@ export async function POST(request: NextRequest) {
       })
       .where(eq(productImportJobs.id, job.id));
 
+    // Revalidate storefront cache after successful import
+    const { revalidateStorefront } = await import('@/lib/revalidate-storefront');
+    await revalidateStorefront(['products', 'catalogs']);
+
     return NextResponse.json({
       jobId: job.id,
       totalRows: rawRows.length,

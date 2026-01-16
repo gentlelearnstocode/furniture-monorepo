@@ -5,15 +5,24 @@ import { db } from '@repo/database';
 import { format } from 'date-fns';
 import { ArrowRight, Calendar } from 'lucide-react';
 
+import { createCachedQuery } from '@/lib/cache';
+
 export const BlogsSection = async () => {
-  const posts = await db.query.posts.findMany({
-    where: (posts, { eq }) => eq(posts.isActive, true),
-    orderBy: (posts, { desc }) => [desc(posts.updatedAt)],
-    limit: 3,
-    with: {
-      featuredImage: true,
-    },
-  });
+  const getLatestPosts = createCachedQuery(
+    async () =>
+      await db.query.posts.findMany({
+        where: (posts, { eq }) => eq(posts.isActive, true),
+        orderBy: (posts, { desc }) => [desc(posts.updatedAt)],
+        limit: 3,
+        with: {
+          featuredImage: true,
+        },
+      }),
+    ['blogs-section-home'],
+    { revalidate: 1800, tags: ['posts'] }
+  );
+
+  const posts = await getLatestPosts();
 
   if (posts.length === 0) return null;
 

@@ -107,23 +107,47 @@ function getGridClass(columns: number): string {
   }
 }
 
+import { createCachedQuery } from '@/lib/cache';
+
 export const FeaturedCatalogs = async () => {
-  // Try to fetch custom layout configuration
-  const layoutRows = await db.query.featuredCatalogRows.findMany({
-    orderBy: [asc(featuredCatalogRows.position)],
-    with: {
-      items: {
+  // Cached custom layout configuration
+  const getFeaturedLayout = createCachedQuery(
+    async () =>
+      await db.query.featuredCatalogRows.findMany({
+        orderBy: [asc(featuredCatalogRows.position)],
         with: {
-          catalog: {
+          items: {
             with: {
-              image: true,
+              catalog: {
+                with: {
+                  image: true,
+                },
+              },
             },
+            orderBy: (items, { asc }) => [asc(items.position)],
           },
         },
-        orderBy: (items, { asc }) => [asc(items.position)],
-      },
-    },
-  });
+      }),
+    ['featured-catalogs-layout'],
+    { revalidate: 3600, tags: ['catalogs', 'featured-layout'] }
+  );
+
+  // Cached fallback level 1 catalogs
+  const getFallbackFeaturedCatalogs = createCachedQuery(
+    async () =>
+      await db.query.catalogs.findMany({
+        where: (catalogs, { eq, and }) => and(eq(catalogs.showOnHome, true), eq(catalogs.level, 1)),
+        with: {
+          image: true,
+        },
+        orderBy: (catalogs, { asc }) => [asc(catalogs.displayOrder)],
+      }),
+    ['featured-catalogs-fallback'],
+    { revalidate: 3600, tags: ['catalogs'] }
+  );
+
+  // Try to fetch custom layout configuration
+  const layoutRows = await getFeaturedLayout();
 
   // If custom layout exists and has items, use it
   if (layoutRows.length > 0 && layoutRows.some((row) => row.items.length > 0)) {
@@ -131,7 +155,7 @@ export const FeaturedCatalogs = async () => {
 
     return (
       <div>
-        {layoutRows.map((row) => {
+        {layoutRows.map((row: any) => {
           // Skip empty rows
           if (row.items.length === 0) return null;
 
@@ -140,7 +164,7 @@ export const FeaturedCatalogs = async () => {
 
           return (
             <div key={row.id} className='grid grid-cols-12'>
-              {row.items.map((item) => {
+              {row.items.map((item: any) => {
                 if (!item.catalog) return null;
 
                 const isFirst = isFirstCatalog;
@@ -169,13 +193,7 @@ export const FeaturedCatalogs = async () => {
   }
 
   // Fallback: Fetch Level 1 catalogs marked to be shown on home
-  const featuredCatalogs = await db.query.catalogs.findMany({
-    where: (catalogs, { eq, and }) => and(eq(catalogs.showOnHome, true), eq(catalogs.level, 1)),
-    with: {
-      image: true,
-    },
-    orderBy: (catalogs, { asc }) => [asc(catalogs.displayOrder)],
-  });
+  const featuredCatalogs = await getFallbackFeaturedCatalogs();
 
   if (featuredCatalogs.length === 0) return null;
 

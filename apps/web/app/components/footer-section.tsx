@@ -4,40 +4,83 @@ import Link from 'next/link';
 import { db } from '@repo/database';
 import { MapPin, Phone, Mail, Facebook, Youtube, Linkedin, Twitter } from 'lucide-react';
 
+import { createCachedQuery } from '@/lib/cache';
+
 export const Footer = async () => {
-  // Fetch footer settings
-  const footerData = await db.query.siteFooter.findFirst({
-    orderBy: (footer, { desc }) => [desc(footer.updatedAt)],
-  });
+  // Cached footer settings
+  const getFooterData = createCachedQuery(
+    async () =>
+      await db.query.siteFooter.findFirst({
+        orderBy: (footer, { desc }) => [desc(footer.updatedAt)],
+      }),
+    ['footer-settings'],
+    { revalidate: 3600, tags: ['footer'] }
+  );
 
-  const addresses = await db.query.footerAddresses.findMany({
-    orderBy: (addr, { asc }) => [asc(addr.position)],
-  });
+  const getFooterAddresses = createCachedQuery(
+    async () =>
+      await db.query.footerAddresses.findMany({
+        orderBy: (addr, { asc }) => [asc(addr.position)],
+      }),
+    ['footer-addresses'],
+    { revalidate: 3600, tags: ['footer'] }
+  );
 
-  const contacts = await db.query.footerContacts.findMany({
-    orderBy: (contact, { asc }) => [asc(contact.position)],
-  });
+  const getFooterContacts = createCachedQuery(
+    async () =>
+      await db.query.footerContacts.findMany({
+        orderBy: (contact, { asc }) => [asc(contact.position)],
+      }),
+    ['footer-contacts'],
+    { revalidate: 3600, tags: ['footer'] }
+  );
 
-  // Fetch level 1 catalogs
-  const catalogs = await db.query.catalogs.findMany({
-    where: (catalogs, { isNull }) => isNull(catalogs.parentId),
-    orderBy: (catalogs, { asc }) => [asc(catalogs.name)],
-  });
+  const getFooterSocialLinks = createCachedQuery(
+    async () =>
+      await db.query.footerSocialLinks.findMany({
+        where: (links, { eq }) => eq(links.isActive, true),
+        orderBy: (links, { asc }) => [asc(links.position)],
+      }),
+    ['footer-social-links'],
+    { revalidate: 3600, tags: ['footer'] }
+  );
+
+  // Fetch footer settings using cached queries
+  const footerData = await getFooterData();
+  const addresses = await getFooterAddresses();
+  const contacts = await getFooterContacts();
+
+  // Helper function to fetch level 1 catalogs (already cached in layout, but let's be safe here if needed or use same tags)
+  const getFooterCatalogs = createCachedQuery(
+    async () =>
+      await db.query.catalogs.findMany({
+        where: (catalogs, { isNull }) => isNull(catalogs.parentId),
+        orderBy: (catalogs, { asc }) => [asc(catalogs.name)],
+      }),
+    ['footer-catalogs'],
+    { revalidate: 3600, tags: ['catalogs'] }
+  );
+
+  const catalogs = await getFooterCatalogs();
 
   // Fetch active services
-  const services = await db.query.services.findMany({
-    where: (services, { eq }) => eq(services.isActive, true),
-    orderBy: (services, { asc }) => [asc(services.title)],
-  });
+  const getFooterServices = createCachedQuery(
+    async () =>
+      await db.query.services.findMany({
+        where: (services, { eq }) => eq(services.isActive, true),
+        orderBy: (services, { asc }) => [asc(services.title)],
+      }),
+    ['footer-services'],
+    { revalidate: 3600, tags: ['services'] }
+  );
+
+  const services = await getFooterServices();
 
   const phoneContacts = contacts.filter((c) => c.type === 'phone');
   const emailContacts = contacts.filter((c) => c.type === 'email');
 
   // Fetch active social links
-  const socialLinks = await db.query.footerSocialLinks.findMany({
-    where: (links, { eq }) => eq(links.isActive, true),
-    orderBy: (links, { asc }) => [asc(links.position)],
-  });
+  const socialLinks = await getFooterSocialLinks();
 
   // Helper function to render social media icon
   const getSocialIcon = (platform: string) => {

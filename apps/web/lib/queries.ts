@@ -11,3 +11,18 @@ export const getSiteContacts = createCachedQuery(
   ['site-contacts'],
   { revalidate: 3600, tags: ['contacts'] }
 );
+
+export const getIntroData = createCachedQuery(
+  async () => {
+    return await db.query.siteIntros.findFirst({
+      where: (intros, { eq }) => eq(intros.isActive, true),
+      orderBy: (intros, { desc }) => [desc(intros.updatedAt)],
+      with: {
+        introImage: true,
+        backgroundImage: true,
+      },
+    });
+  },
+  ['intro-data'],
+  { revalidate: 3600, tags: ['intro'] }
+);

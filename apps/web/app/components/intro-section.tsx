@@ -1,16 +1,9 @@
 import React from 'react';
 import Image from 'next/image';
-import { db } from '@repo/database';
+import { getIntroData } from '@/lib/queries';
 
 export const IntroSection = async () => {
-  const intro = await db.query.siteIntros.findFirst({
-    where: (intros, { eq }) => eq(intros.isActive, true),
-    orderBy: (intros, { desc }) => [desc(intros.updatedAt)],
-    with: {
-      introImage: true,
-      backgroundImage: true,
-    },
-  });
+  const intro = await getIntroData();
 
   if (!intro) return null;
 
