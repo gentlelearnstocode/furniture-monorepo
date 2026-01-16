@@ -1,5 +1,7 @@
 'use client';
 
+import { slugify } from '@/lib/slugify';
+
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
@@ -101,10 +103,7 @@ export function ServiceForm({ initialData }: ServiceFormProps) {
                           {...field}
                           onChange={(e) => {
                             field.onChange(e);
-                            const slug = e.target.value
-                              .toLowerCase()
-                              .replace(/[^a-z0-9]+/g, '-')
-                              .replace(/(^-|-$)/g, '');
+                            const slug = slugify(e.target.value);
                             form.setValue('slug', slug);
                           }}
                         />

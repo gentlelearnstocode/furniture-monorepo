@@ -1,5 +1,7 @@
 'use client';
 
+import { slugify } from '@/lib/slugify';
+
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
@@ -118,10 +120,7 @@ export function CatalogForm({
                       // Simple slug generation only if not editing or slug is empty
                       if (!initialData) {
                         const parentId = form.getValues('parentId');
-                        let slug = e.target.value
-                          .toLowerCase()
-                          .replace(/[^a-z0-9]+/g, '-')
-                          .replace(/(^-|-$)/g, '');
+                        let slug = slugify(e.target.value);
 
                         // If parent is selected, prefix slug with parent slug
                         if (parentId && parentId !== 'none') {

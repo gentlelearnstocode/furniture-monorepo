@@ -1,5 +1,7 @@
 'use client';
 
+import { slugify } from '@/lib/slugify';
+
 import { CollectionWithRelations, Product, Catalog } from '@/types';
 
 import { useForm } from 'react-hook-form';
@@ -92,10 +94,7 @@ export function CollectionForm({
                       field.onChange(e);
                       if (!initialData) {
                         // Simple slug generation only on create
-                        const slug = e.target.value
-                          .toLowerCase()
-                          .replace(/[^a-z0-9]+/g, '-')
-                          .replace(/(^-|-$)/g, '');
+                        const slug = slugify(e.target.value);
                         form.setValue('slug', slug);
                       }
                     }}
