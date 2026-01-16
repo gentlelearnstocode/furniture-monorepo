@@ -5,6 +5,7 @@ import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { serviceSchema, type ServiceInput } from '@/lib/validations/service';
 import { revalidateStorefront } from '../revalidate-storefront';
+import { auth } from '@/auth';
 
 export async function getServices() {
   try {
@@ -61,6 +62,7 @@ export async function upsertService(data: ServiceInput & { id?: string }) {
   }
 
   try {
+    const session = await auth();
     const { images, ...serviceData } = validated.data;
     const primaryImage = images.find((img) => img.isPrimary) || images[0];
 
@@ -70,6 +72,7 @@ export async function upsertService(data: ServiceInput & { id?: string }) {
         id: data.id,
         ...serviceData,
         imageId: primaryImage?.assetId,
+        createdById: data.id ? undefined : session?.user?.id || null, // Only set on create
         updatedAt: new Date(),
       })
       .onConflictDoUpdate({

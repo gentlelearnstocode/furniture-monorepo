@@ -6,6 +6,7 @@ import { Menu, Search, X } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { SearchDialog } from './search-dialog';
 
 import Image from 'next/image';
 
@@ -30,6 +31,7 @@ interface NavbarProps {
 export const Navbar = ({ catalogs }: NavbarProps) => {
   const [activeMenu, setActiveMenu] = React.useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isSearchOpen, setIsSearchOpen] = React.useState(false);
   const pathname = usePathname();
 
   // Catalog, product, project, service, and blog detail pages should use the white navbar
@@ -45,7 +47,21 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
   // Auto-close menu when navigating to a new page
   React.useEffect(() => {
     setIsMenuOpen(false);
+    setIsSearchOpen(false);
   }, [pathname]);
+
+  // Global keyboard shortcut for search (Cmd/Ctrl + K)
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsSearchOpen(true);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   return (
     <>
@@ -108,6 +124,7 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
                   )}
                 </button>
                 <button
+                  onClick={() => setIsSearchOpen(true)}
                   className={cn(
                     'transition-colors duration-1000',
                     forceShow
@@ -312,6 +329,7 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
           onClick={() => setIsMenuOpen(false)}
         />
       )}
+      <SearchDialog isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </>
   );
 };

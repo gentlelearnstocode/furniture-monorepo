@@ -40,6 +40,7 @@ export default async function ServicesPage({ searchParams }: ServicesPageProps) 
     orderBy: (t: any, { desc }: any) => [desc(t.createdAt)],
     with: {
       image: true,
+      createdBy: true,
     },
   });
 

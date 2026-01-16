@@ -52,6 +52,7 @@ export function ProductList({ products, meta }: ProductListProps) {
               <TableHead className='w-[300px]'>Name</TableHead>
               <TableHead>Price</TableHead>
               <TableHead>Catalog</TableHead>
+              <TableHead>Created By</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className='w-[100px] text-right'>Actions</TableHead>
             </TableRow>
@@ -59,7 +60,7 @@ export function ProductList({ products, meta }: ProductListProps) {
           <TableBody>
             {products.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7} className='h-48 text-center text-gray-500'>
+                <TableCell colSpan={8} className='h-48 text-center text-gray-500'>
                   <div className='flex flex-col items-center justify-center gap-2'>
                     <Settings className='h-8 w-8 text-gray-300' />
                     <p>No products found matched your criteria.</p>
@@ -108,6 +109,15 @@ export function ProductList({ products, meta }: ProductListProps) {
                         <Badge variant='outline' className='font-normal text-xs'>
                           {product.catalog.name}
                         </Badge>
+                      ) : (
+                        <span className='text-gray-400 text-xs'>-</span>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {product.createdBy ? (
+                        <span className='text-sm text-gray-600'>
+                          {product.createdBy.name || product.createdBy.email}
+                        </span>
                       ) : (
                         <span className='text-gray-400 text-xs'>-</span>
                       )}

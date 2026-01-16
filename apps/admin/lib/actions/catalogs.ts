@@ -6,8 +6,10 @@ import { revalidatePath } from 'next/cache';
 import { createCatalogSchema, type CreateCatalogInput } from '@/lib/validations/catalogs';
 import { revalidateStorefront } from '../revalidate-storefront';
 import { createNotification } from '../notifications';
+import { auth } from '@/auth';
 
 export async function createCatalog(data: CreateCatalogInput) {
+  const session = await auth();
   const validated = createCatalogSchema.safeParse(data);
 
   if (!validated.success) {
@@ -37,6 +39,7 @@ export async function createCatalog(data: CreateCatalogInput) {
       level,
       imageId: imageId || null,
       displayOrder: displayOrder ?? 0,
+      createdById: session?.user?.id || null,
     });
 
     await createNotification({

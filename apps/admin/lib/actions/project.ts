@@ -5,6 +5,7 @@ import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { projectSchema, type ProjectInput } from '@/lib/validations/project';
 import { revalidateStorefront } from '../revalidate-storefront';
+import { auth } from '@/auth';
 
 export async function getProjects() {
   try {
@@ -61,6 +62,7 @@ export async function upsertProject(data: ProjectInput & { id?: string }) {
   }
 
   try {
+    const session = await auth();
     const { images, ...projectData } = validated.data;
     const primaryImage = images.find((img) => img.isPrimary) || images[0];
 
@@ -70,6 +72,7 @@ export async function upsertProject(data: ProjectInput & { id?: string }) {
         id: data.id,
         ...projectData,
         imageId: primaryImage?.assetId,
+        createdById: data.id ? undefined : session?.user?.id || null, // Only set on create
         updatedAt: new Date(),
       })
       .onConflictDoUpdate({

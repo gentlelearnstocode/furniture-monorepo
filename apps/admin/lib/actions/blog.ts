@@ -6,6 +6,7 @@ import { revalidatePath } from 'next/cache';
 import { blogSchema, type BlogInput } from '@/lib/validations/blog';
 import { revalidateStorefront } from '../revalidate-storefront';
 import { createNotification } from '../notifications';
+import { auth } from '@/auth';
 
 export async function getPosts() {
   try {
@@ -62,6 +63,7 @@ export async function upsertPost(data: BlogInput & { id?: string }) {
   }
 
   try {
+    const session = await auth();
     const { images, ...blogData } = validated.data;
     const primaryImage = images.find((img) => img.isPrimary) || images[0];
 
@@ -71,6 +73,7 @@ export async function upsertPost(data: BlogInput & { id?: string }) {
         id: data.id,
         ...blogData,
         featuredImageId: primaryImage?.assetId,
+        createdById: data.id ? undefined : session?.user?.id || null, // Only set on create
         updatedAt: new Date(),
       })
       .onConflictDoUpdate({

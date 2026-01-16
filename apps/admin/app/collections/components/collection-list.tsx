@@ -62,7 +62,7 @@ export function CollectionList({ collections, meta }: CollectionListProps) {
               <TableHead className='min-w-[200px]'>Name</TableHead>
               <TableHead>Slug</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead className='hidden md:table-cell'>Description</TableHead>
+              <TableHead>Created By</TableHead>
               <TableHead className='w-[100px] text-right'>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -127,9 +127,13 @@ export function CollectionList({ collections, meta }: CollectionListProps) {
                     </Badge>
                   </TableCell>
 
-                  <TableCell className='hidden md:table-cell text-gray-500 max-w-xs truncate'>
-                    {collection.description || (
-                      <span className='text-gray-300 italic'>No description</span>
+                  <TableCell>
+                    {collection.createdBy ? (
+                      <span className='text-sm text-gray-600'>
+                        {collection.createdBy.name || collection.createdBy.email}
+                      </span>
+                    ) : (
+                      <span className='text-gray-400 text-xs'>-</span>
                     )}
                   </TableCell>
                   <TableCell className='text-right'>

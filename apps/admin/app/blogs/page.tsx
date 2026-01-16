@@ -40,6 +40,7 @@ export default async function BlogsPage({ searchParams }: BlogsPageProps) {
     orderBy: (t: any, { desc }: any) => [desc(t.updatedAt)],
     with: {
       featuredImage: true,
+      createdBy: true,
     },
   });
 

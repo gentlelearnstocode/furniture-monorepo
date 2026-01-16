@@ -7,8 +7,10 @@ import { createProductSchema, type CreateProductInput } from '@/lib/validations/
 import { eq } from 'drizzle-orm';
 import { revalidateStorefront } from '../revalidate-storefront';
 import { createNotification } from '../notifications';
+import { auth } from '@/auth';
 
 export async function createProduct(data: CreateProductInput) {
+  const session = await auth();
   const validated = createProductSchema.safeParse(data);
 
   if (!validated.success) {
@@ -63,6 +65,7 @@ export async function createProduct(data: CreateProductInput) {
         catalogId: catalogId || null,
         isActive,
         dimensions: dimensions || null,
+        createdById: session?.user?.id || null,
       })
       .returning();
 

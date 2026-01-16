@@ -43,6 +43,9 @@ export const catalogs = pgTable('catalogs', {
   description: text('description'),
   showOnHome: boolean('show_on_home').default(false).notNull(),
   displayOrder: integer('display_order').default(0).notNull(),
+  createdById: uuid('created_by_id').references((): AnyPgColumn => users.id, {
+    onDelete: 'set null',
+  }),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -60,6 +63,10 @@ export const catalogsRelations = relations(catalogs, ({ one, many }) => ({
     fields: [catalogs.imageId],
     references: [assets.id],
   }),
+  createdBy: one(users, {
+    fields: [catalogs.createdById],
+    references: [users.id],
+  }),
 }));
 
 export const collections = pgTable('collections', {
@@ -69,6 +76,9 @@ export const collections = pgTable('collections', {
   description: text('description'),
   bannerId: uuid('banner_id').references(() => assets.id),
   isActive: boolean('is_active').default(true).notNull(),
+  createdById: uuid('created_by_id').references((): AnyPgColumn => users.id, {
+    onDelete: 'set null',
+  }),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -80,6 +90,10 @@ export const collectionsRelations = relations(collections, ({ one, many }) => ({
   }),
   products: many(collectionProducts),
   catalogs: many(catalogCollections),
+  createdBy: one(users, {
+    fields: [collections.createdById],
+    references: [users.id],
+  }),
 }));
 
 // Join table for Collections <-> Products (Many-to-Many)
@@ -148,6 +162,9 @@ export const products = pgTable('products', {
   basePrice: decimal('base_price', { precision: 10, scale: 2 }).notNull(),
   isActive: boolean('is_active').default(true).notNull(),
   dimensions: jsonb('dimensions'), // { width, height, depth, unit }
+  createdById: uuid('created_by_id').references((): AnyPgColumn => users.id, {
+    onDelete: 'set null',
+  }),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -160,6 +177,10 @@ export const productsRelations = relations(products, ({ one, many }) => ({
   variants: many(variants),
   gallery: many(productAssets),
   collections: many(collectionProducts),
+  createdBy: one(users, {
+    fields: [products.createdById],
+    references: [users.id],
+  }),
 }));
 
 // --- Options & Variants ---
@@ -447,6 +468,9 @@ export const services = pgTable('services', {
   seoTitle: text('seo_title'),
   seoDescription: text('seo_description'),
   seoKeywords: text('seo_keywords'),
+  createdById: uuid('created_by_id').references((): AnyPgColumn => users.id, {
+    onDelete: 'set null',
+  }),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -457,6 +481,10 @@ export const servicesRelations = relations(services, ({ one, many }) => ({
     references: [assets.id],
   }),
   gallery: many(serviceAssets),
+  createdBy: one(users, {
+    fields: [services.createdById],
+    references: [users.id],
+  }),
 }));
 
 export const serviceAssets = pgTable(
@@ -499,6 +527,9 @@ export const projects = pgTable('projects', {
   seoTitle: text('seo_title'),
   seoDescription: text('seo_description'),
   seoKeywords: text('seo_keywords'),
+  createdById: uuid('created_by_id').references((): AnyPgColumn => users.id, {
+    onDelete: 'set null',
+  }),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -509,6 +540,10 @@ export const projectsRelations = relations(projects, ({ one, many }) => ({
     references: [assets.id],
   }),
   gallery: many(projectAssets),
+  createdBy: one(users, {
+    fields: [projects.createdById],
+    references: [users.id],
+  }),
 }));
 
 export const projectAssets = pgTable(
@@ -552,6 +587,9 @@ export const posts = pgTable('posts', {
   seoTitle: text('seo_title'),
   seoDescription: text('seo_description'),
   seoKeywords: text('seo_keywords'),
+  createdById: uuid('created_by_id').references((): AnyPgColumn => users.id, {
+    onDelete: 'set null',
+  }),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -562,6 +600,10 @@ export const postsRelations = relations(posts, ({ one, many }) => ({
     references: [assets.id],
   }),
   gallery: many(postAssets),
+  createdBy: one(users, {
+    fields: [posts.createdById],
+    references: [users.id],
+  }),
 }));
 
 export const postAssets = pgTable(

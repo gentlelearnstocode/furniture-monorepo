@@ -40,6 +40,7 @@ export default async function CatalogsPage({ searchParams }: CatalogsPageProps) 
     with: {
       parent: true,
       image: true,
+      createdBy: true,
     },
   });
 

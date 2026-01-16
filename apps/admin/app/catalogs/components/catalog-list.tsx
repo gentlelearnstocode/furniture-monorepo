@@ -52,7 +52,7 @@ export function CatalogList({ catalogs, meta }: CatalogListProps) {
               <TableHead className='w-[300px]'>Name</TableHead>
               <TableHead>Slug</TableHead>
               <TableHead>Level</TableHead>
-              <TableHead className='hidden md:table-cell'>Description</TableHead>
+              <TableHead>Created By</TableHead>
               <TableHead className='w-[100px] text-right'>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -126,9 +126,13 @@ export function CatalogList({ catalogs, meta }: CatalogListProps) {
                       </Badge>
                     )}
                   </TableCell>
-                  <TableCell className='hidden md:table-cell text-gray-500 max-w-xs truncate'>
-                    {catalog.description || (
-                      <span className='text-gray-300 italic'>No description</span>
+                  <TableCell>
+                    {catalog.createdBy ? (
+                      <span className='text-sm text-gray-600'>
+                        {catalog.createdBy.name || catalog.createdBy.email}
+                      </span>
+                    ) : (
+                      <span className='text-gray-400 text-xs'>-</span>
                     )}
                   </TableCell>
                   <TableCell className='text-right'>

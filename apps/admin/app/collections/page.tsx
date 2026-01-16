@@ -40,6 +40,7 @@ export default async function CollectionsPage({ searchParams }: CollectionsPageP
     orderBy: (t: any, { desc }: any) => [desc(t.createdAt)],
     with: {
       banner: true,
+      createdBy: true,
     },
   });
 

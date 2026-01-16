@@ -45,6 +45,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     orderBy: (t: any, { desc }: any) => [desc(t.createdAt)],
     with: {
       catalog: true,
+      createdBy: true,
       gallery: {
         where: (productAssets: any, { eq }: any) => eq(productAssets.isPrimary, true),
         with: {

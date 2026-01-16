@@ -7,8 +7,10 @@ import { redirect } from 'next/navigation';
 import { createCollectionSchema, type CreateCollectionInput } from '@/lib/validations/collections';
 import { revalidateStorefront } from '../revalidate-storefront';
 import { createNotification } from '../notifications';
+import { auth } from '@/auth';
 
 export async function createCollection(data: CreateCollectionInput) {
+  const session = await auth();
   const validated = createCollectionSchema.safeParse(data);
 
   if (!validated.success) {
@@ -37,6 +39,7 @@ export async function createCollection(data: CreateCollectionInput) {
         description: description || null,
         bannerId: bannerId || null,
         isActive: isActive ?? true,
+        createdById: session?.user?.id || null,
       })
       .returning();
 

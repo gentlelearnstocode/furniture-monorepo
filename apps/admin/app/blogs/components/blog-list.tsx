@@ -61,6 +61,7 @@ export function BlogList({ posts, meta }: BlogListProps) {
               <TableHead className='w-[100px]'>Featured Image</TableHead>
               <TableHead className='min-w-[200px]'>Title</TableHead>
               <TableHead>Slug</TableHead>
+              <TableHead>Created By</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className='w-[100px] text-right'>Actions</TableHead>
             </TableRow>
@@ -68,7 +69,7 @@ export function BlogList({ posts, meta }: BlogListProps) {
           <TableBody>
             {posts.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className='h-48 text-center text-gray-500'>
+                <TableCell colSpan={7} className='h-48 text-center text-gray-500'>
                   <div className='flex flex-col items-center justify-center gap-2'>
                     <Newspaper className='h-8 w-8 text-gray-300' />
                     <p>No posts found matched your criteria.</p>
@@ -107,6 +108,15 @@ export function BlogList({ posts, meta }: BlogListProps) {
                     <Badge variant='secondary' className='font-normal font-mono text-xs'>
                       {post.slug}
                     </Badge>
+                  </TableCell>
+                  <TableCell>
+                    {post.createdBy ? (
+                      <span className='text-sm text-gray-600'>
+                        {post.createdBy.name || post.createdBy.email}
+                      </span>
+                    ) : (
+                      <span className='text-gray-400 text-xs'>-</span>
+                    )}
                   </TableCell>
                   <TableCell>
                     <Badge

@@ -40,6 +40,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
     orderBy: (t: any, { desc }: any) => [desc(t.createdAt)],
     with: {
       image: true,
+      createdBy: true,
     },
   });
 
