@@ -1,10 +1,8 @@
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { db } from '@repo/database';
-import { ChevronRight, Grid3x3, List } from 'lucide-react';
 import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
 import { createCachedQuery } from '@/lib/cache';
-import { StyledImage } from '@/app/components/styled-image';
+import { ProductListing } from './components/product-listing';
 
 // Revalidate every hour
 export const revalidate = 3600;
@@ -39,9 +37,16 @@ interface Props {
     slug: string;
     childSlug: string;
   }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-const getChildCatalog = (slug: string, childSlug: string, parentId: string) =>
+const getChildCatalog = (
+  slug: string,
+  childSlug: string,
+  parentId: string,
+  sort?: string,
+  sale?: boolean
+) =>
   createCachedQuery(
     async () => {
       return await db.query.catalogs.findFirst({
@@ -58,17 +63,38 @@ const getChildCatalog = (slug: string, childSlug: string, parentId: string) =>
                 orderBy: (gallery, { asc }) => [asc(gallery.position)],
               },
             },
-            where: (products, { eq }) => eq(products.isActive, true),
+            where: (products, { eq, and, isNotNull }) =>
+              and(
+                eq(products.isActive, true),
+                sale ? isNotNull(products.discountPrice) : undefined
+              ),
+            orderBy: (products, { asc, desc }) => {
+              switch (sort) {
+                case 'name_desc':
+                  return [desc(products.name)];
+                case 'price_asc':
+                  return [asc(products.basePrice)];
+                case 'price_desc':
+                  return [desc(products.basePrice)];
+                case 'name_asc':
+                default:
+                  return [asc(products.name)];
+              }
+            },
           },
         },
       });
     },
-    ['catalog-child', slug, childSlug],
+    ['catalog-child', slug, childSlug, sort || 'default', sale ? 'sale' : 'no-sale'],
     { revalidate: 3600, tags: ['catalogs', `catalog-${slug}-${childSlug}`] }
   );
 
-export default async function CatalogLevel2Page({ params }: Props) {
+export default async function CatalogLevel2Page({ params, searchParams }: Props) {
   const { slug, childSlug } = await params;
+  const search = await searchParams;
+
+  const sort = typeof search.sort === 'string' ? search.sort : undefined;
+  const sale = search.sale === 'true';
 
   // Fetch the parent catalog (level 1) and child catalog (level 2) with products
   const parentCatalog = await db.query.catalogs.findFirst({
@@ -80,11 +106,30 @@ export default async function CatalogLevel2Page({ params }: Props) {
   }
 
   // Fetch the child catalog (level 2) with its products
-  const catalog = await getChildCatalog(slug, childSlug, parentCatalog.id)();
+  const catalog = await getChildCatalog(slug, childSlug, parentCatalog.id, sort, sale)();
 
   if (!catalog) {
     notFound();
   }
+
+  // Map products to ensure they match the Product type expected by ProductListing
+  // The query already returns the structure we need, but we map to be safe and clear
+  const products = catalog.products.map((product) => ({
+    id: product.id,
+    name: product.name,
+    slug: product.slug,
+    basePrice: product.basePrice,
+    discountPrice: product.discountPrice,
+    showPrice: product.showPrice,
+    gallery: product.gallery.map((g) => ({
+      isPrimary: g.isPrimary,
+      asset: g.asset ? { url: g.asset.url } : null,
+      focusPoint: g.focusPoint as { x: number; y: number } | null,
+      aspectRatio: g.aspectRatio,
+      objectFit: g.objectFit,
+      position: g.position,
+    })),
+  }));
 
   return (
     <div className='min-h-screen bg-gradient-to-b from-[#FDFCFB] via-white to-[#FDFCFB]'>
@@ -99,7 +144,7 @@ export default async function CatalogLevel2Page({ params }: Props) {
       <div className='container mx-auto px-4 pt-4 pb-6'>
         {/* Title & Description */}
         <div className='mb-8'>
-          <h1 className='text-5xl md:text-6xl font-serif italic text-black/90 tracking-wide mb-4'>
+          <h1 className='text-5xl md:text-6xl font-serif text-black/90 tracking-wide mb-4'>
             {catalog.name}
           </h1>
           {catalog.description && (
@@ -109,117 +154,8 @@ export default async function CatalogLevel2Page({ params }: Props) {
           )}
         </div>
 
-        {/* Filter Bar */}
-        <div className='flex items-center justify-between mb-8'>
-          {/* Left: Category Filter & Sort */}
-          <div className='flex items-center gap-4'>
-            <button className='px-4 py-2 text-[13px] font-serif italic uppercase tracking-[0.1em] text-black/70 hover:text-black transition-colors border border-black/10 hover:border-black/30 rounded-sm'>
-              SALE
-            </button>
-            <div className='relative'>
-              <select className='appearance-none px-4 py-2 pr-8 text-[13px] font-serif italic uppercase tracking-[0.1em] text-black/70 hover:text-black transition-colors border border-black/10 hover:border-black/30 rounded-sm bg-white cursor-pointer'>
-                <option>Category ~</option>
-                <option>All Products</option>
-                <option>Featured</option>
-                <option>New Arrivals</option>
-              </select>
-              <ChevronRight
-                size={14}
-                className='absolute right-2 top-1/2 -translate-y-1/2 rotate-90 text-black/40 pointer-events-none'
-              />
-            </div>
-          </div>
-
-          {/* Right: Sort & View Toggle */}
-          <div className='flex items-center gap-4'>
-            <div className='relative'>
-              <select className='appearance-none px-4 py-2 pr-8 text-[13px] font-serif italic uppercase tracking-[0.1em] text-black/70 hover:text-black transition-colors border border-black/10 hover:border-black/30 rounded-sm bg-white cursor-pointer'>
-                <option>~ Sort</option>
-                <option>Name A-Z</option>
-                <option>Name Z-A</option>
-                <option>Price Low to High</option>
-                <option>Price High to Low</option>
-              </select>
-              <ChevronRight
-                size={14}
-                className='absolute right-2 top-1/2 -translate-y-1/2 rotate-90 text-black/40 pointer-events-none'
-              />
-            </div>
-
-            {/* View Toggle */}
-            <div className='flex items-center gap-1 border border-black/10 rounded-sm overflow-hidden'>
-              <button className='p-2 bg-black text-white transition-colors'>
-                <Grid3x3 size={16} strokeWidth={1.5} />
-              </button>
-              <button className='p-2 hover:bg-gray-100 text-black/40 hover:text-black transition-colors'>
-                <List size={16} strokeWidth={1.5} />
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Product Grid */}
-      <div className='container mx-auto px-4 pb-20'>
-        <div className='grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-12'>
-          {catalog.products.map((product) => {
-            const primaryAsset = product.gallery.find((g) => g.isPrimary) || product.gallery[0];
-            const imageUrl =
-              primaryAsset?.asset?.url ||
-              'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=800';
-            // Extract display settings from the primary asset
-            const displaySettings = primaryAsset
-              ? {
-                  focusPoint: primaryAsset.focusPoint || undefined,
-                  aspectRatio:
-                    (primaryAsset.aspectRatio as 'original' | '1:1' | '3:4' | '4:3' | '16:9') ||
-                    undefined,
-                  objectFit: (primaryAsset.objectFit as 'cover' | 'contain') || undefined,
-                }
-              : undefined;
-
-            return (
-              <Link
-                key={product.id}
-                href={`/product/${product.slug}`}
-                className='group flex flex-col gap-4'
-              >
-                {/* Product Image */}
-                <div className='relative aspect-[3/4] overflow-hidden bg-gray-100 shadow-md shadow-black/5 group-hover:shadow-xl group-hover:shadow-black/10 transition-all duration-500'>
-                  <StyledImage
-                    src={imageUrl}
-                    alt={product.name}
-                    displaySettings={displaySettings}
-                    className='transition-all duration-700 group-hover:scale-105'
-                    sizes='(max-width: 768px) 50vw, 25vw'
-                  />
-
-                  {/* Subtle overlay on hover */}
-                  <div className='absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500' />
-                </div>
-
-                {/* Product Info */}
-                <div className='flex flex-col gap-1.5'>
-                  <h3 className='text-[15px] md:text-[17px] font-serif uppercase tracking-[0.05em] text-black/90 group-hover:text-black transition-colors text-center'>
-                    {product.name}
-                  </h3>
-                  <p className='text-[11px] md:text-[12px] font-serif italic text-gray-400 tracking-[0.1em] uppercase text-center'>
-                    Available in multiple fabric
-                  </p>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-
-        {/* Empty State */}
-        {catalog.products.length === 0 && (
-          <div className='text-center py-20'>
-            <p className='text-xl font-serif italic text-gray-400'>
-              No products available in this category yet.
-            </p>
-          </div>
-        )}
+        {/* Product Listing (Toolbar + Grid) */}
+        <ProductListing products={products} />
       </div>
     </div>
   );
