@@ -31,7 +31,7 @@ export const BlogsSection = async () => {
       <div className='container mx-auto px-4'>
         {/* Section Header */}
         <div className='flex flex-col items-center mb-12'>
-          <h2 className='text-3xl md:text-4xl lg:text-5xl font-serif italic text-[#49000D] tracking-wide uppercase'>
+          <h2 className='text-3xl md:text-4xl lg:text-5xl font-serif text-[#49000D] tracking-wide uppercase'>
             Our Blog
           </h2>
 
