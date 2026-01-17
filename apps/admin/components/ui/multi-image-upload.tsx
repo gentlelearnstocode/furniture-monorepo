@@ -1,17 +1,28 @@
 'use client';
 
 import { useState } from 'react';
-import { ImagePlus, X, Star, Check, Loader2 } from 'lucide-react';
+import { ImagePlus, X, Star, Check, Loader2, Settings2 } from 'lucide-react';
 import { Button } from '@repo/ui/ui/button';
 import { createAssetAction } from '@/lib/actions/assets';
 import { upload } from '@vercel/blob/client';
 import { toast } from 'sonner';
 import Image from 'next/image';
 import { Progress } from '@repo/ui/ui/progress';
+import { ImageDisplaySettingsDialog, type ImageDisplaySettings } from './image-display-settings';
+
+// Extended image data type with display settings
+export interface ImageWithSettings {
+  assetId: string;
+  url: string;
+  isPrimary: boolean;
+  focusPoint?: { x: number; y: number };
+  aspectRatio?: 'original' | '1:1' | '3:4' | '4:3' | '16:9';
+  objectFit?: 'cover' | 'contain';
+}
 
 interface MultiImageUploadProps {
-  value: { assetId: string; url: string; isPrimary: boolean }[];
-  onChange: (value: { assetId: string; url: string; isPrimary: boolean }[]) => void;
+  value: ImageWithSettings[];
+  onChange: (value: ImageWithSettings[]) => void;
   folder?: string;
 }
 
@@ -52,6 +63,10 @@ export function MultiImageUpload({ value, onChange, folder = 'general' }: MultiI
             assetId: asset.id,
             url: asset.url,
             isPrimary: uploadedImages.length === 0,
+            // Default display settings
+            focusPoint: { x: 50, y: 50 },
+            aspectRatio: 'original',
+            objectFit: 'cover',
           });
         }
 
@@ -95,6 +110,29 @@ export function MultiImageUpload({ value, onChange, folder = 'general' }: MultiI
     onChange(newValue);
   };
 
+  const onUpdateDisplaySettings = (id: string, settings: ImageDisplaySettings) => {
+    const newValue = value.map((img) =>
+      img.assetId === id
+        ? {
+            ...img,
+            focusPoint: settings.focusPoint,
+            aspectRatio: settings.aspectRatio,
+            objectFit: settings.objectFit,
+          }
+        : img
+    );
+    onChange(newValue);
+  };
+
+  // Check if an image has custom display settings
+  const hasCustomSettings = (image: ImageWithSettings) => {
+    return (
+      (image.focusPoint && (image.focusPoint.x !== 50 || image.focusPoint.y !== 50)) ||
+      (image.aspectRatio && image.aspectRatio !== 'original') ||
+      (image.objectFit && image.objectFit !== 'cover')
+    );
+  };
+
   return (
     <div className='space-y-4'>
       <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4'>
@@ -103,7 +141,18 @@ export function MultiImageUpload({ value, onChange, folder = 'general' }: MultiI
             key={image.assetId}
             className='relative aspect-square rounded-md overflow-hidden border bg-gray-50 flex items-center justify-center group'
           >
-            <Image src={image.url} alt='Uploaded Image' fill className='object-cover' />
+            <Image
+              src={image.url}
+              alt='Uploaded Image'
+              fill
+              className='object-cover'
+              style={{
+                objectPosition: image.focusPoint
+                  ? `${image.focusPoint.x}% ${image.focusPoint.y}%`
+                  : '50% 50%',
+              }}
+            />
+            {/* Top buttons: Primary, Settings, Delete */}
             <div className='absolute top-1 right-1 flex gap-1'>
               <Button
                 type='button'
@@ -114,6 +163,25 @@ export function MultiImageUpload({ value, onChange, folder = 'general' }: MultiI
               >
                 <Star className={`h-3 w-3 ${image.isPrimary ? 'fill-white' : ''}`} />
               </Button>
+              <ImageDisplaySettingsDialog
+                imageUrl={image.url}
+                value={{
+                  focusPoint: image.focusPoint,
+                  aspectRatio: image.aspectRatio,
+                  objectFit: image.objectFit,
+                }}
+                onChange={(settings) => onUpdateDisplaySettings(image.assetId, settings)}
+                trigger={
+                  <Button
+                    type='button'
+                    variant={hasCustomSettings(image) ? 'default' : 'secondary'}
+                    size='icon'
+                    className='h-6 w-6'
+                  >
+                    <Settings2 className='h-3 w-3' />
+                  </Button>
+                }
+              />
               <Button
                 type='button'
                 variant='destructive'
@@ -124,11 +192,19 @@ export function MultiImageUpload({ value, onChange, folder = 'general' }: MultiI
                 <X className='h-3 w-3' />
               </Button>
             </div>
-            {image.isPrimary && (
-              <div className='absolute bottom-1 left-1 bg-black/50 text-white text-[10px] px-1.5 py-0.5 rounded flex items-center gap-1 leading-none'>
-                <Check className='h-2 w-2' /> Primary
-              </div>
-            )}
+            {/* Bottom badges */}
+            <div className='absolute bottom-1 left-1 flex gap-1'>
+              {image.isPrimary && (
+                <div className='bg-black/50 text-white text-[10px] px-1.5 py-0.5 rounded flex items-center gap-1 leading-none'>
+                  <Check className='h-2 w-2' /> Primary
+                </div>
+              )}
+              {hasCustomSettings(image) && (
+                <div className='bg-primary/80 text-white text-[10px] px-1.5 py-0.5 rounded flex items-center gap-1 leading-none'>
+                  <Settings2 className='h-2 w-2' /> Custom
+                </div>
+              )}
+            </div>
           </div>
         ))}
 

@@ -1,8 +1,8 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { StyledImage, getDisplaySettings, type ImageDisplaySettings } from './styled-image';
 
 interface ProductCardProps {
   product: {
@@ -18,6 +18,10 @@ interface ProductCardProps {
       asset: {
         url: string;
       };
+      // Display settings from admin
+      focusPoint?: { x: number; y: number } | null;
+      aspectRatio?: string | null;
+      objectFit?: string | null;
     }[];
   };
   className?: string;
@@ -29,6 +33,11 @@ export const ProductCard = ({ product, className }: ProductCardProps) => {
     primaryAsset?.asset?.url ||
     'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=800';
 
+  // Extract display settings from the primary asset
+  const displaySettings: ImageDisplaySettings | undefined = primaryAsset
+    ? getDisplaySettings(primaryAsset)
+    : undefined;
+
   const hasDiscount = !!product.discountPrice;
   const displayPrice = hasDiscount ? product.discountPrice : product.basePrice;
   const originalPrice = product.basePrice;
@@ -38,11 +47,11 @@ export const ProductCard = ({ product, className }: ProductCardProps) => {
     <Link href={`/product/${product.slug}`} className={cn('group flex flex-col gap-4', className)}>
       {/* Product Image Container */}
       <div className='relative aspect-[3/4] overflow-hidden bg-gray-100 shadow-md shadow-black/5 group-hover:shadow-xl group-hover:shadow-black/10 transition-all duration-500'>
-        <Image
+        <StyledImage
           src={imageUrl}
           alt={product.name}
-          fill
-          className='object-cover transition-all duration-700 group-hover:scale-105'
+          displaySettings={displaySettings}
+          className='transition-all duration-700 group-hover:scale-105'
           sizes='(max-width: 768px) 50vw, 25vw'
         />
 

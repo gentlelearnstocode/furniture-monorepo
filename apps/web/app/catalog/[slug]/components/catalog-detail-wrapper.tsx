@@ -15,6 +15,10 @@ interface Product {
     asset: {
       url: string;
     } | null;
+    // Display settings from admin
+    focusPoint: { x: number; y: number } | null;
+    aspectRatio: string | null;
+    objectFit: string | null;
   }[];
 }
 
@@ -151,6 +155,16 @@ export const CatalogDetailWrapper = ({ collections }: CatalogDetailWrapperProps)
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-16'>
             {currentCollection.products.map((product) => {
               const primaryAsset = product.gallery.find((g) => g.isPrimary) || product.gallery[0];
+              // Extract display settings from the primary asset
+              const displaySettings = primaryAsset
+                ? {
+                    focusPoint: primaryAsset.focusPoint || undefined,
+                    aspectRatio:
+                      (primaryAsset.aspectRatio as 'original' | '1:1' | '3:4' | '4:3' | '16:9') ||
+                      undefined,
+                    objectFit: (primaryAsset.objectFit as 'cover' | 'contain') || undefined,
+                  }
+                : undefined;
               return (
                 <ProductCard
                   key={product.id}
@@ -161,6 +175,7 @@ export const CatalogDetailWrapper = ({ collections }: CatalogDetailWrapperProps)
                     primaryAsset?.asset?.url ||
                     'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=800'
                   }
+                  displaySettings={displaySettings}
                 />
               );
             })}

@@ -99,6 +99,13 @@
       "when": 1768553460974,
       "tag": "0013_lively_jackpot",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1768629890162,
+      "tag": "0014_flashy_black_knight",
+      "breakpoints": true
     }
   ]
 }

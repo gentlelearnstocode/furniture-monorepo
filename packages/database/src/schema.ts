@@ -266,6 +266,11 @@ export const variantOptionValuesRelations = relations(variantOptionValues, ({ on
 
 // --- Asset Links ---
 
+// Image display settings type definitions
+export type FocusPoint = { x: number; y: number };
+export type AspectRatio = 'original' | '1:1' | '3:4' | '4:3' | '16:9';
+export type ObjectFit = 'cover' | 'contain';
+
 export const productAssets = pgTable(
   'product_assets',
   {
@@ -277,6 +282,10 @@ export const productAssets = pgTable(
       .references(() => assets.id, { onDelete: 'cascade' }),
     position: integer('position').default(0).notNull(),
     isPrimary: boolean('is_primary').default(false).notNull(),
+    // Display settings for image customization
+    focusPoint: jsonb('focus_point').$type<FocusPoint>(), // { x: 0-100, y: 0-100 } percentages from top-left
+    aspectRatio: text('aspect_ratio').$type<AspectRatio>().default('original'),
+    objectFit: text('object_fit').$type<ObjectFit>().default('cover'),
   },
   (t) => ({
     pk: primaryKey({ columns: [t.productId, t.assetId] }),

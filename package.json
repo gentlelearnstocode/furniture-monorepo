@@ -7,8 +7,6 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
-    "db:push": "dotenv -e apps/web/.env.development.local -- pnpm --filter @repo/database drizzle-kit push",
-    "db:generate": "pnpm --filter @repo/database drizzle-kit generate",
     "dev:web": "pnpm --filter web dev",
     "dev:admin": "pnpm --filter admin dev",
     "start": "turbo run start",

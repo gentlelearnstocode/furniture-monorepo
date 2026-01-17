@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { useTransition } from 'react';
+import { useRouter } from 'next/navigation';
 import { createProduct, updateProduct } from '@/lib/actions/products';
 import { createProductSchema, type CreateProductInput } from '@/lib/validations/products';
 
@@ -39,6 +40,7 @@ interface ProductFormProps {
 
 export function ProductForm({ catalogs, initialData }: ProductFormProps) {
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const form = useForm({
     resolver: zodResolver(createProductSchema),
@@ -84,10 +86,11 @@ export function ProductForm({ catalogs, initialData }: ProductFormProps) {
 
       if (result?.error) {
         toast.error(result.error);
-      } else {
+      } else if (result?.success) {
         toast.success(
           initialData ? 'Product updated successfully' : 'Product created successfully'
         );
+        router.push('/products');
       }
     });
   }

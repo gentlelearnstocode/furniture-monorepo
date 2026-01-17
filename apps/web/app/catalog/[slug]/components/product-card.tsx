@@ -1,18 +1,19 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
+import { StyledImage, type ImageDisplaySettings } from '@/app/components/styled-image';
 
 interface ProductCardProps {
   id: string;
   name: string;
   slug: string;
   imageUrl: string;
+  displaySettings?: ImageDisplaySettings;
 }
 
-export const ProductCard = ({ name, slug, imageUrl }: ProductCardProps) => {
+export const ProductCard = ({ name, slug, imageUrl, displaySettings }: ProductCardProps) => {
   const [isHovered, setIsHovered] = React.useState(false);
 
   return (
@@ -23,11 +24,11 @@ export const ProductCard = ({ name, slug, imageUrl }: ProductCardProps) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className='relative aspect-[4/5] overflow-hidden bg-gray-100 rounded-xl shadow-lg shadow-black/5 group-hover:shadow-2xl group-hover:shadow-black/10 transition-all duration-500'>
-        <Image
+        <StyledImage
           src={imageUrl}
           alt={name}
-          fill
-          className='object-cover transition-all duration-700 group-hover:scale-110'
+          displaySettings={displaySettings}
+          className='transition-all duration-700 group-hover:scale-110'
           sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw'
         />
 

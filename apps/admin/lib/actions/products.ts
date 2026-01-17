@@ -2,7 +2,6 @@
 
 import { db, products, productAssets, homepageSaleProducts } from '@repo/database';
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import { createProductSchema, type CreateProductInput } from '@/lib/validations/products';
 import { eq } from 'drizzle-orm';
 import { revalidateStorefront } from '../revalidate-storefront';
@@ -89,6 +88,10 @@ export async function createProduct(data: CreateProductInput) {
           assetId: img.assetId,
           position: index,
           isPrimary: img.isPrimary,
+          // Display settings
+          focusPoint: img.focusPoint || null,
+          aspectRatio: img.aspectRatio || 'original',
+          objectFit: img.objectFit || 'cover',
         }))
       );
     }
@@ -108,7 +111,7 @@ export async function createProduct(data: CreateProductInput) {
 
   revalidatePath('/products');
   await revalidateStorefront(['products', 'catalogs']);
-  redirect('/products');
+  return { success: true };
 }
 
 export async function updateProduct(id: string, data: CreateProductInput) {
@@ -192,6 +195,10 @@ export async function updateProduct(id: string, data: CreateProductInput) {
           assetId: img.assetId,
           position: index,
           isPrimary: img.isPrimary,
+          // Display settings
+          focusPoint: img.focusPoint || null,
+          aspectRatio: img.aspectRatio || 'original',
+          objectFit: img.objectFit || 'cover',
         }))
       );
     }
@@ -223,7 +230,7 @@ export async function updateProduct(id: string, data: CreateProductInput) {
   revalidatePath('/products');
   revalidatePath(`/products/${id}`);
   await revalidateStorefront(['products', 'catalogs']);
-  redirect('/products');
+  return { success: true };
 }
 
 export async function deleteProduct(id: string) {

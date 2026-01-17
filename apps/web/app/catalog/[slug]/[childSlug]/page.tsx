@@ -2,9 +2,9 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { db } from '@repo/database';
 import { ChevronRight, Grid3x3, List } from 'lucide-react';
-import Image from 'next/image';
 import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
 import { createCachedQuery } from '@/lib/cache';
+import { StyledImage } from '@/app/components/styled-image';
 
 // Revalidate every hour
 export const revalidate = 3600;
@@ -167,6 +167,16 @@ export default async function CatalogLevel2Page({ params }: Props) {
             const imageUrl =
               primaryAsset?.asset?.url ||
               'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=800';
+            // Extract display settings from the primary asset
+            const displaySettings = primaryAsset
+              ? {
+                  focusPoint: primaryAsset.focusPoint || undefined,
+                  aspectRatio:
+                    (primaryAsset.aspectRatio as 'original' | '1:1' | '3:4' | '4:3' | '16:9') ||
+                    undefined,
+                  objectFit: (primaryAsset.objectFit as 'cover' | 'contain') || undefined,
+                }
+              : undefined;
 
             return (
               <Link
@@ -176,11 +186,11 @@ export default async function CatalogLevel2Page({ params }: Props) {
               >
                 {/* Product Image */}
                 <div className='relative aspect-[3/4] overflow-hidden bg-gray-100 shadow-md shadow-black/5 group-hover:shadow-xl group-hover:shadow-black/10 transition-all duration-500'>
-                  <Image
+                  <StyledImage
                     src={imageUrl}
                     alt={product.name}
-                    fill
-                    className='object-cover transition-all duration-700 group-hover:scale-105'
+                    displaySettings={displaySettings}
+                    className='transition-all duration-700 group-hover:scale-105'
                     sizes='(max-width: 768px) 50vw, 25vw'
                   />
 

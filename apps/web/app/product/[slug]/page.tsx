@@ -91,8 +91,15 @@ export default async function ProductDetailPage({ params }: Props) {
           {/* Left: Gallery */}
           <ProductGallery
             images={product.gallery
-              .map((g: any) => g.asset?.url)
-              .filter((url): url is string => !!url)}
+              .filter((g: any) => g.asset?.url)
+              .map((g: any) => ({
+                url: g.asset.url,
+                displaySettings: {
+                  focusPoint: g.focusPoint || undefined,
+                  aspectRatio: g.aspectRatio || undefined,
+                  objectFit: g.objectFit || undefined,
+                },
+              }))}
             name={product.name}
           />
 

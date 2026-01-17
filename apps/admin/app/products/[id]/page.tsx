@@ -54,6 +54,10 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
       assetId: g.assetId,
       url: g.asset.url,
       isPrimary: g.isPrimary,
+      // Display settings
+      focusPoint: g.focusPoint as { x: number; y: number } | undefined,
+      aspectRatio: g.aspectRatio as 'original' | '1:1' | '3:4' | '4:3' | '16:9' | undefined,
+      objectFit: g.objectFit as 'cover' | 'contain' | undefined,
     })),
   };
 

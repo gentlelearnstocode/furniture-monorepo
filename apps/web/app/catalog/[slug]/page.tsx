@@ -98,6 +98,10 @@ export default async function CatalogPage({ params }: Props) {
       gallery: {
         isPrimary: boolean;
         asset: { url: string } | null;
+        // Display settings from admin
+        focusPoint: { x: number; y: number } | null;
+        aspectRatio: string | null;
+        objectFit: string | null;
       }[];
     }[];
   };
@@ -117,6 +121,10 @@ export default async function CatalogPage({ params }: Props) {
         gallery: cp.product.gallery.map((g) => ({
           isPrimary: g.isPrimary,
           asset: g.asset ? { url: g.asset.url } : null,
+          // Include display settings
+          focusPoint: g.focusPoint as { x: number; y: number } | null,
+          aspectRatio: g.aspectRatio,
+          objectFit: g.objectFit,
         })),
       })),
     }));
@@ -134,6 +142,10 @@ export default async function CatalogPage({ params }: Props) {
           gallery: product.gallery.map((g) => ({
             isPrimary: g.isPrimary,
             asset: g.asset ? { url: g.asset.url } : null,
+            // Include display settings
+            focusPoint: g.focusPoint as { x: number; y: number } | null,
+            aspectRatio: g.aspectRatio,
+            objectFit: g.objectFit,
           })),
         })),
       },

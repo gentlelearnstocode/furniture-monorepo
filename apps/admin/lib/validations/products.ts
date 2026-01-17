@@ -32,6 +32,15 @@ export const createProductSchema = z
           assetId: z.string().uuid(),
           url: z.string().url(),
           isPrimary: z.boolean(),
+          // Display settings - use nullish() to accept both null (from DB) and undefined
+          focusPoint: z
+            .object({
+              x: z.number().min(0).max(100),
+              y: z.number().min(0).max(100),
+            })
+            .nullish(),
+          aspectRatio: z.enum(['original', '1:1', '3:4', '4:3', '16:9']).nullish(),
+          objectFit: z.enum(['cover', 'contain']).nullish(),
         })
       )
       .default([]),

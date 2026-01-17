@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { StyledImage } from './styled-image';
 
 interface SaleSectionProps {
   products: any[];
@@ -22,6 +23,16 @@ const SaleProductCard = ({ product, className }: SaleProductCardProps) => {
     primaryAsset?.asset?.url ||
     'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=800';
 
+  // Extract display settings from the primary asset
+  const displaySettings = primaryAsset
+    ? {
+        focusPoint: primaryAsset.focusPoint || undefined,
+        aspectRatio:
+          (primaryAsset.aspectRatio as 'original' | '1:1' | '3:4' | '4:3' | '16:9') || undefined,
+        objectFit: (primaryAsset.objectFit as 'cover' | 'contain') || 'contain', // Default to contain for sale cards
+      }
+    : { objectFit: 'contain' as const };
+
   const hasDiscount = !!product.discountPrice;
 
   // Extract color variants if available (mock for now based on design)
@@ -35,11 +46,11 @@ const SaleProductCard = ({ product, className }: SaleProductCardProps) => {
     <Link href={`/product/${product.slug}`} className={cn('group flex flex-col', className)}>
       {/* Product Image Container */}
       <div className='relative aspect-[4/5] overflow-hidden bg-white'>
-        <Image
+        <StyledImage
           src={imageUrl}
           alt={product.name}
-          fill
-          className='object-contain p-4 transition-transform duration-500 group-hover:scale-105'
+          displaySettings={displaySettings}
+          className='p-4 transition-transform duration-500 group-hover:scale-105'
           sizes='(max-width: 768px) 50vw, 25vw'
         />
 
