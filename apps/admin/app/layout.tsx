@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import '@repo/ui/globals.css';
+
 import { AdminLayout } from '../components/layout/admin-layout';
 
 const inter = Inter({
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
 };
 
 import { auth } from '@/auth';
-import { Providers } from '../components/providers';
+import { Providers } from '../providers';
 
 export default async function RootLayout({
   children,

@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { db } from '@repo/database';
 import { featuredCatalogRows } from '@repo/database/schema';
 import { cn } from '@repo/ui/lib/utils';
-import { asc, eq } from 'drizzle-orm';
+import { asc } from 'drizzle-orm';
 
 // Catalog Section component - same design as old CollectionSection
 const CatalogSection = ({
@@ -29,7 +29,7 @@ const CatalogSection = ({
           layout === 'full' && 'h-[75vh] md:h-[85vh]',
           layout === 'half' && 'h-[50vh] md:h-[60vh]',
           layout === 'third' && 'h-[40vh] md:h-[50vh]',
-          layout === 'quarter' && 'h-[35vh] md:h-[45vh]'
+          layout === 'quarter' && 'h-[35vh] md:h-[45vh]',
         )}
       >
         {/* Background Image with Hover Zoom */}
@@ -59,7 +59,7 @@ const CatalogSection = ({
           <h3
             className={cn(
               'text-white font-serif uppercase tracking-widest mb-4 drop-shadow-xl',
-              isSmall ? 'text-2xl md:text-4xl' : 'text-5xl md:text-7xl'
+              isSmall ? 'text-2xl md:text-4xl' : 'text-5xl md:text-7xl',
             )}
           >
             {name}
@@ -129,7 +129,7 @@ export const FeaturedCatalogs = async () => {
         },
       }),
     ['featured-catalogs-layout'],
-    { revalidate: 3600, tags: ['catalogs', 'featured-layout'] }
+    { revalidate: 3600, tags: ['catalogs', 'featured-layout'] },
   );
 
   // Cached fallback level 1 catalogs
@@ -143,7 +143,7 @@ export const FeaturedCatalogs = async () => {
         orderBy: (catalogs, { asc }) => [asc(catalogs.displayOrder)],
       }),
     ['featured-catalogs-fallback'],
-    { revalidate: 3600, tags: ['catalogs'] }
+    { revalidate: 3600, tags: ['catalogs'] },
   );
 
   // Try to fetch custom layout configuration
@@ -216,7 +216,7 @@ export const FeaturedCatalogs = async () => {
             className={cn(
               layout === 'full' && 'col-span-12',
               layout === 'half' && 'col-span-12 md:col-span-6',
-              layout === 'third' && 'col-span-12 md:col-span-4'
+              layout === 'third' && 'col-span-12 md:col-span-4',
             )}
           >
             <CatalogSection

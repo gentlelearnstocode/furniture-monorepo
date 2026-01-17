@@ -1,10 +1,11 @@
 import { getPost } from '@/lib/actions/blog';
 import { notFound } from 'next/navigation';
-import { BlogForm } from '../components/blog-form';
 import { MoveLeft } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@repo/ui/ui/button';
 import { PageProps } from '@/types';
+
+import { BlogForm } from '../components/blog-form';
 
 export const dynamic = 'force-dynamic';
 

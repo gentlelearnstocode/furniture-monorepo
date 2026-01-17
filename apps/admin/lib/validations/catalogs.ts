@@ -10,8 +10,6 @@ export const createCatalogSchema = z.object({
   parentId: z.string().uuid().optional().nullable(),
   level: z.number().int().min(1).max(2).optional(),
   imageId: z.string().uuid().optional().nullable(),
-  showOnHome: z.boolean().optional(),
-  displayOrder: z.number().int().optional(),
 });
 
 export type CreateCatalogInput = z.infer<typeof createCatalogSchema>;

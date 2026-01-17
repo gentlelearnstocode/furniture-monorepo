@@ -21,9 +21,6 @@ export function ContactButton({
   const zaloContact = contacts.find((c) => c.type === 'zalo');
   const phoneContact = contacts.find((c) => c.type === 'phone');
 
-  const contactValue = zaloContact?.value || phoneContact?.value;
-  const cleanValue = contactValue?.replace(/\s/g, '');
-
   const handleContact = () => {
     if (zaloContact) {
       const cleanValue = zaloContact.value.replace(/\s/g, '');
@@ -41,7 +38,7 @@ export function ContactButton({
       onClick={handleContact}
       className={cn(
         'group flex items-center justify-center gap-3 bg-[#7B0C0C] hover:bg-[#5a0909] text-white py-4 px-8 rounded-sm transition-all duration-300 shadow-lg hover:shadow-xl',
-        className
+        className,
       )}
     >
       <MessageCircle size={20} className='group-hover:scale-110 transition-transform' />

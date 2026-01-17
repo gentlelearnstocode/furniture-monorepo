@@ -16,7 +16,7 @@ export async function createCatalog(data: CreateCatalogInput) {
     return { error: 'Invalid fields' };
   }
 
-  const { name, slug, description, parentId, imageId, showOnHome, displayOrder } = validated.data;
+  const { name, slug, description, parentId, imageId } = validated.data;
 
   try {
     // Check for existing slug
@@ -38,7 +38,7 @@ export async function createCatalog(data: CreateCatalogInput) {
       parentId: parentId || null,
       level,
       imageId: imageId || null,
-      displayOrder: displayOrder ?? 0,
+
       createdById: session?.user?.id || null,
     });
 
@@ -65,7 +65,7 @@ export async function updateCatalog(id: string, data: CreateCatalogInput) {
     return { error: 'Invalid fields' };
   }
 
-  const { name, slug, description, parentId, imageId, showOnHome, displayOrder } = validated.data;
+  const { name, slug, description, parentId, imageId } = validated.data;
 
   try {
     // Check for existing slug on other catalogs
@@ -89,8 +89,7 @@ export async function updateCatalog(id: string, data: CreateCatalogInput) {
         parentId: parentId || null,
         level,
         imageId: imageId || null,
-        showOnHome: showOnHome ?? false,
-        displayOrder: displayOrder ?? 0,
+
         updatedAt: new Date(),
       })
       .where(eq(catalogs.id, id));
