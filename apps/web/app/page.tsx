@@ -4,6 +4,7 @@ import { IntroSection } from './components/intro-section';
 // import { ServicesSection } from './components/services-section';
 import { SaleSection } from './components/sale-section';
 import { ProjectsSection } from './components/projects-section';
+import { RunningBanner } from './components/running-banner';
 import { BlogsSection } from './components/blogs-section';
 import { getHeroData, getHomepageSaleProducts, getSaleSettings } from '@/lib/queries';
 
@@ -44,6 +45,7 @@ export default async function Home() {
       <SaleSection products={saleProducts} settings={saleSettings} />
       {/* <ServicesSection /> */}
       <FeaturedCatalogs />
+      <RunningBanner />
       <ProjectsSection />
       <BlogsSection />
     </div>

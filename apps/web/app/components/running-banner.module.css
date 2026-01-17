@@ -1,0 +1,22 @@
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.scroller {
+  mask: linear-gradient(90deg, transparent, white 5%, white 95%, transparent);
+}
+
+.scrollerInner {
+  width: max-content;
+  flex-wrap: nowrap;
+  animation: scroll 40s linear infinite;
+}
+
+.scrollerInner:hover {
+  animation-play-state: paused;
+}
