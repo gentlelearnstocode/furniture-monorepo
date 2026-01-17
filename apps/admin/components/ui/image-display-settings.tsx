@@ -112,7 +112,7 @@ export function ImageDisplaySettingsDialog({
         <DialogHeader>
           <DialogTitle className='flex items-center gap-2'>
             <Settings2 className='h-4 w-4' />
-            Image Display Settings
+            Image Display Optimizer
           </DialogTitle>
           <DialogDescription>
             Customize how this image appears on the storefront. Click on the image to set the focus
@@ -120,7 +120,7 @@ export function ImageDisplaySettingsDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className='grid gap-6 py-4'>
+        <div className='grid gap-6 py-4 overflow-y-auto px-2' style={{ maxHeight: '60vh' }}>
           {/* Focus Point Picker */}
           <div className='space-y-3'>
             <Label className='flex items-center gap-2'>
