@@ -175,22 +175,16 @@ export function ProductListing({ products }: ProductListingProps) {
               }
             : undefined;
 
-          // Calculate aspect ratio for the container
-          const ratioMap: Record<string, string> = {
-            '1:1': '1 / 1',
-            '3:4': '3 / 4',
-            '4:3': '4 / 3',
-            '16:9': '16 / 9',
-          };
-          const ratio =
-            displaySettings?.aspectRatio && displaySettings.aspectRatio !== 'original'
-              ? (ratioMap[displaySettings.aspectRatio] ?? '3 / 4')
-              : '3 / 4';
+          // Enforce 3:4 Standard Ratio
+          const ratio = '3 / 4';
 
-          // Override aspectRatio for StyledImage to prevent double wrapping
+          // Override settings for StyledImage:
+          // 1. aspectRation: 'original' to prevent StyledImage from creating its own wrapper
+          // 2. objectFit: 'cover' to ensure it fills the 3:4 box
+          // 3. focusPoint: kept from original settings to ensure correct cropping
           const imageDisplaySettings = displaySettings
-            ? { ...displaySettings, aspectRatio: 'original' as const }
-            : undefined;
+            ? { ...displaySettings, aspectRatio: 'original' as const, objectFit: 'cover' as const }
+            : { aspectRatio: 'original' as const, objectFit: 'cover' as const };
 
           return (
             <Link
