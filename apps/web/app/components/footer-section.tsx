@@ -122,7 +122,19 @@ export const Footer = async () => {
   };
 
   return (
-    <footer className='bg-[#f5f1eb] border-t border-gray-200'>
+    <footer className='relative border-t border-gray-200 overflow-hidden'>
+      {/* Background with nav-bg pattern */}
+      <div
+        className='absolute inset-0 -z-10'
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url(/nav-bg.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundColor: 'white',
+        }}
+      />
       {/* Main Footer Content */}
       <div className='container mx-auto px-4 py-16'>
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-12'>

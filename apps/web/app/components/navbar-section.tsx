@@ -93,7 +93,7 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
             )}
             style={{
               backgroundImage:
-                'linear-gradient(rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.92)), url(/nav-bg.png)',
+                'linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url(/nav-bg.png)',
               backgroundSize: 'cover',
               backgroundPosition: 'top',
               backgroundRepeat: 'no-repeat',
@@ -224,7 +224,7 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
                       className='min-w-[200px] py-4 px-6 shadow-lg border border-black/5'
                       style={{
                         backgroundImage:
-                          'linear-gradient(rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.96)), url(/nav-bg.png)',
+                          'linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url(/nav-bg.png)',
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                         backgroundColor: 'white',
@@ -268,7 +268,7 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
             className='absolute inset-0 -z-10'
             style={{
               backgroundImage:
-                'linear-gradient(rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.94)), url(/nav-bg.png)',
+                'linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url(/nav-bg.png)',
               backgroundSize: 'cover',
               backgroundPosition: 'bottom',
               backgroundRepeat: 'no-repeat',
