@@ -24,16 +24,19 @@ export const SubCatalogGrid = ({ subCatalogs, parentSlug }: SubCatalogGridProps)
   return (
     <div className='bg-gradient-to-b from-white to-[#FDFCFB] py-12'>
       <div className='container mx-auto px-4 pb-12'>
+        {/* Shadow line border between sections */}
+        <div className='w-full h-px shadow-[0_2px_4px_rgba(34,34,34,0.12),0_6px_6px_rgba(34,34,34,0.10),0_14px_9px_rgba(34,34,34,0.06),0_26px_10px_rgba(34,34,34,0.02)] border-b border-black/[0.03] mb-16' />
+
         {/* Decorative section header */}
         <div className='relative mb-10'>
           <div className='flex items-center justify-center gap-6 mb-3'>
             <div className='h-px w-12 bg-gradient-to-r from-transparent to-black/20' />
-            <h2 className='text-4xl md:text-5xl font-serif italic text-center text-black/85 tracking-wide'>
+            <h2 className='text-2xl md:text-[24px] font-serif text-center text-black/85 tracking-wide'>
               What are you looking for?
             </h2>
             <div className='h-px w-12 bg-gradient-to-l from-transparent to-black/20' />
           </div>
-          <p className='text-center text-xs font-serif italic text-gray-400 tracking-widest uppercase'>
+          <p className='text-center text-xs font-serif text-gray-400 tracking-widest uppercase'>
             Explore Categories
           </p>
         </div>
@@ -61,12 +64,14 @@ export const SubCatalogGrid = ({ subCatalogs, parentSlug }: SubCatalogGridProps)
                 <div className='absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500' />
               </div>
 
-              <span className='text-[15px] font-serif text-center text-black/80 group-hover:text-black transition-colors duration-300 tracking-wide'>
+              <span className='text-[15px] font-serif font-bold text-left text-black/80 group-hover:text-black transition-colors duration-300 tracking-wide'>
                 {sub.name}
               </span>
             </Link>
           ))}
         </div>
+        {/* Red separator with UI/05 color */}
+        <div className='mt-12 h-0.5 w-full bg-[#B80022]' />
       </div>
     </div>
   );

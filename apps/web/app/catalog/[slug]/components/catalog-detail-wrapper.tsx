@@ -48,15 +48,13 @@ export const CatalogDetailWrapper = ({ collections }: CatalogDetailWrapperProps)
     setCurrentIndex((prev) => (prev - 1 + collections.length) % collections.length);
   };
 
-  // Auto-play functionality
+  // Auto-slide disabled per user request
   React.useEffect(() => {
-    if (collections.length <= 1 || isHovered) return;
-
-    const interval = setInterval(() => {
-      nextSlide();
-    }, 5000);
-
-    return () => clearInterval(interval);
+    // If collections.length <= 1 || isHovered) return;
+    // const interval = setInterval(() => {
+    //   nextSlide();
+    // }, 5000);
+    // return () => clearInterval(interval);
   }, [currentIndex, isHovered, collections.length, nextSlide]);
 
   if (collections.length === 0) return null;
@@ -142,12 +140,12 @@ export const CatalogDetailWrapper = ({ collections }: CatalogDetailWrapperProps)
           <div className='relative mb-12'>
             <div className='flex items-center justify-center gap-6 mb-3'>
               <div className='h-px w-16 bg-gradient-to-r from-transparent to-black/20' />
-              <h2 className='text-5xl md:text-6xl font-serif italic text-center text-black/85 tracking-wide'>
+              <h2 className='text-5xl md:text-6xl font-serif text-center text-black/85 tracking-wide'>
                 Shop the look
               </h2>
               <div className='h-px w-16 bg-gradient-to-l from-transparent to-black/20' />
             </div>
-            <p className='text-center text-sm font-serif italic text-gray-400 tracking-widest uppercase'>
+            <p className='text-center text-sm font-serif text-gray-400 tracking-widest uppercase'>
               {currentCollection.name}
             </p>
           </div>
