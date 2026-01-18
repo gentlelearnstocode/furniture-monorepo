@@ -19,7 +19,7 @@ export const ProjectsSection = async () => {
         },
       }),
     ['projects-section-home'],
-    { revalidate: 3600, tags: ['projects'] }
+    { revalidate: 3600, tags: ['projects'] },
   );
 
   const allProjects = await getProjects();
@@ -31,7 +31,7 @@ export const ProjectsSection = async () => {
       className='py-24 overflow-hidden relative'
       style={{
         backgroundImage:
-          'linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url(/nav-bg.png)',
+          'linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url(/nav-bg.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',

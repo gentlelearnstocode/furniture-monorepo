@@ -32,7 +32,7 @@ const getProjects = createCachedQuery(
     });
   },
   ['projects-list'],
-  { revalidate: 3600, tags: ['projects'] }
+  { revalidate: 3600, tags: ['projects'] },
 );
 
 export default async function ProjectsListingPage() {
@@ -40,9 +40,13 @@ export default async function ProjectsListingPage() {
 
   return (
     <div className='min-h-screen bg-gradient-to-b from-[#FDFCFB] via-white to-[#FDFCFB]'>
-      <AppBreadcrumb items={[{ label: 'Home Page', href: '/' }, { label: 'Our Projects' }]} />
-
-      <div className='container mx-auto px-4 pt-12 pb-6'>
+      <AppBreadcrumb
+        items={[
+          { label: 'Trang chủ', href: '/' },
+          { label: 'Dự án', href: '/projects' },
+        ]}
+      />
+      <div className='container mx-auto px-4 pt-6 pb-12'>
         {/* Title & Description */}
         <div className='mb-8'>
           <h1 className='text-5xl md:text-6xl font-serif italic text-black/90 tracking-wide mb-4'>

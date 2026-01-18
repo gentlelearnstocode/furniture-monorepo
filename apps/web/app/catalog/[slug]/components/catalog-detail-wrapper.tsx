@@ -76,7 +76,7 @@ export const CatalogDetailWrapper = ({ collections }: CatalogDetailWrapperProps)
                 key={collection.id}
                 className={cn(
                   'absolute inset-0 transition-all duration-[1200ms] ease-out',
-                  index === currentIndex ? 'opacity-100 z-10 scale-100' : 'opacity-0 z-0 scale-105'
+                  index === currentIndex ? 'opacity-100 z-10 scale-100' : 'opacity-0 z-0 scale-105',
                 )}
               >
                 {collection.bannerUrl && (
@@ -125,7 +125,7 @@ export const CatalogDetailWrapper = ({ collections }: CatalogDetailWrapperProps)
                     'rounded-full transition-all duration-500 hover:scale-110',
                     index === currentIndex
                       ? 'bg-white w-10 h-2.5 shadow-lg shadow-white/30'
-                      : 'bg-white/50 w-2.5 h-2.5 hover:bg-white/70'
+                      : 'bg-white/50 w-2.5 h-2.5 hover:bg-white/70',
                   )}
                   aria-label={`Go to ${collection.name}`}
                 />
@@ -168,14 +168,14 @@ export const CatalogDetailWrapper = ({ collections }: CatalogDetailWrapperProps)
               return (
                 <ProductCard
                   key={product.id}
-                  id={product.id}
-                  name={product.name}
-                  slug={product.slug}
-                  imageUrl={
-                    primaryAsset?.asset?.url ||
-                    'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=800'
-                  }
-                  displaySettings={displaySettings}
+                  product={{
+                    ...product,
+                    basePrice: '0', // Fallback as it was not in the original interface but required by standard card
+                    gallery: product.gallery.map((g) => ({
+                      ...g,
+                      asset: g.asset || { url: '' },
+                    })),
+                  }}
                 />
               );
             })}

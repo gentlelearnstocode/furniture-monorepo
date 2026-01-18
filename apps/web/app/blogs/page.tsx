@@ -27,7 +27,7 @@ const getPosts = createCachedQuery(
     });
   },
   ['posts-list'],
-  { revalidate: 1800, tags: ['posts'] }
+  { revalidate: 1800, tags: ['posts'] },
 );
 
 export default async function BlogListingPage() {
@@ -35,9 +35,13 @@ export default async function BlogListingPage() {
 
   return (
     <div className='min-h-screen bg-gradient-to-b from-[#FDFCFB] via-white to-[#FDFCFB]'>
-      <AppBreadcrumb items={[{ label: 'Home Page', href: '/' }, { label: 'Our Blog' }]} />
-
-      <div className='container mx-auto px-4 pt-12 pb-6'>
+      <AppBreadcrumb
+        items={[
+          { label: 'Trang chủ', href: '/' },
+          { label: 'Bài viết', href: '/blogs' },
+        ]}
+      />
+      <div className='container mx-auto px-4 pt-6 pb-12'>
         {/* Title & Description */}
         <div className='mb-8'>
           <h1 className='text-5xl md:text-6xl font-serif italic text-black/90 tracking-wide mb-4'>

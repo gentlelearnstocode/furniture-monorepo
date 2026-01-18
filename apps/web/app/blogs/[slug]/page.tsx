@@ -1,4 +1,5 @@
 import React from 'react';
+import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
 import Image from 'next/image';
 import Link from 'next/link';
 import { db } from '@repo/database';
@@ -80,7 +81,14 @@ export default async function BlogPostPage({ params }: Props) {
   return (
     <article className='min-h-screen bg-white pb-24'>
       {/* Back Link */}
-      <div className='container mx-auto px-4 pt-12 pb-8'>
+      <AppBreadcrumb
+        items={[
+          { label: 'Trang chủ', href: '/' },
+          { label: 'Bài viết', href: '/blogs' },
+          { label: post.title },
+        ]}
+      />
+      <div className='container mx-auto px-4 pt-6 pb-6'>
         <Link
           href='/blogs'
           className='inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors group'

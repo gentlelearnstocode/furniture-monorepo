@@ -86,7 +86,14 @@ export default async function ServiceDetailPage({ params }: Props) {
   return (
     <article className='min-h-screen bg-white pb-24'>
       {/* Back Link */}
-      <div className='container mx-auto px-4 pt-12 pb-8'>
+      <AppBreadcrumb
+        items={[
+          { label: 'Trang chủ', href: '/' },
+          { label: 'Dịch vụ', href: '/services' },
+          { label: service.title },
+        ]}
+      />
+      <div className='container mx-auto px-4 pt-6 pb-6'>
         <Link
           href='/services'
           className='inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors group'

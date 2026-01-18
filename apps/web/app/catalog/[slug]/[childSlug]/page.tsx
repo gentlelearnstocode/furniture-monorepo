@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import { db } from '@repo/database';
 import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
 import { createCachedQuery } from '@/lib/cache';
-import { ProductListing } from './components/product-listing';
+import { ProductListing } from '@/app/components/product-listing';
 
 // Revalidate every hour
 export const revalidate = 3600;
@@ -45,7 +45,7 @@ const getChildCatalog = (
   childSlug: string,
   parentId: string,
   sort?: string,
-  sale?: boolean
+  sale?: boolean,
 ) =>
   createCachedQuery(
     async () => {
@@ -66,7 +66,7 @@ const getChildCatalog = (
             where: (products, { eq, and, isNotNull }) =>
               and(
                 eq(products.isActive, true),
-                sale ? isNotNull(products.discountPrice) : undefined
+                sale ? isNotNull(products.discountPrice) : undefined,
               ),
             orderBy: (products, { asc, desc }) => {
               switch (sort) {
@@ -86,7 +86,7 @@ const getChildCatalog = (
       });
     },
     ['catalog-child', slug, childSlug, sort || 'default', sale ? 'sale' : 'no-sale'],
-    { revalidate: 3600, tags: ['catalogs', `catalog-${slug}-${childSlug}`] }
+    { revalidate: 3600, tags: ['catalogs', `catalog-${slug}-${childSlug}`] },
   );
 
 export default async function CatalogLevel2Page({ params, searchParams }: Props) {
@@ -99,6 +99,11 @@ export default async function CatalogLevel2Page({ params, searchParams }: Props)
   // Fetch the parent catalog (level 1) and child catalog (level 2) with products
   const parentCatalog = await db.query.catalogs.findFirst({
     where: (catalogs, { eq }) => eq(catalogs.slug, slug),
+    with: {
+      children: {
+        columns: { name: true, slug: true },
+      },
+    },
   });
 
   if (!parentCatalog) {
@@ -121,14 +126,16 @@ export default async function CatalogLevel2Page({ params, searchParams }: Props)
     basePrice: product.basePrice,
     discountPrice: product.discountPrice,
     showPrice: product.showPrice,
-    gallery: product.gallery.map((g) => ({
-      isPrimary: g.isPrimary,
-      asset: g.asset ? { url: g.asset.url } : null,
-      focusPoint: g.focusPoint as { x: number; y: number } | null,
-      aspectRatio: g.aspectRatio,
-      objectFit: g.objectFit,
-      position: g.position,
-    })),
+    gallery: product.gallery
+      .filter((g) => g.asset !== null)
+      .map((g) => ({
+        isPrimary: g.isPrimary,
+        asset: g.asset as { url: string },
+        focusPoint: g.focusPoint as { x: number; y: number } | null,
+        aspectRatio: g.aspectRatio,
+        objectFit: g.objectFit,
+        position: g.position,
+      })),
   }));
 
   return (
@@ -155,7 +162,14 @@ export default async function CatalogLevel2Page({ params, searchParams }: Props)
         </div>
 
         {/* Product Listing (Toolbar + Grid) */}
-        <ProductListing products={products} />
+        <ProductListing
+          products={products}
+          catalogOptions={parentCatalog.children.map((child) => ({
+            label: child.name,
+            value: `/catalog/${slug}/${child.slug}`,
+          }))}
+          currentCatalog={`/catalog/${slug}/${childSlug}`}
+        />
       </div>
     </div>
   );

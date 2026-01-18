@@ -13,7 +13,7 @@ export const getHeroData = createCachedQuery(
     });
   },
   ['hero-data'],
-  { revalidate: 1800, tags: ['hero'] }
+  { revalidate: 1800, tags: ['hero'] },
 );
 
 export const getSiteContacts = createCachedQuery(
@@ -24,7 +24,7 @@ export const getSiteContacts = createCachedQuery(
     });
   },
   ['site-contacts'],
-  { revalidate: 3600, tags: ['contacts'] }
+  { revalidate: 3600, tags: ['contacts'] },
 );
 
 export const getIntroData = createCachedQuery(
@@ -39,11 +39,11 @@ export const getIntroData = createCachedQuery(
     });
   },
   ['intro-data'],
-  { revalidate: 3600, tags: ['intro'] }
+  { revalidate: 3600, tags: ['intro'] },
 );
 
 export const getSaleProducts = createCachedQuery(
-  async (limit?: number) => {
+  async (limit?: number, sort?: string) => {
     return await db.query.products.findMany({
       where: (products, { isNotNull, eq, and }) =>
         and(isNotNull(products.discountPrice), eq(products.isActive, true)),
@@ -55,11 +55,24 @@ export const getSaleProducts = createCachedQuery(
           orderBy: (gallery, { asc }) => [asc(gallery.position)],
         },
       },
+      orderBy: (products, { asc, desc }) => {
+        switch (sort) {
+          case 'name_desc':
+            return [desc(products.name)];
+          case 'price_asc':
+            return [asc(products.basePrice)];
+          case 'price_desc':
+            return [desc(products.basePrice)];
+          case 'name_asc':
+          default:
+            return [asc(products.name)];
+        }
+      },
       limit,
     });
   },
   ['sale-products'],
-  { revalidate: 3600, tags: ['products'] }
+  { revalidate: 3600, tags: ['products'] },
 );
 
 export const getHomepageSaleProducts = createCachedQuery(
@@ -83,7 +96,7 @@ export const getHomepageSaleProducts = createCachedQuery(
     return saleItems.map((item) => item.product);
   },
   ['homepage-sale-products'],
-  { revalidate: 3600, tags: ['products'] }
+  { revalidate: 3600, tags: ['products'] },
 );
 
 export const getSaleSettings = createCachedQuery(
@@ -91,7 +104,7 @@ export const getSaleSettings = createCachedQuery(
     return await db.query.saleSectionSettings.findFirst();
   },
   ['sale-settings'],
-  { revalidate: 3600, tags: ['settings'] }
+  { revalidate: 3600, tags: ['settings'] },
 );
 
 export const getSaleProductsByCatalog = createCachedQuery(
@@ -122,7 +135,7 @@ export const getSaleProductsByCatalog = createCachedQuery(
         and(
           isNotNull(products.discountPrice),
           eq(products.isActive, true),
-          inArray(products.catalogId, targetIds)
+          inArray(products.catalogId, targetIds),
         ),
       with: {
         gallery: {
@@ -135,5 +148,5 @@ export const getSaleProductsByCatalog = createCachedQuery(
     });
   },
   ['catalog-sale-products'],
-  { revalidate: 3600, tags: ['products', 'catalogs'] }
+  { revalidate: 3600, tags: ['products', 'catalogs'] },
 );

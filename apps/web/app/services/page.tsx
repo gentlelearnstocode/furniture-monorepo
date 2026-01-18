@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { db } from '@repo/database';
+import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
 import { ArrowRight } from 'lucide-react';
 import type { Metadata } from 'next';
 import { createCachedQuery } from '@/lib/cache';
@@ -32,7 +33,7 @@ const getServices = createCachedQuery(
     });
   },
   ['services-list'],
-  { revalidate: 3600, tags: ['services'] }
+  { revalidate: 3600, tags: ['services'] },
 );
 
 export default async function ServicesListingPage() {
@@ -54,7 +55,13 @@ export default async function ServicesListingPage() {
       </div>
 
       {/* Services Grid */}
-      <div className='container mx-auto px-4 py-20'>
+      <AppBreadcrumb
+        items={[
+          { label: 'Trang chủ', href: '/' },
+          { label: 'Dịch vụ', href: '/services' },
+        ]}
+      />
+      <div className='container mx-auto px-4 pt-6 pb-12'>
         {services.length === 0 ? (
           <div className='text-center py-20'>
             <p className='text-gray-500 text-lg'>No services available. Check back soon!</p>
