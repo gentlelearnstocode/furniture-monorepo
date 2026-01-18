@@ -154,7 +154,7 @@ export const Navbar = ({ items }: NavbarProps) => {
                     width={140}
                     height={140}
                     className={cn(
-                      'h-24 w-auto transition-all duration-1000',
+                      'h-20 md:h-32 w-auto transition-all duration-1000',
                       forceShow
                         ? ''
                         : 'brightness-0 invert group-hover/nav:brightness-100 group-hover/nav:invert-0',

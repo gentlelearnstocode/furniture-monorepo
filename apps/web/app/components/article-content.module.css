@@ -2,7 +2,7 @@
 
 .articleContent {
   /* Base typography */
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: var(--font-playfair), Georgia, 'Times New Roman', serif;
   font-size: 1.125rem;
   line-height: 1.9;
   color: #374151;
@@ -18,7 +18,7 @@
   color: #7b0c0c;
   margin-right: 0.5rem;
   margin-top: 0.15rem;
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: var(--font-playfair), Georgia, 'Times New Roman', serif;
 }
 
 /* Paragraphs */
@@ -33,7 +33,7 @@
 .articleContent h2,
 .articleContent h3,
 .articleContent h4 {
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: var(--font-playfair), Georgia, 'Times New Roman', serif;
   font-weight: 700;
   color: #111827;
   margin-top: 2.5rem;
@@ -78,7 +78,7 @@
   line-height: 1;
   color: #7b0c0c;
   opacity: 0.2;
-  font-family: Georgia, serif;
+  font-family: var(--font-playfair), Georgia, serif;
 }
 
 .articleContent blockquote p {

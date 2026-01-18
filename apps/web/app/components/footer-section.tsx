@@ -14,7 +14,7 @@ export const Footer = async () => {
         orderBy: (footer, { desc }) => [desc(footer.updatedAt)],
       }),
     ['footer-settings'],
-    { revalidate: 3600, tags: ['footer'] }
+    { revalidate: 3600, tags: ['footer'] },
   );
 
   const getFooterAddresses = createCachedQuery(
@@ -23,7 +23,7 @@ export const Footer = async () => {
         orderBy: (addr, { asc }) => [asc(addr.position)],
       }),
     ['footer-addresses'],
-    { revalidate: 3600, tags: ['footer'] }
+    { revalidate: 3600, tags: ['footer'] },
   );
 
   const getFooterContacts = createCachedQuery(
@@ -32,7 +32,7 @@ export const Footer = async () => {
         orderBy: (contact, { asc }) => [asc(contact.position)],
       }),
     ['footer-contacts'],
-    { revalidate: 3600, tags: ['footer'] }
+    { revalidate: 3600, tags: ['footer'] },
   );
 
   const getFooterSocialLinks = createCachedQuery(
@@ -42,7 +42,7 @@ export const Footer = async () => {
         orderBy: (links, { asc }) => [asc(links.position)],
       }),
     ['footer-social-links'],
-    { revalidate: 3600, tags: ['footer'] }
+    { revalidate: 3600, tags: ['footer'] },
   );
 
   // Fetch footer settings using cached queries
@@ -58,7 +58,7 @@ export const Footer = async () => {
         orderBy: (catalogs, { asc }) => [asc(catalogs.name)],
       }),
     ['footer-catalogs'],
-    { revalidate: 3600, tags: ['catalogs'] }
+    { revalidate: 3600, tags: ['catalogs'] },
   );
 
   const catalogs = await getFooterCatalogs();
@@ -71,7 +71,7 @@ export const Footer = async () => {
         orderBy: (projects, { asc }) => [asc(projects.title)],
       }),
     ['footer-projects'],
-    { revalidate: 3600, tags: ['projects'] }
+    { revalidate: 3600, tags: ['projects'] },
   );
 
   const projects = await getFooterProjects();
@@ -147,7 +147,7 @@ export const Footer = async () => {
                 alt='Thien An Furniture'
                 width={120}
                 height={80}
-                className='h-20 w-auto'
+                className='h-16 md:h-28 w-auto'
               />
             </Link>
 

@@ -19,7 +19,7 @@ export const BlogsSection = async () => {
         },
       }),
     ['blogs-section-home'],
-    { revalidate: 1800, tags: ['posts'] }
+    { revalidate: 1800, tags: ['posts'] },
   );
 
   const posts = await getLatestPosts();
@@ -27,7 +27,7 @@ export const BlogsSection = async () => {
   if (posts.length === 0) return null;
 
   return (
-    <section className='py-24 bg-gray-50'>
+    <section className='py-24 bg-white'>
       <div className='container mx-auto px-4'>
         {/* Section Header */}
         <div className='flex flex-col items-center mb-12'>

@@ -34,56 +34,77 @@ const SaleProductCard = ({ product, className }: SaleProductCardProps) => {
     : { objectFit: 'contain' as const };
 
   const hasDiscount = !!product.discountPrice;
+  const showPrice = product.showPrice ?? true;
 
   // Extract color variants if available (mock for now based on design)
   const colorVariants = product.colorVariants || [
-    { color: '#8B0000' },
-    { color: '#4A0000' },
-    { color: '#2C2C2C' },
+    { color: '#B80022' },
+    { color: '#93001B' },
+    { color: '#49000D' },
   ];
 
   return (
-    <Link href={`/product/${product.slug}`} className={cn('group flex flex-col', className)}>
+    <Link href={`/product/${product.slug}`} className={cn('group flex flex-col gap-2', className)}>
       {/* Product Image Container */}
-      <div className='relative aspect-[4/5] overflow-hidden bg-white'>
+      <div className='relative aspect-[4/5] overflow-hidden bg-[#EBEBEB] group-hover:bg-[#B80022] transition-colors duration-500 rounded-[12px]'>
         <StyledImage
           src={imageUrl}
           alt={product.name}
           displaySettings={displaySettings}
-          className='p-4 transition-transform duration-500 group-hover:scale-105'
+          className='p-8 transition-transform duration-500 group-hover:scale-105'
           sizes='(max-width: 768px) 50vw, 25vw'
         />
 
         {/* Sale Badge - Top Left */}
         {hasDiscount && (
           <div className='absolute top-3 left-3 z-10'>
-            <div className='bg-[#8B0000] text-white w-8 h-8 flex items-center justify-center'>
-              <span className='text-xs font-bold'>%</span>
+            <div className='bg-[#B80022] text-white group-hover:bg-white group-hover:text-[#B80022] w-14 h-9 flex items-center justify-center rounded-[4px] transition-colors duration-500'>
+              <span className='text-lg font-bold font-serif italic'>%</span>
             </div>
           </div>
         )}
       </div>
 
       {/* Product Info */}
-      <div className='pt-4 flex flex-col gap-1'>
-        <h3 className='text-[13px] md:text-[14px] font-medium text-black tracking-wide'>
+      <div className='pt-2 flex flex-col items-start'>
+        <h3 className='text-[24px] md:text-[32px] font-serif font-medium text-black leading-tight group-hover:text-[#49000D] transition-colors'>
           {product.name || 'Product Name'}
         </h3>
 
-        <p className='text-[11px] md:text-[12px] text-gray-500 italic'>
+        <p className='text-[16px] md:text-[20px] font-serif text-[#666] leading-snug'>
           {product.shortDescription || 'Fabric - Lacquered'}
         </p>
 
         {/* Color Dots */}
-        <div className='flex items-center gap-1.5 mt-1'>
+        <div className='flex items-center gap-2 mt-2'>
           {colorVariants.slice(0, 3).map((variant: any, index: number) => (
             <div
               key={index}
-              className='w-3 h-3 rounded-full border border-gray-200'
+              className='w-5 h-5 rounded-full'
               style={{ backgroundColor: variant.color }}
             />
           ))}
         </div>
+
+        {/* Price Display */}
+        {showPrice && (
+          <div className='flex items-center gap-3 mt-2'>
+            {hasDiscount ? (
+              <>
+                <span className='text-[18px] md:text-[22px] font-serif font-bold text-[#b80022]'>
+                  ${product.discountPrice}
+                </span>
+                <span className='text-[14px] md:text-[16px] font-serif line-through text-gray-500'>
+                  ${product.basePrice}
+                </span>
+              </>
+            ) : (
+              <span className='text-[18px] md:text-[22px] font-serif text-black font-medium'>
+                ${product.basePrice}
+              </span>
+            )}
+          </div>
+        )}
       </div>
     </Link>
   );
@@ -95,7 +116,7 @@ export const SaleSection = ({ products, settings }: SaleSectionProps) => {
   }
 
   return (
-    <section className='bg-[#EBEBEB] py-16 md:py-20'>
+    <section className='bg-white py-16 md:py-20'>
       <div className='container mx-auto px-4'>
         {/* Section Header */}
         <div className='flex flex-col items-center mb-12'>

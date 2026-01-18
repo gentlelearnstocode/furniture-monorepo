@@ -21,7 +21,7 @@ const geistMono = localFont({
 });
 
 const playfair = Playfair_Display({
-  subsets: ['latin'],
+  subsets: ['latin', 'vietnamese'],
   variable: '--font-playfair',
 });
 
