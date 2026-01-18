@@ -8,6 +8,7 @@ import { ContactButton } from '@/components/ui/contact-button';
 import type { Metadata } from 'next';
 import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
 import { createCachedQuery } from '@/lib/cache';
+import styles from '@/app/components/article-content.module.css';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -45,7 +46,7 @@ const getServiceBySlug = (slug: string) =>
       });
     },
     ['service-detail', slug],
-    { revalidate: 3600, tags: ['services', `service-${slug}`] }
+    { revalidate: 3600, tags: ['services', `service-${slug}`] },
   );
 
 import { getSiteContacts } from '@/lib/queries';
@@ -133,9 +134,7 @@ export default async function ServiceDetailPage({ params }: Props) {
       <div className='container mx-auto px-4 mb-20'>
         <div className='max-w-3xl mx-auto'>
           <div
-            className='prose prose-lg prose-gray max-w-none font-light leading-relaxed
-              prose-headings:font-serif prose-headings:font-bold prose-headings:text-gray-900
-              prose-p:text-gray-700 prose-strong:text-gray-900 prose-a:text-[#7B0C0C] hover:prose-a:underline'
+            className={styles.articleContent}
             dangerouslySetInnerHTML={{ __html: service.descriptionHtml }}
           />
 

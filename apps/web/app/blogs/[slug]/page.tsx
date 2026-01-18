@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import { Calendar, User, ChevronLeft } from 'lucide-react';
 import type { Metadata } from 'next';
 import { createCachedQuery } from '@/lib/cache';
+import styles from '@/app/components/article-content.module.css';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -34,11 +35,17 @@ const getPostBySlug = (slug: string) =>
         where: (posts, { eq }) => eq(posts.slug, slug),
         with: {
           featuredImage: true,
+          gallery: {
+            with: {
+              asset: true,
+            },
+            orderBy: (gallery, { asc }) => [asc(gallery.position)],
+          },
         },
       });
     },
     ['post-detail', slug],
-    { revalidate: 1800, tags: ['posts', `post-${slug}`] }
+    { revalidate: 1800, tags: ['posts', `post-${slug}`] },
   );
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -67,6 +74,8 @@ export default async function BlogPostPage({ params }: Props) {
   if (!post || !post.isActive) {
     notFound();
   }
+
+  const galleryImages = post.gallery.map((g) => g.asset).filter(Boolean);
 
   return (
     <article className='min-h-screen bg-white pb-24'>
@@ -118,16 +127,45 @@ export default async function BlogPostPage({ params }: Props) {
       )}
 
       {/* Content */}
-      <div className='container mx-auto px-4'>
+      <div className='container mx-auto px-4 mb-20'>
         <div className='max-w-3xl mx-auto'>
           <div
-            className='prose prose-lg prose-gray max-w-none font-light leading-relaxed
-              prose-headings:font-serif prose-headings:font-bold prose-headings:text-gray-900
-              prose-p:text-gray-700 prose-strong:text-gray-900 prose-a:text-[#7B0C0C] hover:prose-a:underline'
+            className={styles.articleContent}
             dangerouslySetInnerHTML={{ __html: post.contentHtml }}
           />
         </div>
       </div>
+
+      {/* Image Gallery */}
+      {galleryImages.length > 1 && (
+        <div className='container mx-auto px-4'>
+          <div className='mb-12'>
+            <h2 className='text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4'>
+              Image Gallery
+            </h2>
+            <div className='h-px bg-gradient-to-r from-[#7B0C0C]/30 to-transparent w-32' />
+          </div>
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+            {galleryImages.map((image, index) => (
+              <div
+                key={image?.id || index}
+                className='relative aspect-[4/3] overflow-hidden rounded-sm group'
+              >
+                {image && (
+                  <Image
+                    src={image.url}
+                    alt={`${post.title} - Image ${index + 1}`}
+                    fill
+                    className='object-cover transition-transform duration-700 group-hover:scale-105'
+                    sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+                  />
+                )}
+                <div className='absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500' />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </article>
   );
 }
