@@ -9,6 +9,7 @@ import { ScrollToTop } from '@/components/ui/scroll-to-top';
 import { db } from '@repo/database';
 import { createCachedQuery } from '@/lib/cache';
 import { getSiteContacts } from '@/lib/queries';
+import { getNavMenuItems, type NavMenuItem } from '@/lib/menu';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -46,23 +47,77 @@ const getRootCatalogs = createCachedQuery(
     });
   },
   ['root-catalogs'],
-  { revalidate: 3600, tags: ['catalogs'] }
+  { revalidate: 3600, tags: ['catalogs'] },
 );
+
+// Transform menu items to navbar format
+function transformMenuItemsToNavbarFormat(menuItems: NavMenuItem[]) {
+  type NavItemResult = {
+    id: string;
+    name: string;
+    slug: string;
+    type: 'catalog' | 'subcatalog' | 'service';
+    image: { url: string } | null;
+    children: { id: string; name: string; slug: string; image: { url: string } | null }[];
+  };
+
+  const results: NavItemResult[] = [];
+
+  for (const item of menuItems) {
+    if (item.itemType === 'service' && item.service) {
+      results.push({
+        id: item.service.id,
+        name: item.service.title,
+        slug: item.service.slug,
+        type: 'service',
+        image: item.service.image,
+        children: [],
+      });
+    } else if (item.catalog) {
+      results.push({
+        id: item.catalog.id,
+        name: item.catalog.name,
+        slug: item.catalog.slug,
+        type: item.itemType as 'catalog' | 'subcatalog',
+        image: item.catalog.image,
+        children: item.catalog.children || [],
+      });
+    }
+  }
+
+  return results;
+}
 
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const rootCatalogs = await getRootCatalogs();
-  const siteContacts = await getSiteContacts();
+  const [menuItems, rootCatalogs, siteContacts] = await Promise.all([
+    getNavMenuItems(),
+    getRootCatalogs(),
+    getSiteContacts(),
+  ]);
+
+  // Use menu items if configured, otherwise fall back to root catalogs
+  const navItems =
+    menuItems.length > 0
+      ? transformMenuItemsToNavbarFormat(menuItems)
+      : rootCatalogs.map((catalog) => ({
+          id: catalog.id,
+          name: catalog.name,
+          slug: catalog.slug,
+          type: 'catalog' as const,
+          image: catalog.image,
+          children: catalog.children || [],
+        }));
 
   return (
     <html lang='en'>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} font-sans antialiased`}
       >
-        <Navbar catalogs={rootCatalogs} />
+        <Navbar items={navItems} />
         <main>{children}</main>
         <Footer />
         <div className='fixed bottom-6 right-6 z-50 flex items-end gap-4'>

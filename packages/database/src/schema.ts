@@ -109,7 +109,7 @@ export const collectionProducts = pgTable(
   },
   (t) => ({
     pk: primaryKey({ columns: [t.collectionId, t.productId] }),
-  })
+  }),
 );
 
 export const collectionProductsRelations = relations(collectionProducts, ({ one }) => ({
@@ -136,7 +136,7 @@ export const catalogCollections = pgTable(
   },
   (t) => ({
     pk: primaryKey({ columns: [t.catalogId, t.collectionId] }),
-  })
+  }),
 );
 
 export const catalogCollectionsRelations = relations(catalogCollections, ({ one }) => ({
@@ -250,7 +250,7 @@ export const variantOptionValues = pgTable(
   },
   (t) => ({
     pk: primaryKey({ columns: [t.variantId, t.optionValueId] }),
-  })
+  }),
 );
 
 export const variantOptionValuesRelations = relations(variantOptionValues, ({ one }) => ({
@@ -289,7 +289,7 @@ export const productAssets = pgTable(
   },
   (t) => ({
     pk: primaryKey({ columns: [t.productId, t.assetId] }),
-  })
+  }),
 );
 
 export const productAssetsRelations = relations(productAssets, ({ one }) => ({
@@ -316,7 +316,7 @@ export const variantAssets = pgTable(
   },
   (t) => ({
     pk: primaryKey({ columns: [t.variantId, t.assetId] }),
-  })
+  }),
 );
 
 export const variantAssetsRelations = relations(variantAssets, ({ one }) => ({
@@ -365,7 +365,7 @@ export const accounts = pgTable(
   },
   (account) => ({
     pk: primaryKey({ columns: [account.provider, account.providerAccountId] }),
-  })
+  }),
 );
 
 export const sessions = pgTable('sessions', {
@@ -385,7 +385,7 @@ export const verificationTokens = pgTable(
   },
   (vt) => ({
     pk: primaryKey({ columns: [vt.identifier, vt.token] }),
-  })
+  }),
 );
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -512,7 +512,7 @@ export const serviceAssets = pgTable(
   },
   (t) => ({
     pk: primaryKey({ columns: [t.serviceId, t.assetId] }),
-  })
+  }),
 );
 
 export const serviceAssetsRelations = relations(serviceAssets, ({ one }) => ({
@@ -571,7 +571,7 @@ export const projectAssets = pgTable(
   },
   (t) => ({
     pk: primaryKey({ columns: [t.projectId, t.assetId] }),
-  })
+  }),
 );
 
 export const projectAssetsRelations = relations(projectAssets, ({ one }) => ({
@@ -631,7 +631,7 @@ export const postAssets = pgTable(
   },
   (t) => ({
     pk: primaryKey({ columns: [t.postId, t.assetId] }),
-  })
+  }),
 );
 
 export const postAssetsRelations = relations(postAssets, ({ one }) => ({
@@ -854,3 +854,30 @@ export type SelectSaleSectionSettings = typeof saleSectionSettings.$inferSelect;
 
 export type InsertHomepageSaleProduct = typeof homepageSaleProducts.$inferInsert;
 export type SelectHomepageSaleProduct = typeof homepageSaleProducts.$inferSelect;
+
+// --- Nav Menu Items ---
+
+export const navMenuItems = pgTable('nav_menu_items', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  itemType: text('item_type').$type<'catalog' | 'subcatalog' | 'service'>().notNull(),
+  catalogId: uuid('catalog_id').references(() => catalogs.id, { onDelete: 'cascade' }),
+  serviceId: uuid('service_id').references(() => services.id, { onDelete: 'cascade' }),
+  position: integer('position').default(0).notNull(),
+  isActive: boolean('is_active').default(true).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const navMenuItemsRelations = relations(navMenuItems, ({ one }) => ({
+  catalog: one(catalogs, {
+    fields: [navMenuItems.catalogId],
+    references: [catalogs.id],
+  }),
+  service: one(services, {
+    fields: [navMenuItems.serviceId],
+    references: [services.id],
+  }),
+}));
+
+export type InsertNavMenuItem = typeof navMenuItems.$inferInsert;
+export type SelectNavMenuItem = typeof navMenuItems.$inferSelect;

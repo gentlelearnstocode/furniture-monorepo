@@ -14,21 +14,27 @@ function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-interface Catalog {
+interface NavItem {
   id: string;
   name: string;
   slug: string;
+  type: 'catalog' | 'subcatalog' | 'service';
   image?: {
     url: string;
   } | null;
-  children?: Catalog[];
+  children?: {
+    id: string;
+    name: string;
+    slug: string;
+    image?: { url: string } | null;
+  }[];
 }
 
 interface NavbarProps {
-  catalogs: Catalog[];
+  items: NavItem[];
 }
 
-export const Navbar = ({ catalogs }: NavbarProps) => {
+export const Navbar = ({ items }: NavbarProps) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
   const pathname = usePathname();
@@ -71,7 +77,7 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
       <nav
         className={cn(
           'top-0 left-0 w-full z-[100] transition-all duration-1000 ease-in-out group/nav',
-          isWhiteNavbarPath ? 'relative' : 'absolute'
+          isWhiteNavbarPath ? 'relative' : 'absolute',
         )}
       >
         {/* Top Header Layer (Tier 1 & 2) */}
@@ -82,14 +88,14 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
             // Apply shadow on menu open OR on non-homepage pages by default
             isMenuOpen || isWhiteNavbarPath
               ? 'shadow-[0_2px_4px_rgba(34,34,34,0.12),0_6px_6px_rgba(34,34,34,0.10),0_14px_9px_rgba(34,34,34,0.06),0_26px_10px_rgba(34,34,34,0.02)] border-b border-black/[0.03]'
-              : 'border-b border-transparent'
+              : 'border-b border-transparent',
           )}
         >
           {/* Background for Top Header */}
           <div
             className={cn(
               'absolute inset-0 -z-10 transition-opacity duration-1000 ease-in-out pointer-events-none',
-              forceShow ? 'opacity-100' : 'opacity-0 group-hover/nav:opacity-100'
+              forceShow ? 'opacity-100' : 'opacity-0 group-hover/nav:opacity-100',
             )}
             style={{
               backgroundImage:
@@ -117,7 +123,7 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
                     'transition-colors duration-1000',
                     forceShow
                       ? 'text-[#49000D] hover:text-[#49000D]/60'
-                      : 'text-white group-hover/nav:text-[#49000D] hover:text-[#49000D]/60'
+                      : 'text-white group-hover/nav:text-[#49000D] hover:text-[#49000D]/60',
                   )}
                 >
                   {isMenuOpen ? (
@@ -132,7 +138,7 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
                     'transition-colors duration-1000',
                     forceShow
                       ? 'text-[#49000D] hover:text-[#49000D]/60'
-                      : 'text-white group-hover/nav:text-[#49000D] hover:text-[#49000D]/60'
+                      : 'text-white group-hover/nav:text-[#49000D] hover:text-[#49000D]/60',
                   )}
                 >
                   <Search size={24} strokeWidth={1} />
@@ -151,7 +157,7 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
                       'h-24 w-auto transition-all duration-1000',
                       forceShow
                         ? ''
-                        : 'brightness-0 invert group-hover/nav:brightness-100 group-hover/nav:invert-0'
+                        : 'brightness-0 invert group-hover/nav:brightness-100 group-hover/nav:invert-0',
                     )}
                     priority
                   />
@@ -163,7 +169,7 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
                 <div
                   className={cn(
                     'flex items-center text-[24px] font-[444] tracking-normal leading-none gap-3 font-serif transition-colors duration-1000',
-                    forceShow ? 'text-[#49000D]' : 'text-white group-hover/nav:text-[#49000D]'
+                    forceShow ? 'text-[#49000D]' : 'text-white group-hover/nav:text-[#49000D]',
                   )}
                 >
                   <button className='font-bold'>ENG</button>
@@ -172,7 +178,7 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
                       'transition-colors duration-1000',
                       forceShow
                         ? 'text-[#49000D]/20'
-                        : 'text-white/40 group-hover/nav:text-[#49000D]/20'
+                        : 'text-white/40 group-hover/nav:text-[#49000D]/20',
                     )}
                   >
                     |
@@ -182,7 +188,7 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
                       'transition-colors uppercase',
                       forceShow
                         ? 'text-[#49000D]/40 hover:text-[#49000D]'
-                        : 'text-white/60 group-hover/nav:text-[#49000D]/40 hover:text-[#49000D]'
+                        : 'text-white/60 group-hover/nav:text-[#49000D]/40 hover:text-[#49000D]',
                     )}
                   >
                     Vie
@@ -195,63 +201,72 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
             <div
               className={cn(
                 'hidden lg:flex items-center justify-between w-full pb-6 pt-0 transition-colors duration-1000',
-                forceShow ? '' : 'group-hover/nav:border-[#49000D]/10'
+                forceShow ? '' : 'group-hover/nav:border-[#49000D]/10',
               )}
             >
-              {catalogs.map((catalog) => (
-                <div key={catalog.id} className='relative group/dropdown'>
-                  <Link
-                    href={`/catalog/${catalog.slug}`}
-                    className={cn(
-                      'text-[24px] font-serif font-[444] tracking-normal leading-none transition-colors duration-1000 whitespace-nowrap block uppercase relative group/link pb-1',
-                      forceShow
-                        ? 'text-[#49000D] hover:text-[#49000D]/60'
-                        : 'text-white group-hover/nav:text-[#49000D] hover:text-[#49000D]/60'
-                    )}
-                  >
-                    {catalog.name}
-                    <span
-                      className={cn(
-                        'absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] transition-all duration-300 group-hover/link:w-full',
-                        forceShow ? 'bg-[#49000D]' : 'bg-white group-hover/nav:bg-[#49000D]'
-                      )}
-                    />
-                  </Link>
+              {items.map((item) => {
+                const href =
+                  item.type === 'service' ? `/services/${item.slug}` : `/catalog/${item.slug}`;
+                const hasChildren =
+                  item.type === 'catalog' && item.children && item.children.length > 0;
 
-                  {/* Hover Dropdown Menu */}
-                  <div className='absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 invisible group-hover/dropdown:opacity-100 group-hover/dropdown:visible transition-all duration-300 z-50'>
-                    <div
-                      className='min-w-[200px] py-4 px-6 shadow-lg border border-black/5'
-                      style={{
-                        backgroundImage:
-                          'linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url(/nav-bg.png)',
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                        backgroundColor: 'white',
-                      }}
+                return (
+                  <div key={item.id} className='relative group/dropdown'>
+                    <Link
+                      href={href}
+                      className={cn(
+                        'text-[24px] font-serif font-[444] tracking-normal leading-none transition-colors duration-1000 whitespace-nowrap block uppercase relative group/link pb-1',
+                        forceShow
+                          ? 'text-[#49000D] hover:text-[#49000D]/60'
+                          : 'text-white group-hover/nav:text-[#49000D] hover:text-[#49000D]/60',
+                      )}
                     >
-                      <div className='flex flex-col gap-3'>
-                        {catalog.children?.map((child) => (
-                          <Link
-                            key={child.id}
-                            href={`/catalog/${catalog.slug}/${child.slug}`}
-                            className='text-[16px] text-[#49000D]/70 hover:text-[#49000D] transition-colors uppercase font-serif tracking-[0.05em] whitespace-nowrap'
-                          >
-                            {child.name}
-                          </Link>
-                        ))}
-                        <div className='border-t border-[#49000D]/10 my-1' />
-                        <Link
-                          href={`/catalog/${catalog.slug}/sale`}
-                          className='text-[16px] text-red-600/80 hover:text-red-600 transition-colors uppercase font-serif tracking-[0.05em] font-medium'
+                      {item.name}
+                      <span
+                        className={cn(
+                          'absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] transition-all duration-300 group-hover/link:w-full',
+                          forceShow ? 'bg-[#49000D]' : 'bg-white group-hover/nav:bg-[#49000D]',
+                        )}
+                      />
+                    </Link>
+
+                    {/* Hover Dropdown Menu - only for catalogs with children */}
+                    {hasChildren && (
+                      <div className='absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 invisible group-hover/dropdown:opacity-100 group-hover/dropdown:visible transition-all duration-300 z-50'>
+                        <div
+                          className='min-w-[200px] py-4 px-6 shadow-lg border border-black/5'
+                          style={{
+                            backgroundImage:
+                              'linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url(/nav-bg.png)',
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            backgroundColor: 'white',
+                          }}
                         >
-                          SALE
-                        </Link>
+                          <div className='flex flex-col gap-3'>
+                            {item.children?.map((child) => (
+                              <Link
+                                key={child.id}
+                                href={`/catalog/${item.slug}/${child.slug}`}
+                                className='text-[16px] text-[#49000D]/70 hover:text-[#49000D] transition-colors uppercase font-serif tracking-[0.05em] whitespace-nowrap'
+                              >
+                                {child.name}
+                              </Link>
+                            ))}
+                            <div className='border-t border-[#49000D]/10 my-1' />
+                            <Link
+                              href={`/catalog/${item.slug}/sale`}
+                              className='text-[16px] text-red-600/80 hover:text-red-600 transition-colors uppercase font-serif tracking-[0.05em] font-medium'
+                            >
+                              SALE
+                            </Link>
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
@@ -260,7 +275,7 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
         <div
           className={cn(
             'overflow-hidden relative z-20 transition-all duration-1000 ease-out',
-            isMenuOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
+            isMenuOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0',
           )}
         >
           {/* Background for Sliding Menu - slightly more muted to look "behind" */}
@@ -278,59 +293,62 @@ export const Navbar = ({ catalogs }: NavbarProps) => {
 
           <div className='container mx-auto px-4 py-12'>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12'>
-              {catalogs.map((catalog) => (
-                <div
-                  key={catalog.id}
-                  className='flex flex-col gap-6 animate-in fade-in slide-in-from-top-4 duration-1000'
-                >
-                  {/* Catalog Level 1 Banner */}
-                  <Link
-                    href={`/catalog/${catalog.slug}`}
-                    className='group overflow-hidden relative aspect-[4/3]'
-                  >
-                    {catalog.image ? (
-                      <Image
-                        src={catalog.image.url}
-                        alt={catalog.name}
-                        fill
-                        className='object-cover transition-transform duration-700 group-hover:scale-105'
-                      />
-                    ) : (
-                      <div className='w-full h-full bg-gray-100 flex items-center justify-center'>
-                        <span className='text-gray-400 font-serif uppercase tracking-widest'>
-                          {catalog.name}
-                        </span>
-                      </div>
-                    )}
-                  </Link>
+              {items
+                .filter((item) => item.type === 'catalog')
+                .map((item) => {
+                  const href = `/catalog/${item.slug}`;
 
-                  {/* Catalog Level 1 Title */}
-                  <Link href={`/catalog/${catalog.slug}`} className='group'>
-                    <h3 className='text-[24px] font-serif font-[444] tracking-normal leading-none uppercase text-[#49000D] group-hover:text-[#49000D]/60 transition-colors'>
-                      {catalog.name}
-                    </h3>
-                  </Link>
-
-                  {/* Catalog Level 2 List */}
-                  <div className='flex flex-col gap-3'>
-                    {catalog.children?.map((child) => (
-                      <Link
-                        key={child.id}
-                        href={`/catalog/${catalog.slug}/${child.slug}`}
-                        className='text-[18px] text-[#49000D]/60 hover:text-[#49000D] transition-colors uppercase font-serif tracking-[0.1em]'
-                      >
-                        {child.name}
-                      </Link>
-                    ))}
-                    <Link
-                      href={`/catalog/${catalog.slug}/sale`}
-                      className='text-[18px] text-red-600/60 hover:text-red-600 transition-colors uppercase font-serif tracking-[0.1em]'
+                  return (
+                    <div
+                      key={item.id}
+                      className='flex flex-col gap-6 animate-in fade-in slide-in-from-top-4 duration-1000'
                     >
-                      SALE
-                    </Link>
-                  </div>
-                </div>
-              ))}
+                      {/* Catalog Level 1 Banner */}
+                      <Link href={href} className='group overflow-hidden relative aspect-[4/3]'>
+                        {item.image ? (
+                          <Image
+                            src={item.image.url}
+                            alt={item.name}
+                            fill
+                            className='object-cover transition-transform duration-700 group-hover:scale-105'
+                          />
+                        ) : (
+                          <div className='w-full h-full bg-gray-100 flex items-center justify-center'>
+                            <span className='text-gray-400 font-serif uppercase tracking-widest'>
+                              {item.name}
+                            </span>
+                          </div>
+                        )}
+                      </Link>
+
+                      {/* Catalog Level 1 Title */}
+                      <Link href={href} className='group'>
+                        <h3 className='text-[24px] font-serif font-[444] tracking-normal leading-none uppercase text-[#49000D] group-hover:text-[#49000D]/60 transition-colors'>
+                          {item.name}
+                        </h3>
+                      </Link>
+
+                      {/* Catalog Level 2 List */}
+                      <div className='flex flex-col gap-3'>
+                        {item.children?.map((child) => (
+                          <Link
+                            key={child.id}
+                            href={`/catalog/${item.slug}/${child.slug}`}
+                            className='text-[18px] text-[#49000D]/60 hover:text-[#49000D] transition-colors uppercase font-serif tracking-[0.1em]'
+                          >
+                            {child.name}
+                          </Link>
+                        ))}
+                        <Link
+                          href={`/catalog/${item.slug}/sale`}
+                          className='text-[18px] text-red-600/60 hover:text-red-600 transition-colors uppercase font-serif tracking-[0.1em]'
+                        >
+                          SALE
+                        </Link>
+                      </div>
+                    </div>
+                  );
+                })}
               <div className='flex flex-col gap-6 animate-in fade-in slide-in-from-top-4 duration-1000'>
                 <div className='h-[24px] invisible md:block' />{' '}
                 {/* Spacer to align with titles on desktop grid */}
