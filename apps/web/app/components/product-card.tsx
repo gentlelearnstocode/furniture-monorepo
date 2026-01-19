@@ -64,7 +64,7 @@ export const ProductCard = ({ product, className, imageRatio }: ProductCardProps
       {/* Product Image Container */}
       <div
         className={cn(
-          'relative overflow-hidden bg-[#F2F2F2] group-hover:bg-[#B80022] transition-colors duration-500 rounded-[12px]',
+          'relative overflow-hidden bg-[#F2F2F2] transition-colors duration-500 rounded-[12px]',
           {
             'aspect-auto': imageRatio === 'original',
             'aspect-square': imageRatio === '1:1',
