@@ -32,13 +32,13 @@ export function BulkActions({ selectedIds, onClear, onDelete, resourceName }: Bu
         const result = await onDelete(selectedIds);
         if (result.success) {
           toast.success(
-            `Successfully deleted ${selectedIds.length} ${resourceName.toLowerCase()}(s)`
+            `Successfully deleted ${selectedIds.length} ${resourceName.toLowerCase()}(s)`,
           );
           onClear();
         } else {
           toast.error(result.error || `Failed to delete ${resourceName.toLowerCase()}(s)`);
         }
-      } catch (error) {
+      } catch {
         toast.error('An unexpected error occurred');
       } finally {
         setShowConfirm(false);
@@ -50,35 +50,38 @@ export function BulkActions({ selectedIds, onClear, onDelete, resourceName }: Bu
 
   return (
     <>
-      <div className='fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-4 bg-white border border-gray-200 shadow-xl px-6 py-3 rounded-full animate-in fade-in slide-in-from-bottom-4 duration-300'>
-        <div className='flex items-center gap-2 border-r border-gray-100 pr-4 mr-2'>
-          <span className='flex h-6 w-6 items-center justify-center rounded-full bg-brand-primary-100 text-[12px] font-bold text-brand-primary-700'>
-            {selectedIds.length}
-          </span>
-          <span className='text-sm font-medium text-gray-600'>Selected</span>
+      <div className='sticky top-0 z-10 bg-white border-b border-gray-200 shadow-sm animate-in slide-in-from-top-2 duration-200'>
+        <div className='flex items-center justify-between px-4 py-3'>
+          <div className='flex items-center gap-3'>
+            <div className='flex items-center gap-2'>
+              <div className='flex h-6 w-6 items-center justify-center rounded-full bg-brand-primary-100 text-xs font-bold text-brand-primary-700'>
+                {selectedIds.length}
+              </div>
+              <span className='text-sm font-medium text-gray-700'>
+                {selectedIds.length} {resourceName.toLowerCase()}
+                {selectedIds.length !== 1 ? 's' : ''} selected
+              </span>
+            </div>
+          </div>
+
+          <div className='flex items-center gap-2'>
+            <Button
+              variant='outline'
+              size='sm'
+              className='text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200'
+              onClick={() => setShowConfirm(true)}
+              disabled={isPending}
+            >
+              <Trash2 className='mr-2 h-4 w-4' />
+              Delete
+            </Button>
+
+            <Button variant='ghost' size='sm' onClick={onClear} disabled={isPending}>
+              <X className='mr-2 h-4 w-4' />
+              Cancel
+            </Button>
+          </div>
         </div>
-
-        <Button
-          variant='ghost'
-          size='sm'
-          className='text-red-600 hover:text-red-700 hover:bg-red-50'
-          onClick={() => setShowConfirm(true)}
-          disabled={isPending}
-        >
-          <Trash2 className='mr-2 h-4 w-4' />
-          Delete
-        </Button>
-
-        <Button
-          variant='ghost'
-          size='sm'
-          className='text-gray-500 hover:text-gray-700'
-          onClick={onClear}
-          disabled={isPending}
-        >
-          <X className='mr-2 h-4 w-4' />
-          Cancel
-        </Button>
       </div>
 
       <AlertDialog open={showConfirm} onOpenChange={setShowConfirm}>
@@ -87,7 +90,8 @@ export function BulkActions({ selectedIds, onClear, onDelete, resourceName }: Bu
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. This will permanently delete {selectedIds.length}{' '}
-              {resourceName.toLowerCase()}(s) and remove the data from our servers.
+              {resourceName.toLowerCase()}
+              {selectedIds.length !== 1 ? 's' : ''} and remove the data from our servers.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
