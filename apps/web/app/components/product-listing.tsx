@@ -32,6 +32,7 @@ interface ProductListingProps {
   currentCatalog?: string;
   showSaleToggle?: boolean;
   showCatalog?: boolean;
+  imageRatio?: string | null;
 }
 
 export function ProductListing({
@@ -40,6 +41,7 @@ export function ProductListing({
   currentCatalog,
   showSaleToggle = true,
   showCatalog = false,
+  imageRatio,
 }: ProductListingProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -100,7 +102,7 @@ export function ProductListing({
         )}
       >
         {products.map((product) => (
-          <ProductCard key={product.id} product={product as Product} />
+          <ProductCard key={product.id} product={product as Product} imageRatio={imageRatio} />
         ))}
       </div>
 

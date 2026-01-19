@@ -43,6 +43,7 @@ export const catalogs = pgTable('catalogs', {
   description: text('description'),
   showOnHome: boolean('show_on_home').default(false).notNull(),
   displayOrder: integer('display_order').default(0).notNull(),
+  productImageRatio: text('product_image_ratio').default('4:5').notNull(),
   createdById: uuid('created_by_id').references((): AnyPgColumn => users.id, {
     onDelete: 'set null',
   }),

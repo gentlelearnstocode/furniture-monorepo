@@ -37,6 +37,7 @@ interface CatalogFormProps {
     image?: {
       url: string;
     } | null;
+    productImageRatio?: string | null;
   };
   hasChildren?: boolean;
   parentCatalogs?: {
@@ -63,6 +64,7 @@ export function CatalogForm({
       parentId: initialData?.parentId || null,
       level: initialData?.parentId ? 2 : 1,
       imageId: initialData?.imageId || null,
+      productImageRatio: initialData?.productImageRatio || '4:5',
     },
   });
 
@@ -209,6 +211,39 @@ export function CatalogForm({
               </FormControl>
               <FormDescription className='text-xs'>
                 Optional description for internal reference or SEO.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name='productImageRatio'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Product Image Ratio</FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value || '4:5'}
+                value={field.value || '4:5'}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder='Select an image ratio' />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value='original'>Original</SelectItem>
+                  <SelectItem value='1:1'>1:1 (Square)</SelectItem>
+                  <SelectItem value='3:4'>3:4 (Portrait)</SelectItem>
+                  <SelectItem value='4:3'>4:3 (Landscape)</SelectItem>
+                  <SelectItem value='4:5'>4:5 (Standard)</SelectItem>
+                  <SelectItem value='16:9'>16:9 (Wide)</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormDescription className='text-xs'>
+                This ratio will be applied to product cards in the catalog product listing.
               </FormDescription>
               <FormMessage />
             </FormItem>

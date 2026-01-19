@@ -3,11 +3,14 @@
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
+export type AspectRatio = 'original' | '1:1' | '3:4' | '4:3' | '16:9' | '4:5';
+export type ObjectFit = 'cover' | 'contain';
+
 // Type definitions matching the database schema
 export interface ImageDisplaySettings {
   focusPoint?: { x: number; y: number };
-  aspectRatio?: 'original' | '1:1' | '3:4' | '4:3' | '16:9';
-  objectFit?: 'cover' | 'contain';
+  aspectRatio?: AspectRatio;
+  objectFit?: ObjectFit;
 }
 
 interface StyledImageProps {
@@ -31,6 +34,7 @@ const ASPECT_RATIO_MAP: Record<string, string> = {
   '3:4': '3 / 4',
   '4:3': '4 / 3',
   '16:9': '16 / 9',
+  '4:5': '4 / 5',
 };
 
 /**

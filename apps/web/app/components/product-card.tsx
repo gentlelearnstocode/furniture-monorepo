@@ -2,7 +2,12 @@
 
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { StyledImage, getDisplaySettings, type ImageDisplaySettings } from './styled-image';
+import {
+  StyledImage,
+  getDisplaySettings,
+  type ImageDisplaySettings,
+  type ObjectFit,
+} from './styled-image';
 
 interface ProductCardProps {
   product: {
@@ -26,9 +31,10 @@ interface ProductCardProps {
     colorVariants?: { color: string }[];
   };
   className?: string;
+  imageRatio?: string | null;
 }
 
-export const ProductCard = ({ product, className }: ProductCardProps) => {
+export const ProductCard = ({ product, className, imageRatio }: ProductCardProps) => {
   const primaryAsset = product.gallery.find((g) => g.isPrimary) || product.gallery[0];
   const imageUrl =
     primaryAsset?.asset?.url ||
@@ -38,7 +44,7 @@ export const ProductCard = ({ product, className }: ProductCardProps) => {
   const displaySettings: ImageDisplaySettings | undefined = primaryAsset
     ? {
         ...getDisplaySettings(primaryAsset),
-        objectFit: (primaryAsset.objectFit as any) || 'cover', // Default to cover to fill the frame
+        objectFit: (primaryAsset.objectFit as ObjectFit) || 'cover', // Default to cover to fill the frame
       }
     : { objectFit: 'cover' };
 
@@ -55,7 +61,21 @@ export const ProductCard = ({ product, className }: ProductCardProps) => {
   return (
     <Link href={`/product/${product.slug}`} className={cn('group flex flex-col gap-2', className)}>
       {/* Product Image Container */}
-      <div className='relative aspect-[4/5] overflow-hidden bg-[#F2F2F2] group-hover:bg-[#B80022] transition-colors duration-500 rounded-[12px]'>
+      <div
+        className={cn(
+          'relative overflow-hidden bg-[#F2F2F2] group-hover:bg-[#B80022] transition-colors duration-500 rounded-[12px]',
+          imageRatio
+            ? {
+                'aspect-auto': imageRatio === 'original',
+                'aspect-square': imageRatio === '1:1',
+                'aspect-[3/4]': imageRatio === '3:4',
+                'aspect-[4/3]': imageRatio === '4:3',
+                'aspect-video': imageRatio === '16:9',
+                'aspect-[4/5]': imageRatio === '4:5',
+              }[imageRatio] || 'aspect-[4/5]'
+            : 'aspect-[4/5]',
+        )}
+      >
         <StyledImage
           src={imageUrl}
           alt={product.name}

@@ -52,6 +52,14 @@ const getChildCatalog = (
       return await db.query.catalogs.findFirst({
         where: (catalogs, { eq, and }) =>
           and(eq(catalogs.slug, childSlug), eq(catalogs.parentId, parentId)),
+        columns: {
+          id: true,
+          name: true,
+          slug: true,
+          description: true,
+          parentId: true,
+          productImageRatio: true,
+        },
         with: {
           image: true,
           products: {
@@ -169,6 +177,7 @@ export default async function CatalogLevel2Page({ params, searchParams }: Props)
             value: `/catalog/${slug}/${child.slug}`,
           }))}
           currentCatalog={`/catalog/${slug}/${childSlug}`}
+          imageRatio={catalog.productImageRatio}
         />
       </div>
     </div>
