@@ -44,9 +44,10 @@ export const ProductCard = ({ product, className, imageRatio }: ProductCardProps
   const displaySettings: ImageDisplaySettings | undefined = primaryAsset
     ? {
         ...getDisplaySettings(primaryAsset),
+        aspectRatio: 'original', // Always use original here to let the ProductCard container handle the ratio
         objectFit: (primaryAsset.objectFit as ObjectFit) || 'cover', // Default to cover to fill the frame
       }
-    : { objectFit: 'cover' };
+    : { objectFit: 'cover', aspectRatio: 'original' };
 
   const hasDiscount = !!product.discountPrice;
   const showPrice = product.showPrice ?? true;
