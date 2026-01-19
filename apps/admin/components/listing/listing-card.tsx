@@ -1,5 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/ui/card';
-import { ListingControls } from '@/components/ui/listing-controls';
+import { SearchInput, FilterSelect } from '@/components/ui/listing-controls';
 import { ReactNode } from 'react';
 
 interface FilterConfig {
@@ -37,9 +37,9 @@ export function ListingCard({
           </div>
           {(searchPlaceholder || filters.length > 0) && (
             <div className='flex flex-col sm:flex-row gap-2'>
-              {searchPlaceholder && <ListingControls placeholder={searchPlaceholder} />}
+              {searchPlaceholder && <SearchInput placeholder={searchPlaceholder} />}
               {filters.map((filter) => (
-                <ListingControls
+                <FilterSelect
                   key={filter.key}
                   filterKey={filter.key}
                   filterOptions={filter.options}

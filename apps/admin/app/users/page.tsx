@@ -5,7 +5,7 @@ import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import { users } from '@repo/database/schema';
 import { getListingData } from '@/lib/listing-utils';
-import { ListingControls } from '@/components/ui/listing-controls';
+import { SearchInput, FilterSelect } from '@/components/ui/listing-controls';
 import { UserList } from './components/user-list';
 import { eq } from 'drizzle-orm';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/ui/card';
@@ -98,13 +98,13 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
               <CardDescription>View and manage your administrative users.</CardDescription>
             </div>
             <div className='flex flex-col sm:flex-row gap-2'>
-              <ListingControls
-                placeholder='Search users...'
+              <SearchInput placeholder='Search users...' />
+              <FilterSelect
                 filterKey='role'
                 filterOptions={roleOptions}
                 filterPlaceholder='Filter by Role'
               />
-              <ListingControls
+              <FilterSelect
                 filterKey='status'
                 filterOptions={statusOptions}
                 filterPlaceholder='Filter by Status'
