@@ -65,16 +65,14 @@ export const ProductCard = ({ product, className, imageRatio }: ProductCardProps
       <div
         className={cn(
           'relative overflow-hidden bg-[#F2F2F2] group-hover:bg-[#B80022] transition-colors duration-500 rounded-[12px]',
-          imageRatio
-            ? {
-                'aspect-auto': imageRatio === 'original',
-                'aspect-square': imageRatio === '1:1',
-                'aspect-[3/4]': imageRatio === '3:4',
-                'aspect-[4/3]': imageRatio === '4:3',
-                'aspect-video': imageRatio === '16:9',
-                'aspect-[4/5]': imageRatio === '4:5',
-              }[imageRatio] || 'aspect-[4/5]'
-            : 'aspect-[4/5]',
+          {
+            'aspect-auto': imageRatio === 'original',
+            'aspect-square': imageRatio === '1:1',
+            'aspect-[3/4]': imageRatio === '3:4',
+            'aspect-[4/3]': imageRatio === '4:3',
+            'aspect-video': imageRatio === '16:9',
+            'aspect-[4/5]': imageRatio === '4:5' || !imageRatio,
+          },
         )}
       >
         <StyledImage
