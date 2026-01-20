@@ -59,11 +59,11 @@ export const IntroSection = async () => {
           {/* Right: Content */}
           <div className='text-white max-w-xl'>
             {intro.subtitle && (
-              <span className='block text-lg md:text-xl font-serif italic mb-2 tracking-wide text-white/90'>
+              <span className='block text-base md:text-lg font-serif italic mb-2 tracking-wide text-white/90'>
                 {getLocalizedText(intro, 'subtitle', locale)}
               </span>
             )}
-            <h2 className='text-4xl md:text-5xl font-bold font-serif mb-8 leading-tight tracking-tight border-b border-white/20 pb-4'>
+            <h2 className='text-3xl md:text-4xl font-bold font-serif mb-8 leading-tight tracking-tight border-b border-white/20 pb-4'>
               {getLocalizedText(intro, 'title', locale)}
             </h2>
             {(() => {

@@ -42,7 +42,7 @@ export function ProductInfo({ product, contacts }: ProductInfoProps) {
       <div className='flex flex-col gap-8'>
         {/* Title & Short Description */}
         <div className='flex flex-col gap-4'>
-          <h1 className='text-4xl md:text-5xl font-serif text-black uppercase tracking-wider'>
+          <h1 className='text-3xl md:text-4xl font-serif text-black uppercase tracking-wider'>
             {t(product, 'name')}
           </h1>
           {(() => {
@@ -61,15 +61,15 @@ export function ProductInfo({ product, contacts }: ProductInfoProps) {
           <div className='flex items-center gap-4'>
             {hasDiscount ? (
               <>
-                <span className='text-2xl md:text-3xl font-serif font-bold text-[#49000D]'>
+                <span className='text-xl md:text-2xl font-serif font-bold text-[#49000D]'>
                   ${displayPrice}
                 </span>
-                <span className='text-lg md:text-xl font-serif line-through text-gray-400'>
+                <span className='text-base md:text-lg font-serif line-through text-gray-400'>
                   ${originalPrice}
                 </span>
               </>
             ) : (
-              <span className='text-2xl md:text-3xl font-serif text-black font-medium'>
+              <span className='text-xl md:text-2xl font-serif text-black font-medium'>
                 ${originalPrice}
               </span>
             )}

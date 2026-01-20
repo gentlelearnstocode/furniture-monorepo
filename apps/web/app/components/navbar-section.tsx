@@ -207,7 +207,7 @@ export const Navbar = ({ items }: NavbarProps) => {
                     width={140}
                     height={140}
                     className={cn(
-                      'h-20 md:h-32 w-auto transition-all duration-1000',
+                      'h-14 md:h-24 w-auto transition-all duration-1000',
                       forceShow
                         ? ''
                         : 'brightness-0 invert group-hover/nav:brightness-100 group-hover/nav:invert-0',
@@ -241,7 +241,7 @@ export const Navbar = ({ items }: NavbarProps) => {
                     <Link
                       href={href}
                       className={cn(
-                        'text-[24px] font-serif font-[444] tracking-normal leading-none transition-colors duration-1000 whitespace-nowrap block uppercase relative group/link pb-1',
+                        'text-[18px] font-serif font-[444] tracking-normal leading-none transition-colors duration-1000 whitespace-nowrap block uppercase relative group/link pb-1',
                         forceShow
                           ? 'text-[#49000D] hover:text-[#49000D]/60'
                           : 'text-white group-hover/nav:text-[#49000D] hover:text-[#49000D]/60',
@@ -352,7 +352,7 @@ export const Navbar = ({ items }: NavbarProps) => {
 
                       {/* Catalog Level 1 Title */}
                       <Link href={href} className='group'>
-                        <h3 className='text-[20px] md:text-[24px] font-serif font-[444] tracking-normal leading-none uppercase text-[#49000D] group-hover:text-[#49000D]/60 transition-colors'>
+                        <h3 className='text-[18px] md:text-[20px] font-serif font-[444] tracking-normal leading-none uppercase text-[#49000D] group-hover:text-[#49000D]/60 transition-colors'>
                           {t(item, 'name')}
                         </h3>
                       </Link>
@@ -363,14 +363,14 @@ export const Navbar = ({ items }: NavbarProps) => {
                           <Link
                             key={child.id}
                             href={`/catalog/${item.slug}/${child.slug}`}
-                            className='text-[15px] md:text-[18px] text-[#49000D]/60 hover:text-[#49000D] transition-colors uppercase font-serif tracking-[0.1em]'
+                            className='text-[14px] md:text-[16px] text-[#49000D]/60 hover:text-[#49000D] transition-colors uppercase font-serif tracking-[0.1em]'
                           >
                             {t(child, 'name')}
                           </Link>
                         ))}
                         <Link
                           href={`/catalog/${item.slug}/sale`}
-                          className='text-[15px] md:text-[18px] text-red-600/60 hover:text-red-600 transition-colors uppercase font-serif tracking-[0.1em]'
+                          className='text-[14px] md:text-[16px] text-red-600/60 hover:text-red-600 transition-colors uppercase font-serif tracking-[0.1em]'
                         >
                           SALE
                         </Link>

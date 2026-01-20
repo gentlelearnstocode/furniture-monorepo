@@ -66,7 +66,7 @@ const CatalogSection = ({
           <h3
             className={cn(
               'text-white font-serif uppercase tracking-widest mb-4 drop-shadow-xl translate-y-0 md:translate-y-4 md:group-hover:translate-y-0 transition-transform duration-500',
-              isSmall ? 'text-2xl md:text-4xl' : 'text-5xl md:text-7xl',
+              isSmall ? 'text-xl md:text-2xl' : 'text-3xl md:text-5xl',
             )}
           >
             {localizedName}

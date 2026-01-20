@@ -108,11 +108,11 @@ export const ProductCard = ({ product, className, imageRatio }: ProductCardProps
 
       {/* Product Info */}
       <div className='pt-2 flex flex-col items-start'>
-        <h3 className='text-[24px] md:text-[32px] font-serif font-medium text-black leading-tight group-hover:text-[#49000D] transition-colors'>
+        <h3 className='text-[20px] md:text-[24px] font-serif font-medium text-black leading-tight group-hover:text-[#49000D] transition-colors'>
           {productName}
         </h3>
 
-        <p className='text-[16px] md:text-[20px] font-serif text-[#666] leading-snug'>
+        <p className='text-[14px] md:text-[16px] font-serif text-[#666] leading-snug'>
           {productDesc || 'Available in multiple finishes'}
         </p>
 
@@ -132,15 +132,15 @@ export const ProductCard = ({ product, className, imageRatio }: ProductCardProps
           <div className='flex items-center gap-3 mt-2'>
             {hasDiscount ? (
               <>
-                <span className='text-[18px] md:text-[22px] font-serif font-bold text-[#b80022]'>
+                <span className='text-[16px] md:text-[18px] font-serif font-bold text-[#b80022]'>
                   ${product.discountPrice}
                 </span>
-                <span className='text-[14px] md:text-[16px] font-serif line-through text-gray-500'>
+                <span className='text-[12px] md:text-[14px] font-serif line-through text-gray-500'>
                   ${product.basePrice}
                 </span>
               </>
             ) : (
-              <span className='text-[18px] md:text-[22px] font-serif text-black font-medium'>
+              <span className='text-[16px] md:text-[18px] font-serif text-black font-medium'>
                 ${product.basePrice}
               </span>
             )}

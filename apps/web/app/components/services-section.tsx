@@ -21,7 +21,7 @@ export const ServicesSection = async () => {
     <section className='py-24 bg-gray-50'>
       <div className='container mx-auto px-4'>
         <div className='max-w-3xl mb-16'>
-          <h2 className='text-reveal text-4xl md:text-5xl font-serif font-bold mb-6 text-gray-900'>
+          <h2 className='text-reveal text-3xl md:text-4xl font-serif font-bold mb-6 text-gray-900'>
             {locale === 'vi' ? 'Dịch Vụ Nổi Bật' : 'Our Exceptional Services'}
           </h2>
           <p className='text-lg text-gray-600 font-light leading-relaxed'>
@@ -56,7 +56,7 @@ export const ServicesSection = async () => {
               </div>
 
               <div className='p-8'>
-                <h3 className='text-2xl font-serif font-bold mb-4 text-gray-900 group-hover:text-[#7B0C0C] transition-colors'>
+                <h3 className='text-xl font-serif font-bold mb-4 text-gray-900 group-hover:text-[#7B0C0C] transition-colors'>
                   {getLocalizedText(service, 'title', locale)}
                 </h3>
                 {(() => {
