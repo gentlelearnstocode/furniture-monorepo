@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { db } from '@repo/database';
 import { ArrowRight } from 'lucide-react';
+import { getLocale, getLocalizedText, getLocalizedHtml } from '@/lib/i18n';
 
 export const ServicesSection = async () => {
   const allServices = await db.query.services.findMany({
@@ -12,6 +13,7 @@ export const ServicesSection = async () => {
       image: true,
     },
   });
+  const locale = await getLocale();
 
   if (allServices.length === 0) return null;
 
@@ -54,12 +56,17 @@ export const ServicesSection = async () => {
 
               <div className='p-8'>
                 <h3 className='text-2xl font-serif font-bold mb-4 text-gray-900 group-hover:text-[#7B0C0C] transition-colors'>
-                  {service.title}
+                  {getLocalizedText(service, 'title', locale)}
                 </h3>
-                <div
-                  className='text-gray-600 line-clamp-3 mb-6 text-sm leading-relaxed font-light'
-                  dangerouslySetInnerHTML={{ __html: service.descriptionHtml }}
-                />
+                {(() => {
+                  const descHtml = getLocalizedHtml(service, 'descriptionHtml', locale);
+                  return descHtml ? (
+                    <div
+                      className='text-gray-600 line-clamp-3 mb-6 text-sm leading-relaxed font-light'
+                      dangerouslySetInnerHTML={{ __html: descHtml }}
+                    />
+                  ) : null;
+                })()}
                 <span className='flex items-center text-sm font-semibold tracking-wider uppercase text-[#7B0C0C] group/btn'>
                   Explore More
                   <ArrowRight className='ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1' />

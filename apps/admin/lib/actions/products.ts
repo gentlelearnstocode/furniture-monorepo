@@ -18,9 +18,12 @@ export async function createProduct(data: CreateProductInput) {
 
   const {
     name,
+    nameVi,
     slug,
     description,
+    descriptionVi,
     shortDescription,
+    shortDescriptionVi,
     basePrice,
     discountPrice,
     showPrice,
@@ -59,9 +62,12 @@ export async function createProduct(data: CreateProductInput) {
       .insert(products)
       .values({
         name,
+        nameVi: nameVi || null,
         slug,
         description: description || null,
+        descriptionVi: descriptionVi || null,
         shortDescription: shortDescription || null,
+        shortDescriptionVi: shortDescriptionVi || null,
         basePrice: basePrice.toString(), // Decimal types often expect strings in ORMs to preserve precision
         discountPrice: discountPrice?.toString() || null,
         showPrice,
@@ -92,7 +98,7 @@ export async function createProduct(data: CreateProductInput) {
           focusPoint: img.focusPoint || null,
           aspectRatio: img.aspectRatio || 'original',
           objectFit: img.objectFit || 'cover',
-        }))
+        })),
       );
     }
 
@@ -123,9 +129,12 @@ export async function updateProduct(id: string, data: CreateProductInput) {
 
   const {
     name,
+    nameVi,
     slug,
     description,
+    descriptionVi,
     shortDescription,
+    shortDescriptionVi,
     basePrice,
     discountPrice,
     showPrice,
@@ -164,9 +173,12 @@ export async function updateProduct(id: string, data: CreateProductInput) {
       .update(products)
       .set({
         name,
+        nameVi: nameVi || null,
         slug,
         description: description || null,
+        descriptionVi: descriptionVi || null,
         shortDescription: shortDescription || null,
+        shortDescriptionVi: shortDescriptionVi || null,
         basePrice: basePrice.toString(),
         discountPrice: discountPrice?.toString() || null,
         showPrice,
@@ -199,7 +211,7 @@ export async function updateProduct(id: string, data: CreateProductInput) {
           focusPoint: img.focusPoint || null,
           aspectRatio: img.aspectRatio || 'original',
           objectFit: img.objectFit || 'cover',
-        }))
+        })),
       );
     }
 

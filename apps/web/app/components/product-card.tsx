@@ -8,13 +8,16 @@ import {
   type ImageDisplaySettings,
   type ObjectFit,
 } from './styled-image';
+import { useLocalizedText } from '@/providers/language-provider';
 
 interface ProductCardProps {
   product: {
     id: string;
     name: string;
+    nameVi?: string | null;
     slug: string;
     shortDescription?: string | null;
+    shortDescriptionVi?: string | null;
     basePrice: string;
     discountPrice?: string | null;
     showPrice?: boolean;
@@ -35,6 +38,10 @@ interface ProductCardProps {
 }
 
 export const ProductCard = ({ product, className, imageRatio }: ProductCardProps) => {
+  const t = useLocalizedText();
+  const productName = t(product, 'name');
+  const productDesc = t(product, 'shortDescription');
+
   const primaryAsset = product.gallery.find((g) => g.isPrimary) || product.gallery[0];
   const imageUrl =
     primaryAsset?.asset?.url ||
@@ -77,7 +84,7 @@ export const ProductCard = ({ product, className, imageRatio }: ProductCardProps
       >
         <StyledImage
           src={imageUrl}
-          alt={product.name}
+          alt={productName}
           displaySettings={displaySettings}
           className='transition-transform duration-500 group-hover:scale-105'
           sizes='(max-width: 768px) 50vw, 25vw'
@@ -99,11 +106,11 @@ export const ProductCard = ({ product, className, imageRatio }: ProductCardProps
       {/* Product Info */}
       <div className='pt-2 flex flex-col items-start'>
         <h3 className='text-[24px] md:text-[32px] font-serif font-medium text-black leading-tight group-hover:text-[#49000D] transition-colors'>
-          {product.name}
+          {productName}
         </h3>
 
         <p className='text-[16px] md:text-[20px] font-serif text-[#666] leading-snug'>
-          {product.shortDescription || 'Available in multiple finishes'}
+          {productDesc || 'Available in multiple finishes'}
         </p>
 
         {/* Color Dots */}

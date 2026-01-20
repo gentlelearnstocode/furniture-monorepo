@@ -36,11 +36,13 @@ import { AnyPgColumn } from 'drizzle-orm/pg-core';
 export const catalogs = pgTable('catalogs', {
   id: uuid('id').defaultRandom().primaryKey(),
   name: text('name').notNull(),
+  nameVi: text('name_vi'),
   slug: text('slug').notNull().unique(),
   parentId: uuid('parent_id').references((): AnyPgColumn => catalogs.id, { onDelete: 'cascade' }), // Self-referencing FK
   level: integer('level').notNull().default(1), // 1 = parent catalog, 2 = subcatalog
   imageId: uuid('image_id').references(() => assets.id, { onDelete: 'set null' }),
   description: text('description'),
+  descriptionVi: text('description_vi'),
   showOnHome: boolean('show_on_home').default(false).notNull(),
   displayOrder: integer('display_order').default(0).notNull(),
   productImageRatio: text('product_image_ratio').default('4:5').notNull(),
@@ -73,8 +75,10 @@ export const catalogsRelations = relations(catalogs, ({ one, many }) => ({
 export const collections = pgTable('collections', {
   id: uuid('id').defaultRandom().primaryKey(),
   name: text('name').notNull(),
+  nameVi: text('name_vi'),
   slug: text('slug').notNull().unique(),
   description: text('description'),
+  descriptionVi: text('description_vi'),
   bannerId: uuid('banner_id').references(() => assets.id),
   isActive: boolean('is_active').default(true).notNull(),
   createdById: uuid('created_by_id').references((): AnyPgColumn => users.id, {
@@ -156,10 +160,13 @@ export const catalogCollectionsRelations = relations(catalogCollections, ({ one 
 export const products = pgTable('products', {
   id: uuid('id').defaultRandom().primaryKey(),
   name: text('name').notNull(),
+  nameVi: text('name_vi'),
   slug: text('slug').notNull().unique(),
   catalogId: uuid('catalog_id').references(() => catalogs.id, { onDelete: 'set null' }),
   description: text('description'),
+  descriptionVi: text('description_vi'),
   shortDescription: text('short_description'),
+  shortDescriptionVi: text('short_description_vi'),
   basePrice: decimal('base_price', { precision: 10, scale: 2 }).notNull(),
   discountPrice: decimal('discount_price', { precision: 10, scale: 2 }),
   showPrice: boolean('show_price').default(true).notNull(),
@@ -191,6 +198,7 @@ export const productsRelations = relations(products, ({ one, many }) => ({
 export const options = pgTable('options', {
   id: uuid('id').defaultRandom().primaryKey(),
   name: text('name').notNull(), // e.g. "Color"
+  nameVi: text('name_vi'),
   code: text('code').notNull().unique(), // e.g. "color"
 });
 
@@ -204,6 +212,7 @@ export const optionValues = pgTable('option_values', {
     .notNull()
     .references(() => options.id, { onDelete: 'cascade' }),
   label: text('label').notNull(), // e.g. "Red"
+  labelVi: text('label_vi'),
   value: text('value').notNull(), // e.g. "#FF0000" or "red"
   metadata: jsonb('metadata'), // { textureUrl: "..." }
 });
@@ -421,8 +430,11 @@ export const siteSettings = pgTable('site_settings', {
 export const siteIntros = pgTable('site_intros', {
   id: uuid('id').defaultRandom().primaryKey(),
   title: text('title').notNull(),
+  titleVi: text('title_vi'),
   subtitle: text('subtitle'),
+  subtitleVi: text('subtitle_vi'),
   contentHtml: text('content_html').notNull(),
+  contentHtmlVi: text('content_html_vi'),
   introImageId: uuid('intro_image_id').references(() => assets.id),
   backgroundImageId: uuid('background_image_id').references(() => assets.id),
   isActive: boolean('is_active').default(true).notNull(),
@@ -446,8 +458,11 @@ export const siteIntrosRelations = relations(siteIntros, ({ one }) => ({
 export const siteHeros = pgTable('site_heros', {
   id: uuid('id').defaultRandom().primaryKey(),
   title: text('title'),
+  titleVi: text('title_vi'),
   subtitle: text('subtitle'),
+  subtitleVi: text('subtitle_vi'),
   buttonText: text('button_text'),
+  buttonTextVi: text('button_text_vi'),
   buttonLink: text('button_link'),
   backgroundType: text('background_type').$type<'image' | 'video'>().default('image').notNull(),
   backgroundImageId: uuid('background_image_id').references(() => assets.id),
@@ -473,13 +488,18 @@ export const siteHerosRelations = relations(siteHeros, ({ one }) => ({
 export const services = pgTable('services', {
   id: uuid('id').defaultRandom().primaryKey(),
   title: text('title').notNull(),
+  titleVi: text('title_vi'),
   slug: text('slug').notNull().unique(),
   descriptionHtml: text('description_html').notNull(),
+  descriptionHtmlVi: text('description_html_vi'),
   imageId: uuid('image_id').references(() => assets.id),
   isActive: boolean('is_active').default(true).notNull(),
   seoTitle: text('seo_title'),
+  seoTitleVi: text('seo_title_vi'),
   seoDescription: text('seo_description'),
+  seoDescriptionVi: text('seo_description_vi'),
   seoKeywords: text('seo_keywords'),
+  seoKeywordsVi: text('seo_keywords_vi'),
   createdById: uuid('created_by_id').references((): AnyPgColumn => users.id, {
     onDelete: 'set null',
   }),
@@ -532,13 +552,18 @@ export const serviceAssetsRelations = relations(serviceAssets, ({ one }) => ({
 export const projects = pgTable('projects', {
   id: uuid('id').defaultRandom().primaryKey(),
   title: text('title').notNull(),
+  titleVi: text('title_vi'),
   slug: text('slug').notNull().unique(),
   contentHtml: text('content_html').notNull(),
+  contentHtmlVi: text('content_html_vi'),
   imageId: uuid('image_id').references(() => assets.id),
   isActive: boolean('is_active').default(true).notNull(),
   seoTitle: text('seo_title'),
+  seoTitleVi: text('seo_title_vi'),
   seoDescription: text('seo_description'),
+  seoDescriptionVi: text('seo_description_vi'),
   seoKeywords: text('seo_keywords'),
+  seoKeywordsVi: text('seo_keywords_vi'),
   createdById: uuid('created_by_id').references((): AnyPgColumn => users.id, {
     onDelete: 'set null',
   }),
@@ -591,14 +616,20 @@ export const projectAssetsRelations = relations(projectAssets, ({ one }) => ({
 export const posts = pgTable('posts', {
   id: uuid('id').defaultRandom().primaryKey(),
   title: text('title').notNull(),
+  titleVi: text('title_vi'),
   slug: text('slug').notNull().unique(),
   excerpt: text('excerpt'),
+  excerptVi: text('excerpt_vi'),
   contentHtml: text('content_html').notNull(),
+  contentHtmlVi: text('content_html_vi'),
   featuredImageId: uuid('featured_image_id').references(() => assets.id),
   isActive: boolean('is_active').default(true).notNull(),
   seoTitle: text('seo_title'),
+  seoTitleVi: text('seo_title_vi'),
   seoDescription: text('seo_description'),
+  seoDescriptionVi: text('seo_description_vi'),
   seoKeywords: text('seo_keywords'),
+  seoKeywordsVi: text('seo_keywords_vi'),
   createdById: uuid('created_by_id').references((): AnyPgColumn => users.id, {
     onDelete: 'set null',
   }),
@@ -651,7 +682,9 @@ export const postAssetsRelations = relations(postAssets, ({ one }) => ({
 export const siteFooter = pgTable('site_footer', {
   id: uuid('id').defaultRandom().primaryKey(),
   intro: text('intro').notNull(),
+  introVi: text('intro_vi'),
   description: text('description'),
+  descriptionVi: text('description_vi'),
   mapEmbedUrl: text('map_embed_url'),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -659,7 +692,9 @@ export const siteFooter = pgTable('site_footer', {
 export const footerAddresses = pgTable('footer_addresses', {
   id: uuid('id').defaultRandom().primaryKey(),
   label: text('label').notNull(),
+  labelVi: text('label_vi'),
   address: text('address').notNull(),
+  addressVi: text('address_vi'),
   position: integer('position').default(0).notNull(),
 });
 
@@ -667,6 +702,7 @@ export const footerContacts = pgTable('footer_contacts', {
   id: uuid('id').defaultRandom().primaryKey(),
   type: text('type').$type<'phone' | 'email'>().notNull(),
   label: text('label'),
+  labelVi: text('label_vi'),
   value: text('value').notNull(),
   position: integer('position').default(0).notNull(),
 });
@@ -830,6 +866,7 @@ export type SelectProductImportJob = typeof productImportJobs.$inferSelect;
 export const saleSectionSettings = pgTable('sale_section_settings', {
   id: uuid('id').defaultRandom().primaryKey(),
   title: text('title').notNull().default('SALE'),
+  titleVi: text('title_vi'),
   isActive: boolean('is_active').default(true).notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });

@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 import { ArrowRight, Calendar } from 'lucide-react';
 
 import { createCachedQuery } from '@/lib/cache';
+import { getLocale, getLocalizedText } from '@/lib/i18n';
 
 export const BlogsSection = async () => {
   const getLatestPosts = createCachedQuery(
@@ -23,6 +24,7 @@ export const BlogsSection = async () => {
   );
 
   const posts = await getLatestPosts();
+  const locale = await getLocale();
 
   if (posts.length === 0) return null;
 
@@ -59,7 +61,7 @@ export const BlogsSection = async () => {
                 {post.featuredImage ? (
                   <Image
                     src={post.featuredImage.url}
-                    alt={post.title}
+                    alt={getLocalizedText(post, 'title', locale)}
                     fill
                     className='object-cover transition-transform duration-700 group-hover:scale-105'
                     sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
@@ -79,12 +81,13 @@ export const BlogsSection = async () => {
 
               <Link href={`/blogs/${post.slug}`}>
                 <h3 className='text-2xl font-serif font-bold text-gray-900 mb-4 group-hover:text-[#7B0C0C] transition-colors line-clamp-2'>
-                  {post.title}
+                  {getLocalizedText(post, 'title', locale)}
                 </h3>
               </Link>
 
               <p className='text-gray-600 font-light text-sm leading-relaxed mb-6 line-clamp-3 flex-grow'>
-                {post.excerpt || 'Read our latest insights on furniture design and home decor.'}
+                {getLocalizedText(post, 'excerpt', locale) ||
+                  'Read our latest insights on furniture design and home decor.'}
               </p>
 
               <div className='mt-auto'>

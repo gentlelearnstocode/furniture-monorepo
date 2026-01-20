@@ -12,6 +12,7 @@ import { createCatalogSchema, type CreateCatalogInput } from '@/lib/validations/
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/ui/select';
 import { useState } from 'react';
 import { SingleImageUpload } from '../../collections/components/single-image-upload';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/ui/ui/tabs';
 
 import { Button } from '@repo/ui/ui/button';
 import {
@@ -30,8 +31,10 @@ interface CatalogFormProps {
   initialData?: {
     id: string;
     name: string;
+    nameVi?: string | null;
     slug: string;
     description: string | null;
+    descriptionVi?: string | null;
     parentId: string | null;
     imageId?: string | null;
     image?: {
@@ -59,8 +62,10 @@ export function CatalogForm({
     resolver: zodResolver(createCatalogSchema),
     defaultValues: {
       name: initialData?.name || '',
+      nameVi: initialData?.nameVi || '',
       slug: initialData?.slug || '',
       description: initialData?.description || '',
+      descriptionVi: initialData?.descriptionVi || '',
       parentId: initialData?.parentId || null,
       level: initialData?.parentId ? 2 : 1,
       imageId: initialData?.imageId || null,
@@ -107,7 +112,7 @@ export function CatalogForm({
             name='name'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Catalog Name</FormLabel>
+                <FormLabel>Catalog Name (English) *</FormLabel>
                 <FormControl>
                   <Input
                     placeholder='e.g. Living Room'
@@ -138,27 +143,43 @@ export function CatalogForm({
           />
           <FormField
             control={form.control}
-            name='slug'
+            name='nameVi'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Slug</FormLabel>
+                <FormLabel>Catalog Name (Vietnamese)</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder='e.g. living-room'
-                    {...field}
-                    className='font-mono text-sm'
-                    disabled={!!initialData} // Usually slug shouldn't change for SEO after creation
-                  />
+                  <Input placeholder='e.g. Phòng Khách' {...field} />
                 </FormControl>
                 <FormDescription className='text-xs'>
-                  URL-friendly unique identifier.{' '}
-                  {initialData && '(Slug cannot be changed after creation)'}
+                  Optional Vietnamese translation
                 </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
+        <FormField
+          control={form.control}
+          name='slug'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Slug</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder='e.g. living-room'
+                  {...field}
+                  className='font-mono text-sm'
+                  disabled={!!initialData} // Usually slug shouldn't change for SEO after creation
+                />
+              </FormControl>
+              <FormDescription className='text-xs'>
+                URL-friendly unique identifier.{' '}
+                {initialData && '(Slug cannot be changed after creation)'}
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}
@@ -196,26 +217,57 @@ export function CatalogForm({
           )}
         />
 
-        <FormField
-          control={form.control}
-          name='description'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Description</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder='Describe this catalog category...'
-                  className='min-h-[120px] resize-none'
-                  {...field}
-                />
-              </FormControl>
-              <FormDescription className='text-xs'>
-                Optional description for internal reference or SEO.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className='space-y-4 rounded-lg border p-4'>
+          <h3 className='text-sm font-medium'>Description</h3>
+          <Tabs defaultValue='en' className='w-full'>
+            <TabsList className='grid w-full max-w-[200px] grid-cols-2'>
+              <TabsTrigger value='en'>English</TabsTrigger>
+              <TabsTrigger value='vi'>Tiếng Việt</TabsTrigger>
+            </TabsList>
+            <TabsContent value='en'>
+              <FormField
+                control={form.control}
+                name='description'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Textarea
+                        placeholder='Describe this catalog category...'
+                        className='min-h-[120px] resize-none'
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription className='text-xs'>
+                      Optional description for internal reference or SEO.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </TabsContent>
+            <TabsContent value='vi'>
+              <FormField
+                control={form.control}
+                name='descriptionVi'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Textarea
+                        placeholder='Mô tả danh mục...'
+                        className='min-h-[120px] resize-none'
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription className='text-xs'>
+                      Vietnamese translation (optional).
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </TabsContent>
+          </Tabs>
+        </div>
 
         <FormField
           control={form.control}

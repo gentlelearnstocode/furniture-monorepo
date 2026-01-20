@@ -93,43 +93,76 @@ export function FooterForm({ initialData }: FooterFormProps) {
                 <CardDescription>Main text displayed in the footer section.</CardDescription>
               </CardHeader>
               <CardContent className='space-y-4'>
-                <FormField
-                  control={form.control}
-                  name='intro'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Intro Title</FormLabel>
-                      <FormControl>
-                        <Input placeholder='e.g. THIÊN ẤN FURNITURE' {...field} />
-                      </FormControl>
-                      <FormDescription className='text-xs'>
-                        The company name or title displayed prominently in the footer.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name='description'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Description</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder='Enter company description or tagline...'
-                          className='min-h-[120px]'
-                          {...field}
-                          value={field.value || ''}
-                        />
-                      </FormControl>
-                      <FormDescription className='text-xs'>
-                        A brief description or mission statement shown below the intro.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+                  <FormField
+                    control={form.control}
+                    name='intro'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Intro Title (English) *</FormLabel>
+                        <FormControl>
+                          <Input placeholder='e.g. THIEN AN FURNITURE' {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name='introVi'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Intro Title (Vietnamese)</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder='e.g. NỘI THẤT THIÊN ẤN'
+                            {...field}
+                            value={field.value || ''}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+                  <FormField
+                    control={form.control}
+                    name='description'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Description (English)</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder='Enter company description...'
+                            className='min-h-[100px]'
+                            {...field}
+                            value={field.value || ''}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name='descriptionVi'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Description (Vietnamese)</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder='Nhập mô tả công ty...'
+                            className='min-h-[100px]'
+                            {...field}
+                            value={field.value || ''}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </CardContent>
             </Card>
 
@@ -199,34 +232,71 @@ export function FooterForm({ initialData }: FooterFormProps) {
                     >
                       <GripVertical className='h-5 w-5 text-gray-400 mt-2 flex-shrink-0' />
                       <div className='flex-1 space-y-3'>
-                        <FormField
-                          control={form.control}
-                          name={`addresses.${index}.label`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormControl>
-                                <Input placeholder='e.g. Showroom & Office' {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={form.control}
-                          name={`addresses.${index}.address`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormControl>
-                                <Textarea
-                                  placeholder='Full address...'
-                                  className='min-h-[60px]'
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
+                        <div className='grid grid-cols-1 gap-2 md:grid-cols-2'>
+                          <FormField
+                            control={form.control}
+                            name={`addresses.${index}.label`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormControl>
+                                  <Input placeholder='Label (English)' {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name={`addresses.${index}.labelVi`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormControl>
+                                  <Input
+                                    placeholder='Label (Vietnamese)'
+                                    {...field}
+                                    value={field.value || ''}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        <div className='grid grid-cols-1 gap-2 md:grid-cols-2'>
+                          <FormField
+                            control={form.control}
+                            name={`addresses.${index}.address`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormControl>
+                                  <Textarea
+                                    placeholder='Address (English)'
+                                    className='min-h-[60px]'
+                                    {...field}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name={`addresses.${index}.addressVi`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormControl>
+                                  <Textarea
+                                    placeholder='Địa chỉ (Vietnamese)'
+                                    className='min-h-[60px]'
+                                    {...field}
+                                    value={field.value || ''}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
                       </div>
                       <Button
                         type='button'

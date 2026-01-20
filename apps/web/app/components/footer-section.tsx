@@ -5,6 +5,7 @@ import { db } from '@repo/database';
 import { MapPin, Phone, Mail, Facebook, Youtube, Linkedin, Twitter } from 'lucide-react';
 
 import { createCachedQuery } from '@/lib/cache';
+import { getLocale, getLocalizedText } from '@/lib/i18n';
 
 export const Footer = async () => {
   // Cached footer settings
@@ -81,6 +82,7 @@ export const Footer = async () => {
 
   // Fetch active social links
   const socialLinks = await getFooterSocialLinks();
+  const locale = await getLocale();
 
   // Helper function to render social media icon
   const getSocialIcon = (platform: string) => {
@@ -154,14 +156,14 @@ export const Footer = async () => {
             {/* Intro Title */}
             {footerData?.intro && (
               <h3 className='text-2xl font-serif font-bold text-[#7B0C0C] uppercase tracking-wide'>
-                {footerData.intro}
+                {getLocalizedText(footerData, 'intro', locale)}
               </h3>
             )}
 
             {/* Description */}
             {footerData?.description && (
               <p className='text-sm text-gray-700 leading-relaxed italic font-serif'>
-                &ldquo;{footerData.description}&rdquo;
+                &ldquo;{getLocalizedText(footerData, 'description', locale)}&rdquo;
               </p>
             )}
 
@@ -172,7 +174,10 @@ export const Footer = async () => {
                   <div key={addr.id} className='flex items-start gap-3'>
                     <MapPin className='h-4 w-4 text-[#7B0C0C] mt-1 flex-shrink-0' />
                     <div className='text-sm text-gray-700'>
-                      <span className='font-semibold'>{addr.label}:</span> {addr.address}
+                      <span className='font-semibold'>
+                        {getLocalizedText(addr, 'label', locale)}:
+                      </span>{' '}
+                      {getLocalizedText(addr, 'address', locale)}
                     </div>
                   </div>
                 ))}
@@ -186,7 +191,11 @@ export const Footer = async () => {
                   <div key={phone.id} className='flex items-center gap-3'>
                     <Phone className='h-4 w-4 text-[#7B0C0C] flex-shrink-0' />
                     <div className='text-sm text-gray-700'>
-                      {phone.label && <span className='font-semibold'>{phone.label}: </span>}
+                      {phone.label && (
+                        <span className='font-semibold'>
+                          {getLocalizedText(phone, 'label', locale)}:{' '}
+                        </span>
+                      )}
                       <a
                         href={`tel:${phone.value.replace(/\s/g, '')}`}
                         className='hover:text-[#7B0C0C]'
@@ -271,7 +280,7 @@ export const Footer = async () => {
                         href={`/catalog/${catalog.slug}`}
                         className='text-sm text-gray-600 hover:text-[#7B0C0C] transition-colors'
                       >
-                        {catalog.name}
+                        {getLocalizedText(catalog, 'name', locale)}
                       </Link>
                     </li>
                   ))}
@@ -288,7 +297,7 @@ export const Footer = async () => {
                         href={`/projects/${project.slug}`}
                         className='text-sm text-gray-600 hover:text-[#7B0C0C] transition-colors'
                       >
-                        {project.title}
+                        {getLocalizedText(project, 'title', locale)}
                       </Link>
                     </li>
                   ))}

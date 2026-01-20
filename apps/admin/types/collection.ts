@@ -4,8 +4,10 @@ import { Catalog } from './catalog';
 export interface Collection {
   id: string;
   name: string;
+  nameVi?: string | null;
   slug: string;
   description: string | null;
+  descriptionVi?: string | null;
   bannerId: string | null;
   isActive: boolean;
   showOnHome: boolean;

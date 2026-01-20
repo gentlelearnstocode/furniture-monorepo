@@ -21,6 +21,7 @@ import {
 import { Input } from '@repo/ui/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/ui/card';
 import { Checkbox } from '@repo/ui/ui/checkbox';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/ui/ui/tabs';
 
 import { RichTextEditor } from '@/components/ui/rich-text-editor';
 import { SingleImageUpload } from '@/components/ui/single-image-upload';
@@ -41,16 +42,22 @@ export function IntroForm({ initialData }: IntroFormProps) {
     defaultValues: initialData
       ? {
           title: initialData.title,
+          titleVi: initialData.titleVi || '',
           subtitle: initialData.subtitle || '',
+          subtitleVi: initialData.subtitleVi || '',
           contentHtml: initialData.contentHtml,
+          contentHtmlVi: initialData.contentHtmlVi || '',
           introImageId: initialData.introImageId,
           backgroundImageId: initialData.backgroundImageId,
           isActive: initialData.isActive ?? true,
         }
       : {
           title: '',
+          titleVi: '',
           subtitle: '',
+          subtitleVi: '',
           contentHtml: '',
+          contentHtmlVi: '',
           introImageId: null,
           backgroundImageId: null,
           isActive: true,
@@ -81,52 +88,117 @@ export function IntroForm({ initialData }: IntroFormProps) {
                 <CardDescription>Main text and description for the intro section.</CardDescription>
               </CardHeader>
               <CardContent className='space-y-4'>
-                <FormField
-                  control={form.control}
-                  name='subtitle'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Subtitle</FormLabel>
-                      <FormControl>
-                        <Input placeholder='e.g. Khám Phá' {...field} value={field.value || ''} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name='title'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Title</FormLabel>
-                      <FormControl>
-                        <Input placeholder='e.g. Nội thất THIÊN ẤN' {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name='contentHtml'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Main Content</FormLabel>
-                      <FormControl>
-                        <RichTextEditor
-                          placeholder='Tell the store story...'
-                          value={field.value}
-                          onChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormDescription className='text-xs'>
-                        This content will be rendered on the landing page next to the image.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+                  <FormField
+                    control={form.control}
+                    name='subtitle'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Subtitle (English)</FormLabel>
+                        <FormControl>
+                          <Input placeholder='e.g. Explore' {...field} value={field.value || ''} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name='subtitleVi'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Subtitle (Vietnamese)</FormLabel>
+                        <FormControl>
+                          <Input placeholder='e.g. Khám Phá' {...field} value={field.value || ''} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+                  <FormField
+                    control={form.control}
+                    name='title'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Title (English) *</FormLabel>
+                        <FormControl>
+                          <Input placeholder='e.g. THIEN AN Furniture' {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name='titleVi'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Title (Vietnamese)</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder='e.g. Nội thất THIÊN ẤN'
+                            {...field}
+                            value={field.value || ''}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className='space-y-4 rounded-lg border p-4'>
+                  <h4 className='text-sm font-medium'>Main Content</h4>
+                  <Tabs defaultValue='en' className='w-full'>
+                    <TabsList className='grid w-full max-w-[200px] grid-cols-2'>
+                      <TabsTrigger value='en'>English</TabsTrigger>
+                      <TabsTrigger value='vi'>Tiếng Việt</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value='en'>
+                      <FormField
+                        control={form.control}
+                        name='contentHtml'
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <RichTextEditor
+                                placeholder='Tell the store story...'
+                                value={field.value}
+                                onChange={field.onChange}
+                              />
+                            </FormControl>
+                            <FormDescription className='text-xs'>
+                              This content will be rendered on the landing page next to the image.
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </TabsContent>
+                    <TabsContent value='vi'>
+                      <FormField
+                        control={form.control}
+                        name='contentHtmlVi'
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <RichTextEditor
+                                placeholder='Kể câu chuyện cửa hàng...'
+                                value={field.value || ''}
+                                onChange={field.onChange}
+                              />
+                            </FormControl>
+                            <FormDescription className='text-xs'>
+                              Vietnamese translation (optional).
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </TabsContent>
+                  </Tabs>
+                </div>
               </CardContent>
             </Card>
 

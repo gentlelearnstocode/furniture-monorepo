@@ -1,8 +1,10 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { ProductCard } from '@/app/components/product-card';
+import { useLocalizedText } from '@/providers/language-provider';
 
 interface SaleSectionProps {
   products: any[];
@@ -10,6 +12,8 @@ interface SaleSectionProps {
 }
 
 export const SaleSection = ({ products, settings }: SaleSectionProps) => {
+  const t = useLocalizedText();
+
   if (!settings || !settings.isActive || products.length === 0) {
     return null;
   }
@@ -20,7 +24,7 @@ export const SaleSection = ({ products, settings }: SaleSectionProps) => {
         {/* Section Header */}
         <div className='flex flex-col items-center mb-12'>
           <h2 className='text-3xl md:text-4xl lg:text-5xl font-serif text-[#49000D] tracking-wide uppercase'>
-            {settings.title || 'Sales'}
+            {t(settings, 'title') || 'Sales'}
           </h2>
 
           {/* Decorative divider with icon */}

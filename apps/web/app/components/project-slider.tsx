@@ -5,11 +5,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@repo/ui/lib/utils';
+import { useLocalizedText } from '@/providers/language-provider';
 
 // Define a minimal interface for what we need
 export interface Project {
   id: string;
   title: string;
+  titleVi?: string | null;
   slug: string;
   image: {
     url: string;
@@ -22,6 +24,7 @@ interface ProjectSliderProps {
 }
 
 export const ProjectSlider = ({ projects }: ProjectSliderProps) => {
+  const t = useLocalizedText();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -92,7 +95,7 @@ export const ProjectSlider = ({ projects }: ProjectSliderProps) => {
                     ? 'z-10 w-[70%] md:w-[45%] h-[70%] md:h-[80%] opacity-40 -translate-x-[15%] md:-translate-x-[60%] hover:opacity-60'
                     : position === 'right'
                       ? 'z-10 w-[70%] md:w-[45%] h-[70%] md:h-[80%] opacity-40 translate-x-[15%] md:translate-x-[60%] hover:opacity-60'
-                      : 'z-0 opacity-0 scale-50'
+                      : 'z-0 opacity-0 scale-50',
               )}
               onClick={() => {
                 if (position === 'left') prevSlide();
@@ -107,7 +110,7 @@ export const ProjectSlider = ({ projects }: ProjectSliderProps) => {
                   <div
                     className={cn(
                       'relative w-full h-full rounded-2xl overflow-hidden shadow-2xl transition-all duration-500',
-                      isActive ? 'shadow-black/20' : 'shadow-none'
+                      isActive ? 'shadow-black/20' : 'shadow-none',
                     )}
                   >
                     {project.image ? (
@@ -133,7 +136,7 @@ export const ProjectSlider = ({ projects }: ProjectSliderProps) => {
                     {/* Centered Content */}
                     <div className='absolute inset-0 z-20 flex flex-col items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-700 px-4'>
                       <h3 className='text-3xl md:text-5xl font-serif text-white tracking-wide drop-shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700'>
-                        {project.title}
+                        {t(project, 'title')}
                       </h3>
                     </div>
                   </div>
@@ -142,7 +145,7 @@ export const ProjectSlider = ({ projects }: ProjectSliderProps) => {
                 <div
                   className={cn(
                     'relative w-full h-full rounded-2xl overflow-hidden shadow-2xl transition-all duration-500',
-                    isActive ? 'shadow-black/20' : 'shadow-none'
+                    isActive ? 'shadow-black/20' : 'shadow-none',
                   )}
                 >
                   {project.image ? (
@@ -162,7 +165,7 @@ export const ProjectSlider = ({ projects }: ProjectSliderProps) => {
                   <div
                     className={cn(
                       'absolute inset-0 bg-black/10 transition-opacity duration-500',
-                      isActive ? 'opacity-0' : 'opacity-30 group-hover:opacity-10'
+                      isActive ? 'opacity-0' : 'opacity-30 group-hover:opacity-10',
                     )}
                   />
                 </div>
@@ -203,7 +206,7 @@ export const ProjectSlider = ({ projects }: ProjectSliderProps) => {
               'rounded-full transition-all duration-500 hover:scale-110',
               idx === currentIndex
                 ? 'bg-white w-10 h-2.5 shadow-lg shadow-white/30'
-                : 'bg-white/50 w-2.5 h-2.5 hover:bg-white/70'
+                : 'bg-white/50 w-2.5 h-2.5 hover:bg-white/70',
             )}
             aria-label={`Go to slide ${idx + 1}`}
           />

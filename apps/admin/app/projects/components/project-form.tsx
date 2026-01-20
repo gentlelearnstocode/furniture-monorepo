@@ -24,6 +24,7 @@ import { Input } from '@repo/ui/ui/input';
 import { Textarea } from '@repo/ui/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/ui/card';
 import { Checkbox } from '@repo/ui/ui/checkbox';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/ui/ui/tabs';
 
 import { RichTextEditor } from '@/components/ui/rich-text-editor';
 import { MultiImageUpload } from '@/components/ui/multi-image-upload';
@@ -46,22 +47,32 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
     defaultValues: initialData
       ? {
           title: initialData.title,
+          titleVi: initialData.titleVi || '',
           slug: initialData.slug,
           contentHtml: initialData.contentHtml,
+          contentHtmlVi: initialData.contentHtmlVi || '',
           isActive: initialData.isActive,
           seoTitle: initialData.seoTitle || '',
+          seoTitleVi: initialData.seoTitleVi || '',
           seoDescription: initialData.seoDescription || '',
+          seoDescriptionVi: initialData.seoDescriptionVi || '',
           seoKeywords: initialData.seoKeywords || '',
+          seoKeywordsVi: initialData.seoKeywordsVi || '',
           images: initialData.images || [],
         }
       : {
           title: '',
+          titleVi: '',
           slug: '',
           contentHtml: '',
+          contentHtmlVi: '',
           isActive: true,
           seoTitle: '',
+          seoTitleVi: '',
           seoDescription: '',
+          seoDescriptionVi: '',
           seoKeywords: '',
+          seoKeywordsVi: '',
           images: [],
         },
   });
@@ -91,27 +102,42 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
                 <CardDescription>Main details about the project.</CardDescription>
               </CardHeader>
               <CardContent className='space-y-4'>
-                <FormField
-                  control={form.control}
-                  name='title'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Title</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder='Project title'
-                          {...field}
-                          onChange={(e) => {
-                            field.onChange(e);
-                            const slug = slugify(e.target.value);
-                            form.setValue('slug', slug);
-                          }}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+                  <FormField
+                    control={form.control}
+                    name='title'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Title (English) *</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder='Project title'
+                            {...field}
+                            onChange={(e) => {
+                              field.onChange(e);
+                              const slug = slugify(e.target.value);
+                              form.setValue('slug', slug);
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name='titleVi'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Title (Vietnamese)</FormLabel>
+                        <FormControl>
+                          <Input placeholder='Tiêu đề dự án' {...field} value={field.value || ''} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
                 <FormField
                   control={form.control}
                   name='slug'
@@ -126,23 +152,51 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name='contentHtml'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Content</FormLabel>
-                      <FormControl>
-                        <RichTextEditor
-                          placeholder='Tell the project story...'
-                          value={field.value}
-                          onChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className='space-y-4 rounded-lg border p-4'>
+                  <h4 className='text-sm font-medium'>Content</h4>
+                  <Tabs defaultValue='en' className='w-full'>
+                    <TabsList className='grid w-full max-w-[200px] grid-cols-2'>
+                      <TabsTrigger value='en'>English</TabsTrigger>
+                      <TabsTrigger value='vi'>Tiếng Việt</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value='en'>
+                      <FormField
+                        control={form.control}
+                        name='contentHtml'
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <RichTextEditor
+                                placeholder='Tell the project story...'
+                                value={field.value}
+                                onChange={field.onChange}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </TabsContent>
+                    <TabsContent value='vi'>
+                      <FormField
+                        control={form.control}
+                        name='contentHtmlVi'
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <RichTextEditor
+                                placeholder='Kể câu chuyện dự án...'
+                                value={field.value || ''}
+                                onChange={field.onChange}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </TabsContent>
+                  </Tabs>
+                </div>
               </CardContent>
             </Card>
 

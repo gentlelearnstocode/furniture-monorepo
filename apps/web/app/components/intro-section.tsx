@@ -1,9 +1,11 @@
 import React from 'react';
 import Image from 'next/image';
 import { getIntroData } from '@/lib/queries';
+import { getLocale, getLocalizedText, getLocalizedHtml } from '@/lib/i18n';
 
 export const IntroSection = async () => {
   const intro = await getIntroData();
+  const locale = await getLocale();
 
   if (!intro) return null;
 
@@ -58,16 +60,21 @@ export const IntroSection = async () => {
           <div className='text-white max-w-xl'>
             {intro.subtitle && (
               <span className='block text-lg md:text-xl font-serif italic mb-2 tracking-wide text-white/90'>
-                {intro.subtitle}
+                {getLocalizedText(intro, 'subtitle', locale)}
               </span>
             )}
             <h2 className='text-4xl md:text-5xl font-bold font-serif mb-8 leading-tight tracking-tight border-b border-white/20 pb-4'>
-              {intro.title}
+              {getLocalizedText(intro, 'title', locale)}
             </h2>
-            <div
-              className='prose prose-invert prose-sm md:prose-base max-w-none text-white/80 leading-relaxed font-light'
-              dangerouslySetInnerHTML={{ __html: intro.contentHtml }}
-            />
+            {(() => {
+              const content = getLocalizedHtml(intro, 'contentHtml', locale);
+              return content ? (
+                <div
+                  className='prose prose-invert prose-sm md:prose-base max-w-none text-white/80 leading-relaxed font-light'
+                  dangerouslySetInnerHTML={{ __html: content }}
+                />
+              ) : null;
+            })()}
           </div>
         </div>
       </div>

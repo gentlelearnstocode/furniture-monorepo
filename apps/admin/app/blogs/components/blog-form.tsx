@@ -24,6 +24,7 @@ import { Input } from '@repo/ui/ui/input';
 import { Textarea } from '@repo/ui/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/ui/card';
 import { Checkbox } from '@repo/ui/ui/checkbox';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/ui/ui/tabs';
 
 import { RichTextEditor } from '@/components/ui/rich-text-editor';
 import { MultiImageUpload } from '@/components/ui/multi-image-upload';
@@ -46,24 +47,36 @@ export function BlogForm({ initialData }: BlogFormProps) {
     defaultValues: initialData
       ? {
           title: initialData.title,
+          titleVi: initialData.titleVi || '',
           slug: initialData.slug,
           excerpt: initialData.excerpt || '',
+          excerptVi: initialData.excerptVi || '',
           contentHtml: initialData.contentHtml,
+          contentHtmlVi: initialData.contentHtmlVi || '',
           isActive: initialData.isActive,
           seoTitle: initialData.seoTitle || '',
+          seoTitleVi: initialData.seoTitleVi || '',
           seoDescription: initialData.seoDescription || '',
+          seoDescriptionVi: initialData.seoDescriptionVi || '',
           seoKeywords: initialData.seoKeywords || '',
+          seoKeywordsVi: initialData.seoKeywordsVi || '',
           images: initialData.images || [],
         }
       : {
           title: '',
+          titleVi: '',
           slug: '',
           excerpt: '',
+          excerptVi: '',
           contentHtml: '',
+          contentHtmlVi: '',
           isActive: true,
           seoTitle: '',
+          seoTitleVi: '',
           seoDescription: '',
+          seoDescriptionVi: '',
           seoKeywords: '',
+          seoKeywordsVi: '',
           images: [],
         },
   });
@@ -93,27 +106,46 @@ export function BlogForm({ initialData }: BlogFormProps) {
                 <CardDescription>Main content of the blog post.</CardDescription>
               </CardHeader>
               <CardContent className='space-y-4'>
-                <FormField
-                  control={form.control}
-                  name='title'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Title</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder='Post title'
-                          {...field}
-                          onChange={(e) => {
-                            field.onChange(e);
-                            const slug = slugify(e.target.value);
-                            form.setValue('slug', slug);
-                          }}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+                  <FormField
+                    control={form.control}
+                    name='title'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Title (English) *</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder='Post title'
+                            {...field}
+                            onChange={(e) => {
+                              field.onChange(e);
+                              const slug = slugify(e.target.value);
+                              form.setValue('slug', slug);
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name='titleVi'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Title (Vietnamese)</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder='Tiêu đề bài viết'
+                            {...field}
+                            value={field.value || ''}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
                 <FormField
                   control={form.control}
                   name='slug'
@@ -128,40 +160,96 @@ export function BlogForm({ initialData }: BlogFormProps) {
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name='excerpt'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Excerpt</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder='Short summary for listing pages...'
-                          {...field}
-                          value={field.value || ''}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name='contentHtml'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Main Content</FormLabel>
-                      <FormControl>
-                        <RichTextEditor
-                          placeholder='Write your post here...'
-                          value={field.value}
-                          onChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className='space-y-4 rounded-lg border p-4'>
+                  <h4 className='text-sm font-medium'>Excerpt</h4>
+                  <Tabs defaultValue='en' className='w-full'>
+                    <TabsList className='grid w-full max-w-[200px] grid-cols-2'>
+                      <TabsTrigger value='en'>English</TabsTrigger>
+                      <TabsTrigger value='vi'>Tiếng Việt</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value='en'>
+                      <FormField
+                        control={form.control}
+                        name='excerpt'
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <Textarea
+                                placeholder='Short summary for listing pages...'
+                                {...field}
+                                value={field.value || ''}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </TabsContent>
+                    <TabsContent value='vi'>
+                      <FormField
+                        control={form.control}
+                        name='excerptVi'
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <Textarea
+                                placeholder='Tóm tắt ngắn...'
+                                {...field}
+                                value={field.value || ''}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </TabsContent>
+                  </Tabs>
+                </div>
+                <div className='space-y-4 rounded-lg border p-4'>
+                  <h4 className='text-sm font-medium'>Main Content</h4>
+                  <Tabs defaultValue='en' className='w-full'>
+                    <TabsList className='grid w-full max-w-[200px] grid-cols-2'>
+                      <TabsTrigger value='en'>English</TabsTrigger>
+                      <TabsTrigger value='vi'>Tiếng Việt</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value='en'>
+                      <FormField
+                        control={form.control}
+                        name='contentHtml'
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <RichTextEditor
+                                placeholder='Write your post here...'
+                                value={field.value}
+                                onChange={field.onChange}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </TabsContent>
+                    <TabsContent value='vi'>
+                      <FormField
+                        control={form.control}
+                        name='contentHtmlVi'
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <RichTextEditor
+                                placeholder='Viết nội dung ở đây...'
+                                value={field.value || ''}
+                                onChange={field.onChange}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </TabsContent>
+                  </Tabs>
+                </div>
               </CardContent>
             </Card>
 

@@ -23,7 +23,7 @@ import {
 } from '@repo/ui/ui/form';
 import { Input } from '@repo/ui/ui/input';
 import { Switch } from '@repo/ui/ui/switch';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/ui/ui/tabs';
 import { SingleImageUpload } from './single-image-upload';
 import { ProductSelector } from './product-selector';
 import { CatalogSelector } from './catalog-selector';
@@ -42,14 +42,16 @@ export function CollectionForm({
 }: CollectionFormProps) {
   const [isPending, startTransition] = useTransition();
   const [banner, setBanner] = useState<{ assetId: string; url: string } | null>(
-    initialData?.banner ? { assetId: initialData.banner.id, url: initialData.banner.url } : null
+    initialData?.banner ? { assetId: initialData.banner.id, url: initialData.banner.url } : null,
   );
   const form = useForm<CreateCollectionInput>({
     resolver: zodResolver(createCollectionSchema),
     defaultValues: {
       name: initialData?.name || '',
+      nameVi: initialData?.nameVi || '',
       slug: initialData?.slug || '',
       description: initialData?.description || '',
+      descriptionVi: initialData?.descriptionVi || '',
       bannerId: initialData?.bannerId || null,
       isActive: initialData?.isActive ?? true,
       productIds: initialData?.products?.map((p) => p.productId) || [],
@@ -70,7 +72,7 @@ export function CollectionForm({
         toast.error(result.error);
       } else {
         toast.success(
-          initialData ? 'Collection updated successfully' : 'Collection created successfully'
+          initialData ? 'Collection updated successfully' : 'Collection created successfully',
         );
       }
     });
@@ -85,7 +87,7 @@ export function CollectionForm({
             name='name'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Collection Name</FormLabel>
+                <FormLabel>Collection Name (English) *</FormLabel>
                 <FormControl>
                   <Input
                     placeholder='e.g. Summer Sale 2024'
@@ -106,46 +108,91 @@ export function CollectionForm({
           />
           <FormField
             control={form.control}
-            name='slug'
+            name='nameVi'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Slug</FormLabel>
+                <FormLabel>Collection Name (Vietnamese)</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder='e.g. summer-sale-2024'
-                    {...field}
-                    className='font-mono text-sm'
-                  />
+                  <Input placeholder='e.g. Khuyến Mãi Hè 2024' {...field} />
                 </FormControl>
                 <FormDescription className='text-xs'>
-                  URL-friendly unique identifier.
+                  Optional Vietnamese translation
                 </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
-
         <FormField
           control={form.control}
-          name='description'
+          name='slug'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>Slug</FormLabel>
               <FormControl>
-                <RichTextEditor
-                  placeholder='Describe this collection...'
-                  value={field.value || ''}
-                  onChange={field.onChange}
+                <Input
+                  placeholder='e.g. summer-sale-2024'
+                  {...field}
+                  className='font-mono text-sm'
                 />
               </FormControl>
-              <FormDescription className='text-xs'>
-                Optional description for internal reference or SEO. Supports rich text formatting.
-              </FormDescription>
+              <FormDescription className='text-xs'>URL-friendly unique identifier.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
+
+        <div className='space-y-4 rounded-lg border p-4'>
+          <h3 className='text-sm font-medium'>Description</h3>
+          <Tabs defaultValue='en' className='w-full'>
+            <TabsList className='grid w-full max-w-[200px] grid-cols-2'>
+              <TabsTrigger value='en'>English</TabsTrigger>
+              <TabsTrigger value='vi'>Tiếng Việt</TabsTrigger>
+            </TabsList>
+            <TabsContent value='en'>
+              <FormField
+                control={form.control}
+                name='description'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <RichTextEditor
+                        placeholder='Describe this collection...'
+                        value={field.value || ''}
+                        onChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormDescription className='text-xs'>
+                      Optional description for internal reference or SEO.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </TabsContent>
+            <TabsContent value='vi'>
+              <FormField
+                control={form.control}
+                name='descriptionVi'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <RichTextEditor
+                        placeholder='Mô tả bộ sưu tập...'
+                        value={field.value || ''}
+                        onChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormDescription className='text-xs'>
+                      Vietnamese translation (optional).
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </TabsContent>
+          </Tabs>
+        </div>
 
         <div className='space-y-4 pt-4 border-t'>
           <h3 className='text-sm font-medium'>Collection Banner</h3>

@@ -71,9 +71,11 @@ export async function upsertFooterSettings(data: FooterSettingsInput) {
       await db.insert(footerAddresses).values(
         addresses.map((addr, index) => ({
           label: addr.label,
+          labelVi: addr.labelVi || null,
           address: addr.address,
+          addressVi: addr.addressVi || null,
           position: index,
-        }))
+        })),
       );
     }
 
@@ -84,9 +86,10 @@ export async function upsertFooterSettings(data: FooterSettingsInput) {
         contacts.map((contact, index) => ({
           type: contact.type,
           label: contact.label || null,
+          labelVi: contact.labelVi || null,
           value: contact.value,
           position: index,
-        }))
+        })),
       );
     }
 
@@ -99,7 +102,7 @@ export async function upsertFooterSettings(data: FooterSettingsInput) {
           url: link.url,
           isActive: link.isActive ?? true,
           position: index,
-        }))
+        })),
       );
     }
 

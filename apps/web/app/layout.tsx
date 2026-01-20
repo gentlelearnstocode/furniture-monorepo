@@ -10,6 +10,7 @@ import { db } from '@repo/database';
 import { createCachedQuery } from '@/lib/cache';
 import { getSiteContacts } from '@/lib/queries';
 import { getNavMenuItems, type NavMenuItem } from '@/lib/menu';
+import { LanguageProvider } from '@/providers/language-provider';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -117,13 +118,15 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} font-sans antialiased`}
       >
-        <Navbar items={navItems} />
-        <main>{children}</main>
-        <Footer />
-        <div className='fixed bottom-6 right-6 z-50 flex items-end gap-4'>
-          <ScrollToTop />
-          <FloatingContactWidget contacts={siteContacts} />
-        </div>
+        <LanguageProvider>
+          <Navbar items={navItems} />
+          <main>{children}</main>
+          <Footer />
+          <div className='fixed bottom-6 right-6 z-50 flex items-end gap-4'>
+            <ScrollToTop />
+            <FloatingContactWidget contacts={siteContacts} />
+          </div>
+        </LanguageProvider>
       </body>
     </html>
   );

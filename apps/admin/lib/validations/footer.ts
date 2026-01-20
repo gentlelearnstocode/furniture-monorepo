@@ -3,7 +3,9 @@ import { z } from 'zod';
 export const footerAddressSchema = z.object({
   id: z.string().uuid().optional(),
   label: z.string().min(1, 'Label is required'),
+  labelVi: z.string().optional(),
   address: z.string().min(1, 'Address is required'),
+  addressVi: z.string().optional(),
   position: z.number(),
 });
 
@@ -11,6 +13,7 @@ export const footerContactSchema = z.object({
   id: z.string().uuid().optional(),
   type: z.enum(['phone', 'email']),
   label: z.string().optional(),
+  labelVi: z.string().optional(),
   value: z.string().min(1, 'Value is required'),
   position: z.number(),
 });
@@ -25,7 +28,9 @@ export const footerSocialLinkSchema = z.object({
 
 export const footerSettingsSchema = z.object({
   intro: z.string().min(1, 'Intro is required'),
+  introVi: z.string().optional(),
   description: z.string().optional(),
+  descriptionVi: z.string().optional(),
   mapEmbedUrl: z.string().optional(),
   addresses: z.array(footerAddressSchema),
   contacts: z.array(footerContactSchema),

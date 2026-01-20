@@ -3,12 +3,15 @@ import { z } from 'zod';
 export const createProductSchema = z
   .object({
     name: z.string().min(1, 'Name is required'),
+    nameVi: z.string().optional(),
     slug: z
       .string()
       .min(1, 'Slug is required')
       .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug must be lowercase and kebab-case'),
     description: z.string().optional(),
+    descriptionVi: z.string().optional(),
     shortDescription: z.string().optional(),
+    shortDescriptionVi: z.string().optional(),
     basePrice: z.coerce.number().min(0, 'Price must be a positive number'),
     discountPrice: z.coerce
       .number()
@@ -41,7 +44,7 @@ export const createProductSchema = z
             .nullish(),
           aspectRatio: z.enum(['original', '1:1', '3:4', '4:3', '16:9']).nullish(),
           objectFit: z.enum(['cover', 'contain']).nullish(),
-        })
+        }),
       )
       .default([]),
   })
@@ -59,7 +62,7 @@ export const createProductSchema = z
     {
       message: 'Discount price cannot be larger than original price',
       path: ['discountPrice'],
-    }
+    },
   );
 
 export type CreateProductInput = z.infer<typeof createProductSchema>;

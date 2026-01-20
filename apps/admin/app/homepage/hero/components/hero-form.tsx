@@ -41,8 +41,11 @@ export function HeroForm({ initialData }: HeroFormProps) {
       ? {
           id: initialData.id,
           title: initialData.title ?? '',
+          titleVi: initialData.titleVi ?? '',
           subtitle: initialData.subtitle ?? '',
+          subtitleVi: initialData.subtitleVi ?? '',
           buttonText: initialData.buttonText ?? '',
+          buttonTextVi: initialData.buttonTextVi ?? '',
           buttonLink: initialData.buttonLink ?? '',
           backgroundType: initialData.backgroundType,
           backgroundImageId: initialData.backgroundImageId,
@@ -51,8 +54,11 @@ export function HeroForm({ initialData }: HeroFormProps) {
         }
       : {
           title: '',
+          titleVi: '',
           subtitle: '',
+          subtitleVi: '',
           buttonText: '',
+          buttonTextVi: '',
           buttonLink: '',
           backgroundType: 'image',
           isActive: true,
@@ -89,53 +95,100 @@ export function HeroForm({ initialData }: HeroFormProps) {
                 </CardDescription>
               </CardHeader>
               <CardContent className='space-y-4'>
-                <FormField
-                  control={form.control}
-                  name='title'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Title</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder='e.g. Excellence in Craftsmanship'
-                          {...field}
-                          value={field.value || ''}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name='subtitle'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Subtitle</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder='e.g. Timeless furniture for your home since 1997.'
-                          {...field}
-                          value={field.value || ''}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <div className='grid grid-cols-2 gap-4'>
+                <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+                  <FormField
+                    control={form.control}
+                    name='title'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Title (English)</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder='e.g. Excellence in Craftsmanship'
+                            {...field}
+                            value={field.value || ''}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name='titleVi'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Title (Vietnamese)</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder='e.g. Tinh Hoa Tay Nghề'
+                            {...field}
+                            value={field.value || ''}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+                  <FormField
+                    control={form.control}
+                    name='subtitle'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Subtitle (English)</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder='e.g. Timeless furniture...'
+                            {...field}
+                            value={field.value || ''}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name='subtitleVi'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Subtitle (Vietnamese)</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder='e.g. Nội thất trường tồn...'
+                            {...field}
+                            value={field.value || ''}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
                   <FormField
                     control={form.control}
                     name='buttonText'
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Button Text</FormLabel>
+                        <FormLabel>Button Text (English)</FormLabel>
                         <FormControl>
-                          <Input
-                            placeholder='e.g. Explore Collections'
-                            {...field}
-                            value={field.value || ''}
-                          />
+                          <Input placeholder='e.g. Explore' {...field} value={field.value || ''} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name='buttonTextVi'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Button Text (Vietnamese)</FormLabel>
+                        <FormControl>
+                          <Input placeholder='e.g. Khám Phá' {...field} value={field.value || ''} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

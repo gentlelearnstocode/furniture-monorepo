@@ -17,7 +17,17 @@ export async function createCollection(data: CreateCollectionInput) {
     return { error: 'Invalid fields' };
   }
 
-  const { name, slug, description, bannerId, isActive, productIds, catalogIds } = validated.data;
+  const {
+    name,
+    nameVi,
+    slug,
+    description,
+    descriptionVi,
+    bannerId,
+    isActive,
+    productIds,
+    catalogIds,
+  } = validated.data;
 
   console.log('Creating collection with catalogIds:', catalogIds);
 
@@ -35,8 +45,10 @@ export async function createCollection(data: CreateCollectionInput) {
       .insert(collections)
       .values({
         name,
+        nameVi: nameVi || null,
         slug,
         description: description || null,
+        descriptionVi: descriptionVi || null,
         bannerId: bannerId || null,
         isActive: isActive ?? true,
         createdById: session?.user?.id || null,
@@ -57,7 +69,7 @@ export async function createCollection(data: CreateCollectionInput) {
         productIds.map((productId) => ({
           collectionId: collection.id,
           productId,
-        }))
+        })),
       );
     }
 
@@ -67,7 +79,7 @@ export async function createCollection(data: CreateCollectionInput) {
         catalogIds.map((catalogId) => ({
           collectionId: collection.id,
           catalogId,
-        }))
+        })),
       );
     } else {
       console.log('No catalogIds to insert');
@@ -89,7 +101,17 @@ export async function updateCollection(id: string, data: CreateCollectionInput) 
     return { error: 'Invalid fields' };
   }
 
-  const { name, slug, description, bannerId, isActive, productIds, catalogIds } = validated.data;
+  const {
+    name,
+    nameVi,
+    slug,
+    description,
+    descriptionVi,
+    bannerId,
+    isActive,
+    productIds,
+    catalogIds,
+  } = validated.data;
 
   console.log('Updating collection with catalogIds:', catalogIds);
 
@@ -108,8 +130,10 @@ export async function updateCollection(id: string, data: CreateCollectionInput) 
       .update(collections)
       .set({
         name,
+        nameVi: nameVi || null,
         slug,
         description: description || null,
+        descriptionVi: descriptionVi || null,
         bannerId: bannerId || null,
         isActive: isActive ?? true,
         updatedAt: new Date(),
@@ -131,7 +155,7 @@ export async function updateCollection(id: string, data: CreateCollectionInput) 
         productIds.map((productId) => ({
           collectionId: id,
           productId,
-        }))
+        })),
       );
     }
 
@@ -144,7 +168,7 @@ export async function updateCollection(id: string, data: CreateCollectionInput) 
         catalogIds.map((catalogId) => ({
           collectionId: id,
           catalogId,
-        }))
+        })),
       );
     } else {
       console.log('No catalogIds to update');

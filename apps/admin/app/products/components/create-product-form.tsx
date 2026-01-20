@@ -24,6 +24,7 @@ import { Input } from '@repo/ui/ui/input';
 import { Textarea } from '@repo/ui/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/ui/select';
 import { Checkbox } from '@repo/ui/ui/checkbox';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/ui/ui/tabs';
 
 import { MultiImageUpload } from '@/components/ui/multi-image-upload';
 import { RichTextEditor } from '@/components/ui/rich-text-editor';
@@ -53,13 +54,19 @@ export function ProductForm({ catalogs, initialData }: ProductFormProps) {
             : undefined,
           showPrice: initialData.showPrice ?? true,
           description: initialData.description || '',
+          descriptionVi: initialData.descriptionVi || '',
           shortDescription: initialData.shortDescription || '',
+          shortDescriptionVi: initialData.shortDescriptionVi || '',
+          nameVi: initialData.nameVi || '',
         }
       : {
           name: '',
+          nameVi: '',
           slug: '',
           description: '',
+          descriptionVi: '',
           shortDescription: '',
+          shortDescriptionVi: '',
           basePrice: 0,
           discountPrice: undefined,
           showPrice: true,
@@ -88,7 +95,7 @@ export function ProductForm({ catalogs, initialData }: ProductFormProps) {
         toast.error(result.error);
       } else if (result?.success) {
         toast.success(
-          initialData ? 'Product updated successfully' : 'Product created successfully'
+          initialData ? 'Product updated successfully' : 'Product created successfully',
         );
         router.push('/products');
       }
@@ -104,7 +111,7 @@ export function ProductForm({ catalogs, initialData }: ProductFormProps) {
             name='name'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Product Name</FormLabel>
+                <FormLabel>Product Name (English) *</FormLabel>
                 <FormControl>
                   <Input
                     placeholder='e.g. Modern Sofa'
@@ -122,21 +129,35 @@ export function ProductForm({ catalogs, initialData }: ProductFormProps) {
           />
           <FormField
             control={form.control}
-            name='slug'
+            name='nameVi'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Slug</FormLabel>
+                <FormLabel>Product Name (Vietnamese)</FormLabel>
                 <FormControl>
-                  <Input placeholder='e.g. modern-sofa' {...field} className='font-mono text-sm' />
+                  <Input placeholder='e.g. Ghế Sofa Hiện Đại' {...field} />
                 </FormControl>
                 <FormDescription className='text-xs'>
-                  URL-friendly unique identifier.
+                  Optional Vietnamese translation
                 </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
+        <FormField
+          control={form.control}
+          name='slug'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Slug</FormLabel>
+              <FormControl>
+                <Input placeholder='e.g. modern-sofa' {...field} className='font-mono text-sm' />
+              </FormControl>
+              <FormDescription className='text-xs'>URL-friendly unique identifier.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
           <FormField
@@ -243,47 +264,109 @@ export function ProductForm({ catalogs, initialData }: ProductFormProps) {
           </div>
         </div>
 
-        <FormField
-          control={form.control}
-          name='shortDescription'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Short Description</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder='A brief summary of the product...'
-                  className='min-h-[80px] resize-none'
-                  {...field}
-                />
-              </FormControl>
-              <FormDescription className='text-xs'>
-                Displayed in product lists and previews.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className='space-y-4 rounded-lg border p-4'>
+          <h3 className='text-sm font-medium'>Short Description</h3>
+          <Tabs defaultValue='en' className='w-full'>
+            <TabsList className='grid w-full max-w-[200px] grid-cols-2'>
+              <TabsTrigger value='en'>English</TabsTrigger>
+              <TabsTrigger value='vi'>Tiếng Việt</TabsTrigger>
+            </TabsList>
+            <TabsContent value='en'>
+              <FormField
+                control={form.control}
+                name='shortDescription'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Textarea
+                        placeholder='A brief summary of the product...'
+                        className='min-h-[80px] resize-none'
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription className='text-xs'>
+                      Displayed in product lists and previews.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </TabsContent>
+            <TabsContent value='vi'>
+              <FormField
+                control={form.control}
+                name='shortDescriptionVi'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Textarea
+                        placeholder='Mô tả ngắn về sản phẩm...'
+                        className='min-h-[80px] resize-none'
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription className='text-xs'>
+                      Vietnamese translation (optional).
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </TabsContent>
+          </Tabs>
+        </div>
 
-        <FormField
-          control={form.control}
-          name='description'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Full Description</FormLabel>
-              <FormControl>
-                <RichTextEditor
-                  placeholder='Comprehensive product details...'
-                  value={field.value || ''}
-                  onChange={field.onChange}
-                />
-              </FormControl>
-              <FormDescription className='text-xs'>
-                Detailed information shown on the product page. Supports rich text formatting.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className='space-y-4 rounded-lg border p-4'>
+          <h3 className='text-sm font-medium'>Full Description</h3>
+          <Tabs defaultValue='en' className='w-full'>
+            <TabsList className='grid w-full max-w-[200px] grid-cols-2'>
+              <TabsTrigger value='en'>English</TabsTrigger>
+              <TabsTrigger value='vi'>Tiếng Việt</TabsTrigger>
+            </TabsList>
+            <TabsContent value='en'>
+              <FormField
+                control={form.control}
+                name='description'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <RichTextEditor
+                        placeholder='Comprehensive product details...'
+                        value={field.value || ''}
+                        onChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormDescription className='text-xs'>
+                      Detailed information shown on the product page. Supports rich text formatting.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </TabsContent>
+            <TabsContent value='vi'>
+              <FormField
+                control={form.control}
+                name='descriptionVi'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <RichTextEditor
+                        placeholder='Thông tin chi tiết về sản phẩm...'
+                        value={field.value || ''}
+                        onChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormDescription className='text-xs'>
+                      Vietnamese translation (optional).
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </TabsContent>
+          </Tabs>
+        </div>
 
         <div className='space-y-4'>
           <h3 className='text-sm font-medium'>Dimensions</h3>

@@ -7,11 +7,61 @@ import { usePathname } from 'next/navigation';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { SearchDialog } from './search-dialog';
+import { useLanguage } from '@/providers/language-provider';
 
 import Image from 'next/image';
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
+}
+
+// Language Switcher Component
+function LanguageSwitcher({ forceShow }: { forceShow: boolean }) {
+  const { setLocale, isEnglish, isVietnamese } = useLanguage();
+
+  return (
+    <div
+      className={cn(
+        'flex items-center text-[24px] font-[444] tracking-normal leading-none gap-3 font-serif transition-colors duration-1000',
+        forceShow ? 'text-[#49000D]' : 'text-white group-hover/nav:text-[#49000D]',
+      )}
+    >
+      <button
+        onClick={() => setLocale('en')}
+        className={cn(
+          'transition-colors uppercase',
+          isEnglish
+            ? 'font-bold'
+            : forceShow
+              ? 'text-[#49000D]/40 hover:text-[#49000D]'
+              : 'text-white/60 group-hover/nav:text-[#49000D]/40 hover:text-[#49000D]',
+        )}
+      >
+        ENG
+      </button>
+      <span
+        className={cn(
+          'transition-colors duration-1000',
+          forceShow ? 'text-[#49000D]/20' : 'text-white/40 group-hover/nav:text-[#49000D]/20',
+        )}
+      >
+        |
+      </span>
+      <button
+        onClick={() => setLocale('vi')}
+        className={cn(
+          'transition-colors uppercase',
+          isVietnamese
+            ? 'font-bold'
+            : forceShow
+              ? 'text-[#49000D]/40 hover:text-[#49000D]'
+              : 'text-white/60 group-hover/nav:text-[#49000D]/40 hover:text-[#49000D]',
+        )}
+      >
+        VIE
+      </button>
+    </div>
+  );
 }
 
 interface NavItem {
@@ -166,34 +216,7 @@ export const Navbar = ({ items }: NavbarProps) => {
 
               {/* Right: Language Switcher Only */}
               <div className='flex items-center justify-end flex-1'>
-                <div
-                  className={cn(
-                    'flex items-center text-[24px] font-[444] tracking-normal leading-none gap-3 font-serif transition-colors duration-1000',
-                    forceShow ? 'text-[#49000D]' : 'text-white group-hover/nav:text-[#49000D]',
-                  )}
-                >
-                  <button className='font-bold'>ENG</button>
-                  <span
-                    className={cn(
-                      'transition-colors duration-1000',
-                      forceShow
-                        ? 'text-[#49000D]/20'
-                        : 'text-white/40 group-hover/nav:text-[#49000D]/20',
-                    )}
-                  >
-                    |
-                  </span>
-                  <button
-                    className={cn(
-                      'transition-colors uppercase',
-                      forceShow
-                        ? 'text-[#49000D]/40 hover:text-[#49000D]'
-                        : 'text-white/60 group-hover/nav:text-[#49000D]/40 hover:text-[#49000D]',
-                    )}
-                  >
-                    Vie
-                  </button>
-                </div>
+                <LanguageSwitcher forceShow={forceShow} />
               </div>
             </div>
 

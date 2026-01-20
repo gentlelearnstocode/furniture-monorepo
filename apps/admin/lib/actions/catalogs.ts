@@ -16,7 +16,8 @@ export async function createCatalog(data: CreateCatalogInput) {
     return { error: 'Invalid fields' };
   }
 
-  const { name, slug, description, parentId, imageId, productImageRatio } = validated.data;
+  const { name, nameVi, slug, description, descriptionVi, parentId, imageId, productImageRatio } =
+    validated.data;
 
   try {
     // Check for existing slug
@@ -33,8 +34,10 @@ export async function createCatalog(data: CreateCatalogInput) {
 
     await db.insert(catalogs).values({
       name,
+      nameVi: nameVi || null,
       slug,
       description: description || null,
+      descriptionVi: descriptionVi || null,
       parentId: parentId || null,
       level,
       imageId: imageId || null,
@@ -66,7 +69,8 @@ export async function updateCatalog(id: string, data: CreateCatalogInput) {
     return { error: 'Invalid fields' };
   }
 
-  const { name, slug, description, parentId, imageId, productImageRatio } = validated.data;
+  const { name, nameVi, slug, description, descriptionVi, parentId, imageId, productImageRatio } =
+    validated.data;
 
   try {
     // Check for existing slug on other catalogs
@@ -85,8 +89,10 @@ export async function updateCatalog(id: string, data: CreateCatalogInput) {
       .update(catalogs)
       .set({
         name,
+        nameVi: nameVi || null,
         slug,
         description: description || null,
+        descriptionVi: descriptionVi || null,
         parentId: parentId || null,
         level,
         imageId: imageId || null,

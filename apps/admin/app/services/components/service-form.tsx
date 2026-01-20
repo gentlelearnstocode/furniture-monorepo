@@ -24,6 +24,7 @@ import { Input } from '@repo/ui/ui/input';
 import { Textarea } from '@repo/ui/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/ui/card';
 import { Checkbox } from '@repo/ui/ui/checkbox';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/ui/ui/tabs';
 
 import { RichTextEditor } from '@/components/ui/rich-text-editor';
 import { MultiImageUpload } from '@/components/ui/multi-image-upload';
@@ -46,22 +47,32 @@ export function ServiceForm({ initialData }: ServiceFormProps) {
     defaultValues: initialData
       ? {
           title: initialData.title,
+          titleVi: initialData.titleVi || '',
           slug: initialData.slug,
           descriptionHtml: initialData.descriptionHtml,
+          descriptionHtmlVi: initialData.descriptionHtmlVi || '',
           isActive: initialData.isActive,
           seoTitle: initialData.seoTitle || '',
+          seoTitleVi: initialData.seoTitleVi || '',
           seoDescription: initialData.seoDescription || '',
+          seoDescriptionVi: initialData.seoDescriptionVi || '',
           seoKeywords: initialData.seoKeywords || '',
+          seoKeywordsVi: initialData.seoKeywordsVi || '',
           images: initialData.images || [],
         }
       : {
           title: '',
+          titleVi: '',
           slug: '',
           descriptionHtml: '',
+          descriptionHtmlVi: '',
           isActive: true,
           seoTitle: '',
+          seoTitleVi: '',
           seoDescription: '',
+          seoDescriptionVi: '',
           seoKeywords: '',
+          seoKeywordsVi: '',
           images: [],
         },
   });
@@ -91,27 +102,46 @@ export function ServiceForm({ initialData }: ServiceFormProps) {
                 <CardDescription>Main details about the service.</CardDescription>
               </CardHeader>
               <CardContent className='space-y-4'>
-                <FormField
-                  control={form.control}
-                  name='title'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Title</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder='Service title'
-                          {...field}
-                          onChange={(e) => {
-                            field.onChange(e);
-                            const slug = slugify(e.target.value);
-                            form.setValue('slug', slug);
-                          }}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+                  <FormField
+                    control={form.control}
+                    name='title'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Title (English) *</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder='Service title'
+                            {...field}
+                            onChange={(e) => {
+                              field.onChange(e);
+                              const slug = slugify(e.target.value);
+                              form.setValue('slug', slug);
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name='titleVi'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Title (Vietnamese)</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder='Tiêu đề dịch vụ'
+                            {...field}
+                            value={field.value || ''}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
                 <FormField
                   control={form.control}
                   name='slug'
@@ -126,23 +156,51 @@ export function ServiceForm({ initialData }: ServiceFormProps) {
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name='descriptionHtml'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Description</FormLabel>
-                      <FormControl>
-                        <RichTextEditor
-                          placeholder='Describe the service...'
-                          value={field.value}
-                          onChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className='space-y-4 rounded-lg border p-4'>
+                  <h4 className='text-sm font-medium'>Description</h4>
+                  <Tabs defaultValue='en' className='w-full'>
+                    <TabsList className='grid w-full max-w-[200px] grid-cols-2'>
+                      <TabsTrigger value='en'>English</TabsTrigger>
+                      <TabsTrigger value='vi'>Tiếng Việt</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value='en'>
+                      <FormField
+                        control={form.control}
+                        name='descriptionHtml'
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <RichTextEditor
+                                placeholder='Describe the service...'
+                                value={field.value}
+                                onChange={field.onChange}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </TabsContent>
+                    <TabsContent value='vi'>
+                      <FormField
+                        control={form.control}
+                        name='descriptionHtmlVi'
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <RichTextEditor
+                                placeholder='Mô tả dịch vụ...'
+                                value={field.value || ''}
+                                onChange={field.onChange}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </TabsContent>
+                  </Tabs>
+                </div>
               </CardContent>
             </Card>
 
