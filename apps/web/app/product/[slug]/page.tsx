@@ -145,7 +145,7 @@ export default async function ProductDetailPage({ params }: Props) {
       />
 
       {/* Main Content */}
-      <div className='container mx-auto px-4 pb-20'>
+      <div className='container mx-auto px-4 pb-8 md:pb-12'>
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20'>
           {/* Left: Gallery */}
           <ProductGallery

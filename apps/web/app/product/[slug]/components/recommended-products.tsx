@@ -25,7 +25,7 @@ export function RecommendedProducts({ products }: RecommendedProductsProps) {
   const title = locale === 'vi' ? 'Sản phẩm gợi ý' : 'You May Also Like';
 
   return (
-    <section className='py-12 md:py-16'>
+    <section className='pt-4 pb-12 md:pt-6 md:pb-16'>
       <div className='container mx-auto px-4'>
         <h2 className='text-2xl md:text-3xl font-semibold text-center mb-8'>{title}</h2>
 
