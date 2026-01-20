@@ -75,20 +75,21 @@ export function FloatingContactWidget({ contacts }: FloatingContactWidgetProps) 
                   : 'noopener noreferrer'
               }
               className={cn(
-                'group flex items-center gap-3 transition-all duration-300 ease-out',
+                'group relative transition-all duration-300 ease-out',
                 isOpen ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-4 scale-90',
               )}
               style={{
                 transitionDelay: `${delay}ms`,
               }}
             >
-              {/* Floating Label - appears on hover */}
+              {/* Floating Label - positioned absolutely to the left */}
               <span
                 className={cn(
+                  'absolute right-full mr-3 top-1/2 -translate-y-1/2',
                   'px-3 py-1.5 rounded-lg text-[11px] font-semibold uppercase tracking-wider whitespace-nowrap',
                   'bg-black/90 text-white shadow-lg',
-                  'opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0',
-                  'transition-all duration-200 ease-out',
+                  'opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0',
+                  'transition-all duration-200 ease-out pointer-events-none',
                 )}
               >
                 {contact.label || contact.type}
