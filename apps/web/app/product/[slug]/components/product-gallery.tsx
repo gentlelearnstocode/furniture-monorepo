@@ -12,9 +12,10 @@ interface GalleryImage {
 interface ProductGalleryProps {
   images: GalleryImage[];
   name: string;
+  imageRatio?: string | null;
 }
 
-export function ProductGallery({ images, name }: ProductGalleryProps) {
+export function ProductGallery({ images, name, imageRatio }: ProductGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeImage = images[activeIndex];
 
@@ -31,7 +32,16 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
   return (
     <div className='flex flex-col gap-6'>
       {/* Main Image */}
-      <div className='aspect-[4/3] relative bg-[#F9F9F9] rounded-sm overflow-hidden shadow-sm'>
+      <div
+        className={cn('relative bg-[#F9F9F9] rounded-sm overflow-hidden shadow-sm', {
+          'aspect-auto': imageRatio === 'original',
+          'aspect-square': imageRatio === '1:1',
+          'aspect-[3/4]': imageRatio === '3:4',
+          'aspect-[4/3]': imageRatio === '4:3',
+          'aspect-video': imageRatio === '16:9',
+          'aspect-[4/5]': imageRatio === '4:5' || !imageRatio,
+        })}
+      >
         <StyledImage
           src={activeImage.url}
           alt={name}
@@ -49,10 +59,18 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
             key={index}
             onClick={() => setActiveIndex(index)}
             className={cn(
-              'aspect-video relative bg-[#F9F9F9] rounded-sm overflow-hidden transition-all duration-300 border-2',
+              'relative bg-[#F9F9F9] rounded-sm overflow-hidden transition-all duration-300 border-2',
+              {
+                'aspect-auto': imageRatio === 'original',
+                'aspect-square': imageRatio === '1:1',
+                'aspect-[3/4]': imageRatio === '3:4',
+                'aspect-[4/3]': imageRatio === '4:3',
+                'aspect-video': imageRatio === '16:9',
+                'aspect-[4/5]': imageRatio === '4:5' || !imageRatio,
+              },
               activeIndex === index
                 ? 'border-red-800'
-                : 'border-transparent opacity-70 hover:opacity-100'
+                : 'border-transparent opacity-70 hover:opacity-100',
             )}
           >
             <StyledImage

@@ -108,6 +108,7 @@ export default async function ProductDetailPage({ params }: Props) {
                 },
               }))}
             name={product.name}
+            imageRatio={product.catalog?.productImageRatio}
           />
 
           {/* Right: Info */}
