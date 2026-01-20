@@ -4,7 +4,8 @@ import React from 'react';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@repo/ui/lib/utils';
-import { useLanguage, useLocalizedText } from '@/providers/language-provider';
+import { useLocalizedText } from '@/providers/language-provider';
+import { useTranslations } from 'next-intl';
 import { ProductCard } from './product-card';
 
 interface Product {
@@ -39,8 +40,8 @@ interface CatalogDetailWrapperProps {
 }
 
 export const CatalogDetailWrapper = ({ collections }: CatalogDetailWrapperProps) => {
-  const { locale } = useLanguage();
-  const t = useLocalizedText();
+  const tl = useLocalizedText();
+  const tc = useTranslations('Catalog');
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [isHovered, setIsHovered] = React.useState(false);
 
@@ -87,7 +88,7 @@ export const CatalogDetailWrapper = ({ collections }: CatalogDetailWrapperProps)
                 {collection.bannerUrl && (
                   <Image
                     src={collection.bannerUrl}
-                    alt={t(collection, 'name')}
+                    alt={tl(collection, 'name')}
                     fill
                     className='object-cover'
                     priority={index === 0}
@@ -106,14 +107,14 @@ export const CatalogDetailWrapper = ({ collections }: CatalogDetailWrapperProps)
                 <button
                   onClick={prevSlide}
                   className='absolute left-6 md:left-10 top-1/2 -translate-y-1/2 z-20 w-14 h-14 rounded-full border border-white/30 bg-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-white hover:text-black hover:border-white hover:scale-110 transition-all duration-300 opacity-0 group-hover:opacity-100 shadow-lg'
-                  aria-label='Previous collection'
+                  aria-label={tc('prevCollection')}
                 >
                   <ChevronLeft size={26} strokeWidth={1.5} />
                 </button>
                 <button
                   onClick={nextSlide}
                   className='absolute right-6 md:right-10 top-1/2 -translate-y-1/2 z-20 w-14 h-14 rounded-full border border-white/30 bg-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-white hover:text-black hover:border-white hover:scale-110 transition-all duration-300 opacity-0 group-hover:opacity-100 shadow-lg'
-                  aria-label='Next collection'
+                  aria-label={tc('nextCollection')}
                 >
                   <ChevronRight size={26} strokeWidth={1.5} />
                 </button>
@@ -132,11 +133,7 @@ export const CatalogDetailWrapper = ({ collections }: CatalogDetailWrapperProps)
                       ? 'bg-white w-10 h-2.5 shadow-lg shadow-white/30'
                       : 'bg-white/50 w-2.5 h-2.5 hover:bg-white/70',
                   )}
-                  aria-label={
-                    locale === 'vi'
-                      ? `Chuyển đến ${t(collection, 'name')}`
-                      : `Go to ${t(collection, 'name')}`
-                  }
+                  aria-label={tc('goToCollection', { name: tl(collection, 'name') })}
                 />
               ))}
             </div>
@@ -152,28 +149,17 @@ export const CatalogDetailWrapper = ({ collections }: CatalogDetailWrapperProps)
             <div className='flex items-center justify-center gap-6 mb-3'>
               <div className='h-px w-16 bg-gradient-to-r from-transparent to-black/20' />
               <h2 className='text-5xl md:text-6xl font-serif text-center text-black/85 tracking-wide'>
-                {locale === 'vi' ? 'Mua theo phong cách' : 'Shop the look'}
+                {tc('shopTheLook')}
               </h2>
               <div className='h-px w-16 bg-gradient-to-l from-transparent to-black/20' />
             </div>
             <p className='text-center text-sm font-serif text-gray-400 tracking-widest uppercase'>
-              {t(currentCollection, 'name')}
+              {tl(currentCollection, 'name')}
             </p>
           </div>
 
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-16'>
             {currentCollection.products.map((product) => {
-              const primaryAsset = product.gallery.find((g) => g.isPrimary) || product.gallery[0];
-              // Extract display settings from the primary asset
-              const displaySettings = primaryAsset
-                ? {
-                    focusPoint: primaryAsset.focusPoint || undefined,
-                    aspectRatio:
-                      (primaryAsset.aspectRatio as 'original' | '1:1' | '3:4' | '4:3' | '16:9') ||
-                      undefined,
-                    objectFit: (primaryAsset.objectFit as 'cover' | 'contain') || undefined,
-                  }
-                : undefined;
               return (
                 <ProductCard
                   key={product.id}

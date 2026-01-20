@@ -2,10 +2,12 @@ import React from 'react';
 import Image from 'next/image';
 import { getIntroData } from '@/lib/queries';
 import { getLocale, getLocalizedText, getLocalizedHtml } from '@/lib/i18n';
+import { getTranslations } from 'next-intl/server';
 
 export const IntroSection = async () => {
   const intro = await getIntroData();
   const locale = await getLocale();
+  const t = await getTranslations('Intro');
 
   if (!intro) return null;
 
@@ -14,12 +16,7 @@ export const IntroSection = async () => {
       {/* Background Layer */}
       <div className='absolute inset-0 z-0'>
         {intro.backgroundImage ? (
-          <Image
-            src={intro.backgroundImage.url}
-            alt='Section Background'
-            fill
-            className='object-cover'
-          />
+          <Image src={intro.backgroundImage.url} alt={t('bgAlt')} fill className='object-cover' />
         ) : (
           <div className='absolute inset-0 bg-[#7B0C0C]' /> // Default deep red if no background provided
         )}

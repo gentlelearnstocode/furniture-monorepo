@@ -51,6 +51,7 @@ const getServiceBySlug = (slug: string) =>
 
 import { getLocale, getLocalizedText, getLocalizedHtml } from '@/lib/i18n';
 import { getSiteContacts } from '@/lib/queries';
+import { getTranslations } from 'next-intl/server';
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -69,13 +70,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const seoTitle = getLocalizedText(service, 'seoTitle', locale);
   const seoDescription = getLocalizedText(service, 'seoDescription', locale);
 
+  const t = await getTranslations('Services');
+
   return {
     title: seoTitle || `${title} | Thien An Furniture Services`,
-    description:
-      seoDescription ||
-      (locale === 'vi'
-        ? `Tìm hiểu thêm về dịch vụ ${title}`
-        : `Learn more about our ${title} service`),
+    description: seoDescription || t('seoDescription', { title }),
     keywords: getLocalizedText(service, 'seoKeywords', locale),
   };
 }
@@ -85,6 +84,8 @@ export default async function ServiceDetailPage({ params }: Props) {
   const locale = await getLocale();
   const service = await getServiceBySlug(slug)();
   const contacts = await getSiteContacts();
+  const t = await getTranslations('Services');
+  const tb = await getTranslations('Breadcrumbs');
 
   if (!service || !service.isActive) {
     notFound();
@@ -102,8 +103,8 @@ export default async function ServiceDetailPage({ params }: Props) {
       {/* Back Link */}
       <AppBreadcrumb
         items={[
-          { label: locale === 'vi' ? 'Trang chủ' : 'Home Page', href: '/' },
-          { label: locale === 'vi' ? 'Dịch vụ' : 'Services', href: '/services' },
+          { label: tb('home'), href: '/' },
+          { label: tb('services'), href: '/services' },
           { label: title },
         ]}
       />
@@ -113,7 +114,7 @@ export default async function ServiceDetailPage({ params }: Props) {
           className='inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors group'
         >
           <ChevronLeft className='mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1' />
-          {locale === 'vi' ? 'Quay lại danh sách dịch vụ' : 'Back to all services'}
+          {t('backToList')}
         </Link>
       </div>
 
@@ -121,7 +122,7 @@ export default async function ServiceDetailPage({ params }: Props) {
       <div className='container mx-auto px-4 mb-12'>
         <div className='max-w-4xl'>
           <span className='block text-[#7B0C0C] font-serif italic text-lg mb-4'>
-            {locale === 'vi' ? 'Dịch vụ của chúng tôi' : 'Our Service'}
+            {t('ourService')}
           </span>
           <h1 className='text-4xl md:text-6xl font-serif font-bold text-gray-900 mb-8 leading-tight'>
             {title}
@@ -158,7 +159,7 @@ export default async function ServiceDetailPage({ params }: Props) {
           <div className='mt-12 flex justify-center'>
             <ContactButton
               contacts={contacts}
-              label={locale === 'vi' ? 'Tư vấn dịch vụ này' : 'Consult for this service'}
+              label={t('consultLabel')}
               className='w-full max-w-sm'
             />
           </div>
@@ -170,7 +171,7 @@ export default async function ServiceDetailPage({ params }: Props) {
         <div className='container mx-auto px-4'>
           <div className='mb-12'>
             <h2 className='text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4'>
-              {locale === 'vi' ? 'Thư viện hình ảnh' : 'Service Gallery'}
+              {t('gallery')}
             </h2>
             <div className='h-px bg-gradient-to-r from-[#7B0C0C]/30 to-transparent w-32' />
           </div>

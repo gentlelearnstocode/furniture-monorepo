@@ -1,0 +1,130 @@
+{
+  "Common": {
+    "home": "Trang chủ",
+    "seeAll": "Xem tất cả",
+    "expandYourView": "Xem thêm",
+    "exploreMore": "Khám phá",
+    "back": "Quay lại",
+    "loading": "Đang tải...",
+    "noResults": "Không tìm thấy kết quả",
+    "category": "Danh mục",
+    "noImage": "Không có bộ sưu tập",
+    "dateFormat": "d MMMM, yyyy"
+  },
+  "Breadcrumbs": {
+    "home": "Trang chủ",
+    "services": "Dịch vụ",
+    "projects": "Dự án",
+    "blogs": "Bài viết",
+    "catalog": "Danh mục",
+    "sale": "Khuyến mãi",
+    "allCategories": "Tất cả danh mục"
+  },
+  "Footer": {
+    "emailPlaceholder": "Địa chỉ Email/SĐT",
+    "registerButton": "Đăng ký tư vấn",
+    "catalog": "Danh Mục",
+    "projects": "Dự Án",
+    "privacyPolicy": "Chính sách bảo mật",
+    "termsOfUse": "Điều khoản sử dụng",
+    "legalInfo": "Thông tin pháp lý",
+    "allRightsReserved": "Mọi quyền được bảo lưu.",
+    "mapTitle": "Bản đồ vị trí",
+    "mapFallback": "Bản đồ sẽ được hiển thị tại đây"
+  },
+  "Product": {
+    "availableFinishes": "Có sẵn nhiều tùy chọn màu sắc",
+    "details": "Thông tin sản phẩm",
+    "contactConsultation": "Liên hệ ngay để được tư vấn",
+    "youMayAlsoLike": "Sản phẩm gợi ý",
+    "noDetailedInfo": "Không có thông tin chi tiết cho sản phẩm này."
+  },
+  "Navbar": {
+    "sale": "Sale",
+    "allSale": "Tất Cả Sale"
+  },
+  "Search": {
+    "placeholder": "Tìm kiếm sản phẩm...",
+    "noResults": "Không tìm thấy sản phẩm nào cho \"{query}\"",
+    "initialHint": "Nhập để tìm kiếm sản phẩm",
+    "shortcutHint": "Sử dụng ↑↓ để di chuyển, Enter để chọn, Esc để đóng",
+    "navigate": "Di chuyển",
+    "select": "Chọn",
+    "close": "Đóng",
+    "tapOutsideToClose": "Nhấn bên ngoài để đóng"
+  },
+  "SaleSection": {
+    "title": "Khuyến Mãi",
+    "expandYourView": "Xem Thêm Sản Phẩm Khuyến Mãi",
+    "saleOff": "Sản Phẩm Khuyến Mãi"
+  },
+  "FeaturedCatalogs": {
+    "title": "Bạn đang tìm kiếm sản phẩm gì?",
+    "seeAll": "XEM TẤT CẢ",
+    "exploreCategories": "Khám phá các danh mục"
+  },
+  "Services": {
+    "title": "Dịch Vụ Nổi Bật",
+    "exploreMore": "Khám Phá Thêm",
+    "consultLabel": "Tư vấn dịch vụ này",
+    "gallery": "Thư viện hình ảnh",
+    "ourService": "Dịch vụ",
+    "seoDescription": "Dịch vụ {title} chuyên nghiệp cho ngôi nhà của bạn.",
+    "backToList": "Quay lại danh sách dịch vụ",
+    "pageTitle": "Dịch Vụ Của Chúng Tôi",
+    "pageDescription": "Chúng tôi mang đến giải pháp thiết kế nội thất toàn diện, được may đo riêng cho không gian sống của bạn.",
+    "noResults": "Hiện chưa có dịch vụ nào. Vui lòng quay lại sau!"
+  },
+  "Projects": {
+    "title": "Dự Án Đã Làm",
+    "expandYourView": "Xem Thêm Dự Án",
+    "gallery": "Thư viện dự án",
+    "showcase": "Giới thiệu dự án",
+    "exploreProject": "Khám phá dự án {title}",
+    "backToList": "Quay lại danh sách dự án",
+    "contactLabel": "Liên hệ về dự án này",
+    "pageTitle": "Dự Án Đã Thực Hiện",
+    "pageDescription": "Khám phá danh mục các dự án thiết kế và thi công nội thất đã hoàn thiện, minh chứng cho sự tỉ mỉ và tay nghề của chúng tôi.",
+    "noResults": "Không tìm thấy dự án nào. Vui lòng quay lại sau!",
+    "viewProject": "Xem Dự Án"
+  },
+  "Blogs": {
+    "title": "Tin Tức",
+    "readStory": "Đọc Câu Chuyện",
+    "expandYourView": "Xem Thêm Bài Viết",
+    "fallbackExcerpt": "Đọc những chia sẻ mới nhất của chúng tôi về thiết kế nội thất và trang trí nhà cửa.",
+    "admin": "Quản trị viên",
+    "backToList": "Quay lại danh sách bài viết",
+    "gallery": "Thư viện hình ảnh",
+    "pageTitle": "Góc Chia Sẻ",
+    "pageDescription": "Khám phá những câu chuyện về tay nghề thủ công, xu hướng thiết kế và mẹo tạo nên không gian sống lý tưởng.",
+    "noResults": "Không tìm thấy bài viết nào. Vui lòng quay lại sau!"
+  },
+  "Intro": {
+    "bgAlt": "Nền phần giới thiệu"
+  },
+  "Toolbar": {
+    "sort": "Sắp xếp",
+    "sortPriceLowHigh": "Giá thấp đến cao",
+    "sortPriceHighLow": "Giá cao đến thấp",
+    "sortAz": "Tên A-Z",
+    "sortZa": "Tên Z-A",
+    "priceLowHigh": "Giá thấp đến cao",
+    "priceHighLow": "Giá cao đến thấp",
+    "sortPlaceholder": "Sắp xếp",
+    "showingResults": "Hiển thị {count} kết quả"
+  },
+  "Catalog": {
+    "shopTheLook": "Gợi ý không gian",
+    "whatAreYouLookingFor": "Bạn đang tìm kiếm sản phẩm gì?",
+    "exploreCategories": "Khám phá các danh mục",
+    "prevCollection": "Bộ sưu tập trước",
+    "nextCollection": "Bộ sưu tập tiếp theo",
+    "goToCollection": "Xem bộ sưu tập {name}"
+  },
+  "Sale": {
+    "title": "Chương Trình Khuyến Mãi",
+    "description": "Khám phá những ưu đãi tuyệt vời nhất cho ngôi nhà của bạn. Các sản phẩm nội thất cao cấp với mức giá ưu đãi đặc biệt.",
+    "allCategories": "Tất cả danh mục"
+  }
+}

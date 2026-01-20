@@ -51,6 +51,7 @@ const getProjectBySlug = (slug: string) =>
 
 import { getLocale, getLocalizedText, getLocalizedHtml } from '@/lib/i18n';
 import { getSiteContacts } from '@/lib/queries';
+import { getTranslations } from 'next-intl/server';
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -69,11 +70,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const seoTitle = getLocalizedText(project, 'seoTitle', locale);
   const seoDescription = getLocalizedText(project, 'seoDescription', locale);
 
+  const t = await getTranslations('Projects');
+
   return {
     title: seoTitle || `${title} | Thien An Furniture Projects`,
-    description:
-      seoDescription ||
-      (locale === 'vi' ? `Khám phá dự án ${title}` : `Explore our ${title} project`),
+    description: seoDescription || t('exploreProject', { title }),
     keywords: getLocalizedText(project, 'seoKeywords', locale),
   };
 }
@@ -83,6 +84,8 @@ export default async function ProjectDetailPage({ params }: Props) {
   const locale = await getLocale();
   const project = await getProjectBySlug(slug)();
   const contacts = await getSiteContacts();
+  const t = await getTranslations('Projects');
+  const tb = await getTranslations('Breadcrumbs');
 
   if (!project || !project.isActive) {
     notFound();
@@ -104,14 +107,14 @@ export default async function ProjectDetailPage({ params }: Props) {
           className='inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors group'
         >
           <ChevronLeft className='mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1' />
-          {locale === 'vi' ? 'Quay lại danh sách dự án' : 'Back to all projects'}
+          {t('backToList')}
         </Link>
       </div>
 
       <AppBreadcrumb
         items={[
-          { label: locale === 'vi' ? 'Trang chủ' : 'Home Page', href: '/' },
-          { label: locale === 'vi' ? 'Dự án' : 'Projects', href: '/projects' },
+          { label: tb('home'), href: '/' },
+          { label: tb('projects'), href: '/projects' },
           { label: title },
         ]}
       />
@@ -120,7 +123,7 @@ export default async function ProjectDetailPage({ params }: Props) {
       <div className='container mx-auto px-4 mb-12'>
         <div className='max-w-4xl'>
           <span className='block text-[#7B0C0C] font-serif italic text-lg mb-4'>
-            {locale === 'vi' ? 'Giới thiệu dự án' : 'Project Showcase'}
+            {t('showcase')}
           </span>
           <h1 className='text-4xl md:text-6xl font-serif font-bold text-gray-900 mb-8 leading-tight'>
             {title}
@@ -157,7 +160,7 @@ export default async function ProjectDetailPage({ params }: Props) {
           <div className='mt-12 flex justify-center'>
             <ContactButton
               contacts={contacts}
-              label={locale === 'vi' ? 'Liên hệ về dự án này' : 'Contact about this project'}
+              label={t('contactLabel')}
               className='w-full max-w-sm'
             />
           </div>
@@ -169,7 +172,7 @@ export default async function ProjectDetailPage({ params }: Props) {
         <div className='container mx-auto px-4'>
           <div className='mb-12'>
             <h2 className='text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4'>
-              {locale === 'vi' ? 'Thư viện dự án' : 'Project Gallery'}
+              {t('gallery')}
             </h2>
             <div className='h-px bg-gradient-to-r from-[#7B0C0C]/30 to-transparent w-32' />
           </div>

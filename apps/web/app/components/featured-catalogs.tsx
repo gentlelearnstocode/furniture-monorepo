@@ -5,6 +5,7 @@ import { featuredCatalogRows } from '@repo/database/schema';
 import { cn } from '@repo/ui/lib/utils';
 import { asc } from 'drizzle-orm';
 import { getLocale, getLocalizedText, type Locale } from '@/lib/i18n';
+import { getTranslations } from 'next-intl/server';
 
 // Catalog Section component - same design as old CollectionSection
 const CatalogSection = ({
@@ -15,6 +16,7 @@ const CatalogSection = ({
   isFirst,
   layout,
   locale,
+  t,
 }: {
   name: string;
   nameVi?: string | null;
@@ -23,6 +25,7 @@ const CatalogSection = ({
   isFirst?: boolean;
   layout?: 'full' | 'half' | 'third' | 'quarter';
   locale: Locale;
+  t: any;
 }) => {
   const isSmall = layout === 'half' || layout === 'third' || layout === 'quarter';
 
@@ -73,7 +76,7 @@ const CatalogSection = ({
           </h3>
           <div className='flex flex-col items-center gap-2'>
             <span className='text-white text-sm md:text-base font-medium tracking-[0.2em] uppercase border-b border-white pb-1'>
-              {locale === 'vi' ? 'XEM TẤT CẢ' : 'SEE ALL'}
+              {t('seeAll')}
             </span>
           </div>
         </div>
@@ -156,6 +159,7 @@ export const FeaturedCatalogs = async () => {
   // Try to fetch custom layout configuration
   const layoutRows = await getFeaturedLayout();
   const locale = await getLocale();
+  const t = await getTranslations('FeaturedCatalogs');
 
   // If custom layout exists and has items, use it
   if (layoutRows.length > 0 && layoutRows.some((row) => row.items.length > 0)) {
@@ -191,6 +195,7 @@ export const FeaturedCatalogs = async () => {
                       isFirst={isFirst}
                       layout={layout}
                       locale={locale}
+                      t={t}
                     />
                   </div>
                 );
@@ -240,6 +245,7 @@ export const FeaturedCatalogs = async () => {
               isFirst={index === 0}
               layout={layout}
               locale={locale}
+              t={t}
             />
           </div>
         );

@@ -11,6 +11,7 @@ import { createCachedQuery } from '@/lib/cache';
 import { getSiteContacts } from '@/lib/queries';
 import { getNavMenuItems, type NavMenuItem } from '@/lib/menu';
 import { getLocale } from '@/lib/i18n';
+import { getMessages } from 'next-intl/server';
 import { LanguageProvider } from '@/providers/language-provider';
 
 const geistSans = localFont({
@@ -111,11 +112,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [menuItems, rootCatalogs, siteContacts, locale] = await Promise.all([
+  const [menuItems, rootCatalogs, siteContacts, locale, messages] = await Promise.all([
     getNavMenuItems(),
     getRootCatalogs(),
     getSiteContacts(),
     getLocale(),
+    getMessages(),
   ]);
 
   // Use menu items if configured, otherwise fall back to root catalogs
@@ -143,7 +145,7 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} font-sans antialiased`}
       >
-        <LanguageProvider initialLocale={locale}>
+        <LanguageProvider initialLocale={locale} messages={messages}>
           <Navbar items={navItems} />
           <main>{children}</main>
           <Footer />

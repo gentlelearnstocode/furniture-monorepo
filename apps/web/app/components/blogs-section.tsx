@@ -7,6 +7,7 @@ import { ArrowRight, Calendar } from 'lucide-react';
 
 import { createCachedQuery } from '@/lib/cache';
 import { getLocale, getLocalizedText } from '@/lib/i18n';
+import { getTranslations } from 'next-intl/server';
 
 export const BlogsSection = async () => {
   const getLatestPosts = createCachedQuery(
@@ -25,6 +26,8 @@ export const BlogsSection = async () => {
 
   const posts = await getLatestPosts();
   const locale = await getLocale();
+  const t = await getTranslations('Blogs');
+  const tc = await getTranslations('Common');
 
   if (posts.length === 0) return null;
 
@@ -34,7 +37,7 @@ export const BlogsSection = async () => {
         {/* Section Header */}
         <div className='flex flex-col items-center mb-12'>
           <h2 className='text-2xl md:text-3xl lg:text-4xl font-serif text-[#49000D] tracking-wide uppercase'>
-            {locale === 'vi' ? 'Blog Của Chúng Tôi' : 'Our Blog'}
+            {t('title')}
           </h2>
 
           {/* Decorative divider with symbol */}
@@ -68,7 +71,7 @@ export const BlogsSection = async () => {
                   />
                 ) : (
                   <div className='absolute inset-0 bg-gray-100 flex items-center justify-center text-gray-400'>
-                    No Image
+                    {tc('noImage')}
                   </div>
                 )}
                 <div className='absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500' />
@@ -76,7 +79,7 @@ export const BlogsSection = async () => {
 
               <div className='flex items-center gap-2 text-xs font-medium text-gray-400 uppercase tracking-widest mb-4'>
                 <Calendar className='h-3.5 w-3.5' />
-                {format(new Date(post.updatedAt), 'MMMM d, yyyy')}
+                {format(new Date(post.updatedAt), tc('dateFormat'))}
               </div>
 
               <Link href={`/blogs/${post.slug}`}>
@@ -86,8 +89,7 @@ export const BlogsSection = async () => {
               </Link>
 
               <p className='text-gray-600 font-light text-sm leading-relaxed mb-6 line-clamp-3 flex-grow'>
-                {getLocalizedText(post, 'excerpt', locale) ||
-                  'Read our latest insights on furniture design and home decor.'}
+                {getLocalizedText(post, 'excerpt', locale) || t('fallbackExcerpt')}
               </p>
 
               <div className='mt-auto'>
@@ -95,7 +97,7 @@ export const BlogsSection = async () => {
                   href={`/blogs/${post.slug}`}
                   className='inline-flex items-center text-sm font-semibold text-[#7B0C0C] group/link'
                 >
-                  {locale === 'vi' ? 'Đọc Câu Chuyện' : 'Read Story'}
+                  {t('readStory')}
                   <ArrowRight className='ml-2 h-4 w-4 transition-transform duration-300 group-hover/link:translate-x-1' />
                 </Link>
               </div>
@@ -109,7 +111,7 @@ export const BlogsSection = async () => {
             href='/blogs'
             className='group flex items-center gap-2 text-[13px] font-medium tracking-wider text-gray-700 hover:text-[#49000D] transition-colors'
           >
-            <span>{locale === 'vi' ? 'Xem Thêm Bài Viết' : 'Expand Your View'}</span>
+            <span>{t('expandYourView')}</span>
             <div className='w-5 h-5 rounded-full border border-current flex items-center justify-center transition-transform group-hover:translate-x-1'>
               <ArrowRight size={12} />
             </div>

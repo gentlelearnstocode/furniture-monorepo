@@ -5,7 +5,8 @@ import { Search, X, Loader2 } from 'lucide-react';
 import NextImage from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useLanguage, useLocalizedText } from '@/providers/language-provider';
+import { useTranslations } from 'next-intl';
+import { useLocalizedText } from '@/providers/language-provider';
 
 interface SearchResult {
   id: string;
@@ -23,8 +24,8 @@ interface SearchDialogProps {
 }
 
 export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
-  const { locale } = useLanguage();
-  const t = useLocalizedText();
+  const t = useTranslations('Search');
+  const tl = useLocalizedText();
   const [query, setQuery] = React.useState('');
   const [results, setResults] = React.useState<SearchResult[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -134,7 +135,7 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
             <input
               ref={inputRef}
               type='text'
-              placeholder={locale === 'vi' ? 'Tìm kiếm sản phẩm...' : 'Search products...'}
+              placeholder={t('placeholder')}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -154,11 +155,7 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
             {query.length >= 2 && results.length === 0 && !isLoading && (
               <div className='px-6 py-12 text-center text-gray-500'>
                 <Search className='w-12 h-12 mx-auto mb-4 text-gray-300' />
-                <p>
-                  {locale === 'vi'
-                    ? `Không tìm thấy sản phẩm nào cho "${query}"`
-                    : `No products found for "${query}"`}
-                </p>
+                <p>{t('noResults', { query })}</p>
               </div>
             )}
 
@@ -192,7 +189,7 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
 
                       {/* Product Info */}
                       <div className='flex-1 min-w-0'>
-                        <h4 className='font-medium text-gray-900 truncate'>{t(result, 'name')}</h4>
+                        <h4 className='font-medium text-gray-900 truncate'>{tl(result, 'name')}</h4>
                         <p className='text-sm text-[#49000D] font-medium'>
                           {formatPrice(result.price)}
                         </p>
@@ -213,16 +210,8 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
             {/* Empty state - initial */}
             {query.length < 2 && (
               <div className='px-6 py-12 text-center text-gray-500'>
-                <p className='mb-2'>
-                  {locale === 'vi'
-                    ? 'Nhập để tìm kiếm sản phẩm'
-                    : 'Start typing to search products'}
-                </p>
-                <p className='text-sm text-gray-400'>
-                  {locale === 'vi'
-                    ? 'Sử dụng ↑↓ để di chuyển, Enter để chọn, Esc để đóng'
-                    : 'Use ↑↓ to navigate, Enter to select, Esc to close'}
-                </p>
+                <p className='mb-2'>{t('initialHint')}</p>
+                <p className='text-sm text-gray-400'>{t('shortcutHint')}</p>
               </div>
             )}
           </div>
@@ -237,25 +226,23 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
                 <kbd className='px-1.5 py-0.5 bg-white rounded border border-gray-200 font-mono'>
                   ↓
                 </kbd>
-                <span className='ml-1'>{locale === 'vi' ? 'Di chuyển' : 'Navigate'}</span>
+                <span className='ml-1'>{t('navigate')}</span>
               </span>
               <span className='flex items-center gap-1'>
                 <kbd className='px-1.5 py-0.5 bg-white rounded border border-gray-200 font-mono'>
                   ↵
                 </kbd>
-                <span className='ml-1'>{locale === 'vi' ? 'Chọn' : 'Select'}</span>
+                <span className='ml-1'>{t('select')}</span>
               </span>
               <span className='flex items-center gap-1'>
                 <kbd className='px-1.5 py-0.5 bg-white rounded border border-gray-200 font-mono'>
                   Esc
                 </kbd>
-                <span className='ml-1'>{locale === 'vi' ? 'Đóng' : 'Close'}</span>
+                <span className='ml-1'>{t('close')}</span>
               </span>
             </div>
             {/* Mobile hint */}
-            <span className='md:hidden text-gray-400'>
-              {locale === 'vi' ? 'Nhấn ngoài để đóng' : 'Tap outside to close'}
-            </span>
+            <span className='md:hidden text-gray-400'>{t('tapOutsideToClose')}</span>
           </div>
         </div>
       </div>

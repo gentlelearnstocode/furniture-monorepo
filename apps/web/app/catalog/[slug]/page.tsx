@@ -5,6 +5,7 @@ import { SubCatalogGrid } from './components/sub-catalog-grid';
 import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
 import { createCachedQuery } from '@/lib/cache';
 import { getLocale, getLocalizedText } from '@/lib/i18n';
+import { getTranslations } from 'next-intl/server';
 
 import type { Metadata } from 'next';
 
@@ -103,6 +104,7 @@ const getCatalogBySlug = (slug: string) =>
 export default async function CatalogPage({ params }: Props) {
   const { slug } = await params;
   const locale = await getLocale();
+  const tb = await getTranslations('Breadcrumbs');
 
   // Fetch the catalog and its linked collections/products
   const catalog = await getCatalogBySlug(slug)();
@@ -193,7 +195,7 @@ export default async function CatalogPage({ params }: Props) {
     <div className='min-h-screen bg-gradient-to-b from-[#FDFCFB] via-white to-[#FDFCFB]'>
       <AppBreadcrumb
         items={[
-          { label: locale === 'vi' ? 'Trang chủ' : 'Home Page', href: '/' },
+          { label: tb('home'), href: '/' },
           { label: getLocalizedText(catalog, 'name', locale) },
         ]}
       />

@@ -1,0 +1,130 @@
+{
+  "Common": {
+    "home": "Home",
+    "seeAll": "See All",
+    "expandYourView": "Expand Your View",
+    "exploreMore": "Explore More",
+    "back": "Back",
+    "loading": "Loading...",
+    "noResults": "No results found",
+    "category": "Category",
+    "noImage": "No Image",
+    "dateFormat": "MMMM d, yyyy"
+  },
+  "Breadcrumbs": {
+    "home": "Home Page",
+    "services": "Services",
+    "projects": "Projects",
+    "blogs": "Stories",
+    "catalog": "Catalog",
+    "sale": "Sale",
+    "allCategories": "All Categories"
+  },
+  "Footer": {
+    "emailPlaceholder": "Email/Phone Address",
+    "registerButton": "Register for consultation",
+    "catalog": "Catalog",
+    "projects": "Projects",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfUse": "Terms of Use",
+    "legalInfo": "Legal Information",
+    "allRightsReserved": "All rights reserved.",
+    "mapTitle": "Location Map",
+    "mapFallback": "Map will be displayed here"
+  },
+  "Product": {
+    "availableFinishes": "Available in multiple finishes",
+    "details": "Product Details",
+    "contactConsultation": "Contact us for consultation",
+    "youMayAlsoLike": "You May Also Like",
+    "noDetailedInfo": "No detailed information available for this product."
+  },
+  "Navbar": {
+    "sale": "Sale",
+    "allSale": "All Sale"
+  },
+  "Search": {
+    "placeholder": "Search products...",
+    "noResults": "No products found for \"{query}\"",
+    "initialHint": "Start typing to search products",
+    "shortcutHint": "Use ↑↓ to navigate, Enter to select, Esc to close",
+    "navigate": "Navigate",
+    "select": "Select",
+    "close": "Close",
+    "tapOutsideToClose": "Tap outside to close"
+  },
+  "SaleSection": {
+    "title": "Sales",
+    "expandYourView": "Expand Your View",
+    "saleOff": "Sale Off"
+  },
+  "FeaturedCatalogs": {
+    "title": "What are you looking for?",
+    "seeAll": "SEE ALL",
+    "exploreCategories": "Explore Categories"
+  },
+  "Services": {
+    "title": "Our Exceptional Services",
+    "exploreMore": "Explore More",
+    "consultLabel": "Consult for this service",
+    "gallery": "Service Gallery",
+    "ourService": "Our Service",
+    "seoDescription": "Expert {title} services for your home.",
+    "backToList": "Back to all services",
+    "pageTitle": "Our Services",
+    "pageDescription": "We offer a comprehensive range of interior design and furniture solutions tailored to your unique needs and style.",
+    "noResults": "No services available. Check back soon!"
+  },
+  "Projects": {
+    "title": "Our Projects",
+    "expandYourView": "Expand Your View",
+    "gallery": "Project Gallery",
+    "showcase": "Project Showcase",
+    "exploreProject": "Explore our {title} project",
+    "backToList": "Back to all projects",
+    "contactLabel": "Contact about this project",
+    "pageTitle": "Our Projects",
+    "pageDescription": "Explore our portfolio of completed interior design and furniture projects that showcase our craftsmanship and attention to detail.",
+    "noResults": "No projects found. Check back soon!",
+    "viewProject": "View Project"
+  },
+  "Blogs": {
+    "title": "Our Blog",
+    "readStory": "Read Story",
+    "expandYourView": "Expand Your View",
+    "fallbackExcerpt": "Read our latest insights on furniture design and home decor.",
+    "admin": "Admin",
+    "backToList": "Back to all stories",
+    "gallery": "Image Gallery",
+    "pageTitle": "Our Blog",
+    "pageDescription": "Discover stories of craftsmanship, design trends, and tips for creating your perfect living space.",
+    "noResults": "No blog posts found. Check back soon!"
+  },
+  "Intro": {
+    "bgAlt": "Section Background"
+  },
+  "Toolbar": {
+    "sort": "Sort",
+    "sortPriceLowHigh": "Price Low to High",
+    "sortPriceHighLow": "Price High to Low",
+    "sortAz": "Name A-Z",
+    "sortZa": "Name Z-A",
+    "priceLowHigh": "Price Low to High",
+    "priceHighLow": "Price High to Low",
+    "sortPlaceholder": "Sort",
+    "showingResults": "Showing {count} results"
+  },
+  "Catalog": {
+    "shopTheLook": "Shop the Look",
+    "whatAreYouLookingFor": "What are you looking for?",
+    "exploreCategories": "Explore Categories",
+    "prevCollection": "Previous Collection",
+    "nextCollection": "Next Collection",
+    "goToCollection": "Go to {name} collection"
+  },
+  "Sale": {
+    "title": "Special Offers",
+    "description": "Discover the best deals for your home. Premium furniture pieces at exceptional prices.",
+    "allCategories": "All Categories"
+  }
+}

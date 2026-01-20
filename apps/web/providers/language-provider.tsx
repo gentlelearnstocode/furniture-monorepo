@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { NextIntlClientProvider, type AbstractIntlMessages } from 'next-intl';
 import { Locale, DEFAULT_LOCALE, LOCALE_COOKIE_NAME } from '@/lib/i18n';
 
 interface LanguageContextType {
@@ -15,9 +16,10 @@ const LanguageContext = createContext<LanguageContextType | null>(null);
 interface LanguageProviderProps {
   children: React.ReactNode;
   initialLocale?: Locale;
+  messages?: AbstractIntlMessages;
 }
 
-export function LanguageProvider({ children, initialLocale }: LanguageProviderProps) {
+export function LanguageProvider({ children, initialLocale, messages }: LanguageProviderProps) {
   const [locale, setLocaleState] = useState<Locale>(initialLocale || DEFAULT_LOCALE);
 
   // Load from cookie on mount (client-side only)
@@ -50,7 +52,13 @@ export function LanguageProvider({ children, initialLocale }: LanguageProviderPr
     isEnglish: locale === 'en',
   };
 
-  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
+  return (
+    <LanguageContext.Provider value={value}>
+      <NextIntlClientProvider locale={locale} messages={messages}>
+        {children}
+      </NextIntlClientProvider>
+    </LanguageContext.Provider>
+  );
 }
 
 /**

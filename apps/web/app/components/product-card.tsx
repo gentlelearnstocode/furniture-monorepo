@@ -8,6 +8,7 @@ import {
   type ImageDisplaySettings,
   type ObjectFit,
 } from './styled-image';
+import { useTranslations } from 'next-intl';
 import { useLocalizedText } from '@/providers/language-provider';
 
 interface ProductCardProps {
@@ -38,9 +39,10 @@ interface ProductCardProps {
 }
 
 export const ProductCard = ({ product, className, imageRatio }: ProductCardProps) => {
-  const t = useLocalizedText();
-  const productName = t(product, 'name');
-  const productDesc = t(product, 'shortDescription');
+  const t = useTranslations('Product');
+  const tl = useLocalizedText();
+  const productName = tl(product, 'name');
+  const productDesc = tl(product, 'shortDescription');
 
   const primaryAsset = product.gallery.find((g) => g.isPrimary) || product.gallery[0];
   const imageUrl =
@@ -113,7 +115,7 @@ export const ProductCard = ({ product, className, imageRatio }: ProductCardProps
         </h3>
 
         <p className='text-[14px] md:text-[16px] font-serif text-[#666] leading-snug'>
-          {productDesc || 'Available in multiple finishes'}
+          {productDesc || t('availableFinishes')}
         </p>
 
         {/* Color Dots */}

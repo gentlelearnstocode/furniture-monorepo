@@ -5,9 +5,11 @@ import { db } from '@repo/database';
 import { MapPin, Phone, Mail, Facebook, Youtube, Linkedin, Twitter } from 'lucide-react';
 
 import { createCachedQuery } from '@/lib/cache';
+import { getTranslations } from 'next-intl/server';
 import { getLocale, getLocalizedText } from '@/lib/i18n';
 
 export const Footer = async () => {
+  const t = await getTranslations('Footer');
   // Cached footer settings
   const getFooterData = createCachedQuery(
     async () =>
@@ -230,14 +232,14 @@ export const Footer = async () => {
               <form className='flex flex-col sm:flex-row gap-2'>
                 <input
                   type='email'
-                  placeholder={locale === 'vi' ? 'Địa chỉ Email/SĐT' : 'Email/Phone Address'}
+                  placeholder={t('emailPlaceholder')}
                   className='flex-1 px-4 py-3 text-sm border border-gray-300 bg-white focus:outline-none focus:border-[#7B0C0C] placeholder:text-gray-400'
                 />
                 <button
                   type='submit'
                   className='px-6 py-3 bg-[#7B0C0C] text-white text-sm font-semibold uppercase tracking-wider hover:bg-[#5a0909] transition-colors whitespace-nowrap'
                 >
-                  {locale === 'vi' ? 'Đăng ký tư vấn' : 'Register for consultation'}
+                  {t('registerButton')}
                 </button>
               </form>
             </div>
@@ -256,13 +258,13 @@ export const Footer = async () => {
                   allowFullScreen
                   loading='lazy'
                   referrerPolicy='no-referrer-when-downgrade'
-                  title='Location Map'
+                  title={t('mapTitle')}
                 />
               ) : (
                 <div className='w-full h-full flex items-center justify-center text-gray-400'>
                   <div className='text-center'>
                     <MapPin className='h-12 w-12 mx-auto mb-2' />
-                    <p className='text-sm'>Map will be displayed here</p>
+                    <p className='text-sm'>{t('mapFallback')}</p>
                   </div>
                 </div>
               )}
@@ -272,9 +274,7 @@ export const Footer = async () => {
             <div className='grid grid-cols-2 gap-8'>
               {/* Catalog Links */}
               <div>
-                <h4 className='text-lg font-serif font-bold text-gray-900 mb-6'>
-                  {locale === 'vi' ? 'Danh Mục' : 'Catalog'}
-                </h4>
+                <h4 className='text-lg font-serif font-bold text-gray-900 mb-6'>{t('catalog')}</h4>
                 <ul className='space-y-3'>
                   {catalogs.map((catalog) => (
                     <li key={catalog.id}>
@@ -291,9 +291,7 @@ export const Footer = async () => {
 
               {/* Projects Links */}
               <div>
-                <h4 className='text-lg font-serif font-bold text-gray-900 mb-6'>
-                  {locale === 'vi' ? 'Dự Án' : 'Projects'}
-                </h4>
+                <h4 className='text-lg font-serif font-bold text-gray-900 mb-6'>{t('projects')}</h4>
                 <ul className='space-y-3'>
                   {projects.map((project) => (
                     <li key={project.id}>
@@ -319,22 +317,22 @@ export const Footer = async () => {
             {/* Policy Links */}
             <div className='flex items-center gap-6 text-sm text-gray-500'>
               <Link href='/privacy' className='hover:text-gray-900 transition-colors'>
-                {locale === 'vi' ? 'Chính sách bảo mật' : 'Privacy Policy'}
+                {t('privacyPolicy')}
               </Link>
               <span className='text-gray-300'>|</span>
               <Link href='/terms' className='hover:text-gray-900 transition-colors'>
-                {locale === 'vi' ? 'Điều khoản sử dụng' : 'Terms of Use'}
+                {t('termsOfUse')}
               </Link>
               <span className='text-gray-300'>|</span>
               <Link href='/legal' className='hover:text-gray-900 transition-colors'>
-                {locale === 'vi' ? 'Thông tin pháp lý' : 'Legal Information'}
+                {t('legalInfo')}
               </Link>
             </div>
 
             {/* Copyright */}
             <div className='text-sm text-gray-500'>
               ©1997 <span className='font-semibold text-gray-900'>THIÊN ẤN Furniture.</span>{' '}
-              {locale === 'vi' ? 'Mọi quyền được bảo lưu.' : 'All rights reserved.'}
+              {t('allRightsReserved')}
             </div>
 
             {/* Social Links */}

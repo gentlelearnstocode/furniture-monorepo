@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { ProductCard } from '@/app/components/product-card';
+import { useTranslations } from 'next-intl';
 import { useLanguage, useLocalizedText } from '@/providers/language-provider';
 
 import {
@@ -22,7 +23,8 @@ interface SaleSectionProps {
 
 export const SaleSection = ({ products, settings }: SaleSectionProps) => {
   const { locale } = useLanguage();
-  const t = useLocalizedText();
+  const t = useTranslations('SaleSection');
+  const tl = useLocalizedText();
 
   if (!settings || !settings.isActive || products.length === 0) {
     return null;
@@ -34,7 +36,7 @@ export const SaleSection = ({ products, settings }: SaleSectionProps) => {
         {/* Section Header */}
         <div className='flex flex-col items-center mb-12'>
           <h2 className='text-3xl md:text-4xl lg:text-5xl font-serif text-[#49000D] tracking-wide uppercase'>
-            {t(settings, 'title') || 'Sales'}
+            {tl(settings, 'title') || t('title')}
           </h2>
 
           {/* Decorative divider with icon */}
@@ -82,7 +84,7 @@ export const SaleSection = ({ products, settings }: SaleSectionProps) => {
             href='/sale'
             className='group flex items-center gap-2 text-[13px] font-medium tracking-wider text-gray-700 hover:text-[#49000D] transition-colors'
           >
-            <span>{locale === 'vi' ? 'Xem Thêm Sản Phẩm Khuyến Mãi' : 'Expand Your View'}</span>
+            <span>{t('expandYourView')}</span>
             <div className='w-5 h-5 rounded-full border border-current flex items-center justify-center transition-transform group-hover:translate-x-1'>
               <ArrowRight size={12} />
             </div>

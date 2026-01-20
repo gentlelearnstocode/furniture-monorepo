@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { ShoppingBag, Minus, Plus } from 'lucide-react';
 import { cn } from '@repo/ui/lib/utils';
 import { useLanguage, useLocalizedText } from '@/providers/language-provider';
+import { useTranslations } from 'next-intl';
 import { ContactModal } from '@/components/ui/contact-modal';
 
 interface ProductInfoProps {
@@ -28,7 +29,8 @@ interface ProductInfoProps {
 
 export function ProductInfo({ product, contacts }: ProductInfoProps) {
   const { locale } = useLanguage();
-  const t = useLocalizedText();
+  const tl = useLocalizedText();
+  const t = useTranslations('Product');
   const [isDetailsOpen, setIsDetailsOpen] = useState(true);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
@@ -43,10 +45,10 @@ export function ProductInfo({ product, contacts }: ProductInfoProps) {
         {/* Title & Short Description */}
         <div className='flex flex-col gap-4'>
           <h1 className='text-3xl md:text-4xl font-serif text-black uppercase tracking-wider'>
-            {t(product, 'name')}
+            {tl(product, 'name')}
           </h1>
           {(() => {
-            const shortDesc = t(product, 'shortDescription');
+            const shortDesc = tl(product, 'shortDescription');
             return shortDesc ? (
               <div
                 className='text-[14px] md:text-[16px] leading-relaxed text-gray-600 font-serif'
@@ -83,7 +85,7 @@ export function ProductInfo({ product, contacts }: ProductInfoProps) {
             className='flex items-center justify-between w-full group'
           >
             <span className='text-[13px] font-serif uppercase tracking-[0.2em] text-black/80 group-hover:text-black transition-colors'>
-              {locale === 'vi' ? 'Thông tin sản phẩm' : 'Product Details'}
+              {t('details')}
             </span>
             <div className='w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center text-gray-400 group-hover:text-black group-hover:border-black transition-all'>
               {isDetailsOpen ? <Minus size={14} /> : <Plus size={14} />}
@@ -97,7 +99,7 @@ export function ProductInfo({ product, contacts }: ProductInfoProps) {
             )}
           >
             {(() => {
-              const description = t(product, 'description');
+              const description = tl(product, 'description');
               return description ? (
                 <div
                   className='text-[13px] md:text-[14px] leading-relaxed text-gray-600 font-serif prose prose-sm max-w-none'
@@ -105,9 +107,9 @@ export function ProductInfo({ product, contacts }: ProductInfoProps) {
                 />
               ) : (
                 <p className='text-[13px] md:text-[14px] leading-relaxed text-gray-600 font-serif italic'>
-                  {locale === 'vi'
-                    ? 'Chưa có thông tin chi tiết cho sản phẩm này.'
-                    : 'No detailed information available for this product.'}
+                  {t('noDetailedInfo', {
+                    defaultValue: 'No detailed information available for this product.',
+                  })}
                 </p>
               );
             })()}
@@ -124,7 +126,7 @@ export function ProductInfo({ product, contacts }: ProductInfoProps) {
             className='md:w-5 md:h-5 group-hover:scale-110 transition-transform'
           />
           <span className='text-[13px] md:text-[15px] font-serif uppercase tracking-[0.15em] md:tracking-[0.2em] font-medium'>
-            {locale === 'vi' ? 'Liên hệ ngay để được tư vấn' : 'Contact us for consultation'}
+            {t('contactConsultation')}
           </span>
         </button>
       </div>

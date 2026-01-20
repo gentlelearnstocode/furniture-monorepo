@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { useLanguage } from '@/providers/language-provider';
+import { useTranslations } from 'next-intl';
 
 import { ProductCard } from '@/app/components/product-card';
 import { ProductListToolbar } from '@/app/components/product-list-toolbar';
@@ -46,7 +46,7 @@ export function ProductListing({
   showCatalog = false,
   imageRatio,
 }: ProductListingProps) {
-  const { locale } = useLanguage();
+  const t = useTranslations('Common');
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -113,11 +113,7 @@ export function ProductListing({
       {/* Empty State */}
       {products.length === 0 && (
         <div className='text-center py-20'>
-          <p className='text-xl font-serif italic text-gray-400'>
-            {locale === 'vi'
-              ? 'Không tìm thấy sản phẩm phù hợp.'
-              : 'No products match your filter.'}
-          </p>
+          <p className='text-xl font-serif italic text-gray-400'>{t('noResults')}</p>
         </div>
       )}
     </div>

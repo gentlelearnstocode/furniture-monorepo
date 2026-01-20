@@ -50,6 +50,7 @@ const getPostBySlug = (slug: string) =>
   );
 
 import { getLocale, getLocalizedText, getLocalizedHtml } from '@/lib/i18n';
+import { getTranslations } from 'next-intl/server';
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -80,6 +81,8 @@ export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
   const locale = await getLocale();
   const post = await getPostBySlug(slug)();
+  const t = await getTranslations('Blogs');
+  const tb = await getTranslations('Breadcrumbs');
 
   if (!post || !post.isActive) {
     notFound();
@@ -94,8 +97,8 @@ export default async function BlogPostPage({ params }: Props) {
       {/* Back Link */}
       <AppBreadcrumb
         items={[
-          { label: locale === 'vi' ? 'Trang chủ' : 'Home Page', href: '/' },
-          { label: locale === 'vi' ? 'Bài viết' : 'Stories', href: '/blogs' },
+          { label: tb('home'), href: '/' },
+          { label: tb('blogs'), href: '/blogs' },
           { label: title },
         ]}
       />
@@ -105,7 +108,7 @@ export default async function BlogPostPage({ params }: Props) {
           className='inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors group'
         >
           <ChevronLeft className='mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1' />
-          {locale === 'vi' ? 'Quay lại danh sách bài viết' : 'Back to all stories'}
+          {t('backToList')}
         </Link>
       </div>
 
@@ -123,7 +126,7 @@ export default async function BlogPostPage({ params }: Props) {
             <span className='w-1 h-1 rounded-full bg-gray-300' />
             <span className='flex items-center gap-2'>
               <User className='h-4 w-4' />
-              {locale === 'vi' ? 'Quản trị viên' : 'Admin'}
+              {t('admin')}
             </span>
           </div>
         </div>
@@ -162,7 +165,7 @@ export default async function BlogPostPage({ params }: Props) {
         <div className='container mx-auto px-4'>
           <div className='mb-12'>
             <h2 className='text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4'>
-              {locale === 'vi' ? 'Thư viện hình ảnh' : 'Image Gallery'}
+              {t('gallery')}
             </h2>
             <div className='h-px bg-gradient-to-r from-[#7B0C0C]/30 to-transparent w-32' />
           </div>

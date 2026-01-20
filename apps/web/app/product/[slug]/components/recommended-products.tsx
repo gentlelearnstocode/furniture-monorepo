@@ -1,7 +1,7 @@
 'use client';
 
 import { ProductCard } from '@/app/components/product-card';
-import { useLanguage } from '@/providers/language-provider';
+import { useTranslations } from 'next-intl';
 import {
   Carousel,
   CarouselContent,
@@ -17,13 +17,13 @@ interface RecommendedProductsProps {
 }
 
 export function RecommendedProducts({ products, imageRatio }: RecommendedProductsProps) {
-  const { locale } = useLanguage();
+  const t = useTranslations('Product');
 
   if (!products || products.length === 0) {
     return null;
   }
 
-  const title = locale === 'vi' ? 'Sản phẩm gợi ý' : 'You May Also Like';
+  const title = t('youMayAlsoLike');
 
   return (
     <section className='pt-12 pb-16 md:pt-16 md:pb-24 border-t border-black/5'>

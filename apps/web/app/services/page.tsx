@@ -7,11 +7,16 @@ import { ArrowRight } from 'lucide-react';
 import type { Metadata } from 'next';
 import { createCachedQuery } from '@/lib/cache';
 
-export const metadata: Metadata = {
-  title: 'Services | Thien An Furniture',
-  description:
-    'Explore our comprehensive range of interior design and furniture services tailored to your needs.',
-};
+import { getLocale, getLocalizedText } from '@/lib/i18n';
+import { getTranslations } from 'next-intl/server';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('Services');
+  return {
+    title: `${t('pageTitle')} | Thien An Furniture`,
+    description: t('pageDescription'),
+  };
+}
 
 // Revalidate every hour
 export const revalidate = 3600;
@@ -38,6 +43,10 @@ const getServices = createCachedQuery(
 
 export default async function ServicesListingPage() {
   const services = await getServices();
+  const locale = await getLocale();
+  const t = await getTranslations('Services');
+  const tb = await getTranslations('Breadcrumbs');
+  const tc = await getTranslations('Common');
 
   return (
     <div className='min-h-screen bg-white'>
@@ -45,11 +54,10 @@ export default async function ServicesListingPage() {
       <div className='bg-gray-50 py-24 border-b border-gray-100'>
         <div className='container mx-auto px-4'>
           <h1 className='text-5xl md:text-7xl font-serif font-bold text-gray-900 mb-6'>
-            Our Services
+            {t('pageTitle')}
           </h1>
           <p className='text-xl text-gray-600 font-light max-w-2xl leading-relaxed'>
-            We offer a comprehensive range of interior design and furniture solutions tailored to
-            your unique needs and style.
+            {t('pageDescription')}
           </p>
         </div>
       </div>
@@ -57,14 +65,14 @@ export default async function ServicesListingPage() {
       {/* Services Grid */}
       <AppBreadcrumb
         items={[
-          { label: 'Trang chủ', href: '/' },
-          { label: 'Dịch vụ', href: '/services' },
+          { label: tb('home'), href: '/' },
+          { label: tb('services'), href: '/services' },
         ]}
       />
       <div className='container mx-auto px-4 pt-6 pb-12'>
         {services.length === 0 ? (
           <div className='text-center py-20'>
-            <p className='text-gray-500 text-lg'>No services available. Check back soon!</p>
+            <p className='text-gray-500 text-lg'>{t('noResults')}</p>
           </div>
         ) : (
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
@@ -88,7 +96,7 @@ export default async function ServicesListingPage() {
                       />
                     ) : (
                       <div className='absolute inset-0 bg-gray-200 flex items-center justify-center text-gray-400'>
-                        No Image
+                        {tc('noImage')}
                       </div>
                     )}
                     <div className='absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500' />
@@ -96,14 +104,16 @@ export default async function ServicesListingPage() {
 
                   <div className='p-8'>
                     <h3 className='text-2xl font-serif font-bold mb-4 text-gray-900 group-hover:text-[#7B0C0C] transition-colors'>
-                      {service.title}
+                      {getLocalizedText(service, 'title', locale)}
                     </h3>
                     <div
                       className='text-gray-600 line-clamp-3 mb-6 text-sm leading-relaxed font-light'
-                      dangerouslySetInnerHTML={{ __html: service.descriptionHtml }}
+                      dangerouslySetInnerHTML={{
+                        __html: getLocalizedText(service, 'descriptionHtml', locale),
+                      }}
                     />
                     <span className='flex items-center text-sm font-semibold tracking-wider uppercase text-[#7B0C0C] group/btn'>
-                      Explore More
+                      {t('exploreMore')}
                       <ArrowRight className='ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1' />
                     </span>
                   </div>

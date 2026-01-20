@@ -8,7 +8,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@repo/ui/components/ui/dropdown-menu';
-import { useLanguage, useLocalizedText } from '@/providers/language-provider';
+import { useLocalizedText } from '@/providers/language-provider';
+import { useTranslations } from 'next-intl';
 
 interface CatalogOption {
   label: string;
@@ -45,30 +46,27 @@ export function ProductListToolbar({
   currentSort,
   onSortChange,
 }: ProductListToolbarProps) {
-  const { locale } = useLanguage();
-  const t = useLocalizedText();
+  const tl = useLocalizedText();
+  const t = useTranslations('Toolbar');
+  const tc = useTranslations('Common');
 
   const getSortLabel = (value: string) => {
     switch (value) {
       case 'name_asc':
-        return locale === 'vi' ? 'Tên A-Z' : 'Name A-Z';
+        return t('sortAz');
       case 'name_desc':
-        return locale === 'vi' ? 'Tên Z-A' : 'Name Z-A';
+        return t('sortZa');
       case 'price_asc':
-        return locale === 'vi' ? 'Giá thấp đến cao' : 'Price Low to High';
+        return t('priceLowHigh');
       case 'price_desc':
-        return locale === 'vi' ? 'Giá cao đến thấp' : 'Price High to Low';
+        return t('priceHighLow');
       default:
-        return locale === 'vi' ? 'Sắp xếp' : 'Sort';
+        return t('sort');
     }
   };
 
   const activeCatalog = catalogOptions.find((opt) => opt.value === currentCatalog);
-  const currentCatalogLabel = activeCatalog
-    ? t(activeCatalog, 'label')
-    : locale === 'vi'
-      ? 'Danh mục'
-      : 'Category';
+  const currentCatalogLabel = activeCatalog ? tl(activeCatalog, 'label') : tc('category');
 
   return (
     <div className='flex flex-wrap items-center justify-between gap-4 md:gap-0 mb-6 md:mb-8 pb-4 border-b border-black/5'>
@@ -112,7 +110,7 @@ export function ProductListToolbar({
                     currentCatalog === option.value && 'bg-accent font-bold',
                   )}
                 >
-                  {t(option, 'label')}
+                  {tl(option, 'label')}
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
@@ -120,7 +118,7 @@ export function ProductListToolbar({
         )}
 
         <div className='hidden sm:block text-[12px] md:text-[13px] font-serif italic text-black/50 uppercase tracking-[0.1em]'>
-          {locale === 'vi' ? `Hiển thị ${totalResults} kết quả` : `Showing ${totalResults} results`}
+          {t('showingResults', { count: totalResults })}
         </div>
       </div>
 
@@ -129,23 +127,21 @@ export function ProductListToolbar({
         {/* Sort Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger className='flex items-center gap-2 px-4 py-2 text-[13px] font-serif italic uppercase tracking-[0.1em] text-black/70 hover:text-black transition-colors border border-black/10 hover:border-black/30 rounded-sm bg-white outline-none ring-0 focus:ring-0'>
-            <span>
-              {currentSort ? getSortLabel(currentSort) : locale === 'vi' ? '~ Sắp xếp' : '~ Sort'}
-            </span>
+            <span>{currentSort ? getSortLabel(currentSort) : t('sortPlaceholder')}</span>
             <ChevronDown size={14} className='opacity-50' />
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end' className='w-48'>
             <DropdownMenuItem onClick={() => onSortChange('name_asc')}>
-              {locale === 'vi' ? 'Tên A-Z' : 'Name A-Z'}
+              {t('sortAz')}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => onSortChange('name_desc')}>
-              {locale === 'vi' ? 'Tên Z-A' : 'Name Z-A'}
+              {t('sortZa')}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => onSortChange('price_asc')}>
-              {locale === 'vi' ? 'Giá thấp đến cao' : 'Price Low to High'}
+              {t('priceLowHigh')}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => onSortChange('price_desc')}>
-              {locale === 'vi' ? 'Giá cao đến thấp' : 'Price High to Low'}
+              {t('priceHighLow')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

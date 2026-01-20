@@ -7,10 +7,16 @@ import type { Metadata } from 'next';
 import { createCachedQuery } from '@/lib/cache';
 import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
 
-export const metadata: Metadata = {
-  title: 'Projects | Thien An Furniture',
-  description: 'Explore our portfolio of completed interior design and furniture projects.',
-};
+import { getLocale, getLocalizedText } from '@/lib/i18n';
+import { getTranslations } from 'next-intl/server';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('Projects');
+  return {
+    title: `${t('pageTitle')} | Thien An Furniture`,
+    description: t('pageDescription'),
+  };
+}
 
 // Revalidate every hour
 export const revalidate = 3600;
@@ -37,31 +43,35 @@ const getProjects = createCachedQuery(
 
 export default async function ProjectsListingPage() {
   const projects = await getProjects();
+  const locale = await getLocale();
+  const t = await getTranslations('Projects');
+  const tb = await getTranslations('Breadcrumbs');
+  const tc = await getTranslations('Common');
+  const tt = await getTranslations('Toolbar');
 
   return (
     <div className='min-h-screen bg-gradient-to-b from-[#FDFCFB] via-white to-[#FDFCFB]'>
       <AppBreadcrumb
         items={[
-          { label: 'Trang chủ', href: '/' },
-          { label: 'Dự án', href: '/projects' },
+          { label: tb('home'), href: '/' },
+          { label: tb('projects'), href: '/projects' },
         ]}
       />
       <div className='container mx-auto px-4 pt-6 pb-12'>
         {/* Title & Description */}
         <div className='mb-8'>
           <h1 className='text-5xl md:text-6xl font-serif italic text-black/90 tracking-wide mb-4'>
-            Our Projects
+            {t('pageTitle')}
           </h1>
           <p className='text-[15px] leading-relaxed text-gray-600 max-w-4xl font-serif'>
-            Explore our portfolio of completed interior design and furniture projects that showcase
-            our craftsmanship and attention to detail.
+            {t('pageDescription')}
           </p>
         </div>
 
         {/* Filter Bar */}
         <div className='flex items-center justify-between mb-8 pb-4 border-b border-black/5'>
           <div className='text-[13px] font-serif italic text-black/50 uppercase tracking-[0.1em]'>
-            Showing {projects.length} results
+            {tt('showingResults', { count: projects.length })}
           </div>
         </div>
       </div>
@@ -70,9 +80,7 @@ export default async function ProjectsListingPage() {
       <div className='container mx-auto px-4 pb-20'>
         {projects.length === 0 ? (
           <div className='text-center py-20'>
-            <p className='text-xl font-serif italic text-gray-400'>
-              No projects found. Check back soon!
-            </p>
+            <p className='text-xl font-serif italic text-gray-400'>{t('noResults')}</p>
           </div>
         ) : (
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
@@ -96,7 +104,7 @@ export default async function ProjectsListingPage() {
                       />
                     ) : (
                       <div className='absolute inset-0 bg-gray-200 flex items-center justify-center text-gray-400'>
-                        No Image
+                        {tc('noImage')}
                       </div>
                     )}
                     <div className='absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500' />
@@ -104,10 +112,10 @@ export default async function ProjectsListingPage() {
 
                   <div className='p-6'>
                     <h3 className='text-xl md:text-2xl font-serif font-semibold text-[#222222] mb-3 group-hover:text-[#7B0C0C] transition-colors line-clamp-2'>
-                      {project.title}
+                      {getLocalizedText(project, 'title', locale)}
                     </h3>
                     <span className='inline-flex items-center text-sm font-semibold text-[#7B0C0C]'>
-                      View Project
+                      {t('viewProject')}
                       <ArrowRight className='ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1' />
                     </span>
                   </div>
