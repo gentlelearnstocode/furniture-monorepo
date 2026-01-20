@@ -304,7 +304,10 @@ export const Navbar = ({ items }: NavbarProps) => {
                       className='flex flex-col gap-6 animate-in fade-in slide-in-from-top-4 duration-1000'
                     >
                       {/* Catalog Level 1 Banner */}
-                      <Link href={href} className='group overflow-hidden relative aspect-[4/3]'>
+                      <Link
+                        href={href}
+                        className='hidden md:block group overflow-hidden relative aspect-[4/3]'
+                      >
                         {item.image ? (
                           <Image
                             src={item.image.url}
