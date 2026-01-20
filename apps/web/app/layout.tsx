@@ -10,6 +10,7 @@ import { db } from '@repo/database';
 import { createCachedQuery } from '@/lib/cache';
 import { getSiteContacts } from '@/lib/queries';
 import { getNavMenuItems, type NavMenuItem } from '@/lib/menu';
+import { getLocale } from '@/lib/i18n';
 import { LanguageProvider } from '@/providers/language-provider';
 
 const geistSans = localFont({
@@ -110,24 +111,25 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [menuItems, rootCatalogs, siteContacts] = await Promise.all([
+  const [menuItems, rootCatalogs, siteContacts, locale] = await Promise.all([
     getNavMenuItems(),
     getRootCatalogs(),
     getSiteContacts(),
+    getLocale(),
   ]);
 
   // Use menu items if configured, otherwise fall back to root catalogs
   const navItems =
     menuItems.length > 0
       ? transformMenuItemsToNavbarFormat(menuItems)
-      : rootCatalogs.map((catalog) => ({
+      : rootCatalogs.map((catalog: any) => ({
           id: catalog.id,
           name: catalog.name,
           nameVi: catalog.nameVi,
           slug: catalog.slug,
           type: 'catalog' as const,
           image: catalog.image,
-          children: (catalog.children || []).map((child) => ({
+          children: (catalog.children || []).map((child: any) => ({
             id: child.id,
             name: child.name,
             nameVi: child.nameVi,
@@ -137,11 +139,11 @@ export default async function RootLayout({
         }));
 
   return (
-    <html lang='en'>
+    <html lang={locale}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} font-sans antialiased`}
       >
-        <LanguageProvider>
+        <LanguageProvider initialLocale={locale}>
           <Navbar items={navItems} />
           <main>{children}</main>
           <Footer />
