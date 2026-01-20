@@ -227,9 +227,9 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
             )}
           </div>
 
-          {/* Footer */}
-          <div className='px-6 py-3 bg-gray-50 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500'>
-            <div className='flex items-center gap-4'>
+          {/* Footer - simplified on mobile */}
+          <div className='px-4 md:px-6 py-3 bg-gray-50 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500'>
+            <div className='hidden md:flex items-center gap-4'>
               <span className='flex items-center gap-1'>
                 <kbd className='px-1.5 py-0.5 bg-white rounded border border-gray-200 font-mono'>
                   ↑
@@ -252,6 +252,10 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
                 <span className='ml-1'>{locale === 'vi' ? 'Đóng' : 'Close'}</span>
               </span>
             </div>
+            {/* Mobile hint */}
+            <span className='md:hidden text-gray-400'>
+              {locale === 'vi' ? 'Nhấn ngoài để đóng' : 'Tap outside to close'}
+            </span>
           </div>
         </div>
       </div>

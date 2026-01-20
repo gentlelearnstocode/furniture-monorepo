@@ -57,10 +57,10 @@ export default async function SalePage({
       <div className='container mx-auto px-4 pt-6 pb-2'>
         {/* Title & Description */}
         <div className='mb-8'>
-          <h1 className='text-5xl md:text-6xl font-serif text-black/90 tracking-wide mb-4'>
+          <h1 className='text-4xl md:text-5xl lg:text-6xl font-serif text-black/90 tracking-wide mb-4'>
             {locale === 'vi' ? 'Sản Phẩm Khuyến Mãi' : 'Sale Off'}
           </h1>
-          <p className='text-[15px] leading-relaxed text-gray-600 max-w-4xl font-serif'>
+          <p className='text-[14px] md:text-[15px] leading-relaxed text-gray-600 max-w-4xl font-serif'>
             {locale === 'vi'
               ? 'Khám phá các ưu đãi độc quyền của chúng tôi cho đồ nội thất cao cấp. Ưu đãi có hạn cho các mặt hàng được chọn lọc.'
               : 'Explore our exclusive discounts on premium furniture. Limited time offers on selected items.'}

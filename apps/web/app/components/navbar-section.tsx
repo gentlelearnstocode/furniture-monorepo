@@ -22,7 +22,7 @@ function LanguageSwitcher({ forceShow }: { forceShow: boolean }) {
   return (
     <div
       className={cn(
-        'flex items-center text-[24px] font-[444] tracking-normal leading-none gap-3 font-serif transition-colors duration-1000',
+        'flex items-center text-[18px] md:text-[24px] font-[444] tracking-normal leading-none gap-2 md:gap-3 font-serif transition-colors duration-1000',
         forceShow ? 'text-[#49000D]' : 'text-white group-hover/nav:text-[#49000D]',
       )}
     >
@@ -352,7 +352,7 @@ export const Navbar = ({ items }: NavbarProps) => {
 
                       {/* Catalog Level 1 Title */}
                       <Link href={href} className='group'>
-                        <h3 className='text-[24px] font-serif font-[444] tracking-normal leading-none uppercase text-[#49000D] group-hover:text-[#49000D]/60 transition-colors'>
+                        <h3 className='text-[20px] md:text-[24px] font-serif font-[444] tracking-normal leading-none uppercase text-[#49000D] group-hover:text-[#49000D]/60 transition-colors'>
                           {t(item, 'name')}
                         </h3>
                       </Link>
@@ -363,14 +363,14 @@ export const Navbar = ({ items }: NavbarProps) => {
                           <Link
                             key={child.id}
                             href={`/catalog/${item.slug}/${child.slug}`}
-                            className='text-[18px] text-[#49000D]/60 hover:text-[#49000D] transition-colors uppercase font-serif tracking-[0.1em]'
+                            className='text-[15px] md:text-[18px] text-[#49000D]/60 hover:text-[#49000D] transition-colors uppercase font-serif tracking-[0.1em]'
                           >
                             {t(child, 'name')}
                           </Link>
                         ))}
                         <Link
                           href={`/catalog/${item.slug}/sale`}
-                          className='text-[18px] text-red-600/60 hover:text-red-600 transition-colors uppercase font-serif tracking-[0.1em]'
+                          className='text-[15px] md:text-[18px] text-red-600/60 hover:text-red-600 transition-colors uppercase font-serif tracking-[0.1em]'
                         >
                           SALE
                         </Link>

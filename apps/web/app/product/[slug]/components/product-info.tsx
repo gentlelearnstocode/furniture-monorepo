@@ -49,7 +49,7 @@ export function ProductInfo({ product, contacts }: ProductInfoProps) {
             const shortDesc = t(product, 'shortDescription');
             return shortDesc ? (
               <div
-                className='text-[16px] leading-relaxed text-gray-600 font-serif'
+                className='text-[14px] md:text-[16px] leading-relaxed text-gray-600 font-serif'
                 dangerouslySetInnerHTML={{ __html: shortDesc }}
               />
             ) : null;
@@ -61,15 +61,17 @@ export function ProductInfo({ product, contacts }: ProductInfoProps) {
           <div className='flex items-center gap-4'>
             {hasDiscount ? (
               <>
-                <span className='text-3xl font-serif font-bold text-[#49000D]'>
+                <span className='text-2xl md:text-3xl font-serif font-bold text-[#49000D]'>
                   ${displayPrice}
                 </span>
-                <span className='text-xl font-serif line-through text-gray-400'>
+                <span className='text-lg md:text-xl font-serif line-through text-gray-400'>
                   ${originalPrice}
                 </span>
               </>
             ) : (
-              <span className='text-3xl font-serif text-black font-medium'>${originalPrice}</span>
+              <span className='text-2xl md:text-3xl font-serif text-black font-medium'>
+                ${originalPrice}
+              </span>
             )}
           </div>
         )}
@@ -98,11 +100,11 @@ export function ProductInfo({ product, contacts }: ProductInfoProps) {
               const description = t(product, 'description');
               return description ? (
                 <div
-                  className='text-[14px] leading-relaxed text-gray-600 font-serif prose prose-sm max-w-none'
+                  className='text-[13px] md:text-[14px] leading-relaxed text-gray-600 font-serif prose prose-sm max-w-none'
                   dangerouslySetInnerHTML={{ __html: description }}
                 />
               ) : (
-                <p className='text-[14px] leading-relaxed text-gray-600 font-serif italic'>
+                <p className='text-[13px] md:text-[14px] leading-relaxed text-gray-600 font-serif italic'>
                   {locale === 'vi'
                     ? 'Chưa có thông tin chi tiết cho sản phẩm này.'
                     : 'No detailed information available for this product.'}
@@ -115,10 +117,13 @@ export function ProductInfo({ product, contacts }: ProductInfoProps) {
         {/* Contact Button - Opens Modal */}
         <button
           onClick={() => setIsContactModalOpen(true)}
-          className='w-full bg-[#8B0000] hover:bg-[#A00000] text-white py-5 px-8 rounded-sm flex items-center justify-center gap-3 transition-all duration-300 group shadow-lg shadow-red-900/10 hover:shadow-red-900/20'
+          className='w-full bg-[#8B0000] hover:bg-[#A00000] text-white py-4 md:py-5 px-6 md:px-8 rounded-sm flex items-center justify-center gap-2 md:gap-3 transition-all duration-300 group shadow-lg shadow-red-900/10 hover:shadow-red-900/20'
         >
-          <ShoppingBag size={20} className='group-hover:scale-110 transition-transform' />
-          <span className='text-[15px] font-serif uppercase tracking-[0.2em] font-medium'>
+          <ShoppingBag
+            size={18}
+            className='md:w-5 md:h-5 group-hover:scale-110 transition-transform'
+          />
+          <span className='text-[13px] md:text-[15px] font-serif uppercase tracking-[0.15em] md:tracking-[0.2em] font-medium'>
             {locale === 'vi' ? 'Liên hệ ngay để được tư vấn' : 'Contact us for consultation'}
           </span>
         </button>

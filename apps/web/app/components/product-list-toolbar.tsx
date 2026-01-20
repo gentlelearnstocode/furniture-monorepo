@@ -71,9 +71,9 @@ export function ProductListToolbar({
       : 'Category';
 
   return (
-    <div className='flex items-center justify-between mb-8 pb-4 border-b border-black/5'>
+    <div className='flex flex-wrap items-center justify-between gap-4 md:gap-0 mb-6 md:mb-8 pb-4 border-b border-black/5'>
       {/* Left: Filters & Results Count */}
-      <div className='flex items-center gap-6'>
+      <div className='flex flex-wrap items-center gap-3 md:gap-6'>
         {/* Sale Toggle */}
         {showSaleToggle && (
           <button
@@ -94,12 +94,12 @@ export function ProductListToolbar({
         {showCatalog && catalogOptions.length > 0 && (
           <DropdownMenu>
             <DropdownMenuTrigger className='flex items-center gap-[6px] outline-none group'>
-              <span className='text-[24px] font-serif font-bold text-[#222] capitalize leading-normal transition-colors group-hover:text-[#49000D]'>
+              <span className='text-[18px] md:text-[24px] font-serif font-bold text-[#222] capitalize leading-normal transition-colors group-hover:text-[#49000D]'>
                 {currentCatalogLabel}
               </span>
               <ChevronDown
-                size={16}
-                className='text-[#222] transition-transform group-data-[state=open]:rotate-180'
+                size={14}
+                className='md:w-4 md:h-4 text-[#222] transition-transform group-data-[state=open]:rotate-180'
               />
             </DropdownMenuTrigger>
             <DropdownMenuContent align='start' className='min-w-[200px]'>
@@ -119,13 +119,13 @@ export function ProductListToolbar({
           </DropdownMenu>
         )}
 
-        <div className='text-[13px] font-serif italic text-black/50 uppercase tracking-[0.1em]'>
+        <div className='hidden sm:block text-[12px] md:text-[13px] font-serif italic text-black/50 uppercase tracking-[0.1em]'>
           {locale === 'vi' ? `Hiển thị ${totalResults} kết quả` : `Showing ${totalResults} results`}
         </div>
       </div>
 
       {/* Right: Controls */}
-      <div className='flex items-center gap-6'>
+      <div className='flex items-center gap-3 md:gap-6'>
         {/* Sort Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger className='flex items-center gap-2 px-4 py-2 text-[13px] font-serif italic uppercase tracking-[0.1em] text-black/70 hover:text-black transition-colors border border-black/10 hover:border-black/30 rounded-sm bg-white outline-none ring-0 focus:ring-0'>
