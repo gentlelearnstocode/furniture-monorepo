@@ -114,7 +114,7 @@ export async function updateCatalog(id: string, data: CreateCatalogInput) {
   }
 
   revalidatePath('/catalogs');
-  await revalidateStorefront(['catalogs']);
+  await revalidateStorefront(['catalogs', 'products']);
   return { success: true };
 }
 
@@ -122,7 +122,7 @@ export async function deleteCatalog(id: string) {
   try {
     await db.delete(catalogs).where(eq(catalogs.id, id));
     revalidatePath('/catalogs');
-    await revalidateStorefront(['catalogs']);
+    await revalidateStorefront(['catalogs', 'products']);
     return { success: true };
   } catch (error) {
     console.error('Failed to delete catalog:', error);

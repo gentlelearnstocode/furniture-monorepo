@@ -16,6 +16,7 @@ interface ProductGalleryProps {
 }
 
 export function ProductGallery({ images, name, imageRatio }: ProductGalleryProps) {
+  console.log('imageRatio', imageRatio);
   const [activeIndex, setActiveIndex] = useState(0);
   const activeImage = images[activeIndex];
 

@@ -72,7 +72,7 @@ const getProductBySlug = createCachedQuery(
     });
   },
   ['product-detail'],
-  { revalidate: 3600, tags: ['products'] },
+  { revalidate: 3600, tags: ['products', 'catalogs'] },
 );
 
 const getRecommendedProducts = createCachedQuery(
@@ -97,7 +97,7 @@ const getRecommendedProducts = createCachedQuery(
     return recommendations.map((r) => r.recommendedProduct);
   },
   ['recommended-products'],
-  { revalidate: 3600, tags: ['products'] },
+  { revalidate: 3600, tags: ['products', 'catalogs'] },
 );
 
 export default async function ProductDetailPage({ params }: Props) {
