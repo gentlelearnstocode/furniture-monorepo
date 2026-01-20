@@ -191,6 +191,8 @@ export const productsRelations = relations(products, ({ one, many }) => ({
     fields: [products.createdById],
     references: [users.id],
   }),
+  recommendations: many(recommendedProducts, { relationName: 'product_recommendations' }),
+  recommendedIn: many(recommendedProducts, { relationName: 'recommended_in' }),
 }));
 
 // --- Options & Variants ---
@@ -919,3 +921,37 @@ export const navMenuItemsRelations = relations(navMenuItems, ({ one }) => ({
 
 export type InsertNavMenuItem = typeof navMenuItems.$inferInsert;
 export type SelectNavMenuItem = typeof navMenuItems.$inferSelect;
+
+// --- Recommended Products ---
+
+export const recommendedProducts = pgTable(
+  'recommended_products',
+  {
+    sourceProductId: uuid('source_product_id')
+      .notNull()
+      .references(() => products.id, { onDelete: 'cascade' }),
+    recommendedProductId: uuid('recommended_product_id')
+      .notNull()
+      .references(() => products.id, { onDelete: 'cascade' }),
+    position: integer('position').default(0).notNull(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.sourceProductId, t.recommendedProductId] }),
+  }),
+);
+
+export const recommendedProductsRelations = relations(recommendedProducts, ({ one }) => ({
+  sourceProduct: one(products, {
+    fields: [recommendedProducts.sourceProductId],
+    references: [products.id],
+    relationName: 'product_recommendations',
+  }),
+  recommendedProduct: one(products, {
+    fields: [recommendedProducts.recommendedProductId],
+    references: [products.id],
+    relationName: 'recommended_in',
+  }),
+}));
+
+export type InsertRecommendedProduct = typeof recommendedProducts.$inferInsert;
+export type SelectRecommendedProduct = typeof recommendedProducts.$inferSelect;

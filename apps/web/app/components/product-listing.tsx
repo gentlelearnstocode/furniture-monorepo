@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/providers/language-provider';
 
 import { ProductCard } from '@/app/components/product-card';
 import { ProductListToolbar } from '@/app/components/product-list-toolbar';
@@ -11,8 +12,10 @@ import { ProductListToolbar } from '@/app/components/product-list-toolbar';
 export type Product = {
   id: string;
   name: string;
+  nameVi?: string | null;
   slug: string;
   shortDescription?: string | null;
+  shortDescriptionVi?: string | null;
   basePrice: string; // Decimal is string in JS usually
   discountPrice: string | null;
   showPrice: boolean;
@@ -43,6 +46,7 @@ export function ProductListing({
   showCatalog = false,
   imageRatio,
 }: ProductListingProps) {
+  const { locale } = useLanguage();
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -109,7 +113,11 @@ export function ProductListing({
       {/* Empty State */}
       {products.length === 0 && (
         <div className='text-center py-20'>
-          <p className='text-xl font-serif italic text-gray-400'>No products match your filter.</p>
+          <p className='text-xl font-serif italic text-gray-400'>
+            {locale === 'vi'
+              ? 'Không tìm thấy sản phẩm phù hợp.'
+              : 'No products match your filter.'}
+          </p>
         </div>
       )}
     </div>

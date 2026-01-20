@@ -3,6 +3,7 @@ import { db } from '@repo/database';
 import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
 import { createCachedQuery } from '@/lib/cache';
 import { ProductListing } from '@/app/components/product-listing';
+import { getLocale, getLocalizedText } from '@/lib/i18n';
 
 // Revalidate every hour
 export const revalidate = 3600;
@@ -55,8 +56,10 @@ const getChildCatalog = (
         columns: {
           id: true,
           name: true,
+          nameVi: true,
           slug: true,
           description: true,
+          descriptionVi: true,
           parentId: true,
           productImageRatio: true,
         },
@@ -109,7 +112,7 @@ export default async function CatalogLevel2Page({ params, searchParams }: Props)
     where: (catalogs, { eq }) => eq(catalogs.slug, slug),
     with: {
       children: {
-        columns: { name: true, slug: true },
+        columns: { name: true, nameVi: true, slug: true },
       },
     },
   });
@@ -125,15 +128,20 @@ export default async function CatalogLevel2Page({ params, searchParams }: Props)
     notFound();
   }
 
+  const locale = await getLocale();
+
   // Map products to ensure they match the Product type expected by ProductListing
   // The query already returns the structure we need, but we map to be safe and clear
   const products = catalog.products.map((product) => ({
     id: product.id,
     name: product.name,
+    nameVi: product.nameVi,
     slug: product.slug,
     basePrice: product.basePrice,
     discountPrice: product.discountPrice,
     showPrice: product.showPrice,
+    shortDescription: product.shortDescription,
+    shortDescriptionVi: product.shortDescriptionVi,
     gallery: product.gallery
       .filter((g) => g.asset !== null)
       .map((g) => ({
@@ -150,9 +158,9 @@ export default async function CatalogLevel2Page({ params, searchParams }: Props)
     <div className='min-h-screen bg-gradient-to-b from-[#FDFCFB] via-white to-[#FDFCFB]'>
       <AppBreadcrumb
         items={[
-          { label: 'Home Page', href: '/' },
-          { label: parentCatalog.name, href: `/catalog/${slug}` },
-          { label: catalog.name },
+          { label: locale === 'vi' ? 'Trang chủ' : 'Home Page', href: '/' },
+          { label: getLocalizedText(parentCatalog, 'name', locale), href: `/catalog/${slug}` },
+          { label: getLocalizedText(catalog, 'name', locale) },
         ]}
       />
 
@@ -160,11 +168,11 @@ export default async function CatalogLevel2Page({ params, searchParams }: Props)
         {/* Title & Description */}
         <div className='mb-8'>
           <h1 className='text-5xl md:text-6xl font-serif text-black/90 tracking-wide mb-4'>
-            {catalog.name}
+            {getLocalizedText(catalog, 'name', locale)}
           </h1>
-          {catalog.description && (
+          {getLocalizedText(catalog, 'description', locale) && (
             <p className='text-[15px] leading-relaxed text-gray-600 max-w-4xl font-serif'>
-              {catalog.description}
+              {getLocalizedText(catalog, 'description', locale)}
             </p>
           )}
         </div>
@@ -173,7 +181,7 @@ export default async function CatalogLevel2Page({ params, searchParams }: Props)
         <ProductListing
           products={products}
           catalogOptions={parentCatalog.children.map((child) => ({
-            label: child.name,
+            label: getLocalizedText(child, 'name', locale),
             value: `/catalog/${slug}/${child.slug}`,
           }))}
           currentCatalog={`/catalog/${slug}/${childSlug}`}

@@ -1,9 +1,11 @@
 import { ProductForm } from '@/app/products/components/create-product-form';
+import { RecommendedProductSelector } from '@/app/products/components/recommended-product-selector';
 import { MoveLeft } from 'lucide-react';
 import Link from 'next/link';
 import { db } from '@repo/database';
 import { Button } from '@repo/ui/ui/button';
 import { notFound } from 'next/navigation';
+import { getRecommendedProducts, getAvailableProducts } from '@/lib/actions/recommended-products';
 
 export const dynamic = 'force-dynamic';
 
@@ -37,6 +39,12 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
     },
   });
 
+  // Fetch recommended products data
+  const [recommendedProducts, availableProducts] = await Promise.all([
+    getRecommendedProducts(id),
+    getAvailableProducts(id),
+  ]);
+
   // Transform DB product to Form Input type
   const initialData = {
     id: product.id,
@@ -65,7 +73,7 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
   };
 
   return (
-    <div className='space-y-6'>
+    <div className='space-y-8'>
       <div className='flex items-center gap-4'>
         <Link href='/products'>
           <Button variant='outline' size='icon'>
@@ -85,6 +93,21 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
         }))}
         initialData={initialData as any}
       />
+
+      {/* Recommended Products Section */}
+      <div className='space-y-4'>
+        <div>
+          <h2 className='text-xl font-semibold tracking-tight'>Recommended Products</h2>
+          <p className='text-sm text-gray-500'>
+            Select products to recommend on this product's detail page.
+          </p>
+        </div>
+        <RecommendedProductSelector
+          productId={id}
+          availableProducts={availableProducts}
+          initialRecommended={recommendedProducts}
+        />
+      </div>
     </div>
   );
 }

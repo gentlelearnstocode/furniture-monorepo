@@ -1,11 +1,13 @@
 import { notFound } from 'next/navigation';
-import { db } from '@repo/database';
+import { db, recommendedProducts } from '@repo/database';
 import { ProductGallery } from './components/product-gallery';
 import { ProductInfo } from './components/product-info';
+import { RecommendedProducts } from './components/recommended-products';
 import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
 import { createCachedQuery } from '@/lib/cache';
 import { getSiteContacts } from '@/lib/queries';
 import { getLocale, getLocalizedText } from '@/lib/i18n';
+import { eq, asc } from 'drizzle-orm';
 
 import type { Metadata } from 'next';
 
@@ -73,6 +75,31 @@ const getProductBySlug = createCachedQuery(
   { revalidate: 3600, tags: ['products'] },
 );
 
+const getRecommendedProducts = createCachedQuery(
+  async (productId: string) => {
+    const recommendations = await db.query.recommendedProducts.findMany({
+      where: eq(recommendedProducts.sourceProductId, productId),
+      orderBy: [asc(recommendedProducts.position)],
+      with: {
+        recommendedProduct: {
+          with: {
+            gallery: {
+              with: {
+                asset: true,
+              },
+              orderBy: (gallery, { asc }) => [asc(gallery.position)],
+            },
+          },
+        },
+      },
+    });
+
+    return recommendations.map((r) => r.recommendedProduct);
+  },
+  ['recommended-products'],
+  { revalidate: 3600, tags: ['products'] },
+);
+
 export default async function ProductDetailPage({ params }: Props) {
   const { slug } = await params;
   const locale = await getLocale();
@@ -83,6 +110,9 @@ export default async function ProductDetailPage({ params }: Props) {
   if (!product) {
     notFound();
   }
+
+  // Fetch recommended products
+  const recommended = await getRecommendedProducts(product.id);
 
   const parentCatalog = product.catalog?.parent;
   const currentCatalog = product.catalog;
@@ -137,6 +167,9 @@ export default async function ProductDetailPage({ params }: Props) {
           <ProductInfo product={product as any} contacts={contacts as any} />
         </div>
       </div>
+
+      {/* Recommended Products */}
+      <RecommendedProducts products={recommended} />
     </div>
   );
 }
