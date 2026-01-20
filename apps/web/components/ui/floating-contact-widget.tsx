@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Phone, MessageCircle, X, Facebook, Mail, MessageSquare } from 'lucide-react';
 import { cn } from '@repo/ui/lib/utils';
 
@@ -14,21 +14,12 @@ interface FloatingContactWidgetProps {
 }
 
 const CONTACT_ICONS: Record<string, React.ReactNode> = {
-  phone: <Phone size={20} strokeWidth={1.5} />,
-  zalo: <span className='text-[10px] font-bold tracking-tighter leading-none'>Zalo</span>,
-  facebook: <Facebook size={20} strokeWidth={1.5} />,
-  messenger: <MessageSquare size={20} strokeWidth={1.5} />,
-  email: <Mail size={20} strokeWidth={1.5} />,
-  whatsapp: <MessageSquare size={20} strokeWidth={1.5} />,
-};
-
-const CONTACT_COLORS: Record<string, string> = {
-  phone: 'bg-[#C00000]',
-  zalo: 'bg-[#0068FF]',
-  facebook: 'bg-[#1877F2]',
-  messenger: 'bg-[#00B2FF]',
-  email: 'bg-[#EA4335]',
-  whatsapp: 'bg-[#25D366]',
+  phone: <Phone size={24} strokeWidth={1.5} />,
+  zalo: <span className='text-sm font-bold tracking-tighter leading-none'>Zalo</span>,
+  facebook: <Facebook size={24} strokeWidth={1.5} />,
+  messenger: <MessageSquare size={24} strokeWidth={1.5} />,
+  email: <Mail size={24} strokeWidth={1.5} />,
+  whatsapp: <MessageSquare size={24} strokeWidth={1.5} />,
 };
 
 const getContactHref = (type: string, value: string) => {
@@ -52,70 +43,104 @@ const getContactHref = (type: string, value: string) => {
 
 export function FloatingContactWidget({ contacts }: FloatingContactWidgetProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const activeContacts = contacts.filter((c) => c.isActive);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   if (activeContacts.length === 0) return null;
 
   return (
-    <div className='flex flex-col items-center gap-4'>
-      {/* Expanded Menu */}
+    <div className='flex flex-col items-center gap-3'>
+      {/* Expanded Contact Options - Stacked vertically above trigger */}
       <div
         className={cn(
-          'flex flex-col items-center gap-3 transition-all duration-300 origin-bottom',
-          isOpen
-            ? 'scale-100 opacity-100 transform translate-y-0'
-            : 'scale-0 opacity-0 transform translate-y-10'
+          'flex flex-col items-center gap-3 transition-all duration-300 ease-out',
+          isOpen ? 'pointer-events-auto' : 'pointer-events-none',
         )}
       >
-        {activeContacts.map((contact, index) => (
-          <a
-            key={index}
-            href={getContactHref(contact.type, contact.value)}
-            target={contact.type === 'phone' || contact.type === 'email' ? undefined : '_blank'}
-            rel={
-              contact.type === 'phone' || contact.type === 'email'
-                ? undefined
-                : 'noopener noreferrer'
-            }
-            className='group flex items-center gap-3'
-            style={{ transitionDelay: `${index * 50}ms` }}
-          >
-            <span className='bg-black/95 backdrop-blur-md text-white px-3 py-1.5 rounded-lg shadow-2xl text-[11px] font-medium uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0 whitespace-nowrap order-first border border-white/10'>
-              {contact.label || contact.type}
-            </span>
-            <div
+        {activeContacts.map((contact, index) => {
+          const delay = isOpen ? index * 50 : (activeContacts.length - index - 1) * 30;
+
+          return (
+            <a
+              key={index}
+              href={getContactHref(contact.type, contact.value)}
+              target={contact.type === 'phone' || contact.type === 'email' ? undefined : '_blank'}
+              rel={
+                contact.type === 'phone' || contact.type === 'email'
+                  ? undefined
+                  : 'noopener noreferrer'
+              }
               className={cn(
-                'w-12 h-12 rounded-full flex items-center justify-center text-white shadow-2xl hover:scale-110 transition-all duration-300 ring-4 ring-transparent hover:ring-white/20 border border-white/20',
-                CONTACT_COLORS[contact.type] || 'bg-gray-800'
+                'group flex items-center gap-3 transition-all duration-300 ease-out',
+                isOpen ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-4 scale-90',
               )}
+              style={{
+                transitionDelay: `${delay}ms`,
+              }}
             >
-              {CONTACT_ICONS[contact.type] || <MessageCircle size={20} />}
-            </div>
-          </a>
-        ))}
+              {/* Floating Label - appears on hover */}
+              <span
+                className={cn(
+                  'px-3 py-1.5 rounded-lg text-[11px] font-semibold uppercase tracking-wider whitespace-nowrap',
+                  'bg-black/90 text-white shadow-lg',
+                  'opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0',
+                  'transition-all duration-200 ease-out',
+                )}
+              >
+                {contact.label || contact.type}
+              </span>
+
+              {/* Contact Button with Solid Colors */}
+              <div
+                className='w-14 h-14 rounded-full flex items-center justify-center text-white shadow-lg transition-all duration-300 ease-out hover:scale-110 hover:shadow-xl'
+                style={{
+                  backgroundColor:
+                    contact.type === 'phone'
+                      ? '#C00000'
+                      : contact.type === 'zalo'
+                        ? '#0068FF'
+                        : contact.type === 'facebook'
+                          ? '#1877F2'
+                          : contact.type === 'messenger'
+                            ? '#00B2FF'
+                            : contact.type === 'email'
+                              ? '#EA4335'
+                              : contact.type === 'whatsapp'
+                                ? '#25D366'
+                                : '#444444',
+                }}
+              >
+                {CONTACT_ICONS[contact.type] || <MessageCircle size={24} />}
+              </div>
+            </a>
+          );
+        })}
       </div>
 
-      {/* Main Trigger Button */}
+      {/* Main Trigger Button - Original Color */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          'w-14 h-14 rounded-full flex items-center justify-center text-white shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-all duration-500 relative ring-4 border border-white/20',
-          isOpen
-            ? 'bg-black ring-black/10 rotate-[360deg]'
-            : 'bg-[#7B0C0C] ring-[#7B0C0C]/10 hover:scale-105 hover:bg-[#900000]'
+          'relative w-14 h-14 rounded-full flex items-center justify-center text-white',
+          'transition-all duration-300 ease-out',
+          'shadow-xl',
+          isOpen ? 'bg-black rotate-180' : 'bg-[#7B0C0C] hover:bg-[#900000] hover:scale-105',
         )}
+        aria-label={isOpen ? 'Close contact menu' : 'Open contact menu'}
       >
-        {isOpen ? (
-          <X size={24} className='animate-in fade-in zoom-in duration-300' />
-        ) : (
-          <MessageCircle size={28} className='animate-pulse' />
-        )}
+        <span className='relative z-10 transition-all duration-300'>
+          {isOpen ? <X size={24} /> : <MessageCircle size={26} />}
+        </span>
 
-        {/* Subtle status indicator */}
-        {!isOpen && (
-          <span className='absolute -top-1 -right-1 flex h-4 w-4'>
-            <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75'></span>
-            <span className='relative inline-flex rounded-full h-4 w-4 bg-red-500 shadow-sm'></span>
+        {/* Pulsing notification indicator */}
+        {!isOpen && mounted && (
+          <span className='absolute -top-0.5 -right-0.5 flex h-3.5 w-3.5'>
+            <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75' />
+            <span className='relative inline-flex rounded-full h-3.5 w-3.5 bg-red-500' />
           </span>
         )}
       </button>
