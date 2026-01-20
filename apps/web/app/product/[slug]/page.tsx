@@ -169,7 +169,7 @@ export default async function ProductDetailPage({ params }: Props) {
       </div>
 
       {/* Recommended Products */}
-      <RecommendedProducts products={recommended} />
+      <RecommendedProducts products={recommended} imageRatio={product.catalog?.productImageRatio} />
     </div>
   );
 }
