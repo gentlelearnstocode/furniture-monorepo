@@ -67,7 +67,10 @@ export const ProductCard = ({ product, className, imageRatio }: ProductCardProps
   ];
 
   return (
-    <Link href={`/product/${product.slug}`} className={cn('group flex flex-col gap-2', className)}>
+    <Link
+      href={`/product/${product.slug}`}
+      className={cn('group flex flex-col gap-2 cursor-pointer', className)}
+    >
       {/* Product Image Container */}
       <div
         className={cn(
