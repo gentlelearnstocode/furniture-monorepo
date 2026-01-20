@@ -1,6 +1,6 @@
 export type Locale = 'en' | 'vi';
 
-export const DEFAULT_LOCALE: Locale = 'en';
+export const DEFAULT_LOCALE: Locale = 'vi';
 
 export const LOCALE_COOKIE_NAME = 'locale';
 
@@ -11,8 +11,8 @@ export const LOCALE_COOKIE_NAME = 'locale';
 export async function getLocale(): Promise<Locale> {
   const { cookies } = await import('next/headers');
   const cookieStore = await cookies();
-  const stored = cookieStore.get(LOCALE_COOKIE_NAME)?.value;
-  return stored === 'vi' ? 'vi' : DEFAULT_LOCALE;
+  const stored = cookieStore.get(LOCALE_COOKIE_NAME)?.value as Locale | undefined;
+  return stored === 'vi' || stored === 'en' ? stored : DEFAULT_LOCALE;
 }
 
 /**
