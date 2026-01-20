@@ -165,12 +165,12 @@ export const ProjectSlider = ({ projects }: ProjectSliderProps) => {
                       </div>
                     )}
 
-                    {/* Dark Overlay - 0% default, 30% on hover to make it gentler */}
-                    <div className='absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-700 z-10' />
+                    {/* Dark Overlay - 30% default on mobile, 0% default on desktop, 30% on hover */}
+                    <div className='absolute inset-0 bg-black/30 md:bg-black/0 md:group-hover:bg-black/30 transition-colors duration-700 z-10' />
 
-                    {/* Centered Content */}
-                    <div className='absolute inset-0 z-20 flex flex-col items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-700 px-4'>
-                      <h3 className='text-3xl md:text-5xl font-serif text-white tracking-wide drop-shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700'>
+                    {/* Centered Content - Static on Mobile, Visible on Hover on Desktop */}
+                    <div className='absolute inset-0 z-20 flex flex-col items-center justify-center text-center opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-700 px-4'>
+                      <h3 className='text-3xl md:text-5xl font-serif text-white tracking-wide drop-shadow-lg transform translate-y-0 md:translate-y-4 md:group-hover:translate-y-0 transition-transform duration-700'>
                         {t(project, 'title')}
                       </h3>
                     </div>

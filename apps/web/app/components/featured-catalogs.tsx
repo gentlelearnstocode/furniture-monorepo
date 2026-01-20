@@ -57,15 +57,15 @@ const CatalogSection = ({
                     : '25vw'
             }
           />
-          {/* Dark Overlay - 30% default, 50% on hover */}
-          <div className='absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors duration-500 z-10' />
+          {/* Dark Overlay - 40% on mobile for readability, 30% default on desktop, 50% on hover */}
+          <div className='absolute inset-0 bg-black/40 md:bg-black/30 md:group-hover:bg-black/50 transition-colors duration-500 z-10' />
         </div>
 
-        {/* Centered Content - Visible on Hover */}
-        <div className='absolute inset-0 z-20 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 px-4 text-center'>
+        {/* Centered Content - Static on Mobile, Visible on Hover on Desktop */}
+        <div className='absolute inset-0 z-20 flex flex-col items-center justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-500 px-4 text-center'>
           <h3
             className={cn(
-              'text-white font-serif uppercase tracking-widest mb-4 drop-shadow-xl',
+              'text-white font-serif uppercase tracking-widest mb-4 drop-shadow-xl translate-y-0 md:translate-y-4 md:group-hover:translate-y-0 transition-transform duration-500',
               isSmall ? 'text-2xl md:text-4xl' : 'text-5xl md:text-7xl',
             )}
           >
