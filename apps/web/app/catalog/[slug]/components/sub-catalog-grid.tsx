@@ -3,10 +3,12 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useLanguage, useLocalizedText } from '@/providers/language-provider';
 
 interface SubCatalog {
   id: string;
   name: string;
+  nameVi: string | null;
   slug: string;
   image?: {
     url: string;
@@ -19,6 +21,9 @@ interface SubCatalogGridProps {
 }
 
 export const SubCatalogGrid = ({ subCatalogs, parentSlug }: SubCatalogGridProps) => {
+  const { locale } = useLanguage();
+  const t = useLocalizedText();
+
   if (!subCatalogs || subCatalogs.length === 0) return null;
 
   return (
@@ -32,12 +37,12 @@ export const SubCatalogGrid = ({ subCatalogs, parentSlug }: SubCatalogGridProps)
           <div className='flex items-center justify-center gap-6 mb-3'>
             <div className='h-px w-12 bg-gradient-to-r from-transparent to-black/20' />
             <h2 className='text-2xl md:text-[24px] font-serif text-center text-black/85 tracking-wide'>
-              What are you looking for?
+              {locale === 'vi' ? 'Bạn đang tìm kiếm điều gì?' : 'What are you looking for?'}
             </h2>
             <div className='h-px w-12 bg-gradient-to-l from-transparent to-black/20' />
           </div>
           <p className='text-center text-xs font-serif text-gray-400 tracking-widest uppercase'>
-            Explore Categories
+            {locale === 'vi' ? 'Khám phá các danh mục' : 'Explore Categories'}
           </p>
         </div>
 
@@ -54,7 +59,7 @@ export const SubCatalogGrid = ({ subCatalogs, parentSlug }: SubCatalogGridProps)
                     sub.image?.url ||
                     'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=800'
                   }
-                  alt={sub.name}
+                  alt={t(sub, 'name')}
                   fill
                   className='object-cover transition-all duration-700 group-hover:scale-110'
                   sizes='(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 16vw'
@@ -65,7 +70,7 @@ export const SubCatalogGrid = ({ subCatalogs, parentSlug }: SubCatalogGridProps)
               </div>
 
               <span className='text-[15px] font-serif font-bold text-left text-black/80 group-hover:text-black transition-colors duration-300 tracking-wide'>
-                {sub.name}
+                {t(sub, 'name')}
               </span>
             </Link>
           ))}

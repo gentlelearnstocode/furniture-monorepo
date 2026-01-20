@@ -4,12 +4,16 @@ import React from 'react';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@repo/ui/lib/utils';
+import { useLanguage, useLocalizedText } from '@/providers/language-provider';
 import { ProductCard } from './product-card';
 
 interface Product {
   id: string;
   name: string;
+  nameVi: string | null;
   slug: string;
+  shortDescription?: string | null;
+  shortDescriptionVi?: string | null;
   gallery: {
     isPrimary: boolean;
     asset: {
@@ -25,6 +29,7 @@ interface Product {
 interface Collection {
   id: string;
   name: string;
+  nameVi: string | null;
   bannerUrl: string | null;
   products: Product[];
 }
@@ -34,6 +39,8 @@ interface CatalogDetailWrapperProps {
 }
 
 export const CatalogDetailWrapper = ({ collections }: CatalogDetailWrapperProps) => {
+  const { locale } = useLanguage();
+  const t = useLocalizedText();
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [isHovered, setIsHovered] = React.useState(false);
 
@@ -80,7 +87,7 @@ export const CatalogDetailWrapper = ({ collections }: CatalogDetailWrapperProps)
                 {collection.bannerUrl && (
                   <Image
                     src={collection.bannerUrl}
-                    alt={collection.name}
+                    alt={t(collection, 'name')}
                     fill
                     className='object-cover'
                     priority={index === 0}
@@ -125,7 +132,11 @@ export const CatalogDetailWrapper = ({ collections }: CatalogDetailWrapperProps)
                       ? 'bg-white w-10 h-2.5 shadow-lg shadow-white/30'
                       : 'bg-white/50 w-2.5 h-2.5 hover:bg-white/70',
                   )}
-                  aria-label={`Go to ${collection.name}`}
+                  aria-label={
+                    locale === 'vi'
+                      ? `Chuyển đến ${t(collection, 'name')}`
+                      : `Go to ${t(collection, 'name')}`
+                  }
                 />
               ))}
             </div>
@@ -141,12 +152,12 @@ export const CatalogDetailWrapper = ({ collections }: CatalogDetailWrapperProps)
             <div className='flex items-center justify-center gap-6 mb-3'>
               <div className='h-px w-16 bg-gradient-to-r from-transparent to-black/20' />
               <h2 className='text-5xl md:text-6xl font-serif text-center text-black/85 tracking-wide'>
-                Shop the look
+                {locale === 'vi' ? 'Mua theo phong cách' : 'Shop the look'}
               </h2>
               <div className='h-px w-16 bg-gradient-to-l from-transparent to-black/20' />
             </div>
             <p className='text-center text-sm font-serif text-gray-400 tracking-widest uppercase'>
-              {currentCollection.name}
+              {t(currentCollection, 'name')}
             </p>
           </div>
 

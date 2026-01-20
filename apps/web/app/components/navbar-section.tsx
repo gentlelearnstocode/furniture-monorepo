@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { SearchDialog } from './search-dialog';
-import { useLanguage } from '@/providers/language-provider';
+import { useLanguage, useLocalizedText } from '@/providers/language-provider';
 
 import Image from 'next/image';
 
@@ -67,6 +67,7 @@ function LanguageSwitcher({ forceShow }: { forceShow: boolean }) {
 interface NavItem {
   id: string;
   name: string;
+  nameVi: string | null;
   slug: string;
   type: 'catalog' | 'subcatalog' | 'service';
   image?: {
@@ -75,6 +76,7 @@ interface NavItem {
   children?: {
     id: string;
     name: string;
+    nameVi: string | null;
     slug: string;
     image?: { url: string } | null;
   }[];
@@ -88,6 +90,7 @@ export const Navbar = ({ items }: NavbarProps) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
   const pathname = usePathname();
+  const t = useLocalizedText();
 
   // Catalog, product, project, service, and blog pages should use the white navbar
   const isWhiteNavbarPath =
@@ -244,7 +247,7 @@ export const Navbar = ({ items }: NavbarProps) => {
                           : 'text-white group-hover/nav:text-[#49000D] hover:text-[#49000D]/60',
                       )}
                     >
-                      {item.name}
+                      {t(item, 'name')}
                       <span
                         className={cn(
                           'absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] transition-all duration-300 group-hover/link:w-full',
@@ -273,7 +276,7 @@ export const Navbar = ({ items }: NavbarProps) => {
                                 href={`/catalog/${item.slug}/${child.slug}`}
                                 className='text-[16px] text-[#49000D]/70 hover:text-[#49000D] transition-colors uppercase font-serif tracking-[0.05em] whitespace-nowrap'
                               >
-                                {child.name}
+                                {t(child, 'name')}
                               </Link>
                             ))}
                             <div className='border-t border-[#49000D]/10 my-1' />
@@ -334,14 +337,14 @@ export const Navbar = ({ items }: NavbarProps) => {
                         {item.image ? (
                           <Image
                             src={item.image.url}
-                            alt={item.name}
+                            alt={t(item, 'name')}
                             fill
                             className='object-cover transition-transform duration-700 group-hover:scale-105'
                           />
                         ) : (
                           <div className='w-full h-full bg-gray-100 flex items-center justify-center'>
                             <span className='text-gray-400 font-serif uppercase tracking-widest'>
-                              {item.name}
+                              {t(item, 'name')}
                             </span>
                           </div>
                         )}
@@ -350,7 +353,7 @@ export const Navbar = ({ items }: NavbarProps) => {
                       {/* Catalog Level 1 Title */}
                       <Link href={href} className='group'>
                         <h3 className='text-[24px] font-serif font-[444] tracking-normal leading-none uppercase text-[#49000D] group-hover:text-[#49000D]/60 transition-colors'>
-                          {item.name}
+                          {t(item, 'name')}
                         </h3>
                       </Link>
 
@@ -362,7 +365,7 @@ export const Navbar = ({ items }: NavbarProps) => {
                             href={`/catalog/${item.slug}/${child.slug}`}
                             className='text-[18px] text-[#49000D]/60 hover:text-[#49000D] transition-colors uppercase font-serif tracking-[0.1em]'
                           >
-                            {child.name}
+                            {t(child, 'name')}
                           </Link>
                         ))}
                         <Link

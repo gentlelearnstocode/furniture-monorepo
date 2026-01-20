@@ -4,6 +4,7 @@ import { CatalogDetailWrapper } from './components/catalog-detail-wrapper';
 import { SubCatalogGrid } from './components/sub-catalog-grid';
 import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
 import { createCachedQuery } from '@/lib/cache';
+import { getLocale, getLocalizedText } from '@/lib/i18n';
 
 // Revalidate every hour
 export const revalidate = 3600;
@@ -73,11 +74,12 @@ const getCatalogBySlug = (slug: string) =>
       });
     },
     ['catalog-detail', slug],
-    { revalidate: 3600, tags: ['catalogs', `catalog-${slug}`] }
+    { revalidate: 3600, tags: ['catalogs', `catalog-${slug}`] },
   );
 
 export default async function CatalogPage({ params }: Props) {
   const { slug } = await params;
+  const locale = await getLocale();
 
   // Fetch the catalog and its linked collections/products
   const catalog = await getCatalogBySlug(slug)();
@@ -90,11 +92,15 @@ export default async function CatalogPage({ params }: Props) {
   type CollectionData = {
     id: string;
     name: string;
+    nameVi: string | null;
     bannerUrl: string | null;
     products: {
       id: string;
       name: string;
+      nameVi: string | null;
       slug: string;
+      shortDescription: string | null;
+      shortDescriptionVi: string | null;
       gallery: {
         isPrimary: boolean;
         asset: { url: string } | null;
@@ -113,11 +119,15 @@ export default async function CatalogPage({ params }: Props) {
     collectionsData = catalog.collections.map((cc) => ({
       id: cc.collection.id,
       name: cc.collection.name,
+      nameVi: cc.collection.nameVi,
       bannerUrl: cc.collection.banner?.url || null,
       products: cc.collection.products.map((cp) => ({
         id: cp.product.id,
         name: cp.product.name,
+        nameVi: cp.product.nameVi,
         slug: cp.product.slug,
+        shortDescription: cp.product.shortDescription,
+        shortDescriptionVi: cp.product.shortDescriptionVi,
         gallery: cp.product.gallery.map((g) => ({
           isPrimary: g.isPrimary,
           asset: g.asset ? { url: g.asset.url } : null,
@@ -134,11 +144,15 @@ export default async function CatalogPage({ params }: Props) {
       {
         id: catalog.id,
         name: catalog.name,
+        nameVi: catalog.nameVi,
         bannerUrl: null, // Level 2 catalogs don't have banner images in the same way
         products: catalog.products.map((product) => ({
           id: product.id,
           name: product.name,
+          nameVi: product.nameVi,
           slug: product.slug,
+          shortDescription: product.shortDescription,
+          shortDescriptionVi: product.shortDescriptionVi,
           gallery: product.gallery.map((g) => ({
             isPrimary: g.isPrimary,
             asset: g.asset ? { url: g.asset.url } : null,
@@ -154,7 +168,12 @@ export default async function CatalogPage({ params }: Props) {
 
   return (
     <div className='min-h-screen bg-gradient-to-b from-[#FDFCFB] via-white to-[#FDFCFB]'>
-      <AppBreadcrumb items={[{ label: 'Home Page', href: '/' }, { label: catalog.name }]} />
+      <AppBreadcrumb
+        items={[
+          { label: locale === 'vi' ? 'Trang chủ' : 'Home Page', href: '/' },
+          { label: getLocalizedText(catalog, 'name', locale) },
+        ]}
+      />
 
       {/* Client component handles slider + shop the look with collection state */}
       <CatalogDetailWrapper collections={collectionsData} />

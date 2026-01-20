@@ -4,22 +4,29 @@ import { db } from '@repo/database';
 import { featuredCatalogRows } from '@repo/database/schema';
 import { cn } from '@repo/ui/lib/utils';
 import { asc } from 'drizzle-orm';
+import { getLocale, getLocalizedText, type Locale } from '@/lib/i18n';
 
 // Catalog Section component - same design as old CollectionSection
 const CatalogSection = ({
   name,
+  nameVi,
   slug,
   imageUrl,
   isFirst,
-  layout = 'full',
+  layout,
+  locale,
 }: {
   name: string;
+  nameVi?: string | null;
   slug: string;
   imageUrl: string;
   isFirst?: boolean;
   layout?: 'full' | 'half' | 'third' | 'quarter';
+  locale: Locale;
 }) => {
   const isSmall = layout === 'half' || layout === 'third' || layout === 'quarter';
+
+  const localizedName = getLocalizedText({ name, nameVi }, 'name', locale);
 
   return (
     <Link href={`/catalog/${slug}`}>
@@ -36,7 +43,7 @@ const CatalogSection = ({
         <div className='absolute inset-0 z-0 transition-transform duration-1000 ease-out group-hover:scale-110'>
           <Image
             src={imageUrl}
-            alt={name}
+            alt={localizedName}
             fill
             className='object-cover'
             priority={isFirst}
@@ -62,11 +69,11 @@ const CatalogSection = ({
               isSmall ? 'text-2xl md:text-4xl' : 'text-5xl md:text-7xl',
             )}
           >
-            {name}
+            {localizedName}
           </h3>
           <div className='flex flex-col items-center gap-2'>
             <span className='text-white text-sm md:text-base font-medium tracking-[0.2em] uppercase border-b border-white pb-1'>
-              SEE ALL
+              {locale === 'vi' ? 'XEM TẤT CẢ' : 'SEE ALL'}
             </span>
           </div>
         </div>
@@ -148,6 +155,7 @@ export const FeaturedCatalogs = async () => {
 
   // Try to fetch custom layout configuration
   const layoutRows = await getFeaturedLayout();
+  const locale = await getLocale();
 
   // If custom layout exists and has items, use it
   if (layoutRows.length > 0 && layoutRows.some((row) => row.items.length > 0)) {
@@ -174,6 +182,7 @@ export const FeaturedCatalogs = async () => {
                   <div key={item.id} className={gridClass}>
                     <CatalogSection
                       name={item.catalog.name}
+                      nameVi={item.catalog.nameVi}
                       slug={item.catalog.slug}
                       imageUrl={
                         item.catalog.image?.url ||
@@ -181,6 +190,7 @@ export const FeaturedCatalogs = async () => {
                       }
                       isFirst={isFirst}
                       layout={layout}
+                      locale={locale}
                     />
                   </div>
                 );
@@ -221,6 +231,7 @@ export const FeaturedCatalogs = async () => {
           >
             <CatalogSection
               name={catalog.name}
+              nameVi={catalog.nameVi}
               slug={catalog.slug}
               imageUrl={
                 catalog.image?.url ||
@@ -228,6 +239,7 @@ export const FeaturedCatalogs = async () => {
               }
               isFirst={index === 0}
               layout={layout}
+              locale={locale}
             />
           </div>
         );

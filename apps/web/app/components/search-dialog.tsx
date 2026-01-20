@@ -2,13 +2,15 @@
 
 import React from 'react';
 import { Search, X, Loader2 } from 'lucide-react';
-import Image from 'next/image';
+import NextImage from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useLanguage, useLocalizedText } from '@/providers/language-provider';
 
 interface SearchResult {
   id: string;
   name: string;
+  nameVi: string | null;
   slug: string;
   price: string;
   image: string | null;
@@ -21,6 +23,8 @@ interface SearchDialogProps {
 }
 
 export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
+  const { locale } = useLanguage();
+  const t = useLocalizedText();
   const [query, setQuery] = React.useState('');
   const [results, setResults] = React.useState<SearchResult[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -130,7 +134,7 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
             <input
               ref={inputRef}
               type='text'
-              placeholder='Search products...'
+              placeholder={locale === 'vi' ? 'Tìm kiếm sản phẩm...' : 'Search products...'}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -150,7 +154,11 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
             {query.length >= 2 && results.length === 0 && !isLoading && (
               <div className='px-6 py-12 text-center text-gray-500'>
                 <Search className='w-12 h-12 mx-auto mb-4 text-gray-300' />
-                <p>No products found for &ldquo;{query}&rdquo;</p>
+                <p>
+                  {locale === 'vi'
+                    ? `Không tìm thấy sản phẩm nào cho "${query}"`
+                    : `No products found for "${query}"`}
+                </p>
               </div>
             )}
 
@@ -168,7 +176,7 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
                       {/* Product Image */}
                       <div className='w-16 h-16 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0'>
                         {result.image ? (
-                          <Image
+                          <NextImage
                             src={result.image}
                             alt={result.imageAlt}
                             width={64}
@@ -184,7 +192,7 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
 
                       {/* Product Info */}
                       <div className='flex-1 min-w-0'>
-                        <h4 className='font-medium text-gray-900 truncate'>{result.name}</h4>
+                        <h4 className='font-medium text-gray-900 truncate'>{t(result, 'name')}</h4>
                         <p className='text-sm text-[#49000D] font-medium'>
                           {formatPrice(result.price)}
                         </p>
@@ -205,9 +213,15 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
             {/* Empty state - initial */}
             {query.length < 2 && (
               <div className='px-6 py-12 text-center text-gray-500'>
-                <p className='mb-2'>Start typing to search products</p>
+                <p className='mb-2'>
+                  {locale === 'vi'
+                    ? 'Nhập để tìm kiếm sản phẩm'
+                    : 'Start typing to search products'}
+                </p>
                 <p className='text-sm text-gray-400'>
-                  Use ↑↓ to navigate, Enter to select, Esc to close
+                  {locale === 'vi'
+                    ? 'Sử dụng ↑↓ để di chuyển, Enter để chọn, Esc để đóng'
+                    : 'Use ↑↓ to navigate, Enter to select, Esc to close'}
                 </p>
               </div>
             )}
@@ -223,19 +237,19 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
                 <kbd className='px-1.5 py-0.5 bg-white rounded border border-gray-200 font-mono'>
                   ↓
                 </kbd>
-                <span className='ml-1'>Navigate</span>
+                <span className='ml-1'>{locale === 'vi' ? 'Di chuyển' : 'Navigate'}</span>
               </span>
               <span className='flex items-center gap-1'>
                 <kbd className='px-1.5 py-0.5 bg-white rounded border border-gray-200 font-mono'>
                   ↵
                 </kbd>
-                <span className='ml-1'>Select</span>
+                <span className='ml-1'>{locale === 'vi' ? 'Chọn' : 'Select'}</span>
               </span>
               <span className='flex items-center gap-1'>
                 <kbd className='px-1.5 py-0.5 bg-white rounded border border-gray-200 font-mono'>
                   Esc
                 </kbd>
-                <span className='ml-1'>Close</span>
+                <span className='ml-1'>{locale === 'vi' ? 'Đóng' : 'Close'}</span>
               </span>
             </div>
           </div>

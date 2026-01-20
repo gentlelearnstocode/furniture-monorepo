@@ -3,12 +3,16 @@
 import React, { useState } from 'react';
 import { ShoppingBag, Minus, Plus } from 'lucide-react';
 import { cn } from '@repo/ui/lib/utils';
+import { useLanguage, useLocalizedText } from '@/providers/language-provider';
 
 interface ProductInfoProps {
   product: {
     name: string;
+    nameVi?: string | null;
     description: string | null;
+    descriptionVi?: string | null;
     shortDescription: string | null;
+    shortDescriptionVi?: string | null;
     basePrice: string;
     discountPrice?: string | null;
     showPrice?: boolean;
@@ -16,11 +20,14 @@ interface ProductInfoProps {
   contacts: {
     type: string;
     label: string | null;
+    labelVi?: string | null;
     value: string;
   }[];
 }
 
 export function ProductInfo({ product, contacts }: ProductInfoProps) {
+  const { locale } = useLanguage();
+  const t = useLocalizedText();
   const [isDetailsOpen, setIsDetailsOpen] = useState(true);
 
   const hasDiscount = !!product.discountPrice;
@@ -63,14 +70,17 @@ export function ProductInfo({ product, contacts }: ProductInfoProps) {
       {/* Title & Short Description */}
       <div className='flex flex-col gap-4'>
         <h1 className='text-4xl md:text-5xl font-serif text-black uppercase tracking-wider'>
-          {product.name}
+          {t(product, 'name')}
         </h1>
-        {product.shortDescription && (
-          <div
-            className='text-[16px] leading-relaxed text-gray-600 font-serif'
-            dangerouslySetInnerHTML={{ __html: product.shortDescription }}
-          />
-        )}
+        {(() => {
+          const shortDesc = t(product, 'shortDescription');
+          return shortDesc ? (
+            <div
+              className='text-[16px] leading-relaxed text-gray-600 font-serif'
+              dangerouslySetInnerHTML={{ __html: shortDesc }}
+            />
+          ) : null;
+        })()}
       </div>
 
       {/* Price */}
@@ -96,7 +106,7 @@ export function ProductInfo({ product, contacts }: ProductInfoProps) {
           className='flex items-center justify-between w-full group'
         >
           <span className='text-[13px] font-serif uppercase tracking-[0.2em] text-black/80 group-hover:text-black transition-colors'>
-            Product Details
+            {locale === 'vi' ? 'Thông tin sản phẩm' : 'Product Details'}
           </span>
           <div className='w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center text-gray-400 group-hover:text-black group-hover:border-black transition-all'>
             {isDetailsOpen ? <Minus size={14} /> : <Plus size={14} />}
@@ -106,19 +116,24 @@ export function ProductInfo({ product, contacts }: ProductInfoProps) {
         <div
           className={cn(
             'overflow-hidden transition-all duration-500 ease-in-out',
-            isDetailsOpen ? 'max-h-[1000px] mt-6 opacity-100' : 'max-h-0 opacity-0'
+            isDetailsOpen ? 'max-h-[1000px] mt-6 opacity-100' : 'max-h-0 opacity-0',
           )}
         >
-          {product.description ? (
-            <div
-              className='text-[14px] leading-relaxed text-gray-600 font-serif prose prose-sm max-w-none'
-              dangerouslySetInnerHTML={{ __html: product.description }}
-            />
-          ) : (
-            <p className='text-[14px] leading-relaxed text-gray-600 font-serif italic'>
-              No detailed information available for this product.
-            </p>
-          )}
+          {(() => {
+            const description = t(product, 'description');
+            return description ? (
+              <div
+                className='text-[14px] leading-relaxed text-gray-600 font-serif prose prose-sm max-w-none'
+                dangerouslySetInnerHTML={{ __html: description }}
+              />
+            ) : (
+              <p className='text-[14px] leading-relaxed text-gray-600 font-serif italic'>
+                {locale === 'vi'
+                  ? 'Chưa có thông tin chi tiết cho sản phẩm này.'
+                  : 'No detailed information available for this product.'}
+              </p>
+            );
+          })()}
         </div>
       </div>
 
@@ -129,7 +144,7 @@ export function ProductInfo({ product, contacts }: ProductInfoProps) {
       >
         <ShoppingBag size={20} className='group-hover:scale-110 transition-transform' />
         <span className='text-[15px] font-serif uppercase tracking-[0.2em] font-medium'>
-          Liên hệ ngay để được tư vấn
+          {locale === 'vi' ? 'Liên hệ ngay để được tư vấn' : 'Contact us for consultation'}
         </span>
       </button>
     </div>

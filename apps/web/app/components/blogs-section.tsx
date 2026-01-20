@@ -34,7 +34,7 @@ export const BlogsSection = async () => {
         {/* Section Header */}
         <div className='flex flex-col items-center mb-12'>
           <h2 className='text-3xl md:text-4xl lg:text-5xl font-serif text-[#49000D] tracking-wide uppercase'>
-            Our Blog
+            {locale === 'vi' ? 'Blog Của Chúng Tôi' : 'Our Blog'}
           </h2>
 
           {/* Decorative divider with symbol */}
@@ -95,7 +95,7 @@ export const BlogsSection = async () => {
                   href={`/blogs/${post.slug}`}
                   className='inline-flex items-center text-sm font-semibold text-[#7B0C0C] group/link'
                 >
-                  Read Story
+                  {locale === 'vi' ? 'Đọc Câu Chuyện' : 'Read Story'}
                   <ArrowRight className='ml-2 h-4 w-4 transition-transform duration-300 group-hover/link:translate-x-1' />
                 </Link>
               </div>
@@ -109,7 +109,7 @@ export const BlogsSection = async () => {
             href='/blogs'
             className='group flex items-center gap-2 text-[13px] font-medium tracking-wider text-gray-700 hover:text-[#49000D] transition-colors'
           >
-            <span>Expand Your View</span>
+            <span>{locale === 'vi' ? 'Xem Thêm Bài Viết' : 'Expand Your View'}</span>
             <div className='w-5 h-5 rounded-full border border-current flex items-center justify-center transition-transform group-hover:translate-x-1'>
               <ArrowRight size={12} />
             </div>

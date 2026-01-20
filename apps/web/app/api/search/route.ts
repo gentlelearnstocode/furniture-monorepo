@@ -16,12 +16,17 @@ export async function GET(request: NextRequest) {
     const searchResults = await db.query.products.findMany({
       where: and(
         eq(products.isActive, true),
-        or(ilike(products.name, searchTerm), ilike(products.slug, searchTerm))
+        or(
+          ilike(products.name, searchTerm),
+          ilike(products.nameVi, searchTerm),
+          ilike(products.slug, searchTerm),
+        ),
       ),
       limit: 10,
       columns: {
         id: true,
         name: true,
+        nameVi: true,
         slug: true,
         basePrice: true,
       },
@@ -44,6 +49,7 @@ export async function GET(request: NextRequest) {
     const results = searchResults.map((product) => ({
       id: product.id,
       name: product.name,
+      nameVi: product.nameVi,
       slug: product.slug,
       price: product.basePrice,
       image: product.gallery[0]?.asset?.url ?? null,

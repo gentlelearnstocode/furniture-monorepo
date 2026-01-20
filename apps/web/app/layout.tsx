@@ -40,6 +40,7 @@ const getRootCatalogs = createCachedQuery(
       where: (catalogs, { isNull }) => isNull(catalogs.parentId),
       with: {
         children: {
+          with: { image: true },
           orderBy: (children, { asc }) => [asc(children.name)],
         },
         image: true,
@@ -56,10 +57,17 @@ function transformMenuItemsToNavbarFormat(menuItems: NavMenuItem[]) {
   type NavItemResult = {
     id: string;
     name: string;
+    nameVi: string | null;
     slug: string;
     type: 'catalog' | 'subcatalog' | 'service';
     image: { url: string } | null;
-    children: { id: string; name: string; slug: string; image: { url: string } | null }[];
+    children: {
+      id: string;
+      name: string;
+      nameVi: string | null;
+      slug: string;
+      image: { url: string } | null;
+    }[];
   };
 
   const results: NavItemResult[] = [];
@@ -69,6 +77,7 @@ function transformMenuItemsToNavbarFormat(menuItems: NavMenuItem[]) {
       results.push({
         id: item.service.id,
         name: item.service.title,
+        nameVi: item.service.titleVi,
         slug: item.service.slug,
         type: 'service',
         image: item.service.image,
@@ -78,10 +87,17 @@ function transformMenuItemsToNavbarFormat(menuItems: NavMenuItem[]) {
       results.push({
         id: item.catalog.id,
         name: item.catalog.name,
+        nameVi: item.catalog.nameVi,
         slug: item.catalog.slug,
         type: item.itemType as 'catalog' | 'subcatalog',
         image: item.catalog.image,
-        children: item.catalog.children || [],
+        children: (item.catalog.children || []).map((child) => ({
+          id: child.id,
+          name: child.name,
+          nameVi: child.nameVi,
+          slug: child.slug,
+          image: child.image,
+        })),
       });
     }
   }
@@ -107,10 +123,17 @@ export default async function RootLayout({
       : rootCatalogs.map((catalog) => ({
           id: catalog.id,
           name: catalog.name,
+          nameVi: catalog.nameVi,
           slug: catalog.slug,
           type: 'catalog' as const,
           image: catalog.image,
-          children: catalog.children || [],
+          children: (catalog.children || []).map((child) => ({
+            id: child.id,
+            name: child.name,
+            nameVi: child.nameVi,
+            slug: child.slug,
+            image: child.image,
+          })),
         }));
 
   return (

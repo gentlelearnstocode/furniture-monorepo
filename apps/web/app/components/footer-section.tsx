@@ -230,14 +230,14 @@ export const Footer = async () => {
               <form className='flex flex-col sm:flex-row gap-2'>
                 <input
                   type='email'
-                  placeholder='Địa chỉ Email/SĐT'
+                  placeholder={locale === 'vi' ? 'Địa chỉ Email/SĐT' : 'Email/Phone Address'}
                   className='flex-1 px-4 py-3 text-sm border border-gray-300 bg-white focus:outline-none focus:border-[#7B0C0C] placeholder:text-gray-400'
                 />
                 <button
                   type='submit'
                   className='px-6 py-3 bg-[#7B0C0C] text-white text-sm font-semibold uppercase tracking-wider hover:bg-[#5a0909] transition-colors whitespace-nowrap'
                 >
-                  Đăng ký tư vấn
+                  {locale === 'vi' ? 'Đăng ký tư vấn' : 'Register for consultation'}
                 </button>
               </form>
             </div>
@@ -272,7 +272,9 @@ export const Footer = async () => {
             <div className='grid grid-cols-2 gap-8'>
               {/* Catalog Links */}
               <div>
-                <h4 className='text-lg font-serif font-bold text-gray-900 mb-6'>Catalog</h4>
+                <h4 className='text-lg font-serif font-bold text-gray-900 mb-6'>
+                  {locale === 'vi' ? 'Danh Mục' : 'Catalog'}
+                </h4>
                 <ul className='space-y-3'>
                   {catalogs.map((catalog) => (
                     <li key={catalog.id}>
@@ -289,7 +291,9 @@ export const Footer = async () => {
 
               {/* Projects Links */}
               <div>
-                <h4 className='text-lg font-serif font-bold text-gray-900 mb-6'>Projects</h4>
+                <h4 className='text-lg font-serif font-bold text-gray-900 mb-6'>
+                  {locale === 'vi' ? 'Dự Án' : 'Projects'}
+                </h4>
                 <ul className='space-y-3'>
                   {projects.map((project) => (
                     <li key={project.id}>
@@ -315,22 +319,22 @@ export const Footer = async () => {
             {/* Policy Links */}
             <div className='flex items-center gap-6 text-sm text-gray-500'>
               <Link href='/privacy' className='hover:text-gray-900 transition-colors'>
-                Chính sách bảo mật
+                {locale === 'vi' ? 'Chính sách bảo mật' : 'Privacy Policy'}
               </Link>
               <span className='text-gray-300'>|</span>
               <Link href='/terms' className='hover:text-gray-900 transition-colors'>
-                Điều khoản sử dụng
+                {locale === 'vi' ? 'Điều khoản sử dụng' : 'Terms of Use'}
               </Link>
               <span className='text-gray-300'>|</span>
               <Link href='/legal' className='hover:text-gray-900 transition-colors'>
-                Thông tin pháp lý
+                {locale === 'vi' ? 'Thông tin pháp lý' : 'Legal Information'}
               </Link>
             </div>
 
             {/* Copyright */}
             <div className='text-sm text-gray-500'>
-              ©1997 <span className='font-semibold text-gray-900'>THIÊN ẤN Furniture.</span> All
-              rights reserved.
+              ©1997 <span className='font-semibold text-gray-900'>THIÊN ẤN Furniture.</span>{' '}
+              {locale === 'vi' ? 'Mọi quyền được bảo lưu.' : 'All rights reserved.'}
             </div>
 
             {/* Social Links */}

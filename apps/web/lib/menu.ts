@@ -9,11 +9,13 @@ export interface NavMenuItem {
   catalog: {
     id: string;
     name: string;
+    nameVi: string | null;
     slug: string;
     image: { url: string } | null;
     children: {
       id: string;
       name: string;
+      nameVi: string | null;
       slug: string;
       image: { url: string } | null;
     }[];
@@ -21,6 +23,7 @@ export interface NavMenuItem {
   service: {
     id: string;
     title: string;
+    titleVi: string | null;
     slug: string;
     image: { url: string } | null;
   } | null;

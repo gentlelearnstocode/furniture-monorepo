@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { ProductCard } from '@/app/components/product-card';
-import { useLocalizedText } from '@/providers/language-provider';
+import { useLanguage, useLocalizedText } from '@/providers/language-provider';
 
 interface SaleSectionProps {
   products: any[];
@@ -12,6 +12,7 @@ interface SaleSectionProps {
 }
 
 export const SaleSection = ({ products, settings }: SaleSectionProps) => {
+  const { locale } = useLanguage();
   const t = useLocalizedText();
 
   if (!settings || !settings.isActive || products.length === 0) {
@@ -58,7 +59,7 @@ export const SaleSection = ({ products, settings }: SaleSectionProps) => {
             href='/sale'
             className='group flex items-center gap-2 text-[13px] font-medium tracking-wider text-gray-700 hover:text-[#49000D] transition-colors'
           >
-            <span>Expand Your View</span>
+            <span>{locale === 'vi' ? 'Xem Thêm Sản Phẩm Khuyến Mãi' : 'Expand Your View'}</span>
             <div className='w-5 h-5 rounded-full border border-current flex items-center justify-center transition-transform group-hover:translate-x-1'>
               <ArrowRight size={12} />
             </div>

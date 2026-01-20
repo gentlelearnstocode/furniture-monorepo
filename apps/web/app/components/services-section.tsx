@@ -22,11 +22,12 @@ export const ServicesSection = async () => {
       <div className='container mx-auto px-4'>
         <div className='max-w-3xl mb-16'>
           <h2 className='text-reveal text-4xl md:text-5xl font-serif font-bold mb-6 text-gray-900'>
-            Our Exceptional Services
+            {locale === 'vi' ? 'Dịch Vụ Nổi Bật' : 'Our Exceptional Services'}
           </h2>
           <p className='text-lg text-gray-600 font-light leading-relaxed'>
-            We offer a comprehensive range of interior design and furniture solutions tailored to
-            your unique needs and style.
+            {locale === 'vi'
+              ? 'Chúng tôi mang đến giải pháp thiết kế nội thất toàn diện, được may đo riêng cho không gian sống của bạn.'
+              : 'We offer a comprehensive range of interior design and furniture solutions tailored to your unique needs and style.'}
           </p>
         </div>
 
@@ -68,7 +69,7 @@ export const ServicesSection = async () => {
                   ) : null;
                 })()}
                 <span className='flex items-center text-sm font-semibold tracking-wider uppercase text-[#7B0C0C] group/btn'>
-                  Explore More
+                  {locale === 'vi' ? 'Khám Phá Thêm' : 'Explore More'}
                   <ArrowRight className='ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1' />
                 </span>
               </div>

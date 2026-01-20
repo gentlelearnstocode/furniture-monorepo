@@ -5,6 +5,7 @@ import { ProductInfo } from './components/product-info';
 import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
 import { createCachedQuery } from '@/lib/cache';
 import { getSiteContacts } from '@/lib/queries';
+import { getLocale, getLocalizedText } from '@/lib/i18n';
 
 // Revalidate every hour
 export const revalidate = 3600;
@@ -47,11 +48,12 @@ const getProductBySlug = createCachedQuery(
     });
   },
   ['product-detail'],
-  { revalidate: 3600, tags: ['products'] }
+  { revalidate: 3600, tags: ['products'] },
 );
 
 export default async function ProductDetailPage({ params }: Props) {
   const { slug } = await params;
+  const locale = await getLocale();
 
   const product = await getProductBySlug(slug);
   const contacts = await getSiteContacts();
@@ -67,21 +69,26 @@ export default async function ProductDetailPage({ params }: Props) {
     <div className='min-h-screen bg-gradient-to-b from-[#FDFCFB] via-white to-[#FDFCFB]'>
       <AppBreadcrumb
         items={[
-          { label: 'Home Page', href: '/' },
+          { label: locale === 'vi' ? 'Trang chủ' : 'Home Page', href: '/' },
           ...(parentCatalog
-            ? [{ label: parentCatalog.name, href: `/catalog/${parentCatalog.slug}` }]
+            ? [
+                {
+                  label: getLocalizedText(parentCatalog, 'name', locale),
+                  href: `/catalog/${parentCatalog.slug}`,
+                },
+              ]
             : []),
           ...(currentCatalog
             ? [
                 {
-                  label: currentCatalog.name,
+                  label: getLocalizedText(currentCatalog, 'name', locale),
                   href: parentCatalog
                     ? `/catalog/${parentCatalog.slug}/${currentCatalog.slug}`
                     : `/catalog/${currentCatalog.slug}`,
                 },
               ]
             : []),
-          { label: product.name },
+          { label: getLocalizedText(product, 'name', locale) },
         ]}
       />
 

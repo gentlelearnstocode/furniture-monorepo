@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { db } from '@repo/database';
 import { ArrowRight } from 'lucide-react';
 import { ProjectSlider } from './project-slider';
-
+import { getLocale } from '@/lib/i18n';
 import { createCachedQuery } from '@/lib/cache';
 
 export const ProjectsSection = async () => {
@@ -23,6 +23,7 @@ export const ProjectsSection = async () => {
   );
 
   const allProjects = await getProjects();
+  const locale = await getLocale();
 
   if (allProjects.length === 0) return null;
 
@@ -41,7 +42,7 @@ export const ProjectsSection = async () => {
         {/* Section Header */}
         <div className='flex flex-col items-center mb-12'>
           <h2 className='text-3xl md:text-4xl lg:text-5xl font-serif text-[#49000D] tracking-wide uppercase'>
-            Our Projects
+            {locale === 'vi' ? 'Dự Án Của Chúng Tôi' : 'Our Projects'}
           </h2>
 
           {/* Decorative divider with symbol */}
@@ -66,7 +67,7 @@ export const ProjectsSection = async () => {
             href='/projects'
             className='group flex items-center gap-2 text-[13px] font-medium tracking-wider text-gray-700 hover:text-[#49000D] transition-colors'
           >
-            <span>Expand Your View</span>
+            <span>{locale === 'vi' ? 'Xem Thêm Dự Án' : 'Expand Your View'}</span>
             <div className='w-5 h-5 rounded-full border border-current flex items-center justify-center transition-transform group-hover:translate-x-1'>
               <ArrowRight size={12} />
             </div>

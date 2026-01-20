@@ -8,9 +8,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@repo/ui/components/ui/dropdown-menu';
+import { useLanguage, useLocalizedText } from '@/providers/language-provider';
 
 interface CatalogOption {
   label: string;
+  labelVi?: string | null;
   value: string;
 }
 
@@ -43,23 +45,30 @@ export function ProductListToolbar({
   currentSort,
   onSortChange,
 }: ProductListToolbarProps) {
+  const { locale } = useLanguage();
+  const t = useLocalizedText();
+
   const getSortLabel = (value: string) => {
     switch (value) {
       case 'name_asc':
-        return 'Name A-Z';
+        return locale === 'vi' ? 'Tên A-Z' : 'Name A-Z';
       case 'name_desc':
-        return 'Name Z-A';
+        return locale === 'vi' ? 'Tên Z-A' : 'Name Z-A';
       case 'price_asc':
-        return 'Price Low to High';
+        return locale === 'vi' ? 'Giá thấp đến cao' : 'Price Low to High';
       case 'price_desc':
-        return 'Price High to Low';
+        return locale === 'vi' ? 'Giá cao đến thấp' : 'Price High to Low';
       default:
-        return 'Sort';
+        return locale === 'vi' ? 'Sắp xếp' : 'Sort';
     }
   };
 
-  const currentCatalogLabel =
-    catalogOptions.find((opt) => opt.value === currentCatalog)?.label || 'Category';
+  const activeCatalog = catalogOptions.find((opt) => opt.value === currentCatalog);
+  const currentCatalogLabel = activeCatalog
+    ? t(activeCatalog, 'label')
+    : locale === 'vi'
+      ? 'Danh mục'
+      : 'Category';
 
   return (
     <div className='flex items-center justify-between mb-8 pb-4 border-b border-black/5'>
@@ -103,7 +112,7 @@ export function ProductListToolbar({
                     currentCatalog === option.value && 'bg-accent font-bold',
                   )}
                 >
-                  {option.label}
+                  {t(option, 'label')}
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
@@ -111,7 +120,7 @@ export function ProductListToolbar({
         )}
 
         <div className='text-[13px] font-serif italic text-black/50 uppercase tracking-[0.1em]'>
-          Showing {totalResults} results
+          {locale === 'vi' ? `Hiển thị ${totalResults} kết quả` : `Showing ${totalResults} results`}
         </div>
       </div>
 
@@ -120,17 +129,23 @@ export function ProductListToolbar({
         {/* Sort Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger className='flex items-center gap-2 px-4 py-2 text-[13px] font-serif italic uppercase tracking-[0.1em] text-black/70 hover:text-black transition-colors border border-black/10 hover:border-black/30 rounded-sm bg-white outline-none ring-0 focus:ring-0'>
-            <span>{currentSort ? getSortLabel(currentSort) : '~ Sort'}</span>
+            <span>
+              {currentSort ? getSortLabel(currentSort) : locale === 'vi' ? '~ Sắp xếp' : '~ Sort'}
+            </span>
             <ChevronDown size={14} className='opacity-50' />
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end' className='w-48'>
-            <DropdownMenuItem onClick={() => onSortChange('name_asc')}>Name A-Z</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onSortChange('name_desc')}>Name Z-A</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onSortChange('name_asc')}>
+              {locale === 'vi' ? 'Tên A-Z' : 'Name A-Z'}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onSortChange('name_desc')}>
+              {locale === 'vi' ? 'Tên Z-A' : 'Name Z-A'}
+            </DropdownMenuItem>
             <DropdownMenuItem onClick={() => onSortChange('price_asc')}>
-              Price Low to High
+              {locale === 'vi' ? 'Giá thấp đến cao' : 'Price Low to High'}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => onSortChange('price_desc')}>
-              Price High to Low
+              {locale === 'vi' ? 'Giá cao đến thấp' : 'Price High to Low'}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
