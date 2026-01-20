@@ -2,7 +2,6 @@ import { getSaleProducts, getSaleProductsByCatalog } from '@/lib/queries';
 import { db } from '@repo/database';
 import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
 import { ProductListing, type Product } from '@/app/components/product-listing';
-import { getLocale } from '@/lib/i18n';
 import { getTranslations } from 'next-intl/server';
 
 export const revalidate = 3600;
@@ -54,7 +53,7 @@ export default async function SalePage({
       <div className='container mx-auto px-4 pt-6 pb-2'>
         {/* Title & Description */}
         <div className='mb-8'>
-          <h1 className='text-4xl md:text-5xl lg:text-6xl font-serif text-black/90 tracking-wide mb-4'>
+          <h1 className='text-xl md:text-3xl lg:text-3xl font-serif text-black/90 tracking-wide mb-4'>
             {t('title')}
           </h1>
           <p className='text-[14px] md:text-[15px] leading-relaxed text-gray-600 max-w-4xl font-serif'>

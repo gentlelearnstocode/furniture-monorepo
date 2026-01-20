@@ -19,9 +19,14 @@ interface SubCatalog {
 interface SubCatalogGridProps {
   subCatalogs: SubCatalog[];
   parentSlug: string;
+  showSeparator?: boolean;
 }
 
-export const SubCatalogGrid = ({ subCatalogs, parentSlug }: SubCatalogGridProps) => {
+export const SubCatalogGrid = ({
+  subCatalogs,
+  parentSlug,
+  showSeparator = true,
+}: SubCatalogGridProps) => {
   const tl = useLocalizedText();
   const tc = useTranslations('Catalog');
 
@@ -31,7 +36,9 @@ export const SubCatalogGrid = ({ subCatalogs, parentSlug }: SubCatalogGridProps)
     <div className='bg-gradient-to-b from-white to-[#FDFCFB] py-12'>
       <div className='container mx-auto px-4 pb-12'>
         {/* Shadow line border between sections */}
-        <div className='w-full h-px shadow-[0_2px_4px_rgba(34,34,34,0.12),0_6px_6px_rgba(34,34,34,0.10),0_14px_9px_rgba(34,34,34,0.06),0_26px_10px_rgba(34,34,34,0.02)] border-b border-black/[0.03] mb-16' />
+        {showSeparator && (
+          <div className='w-full h-px shadow-[0_2px_4px_rgba(34,34,34,0.12),0_6px_6px_rgba(34,34,34,0.10),0_14px_9px_rgba(34,34,34,0.06),0_26px_10px_rgba(34,34,34,0.02)] border-b border-black/[0.03] mb-16' />
+        )}
 
         {/* Decorative section header */}
         <div className='relative mb-10'>

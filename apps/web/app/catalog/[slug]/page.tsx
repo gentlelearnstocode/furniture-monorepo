@@ -205,7 +205,11 @@ export default async function CatalogPage({ params }: Props) {
 
       {/* Catalog Level 2 Section - Only show for Level 1 catalogs */}
       {catalog.level === 1 && catalog.children.length > 0 && (
-        <SubCatalogGrid subCatalogs={catalog.children} parentSlug={catalog.slug} />
+        <SubCatalogGrid
+          subCatalogs={catalog.children}
+          parentSlug={catalog.slug}
+          showSeparator={collectionsData.length > 0}
+        />
       )}
     </div>
   );
