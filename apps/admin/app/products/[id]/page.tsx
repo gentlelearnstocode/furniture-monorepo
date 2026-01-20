@@ -41,9 +41,12 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
   const initialData = {
     id: product.id,
     name: product.name,
+    nameVi: product.nameVi || undefined,
     slug: product.slug,
     description: product.description || undefined,
+    descriptionVi: product.descriptionVi || undefined,
     shortDescription: product.shortDescription || undefined,
+    shortDescriptionVi: product.shortDescriptionVi || undefined,
     basePrice: parseFloat(product.basePrice as any),
     discountPrice: product.discountPrice ? parseFloat(product.discountPrice as any) : undefined,
     showPrice: product.showPrice,

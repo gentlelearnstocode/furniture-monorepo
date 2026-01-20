@@ -6,8 +6,31 @@ import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
 import { createCachedQuery } from '@/lib/cache';
 import { getLocale, getLocalizedText } from '@/lib/i18n';
 
+import type { Metadata } from 'next';
+
 // Revalidate every hour
 export const revalidate = 3600;
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const locale = await getLocale();
+  const catalog = await db.query.catalogs.findFirst({
+    where: (catalogs, { eq }) => eq(catalogs.slug, slug),
+  });
+
+  if (!catalog) {
+    return {
+      title: 'Catalog Not Found',
+    };
+  }
+
+  const name = getLocalizedText(catalog, 'name', locale);
+
+  return {
+    title: `${name} | Thien An Furniture`,
+    description: `Browse our ${name} collection - handcrafted luxury furniture.`,
+  };
+}
 
 // Generate static params for all catalogs at build time
 export async function generateStaticParams() {

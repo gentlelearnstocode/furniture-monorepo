@@ -25,8 +25,11 @@ export default async function Home() {
           hero
             ? {
                 title: hero.title,
+                titleVi: hero.titleVi,
                 subtitle: hero.subtitle,
+                subtitleVi: hero.subtitleVi,
                 buttonText: hero.buttonText,
+                buttonTextVi: hero.buttonTextVi,
                 buttonLink: hero.buttonLink,
                 backgroundType: hero.backgroundType,
                 backgroundImageUrl: hero.backgroundImage?.url,

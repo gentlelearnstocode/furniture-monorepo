@@ -49,10 +49,12 @@ const getProjectBySlug = (slug: string) =>
     { revalidate: 3600, tags: ['projects', `project-${slug}`] },
   );
 
+import { getLocale, getLocalizedText, getLocalizedHtml } from '@/lib/i18n';
 import { getSiteContacts } from '@/lib/queries';
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  const locale = await getLocale();
   const project = await db.query.projects.findFirst({
     where: (projects, { eq }) => eq(projects.slug, slug),
   });
@@ -63,15 +65,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
+  const title = getLocalizedText(project, 'title', locale);
+  const seoTitle = getLocalizedText(project, 'seoTitle', locale);
+  const seoDescription = getLocalizedText(project, 'seoDescription', locale);
+
   return {
-    title: project.seoTitle || `${project.title} | Thien An Furniture Projects`,
-    description: project.seoDescription || `Explore our ${project.title} project`,
-    keywords: project.seoKeywords,
+    title: seoTitle || `${title} | Thien An Furniture Projects`,
+    description:
+      seoDescription ||
+      (locale === 'vi' ? `Khám phá dự án ${title}` : `Explore our ${title} project`),
+    keywords: getLocalizedText(project, 'seoKeywords', locale),
   };
 }
 
 export default async function ProjectDetailPage({ params }: Props) {
   const { slug } = await params;
+  const locale = await getLocale();
   const project = await getProjectBySlug(slug)();
   const contacts = await getSiteContacts();
 
@@ -83,6 +92,9 @@ export default async function ProjectDetailPage({ params }: Props) {
     project.gallery.find((g) => g.isPrimary)?.asset || project.gallery[0]?.asset || project.image;
   const galleryImages = project.gallery.map((g) => g.asset).filter(Boolean);
 
+  const title = getLocalizedText(project, 'title', locale);
+  const contentHtml = getLocalizedHtml(project, 'contentHtml', locale);
+
   return (
     <article className='min-h-screen bg-white pb-24'>
       {/* Back Link */}
@@ -92,15 +104,15 @@ export default async function ProjectDetailPage({ params }: Props) {
           className='inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors group'
         >
           <ChevronLeft className='mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1' />
-          Back to all projects
+          {locale === 'vi' ? 'Quay lại danh sách dự án' : 'Back to all projects'}
         </Link>
       </div>
 
       <AppBreadcrumb
         items={[
-          { label: 'Home Page', href: '/' },
-          { label: 'Projects', href: '/projects' },
-          { label: project.title },
+          { label: locale === 'vi' ? 'Trang chủ' : 'Home Page', href: '/' },
+          { label: locale === 'vi' ? 'Dự án' : 'Projects', href: '/projects' },
+          { label: title },
         ]}
       />
 
@@ -108,10 +120,10 @@ export default async function ProjectDetailPage({ params }: Props) {
       <div className='container mx-auto px-4 mb-12'>
         <div className='max-w-4xl'>
           <span className='block text-[#7B0C0C] font-serif italic text-lg mb-4'>
-            Project Showcase
+            {locale === 'vi' ? 'Giới thiệu dự án' : 'Project Showcase'}
           </span>
           <h1 className='text-4xl md:text-6xl font-serif font-bold text-gray-900 mb-8 leading-tight'>
-            {project.title}
+            {title}
           </h1>
         </div>
       </div>
@@ -135,15 +147,17 @@ export default async function ProjectDetailPage({ params }: Props) {
       {/* Content */}
       <div className='container mx-auto px-4 mb-20'>
         <div className='max-w-3xl mx-auto'>
-          <div
-            className={styles.articleContent}
-            dangerouslySetInnerHTML={{ __html: project.contentHtml }}
-          />
+          {contentHtml && (
+            <div
+              className={styles.articleContent}
+              dangerouslySetInnerHTML={{ __html: contentHtml }}
+            />
+          )}
 
           <div className='mt-12 flex justify-center'>
             <ContactButton
               contacts={contacts}
-              label='Liên hệ về dự án này'
+              label={locale === 'vi' ? 'Liên hệ về dự án này' : 'Contact about this project'}
               className='w-full max-w-sm'
             />
           </div>
@@ -155,7 +169,7 @@ export default async function ProjectDetailPage({ params }: Props) {
         <div className='container mx-auto px-4'>
           <div className='mb-12'>
             <h2 className='text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4'>
-              Project Gallery
+              {locale === 'vi' ? 'Thư viện dự án' : 'Project Gallery'}
             </h2>
             <div className='h-px bg-gradient-to-r from-[#7B0C0C]/30 to-transparent w-32' />
           </div>

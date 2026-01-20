@@ -38,6 +38,8 @@ export function LanguageProvider({ children, initialLocale }: LanguageProviderPr
     // Store in cookie for 1 year
     if (typeof window !== 'undefined') {
       document.cookie = `${LOCALE_COOKIE_NAME}=${newLocale};path=/;max-age=31536000;SameSite=Lax`;
+      // Force reload to update server-side segments (metadata, breadcrumbs etc)
+      window.location.reload();
     }
   }, []);
 

@@ -7,8 +7,30 @@ import { createCachedQuery } from '@/lib/cache';
 import { getSiteContacts } from '@/lib/queries';
 import { getLocale, getLocalizedText } from '@/lib/i18n';
 
+import type { Metadata } from 'next';
+
 // Revalidate every hour
 export const revalidate = 3600;
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const locale = await getLocale();
+  const product = await getProductBySlug(slug);
+
+  if (!product) {
+    return {
+      title: 'Product Not Found',
+    };
+  }
+
+  const name = getLocalizedText(product, 'name', locale);
+  const description = getLocalizedText(product, 'shortDescription', locale);
+
+  return {
+    title: `${name} | Thien An Furniture`,
+    description: description || `Explore ${name} - high-quality handcrafted furniture by Thien An.`,
+  };
+}
 
 // Generate static params for all products at build time
 export async function generateStaticParams() {
@@ -107,7 +129,7 @@ export default async function ProductDetailPage({ params }: Props) {
                   objectFit: g.objectFit || undefined,
                 },
               }))}
-            name={product.name}
+            name={getLocalizedText(product, 'name', locale)}
             imageRatio={product.catalog?.productImageRatio}
           />
 

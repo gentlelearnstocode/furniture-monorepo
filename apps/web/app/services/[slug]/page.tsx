@@ -49,10 +49,12 @@ const getServiceBySlug = (slug: string) =>
     { revalidate: 3600, tags: ['services', `service-${slug}`] },
   );
 
+import { getLocale, getLocalizedText, getLocalizedHtml } from '@/lib/i18n';
 import { getSiteContacts } from '@/lib/queries';
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  const locale = await getLocale();
   const service = await db.query.services.findFirst({
     where: (services, { eq }) => eq(services.slug, slug),
   });
@@ -63,15 +65,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
+  const title = getLocalizedText(service, 'title', locale);
+  const seoTitle = getLocalizedText(service, 'seoTitle', locale);
+  const seoDescription = getLocalizedText(service, 'seoDescription', locale);
+
   return {
-    title: service.seoTitle || `${service.title} | Thien An Furniture Services`,
-    description: service.seoDescription || `Learn more about our ${service.title} service`,
-    keywords: service.seoKeywords,
+    title: seoTitle || `${title} | Thien An Furniture Services`,
+    description:
+      seoDescription ||
+      (locale === 'vi'
+        ? `Tìm hiểu thêm về dịch vụ ${title}`
+        : `Learn more about our ${title} service`),
+    keywords: getLocalizedText(service, 'seoKeywords', locale),
   };
 }
 
 export default async function ServiceDetailPage({ params }: Props) {
   const { slug } = await params;
+  const locale = await getLocale();
   const service = await getServiceBySlug(slug)();
   const contacts = await getSiteContacts();
 
@@ -83,14 +94,17 @@ export default async function ServiceDetailPage({ params }: Props) {
     service.gallery.find((g) => g.isPrimary)?.asset || service.gallery[0]?.asset || service.image;
   const galleryImages = service.gallery.map((g) => g.asset).filter(Boolean);
 
+  const title = getLocalizedText(service, 'title', locale);
+  const contentHtml = getLocalizedHtml(service, 'descriptionHtml', locale);
+
   return (
     <article className='min-h-screen bg-white pb-24'>
       {/* Back Link */}
       <AppBreadcrumb
         items={[
-          { label: 'Trang chủ', href: '/' },
-          { label: 'Dịch vụ', href: '/services' },
-          { label: service.title },
+          { label: locale === 'vi' ? 'Trang chủ' : 'Home Page', href: '/' },
+          { label: locale === 'vi' ? 'Dịch vụ' : 'Services', href: '/services' },
+          { label: title },
         ]}
       />
       <div className='container mx-auto px-4 pt-6 pb-6'>
@@ -99,24 +113,18 @@ export default async function ServiceDetailPage({ params }: Props) {
           className='inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors group'
         >
           <ChevronLeft className='mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1' />
-          Back to all services
+          {locale === 'vi' ? 'Quay lại danh sách dịch vụ' : 'Back to all services'}
         </Link>
       </div>
-
-      <AppBreadcrumb
-        items={[
-          { label: 'Home Page', href: '/' },
-          { label: 'Services', href: '/services' },
-          { label: service.title },
-        ]}
-      />
 
       {/* Header */}
       <div className='container mx-auto px-4 mb-12'>
         <div className='max-w-4xl'>
-          <span className='block text-[#7B0C0C] font-serif italic text-lg mb-4'>Our Service</span>
+          <span className='block text-[#7B0C0C] font-serif italic text-lg mb-4'>
+            {locale === 'vi' ? 'Dịch vụ của chúng tôi' : 'Our Service'}
+          </span>
           <h1 className='text-4xl md:text-6xl font-serif font-bold text-gray-900 mb-8 leading-tight'>
-            {service.title}
+            {title}
           </h1>
         </div>
       </div>
@@ -140,15 +148,17 @@ export default async function ServiceDetailPage({ params }: Props) {
       {/* Content */}
       <div className='container mx-auto px-4 mb-20'>
         <div className='max-w-3xl mx-auto'>
-          <div
-            className={styles.articleContent}
-            dangerouslySetInnerHTML={{ __html: service.descriptionHtml }}
-          />
+          {contentHtml && (
+            <div
+              className={styles.articleContent}
+              dangerouslySetInnerHTML={{ __html: contentHtml }}
+            />
+          )}
 
           <div className='mt-12 flex justify-center'>
             <ContactButton
               contacts={contacts}
-              label='Tư vấn dịch vụ này'
+              label={locale === 'vi' ? 'Tư vấn dịch vụ này' : 'Consult for this service'}
               className='w-full max-w-sm'
             />
           </div>
@@ -160,7 +170,7 @@ export default async function ServiceDetailPage({ params }: Props) {
         <div className='container mx-auto px-4'>
           <div className='mb-12'>
             <h2 className='text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4'>
-              Service Gallery
+              {locale === 'vi' ? 'Thư viện hình ảnh' : 'Service Gallery'}
             </h2>
             <div className='h-px bg-gradient-to-r from-[#7B0C0C]/30 to-transparent w-32' />
           </div>
