@@ -371,6 +371,7 @@ export function MenuBuilder({ availableItems, initialSelectedItems, onSave }: Me
           </div>
         ) : (
           <DndContext
+            id='menu-builder-dnd'
             sensors={sensors}
             collisionDetection={closestCenter}
             onDragEnd={handleDragEnd}

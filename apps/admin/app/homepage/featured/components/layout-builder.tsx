@@ -87,7 +87,7 @@ function SortableRow({
       style={style}
       className={cn(
         'bg-white border rounded-lg shadow-sm transition-shadow',
-        isDragging && 'shadow-lg ring-2 ring-blue-500/50'
+        isDragging && 'shadow-lg ring-2 ring-blue-500/50',
       )}
     >
       {/* Row Header */}
@@ -210,7 +210,7 @@ export function LayoutBuilder({ initialRows, availableCatalogs }: LayoutBuilderP
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
+    }),
   );
 
   // Get all used catalog IDs
@@ -246,7 +246,7 @@ export function LayoutBuilder({ initialRows, availableCatalogs }: LayoutBuilderP
         // Keep only items that fit in new column count
         const items = row.items.filter((i) => i.position < columns);
         return { ...row, columns, items };
-      })
+      }),
     );
   }
 
@@ -272,7 +272,7 @@ export function LayoutBuilder({ initialRows, availableCatalogs }: LayoutBuilderP
           catalog,
         };
         return { ...row, items: [...row.items, newItem] };
-      })
+      }),
     );
   }
 
@@ -281,7 +281,7 @@ export function LayoutBuilder({ initialRows, availableCatalogs }: LayoutBuilderP
       prev.map((row) => {
         if (row.id !== rowId) return row;
         return { ...row, items: row.items.filter((i) => i.position !== position) };
-      })
+      }),
     );
   }
 
@@ -353,7 +353,12 @@ export function LayoutBuilder({ initialRows, availableCatalogs }: LayoutBuilderP
           </CardContent>
         </Card>
       ) : (
-        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <DndContext
+          id='layout-builder-dnd'
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
           <SortableContext items={rows.map((r) => r.id)} strategy={verticalListSortingStrategy}>
             <div className='space-y-4'>
               {rows.map((row) => (

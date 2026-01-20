@@ -76,7 +76,7 @@ function SortableProduct({
       style={style}
       className={cn(
         'flex items-center gap-4 p-4 bg-white border rounded-lg shadow-sm transition-shadow',
-        isDragging && 'shadow-lg ring-2 ring-blue-500/50 z-50'
+        isDragging && 'shadow-lg ring-2 ring-blue-500/50 z-50',
       )}
     >
       <button
@@ -132,7 +132,7 @@ export function SaleManagement({
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
+    }),
   );
 
   function handleDragEnd(event: DragEndEvent) {
@@ -248,6 +248,7 @@ export function SaleManagement({
         </CardHeader>
         <CardContent>
           <DndContext
+            id='sale-management-dnd'
             sensors={sensors}
             collisionDetection={closestCenter}
             onDragEnd={handleDragEnd}

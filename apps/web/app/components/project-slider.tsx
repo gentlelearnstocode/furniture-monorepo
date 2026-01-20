@@ -27,6 +27,38 @@ export const ProjectSlider = ({ projects }: ProjectSliderProps) => {
   const t = useLocalizedText();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  // Minimum swipe distance (in px)
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    if (e.targetTouches[0]) {
+      setTouchStart(e.targetTouches[0].clientX);
+    }
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    if (e.targetTouches[0]) {
+      setTouchEnd(e.targetTouches[0].clientX);
+    }
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      nextSlide();
+    } else if (isRightSwipe) {
+      prevSlide();
+    }
+  };
 
   // If we have fewer than 3 projects, we might want to handle it gracefully,
   // but the requirement implies 3 latest projects.
@@ -78,6 +110,9 @@ export const ProjectSlider = ({ projects }: ProjectSliderProps) => {
       className='relative w-full max-w-7xl mx-auto h-[400px] md:h-[500px] lg:h-[600px] flex items-center justify-center perspective-1000'
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
     >
       <div className='relative w-full h-full flex items-center justify-center overflow-hidden md:overflow-visible'>
         {projects.map((project, index) => {

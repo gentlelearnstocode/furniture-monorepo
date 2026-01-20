@@ -79,7 +79,7 @@ export const getHomepageSaleProducts = createCachedQuery(
   async () => {
     const saleItems = await db.query.homepageSaleProducts.findMany({
       orderBy: (items, { asc }) => [asc(items.position)],
-      limit: 4,
+      limit: 10,
       with: {
         product: {
           with: {

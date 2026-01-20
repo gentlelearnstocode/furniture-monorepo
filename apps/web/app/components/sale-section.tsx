@@ -6,6 +6,15 @@ import { ArrowRight } from 'lucide-react';
 import { ProductCard } from '@/app/components/product-card';
 import { useLanguage, useLocalizedText } from '@/providers/language-provider';
 
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  CarouselDots,
+} from '@repo/ui/ui/carousel';
+
 interface SaleSectionProps {
   products: any[];
   settings: any;
@@ -42,15 +51,29 @@ export const SaleSection = ({ products, settings }: SaleSectionProps) => {
           </div>
         </div>
 
-        {/* Product Grid */}
-        <div className='grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6'>
-          {products.slice(0, 4).map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              className='animate-in fade-in slide-in-from-bottom-4 duration-700'
-            />
-          ))}
+        {/* Product Carousel */}
+        <div className='relative px-4 md:px-12'>
+          <Carousel
+            opts={{
+              align: 'start',
+              loop: false,
+            }}
+            className='w-full'
+          >
+            <CarouselContent className='-ml-4'>
+              {products.map((product) => (
+                <CarouselItem key={product.id} className='pl-4 basis-1/2 lg:basis-1/4'>
+                  <ProductCard
+                    product={product}
+                    className='animate-in fade-in slide-in-from-bottom-4 duration-700'
+                  />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className='-left-2 md:-left-6 top-[38%] md:top-[40%] z-20' />
+            <CarouselNext className='-right-2 md:-right-6 top-[38%] md:top-[40%] z-20' />
+            <CarouselDots className='mt-10' />
+          </Carousel>
         </div>
 
         {/* Expand Your View Link */}
