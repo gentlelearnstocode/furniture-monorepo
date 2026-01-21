@@ -8,7 +8,6 @@ import {
   type ImageDisplaySettings,
   type ObjectFit,
 } from './styled-image';
-import { useTranslations } from 'next-intl';
 import { useLocalizedText } from '@/providers/language-provider';
 
 interface ProductCardProps {
@@ -39,7 +38,6 @@ interface ProductCardProps {
 }
 
 export const ProductCard = ({ product, className, imageRatio }: ProductCardProps) => {
-  const t = useTranslations('Product');
   const tl = useLocalizedText();
   const productName = tl(product, 'name');
   const productDesc = tl(product, 'shortDescription');
@@ -114,9 +112,11 @@ export const ProductCard = ({ product, className, imageRatio }: ProductCardProps
           {productName}
         </h3>
 
-        <p className='text-[14px] md:text-[16px] font-serif text-[#666] leading-snug'>
-          {productDesc || t('availableFinishes')}
-        </p>
+        {productDesc && (
+          <p className='text-[14px] md:text-[16px] font-serif text-[#666] leading-snug'>
+            {productDesc}
+          </p>
+        )}
 
         {/* Color Dots */}
         <div className='flex items-center gap-2 mt-2'>

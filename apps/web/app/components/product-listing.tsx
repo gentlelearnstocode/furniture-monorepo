@@ -102,7 +102,7 @@ export function ProductListing({
       <div
         className={cn(
           'grid gap-x-6 gap-y-12 transition-all duration-300',
-          layout === '2-col' ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-3',
+          layout === '2-col' ? 'grid-cols-2' : 'grid-cols-3',
         )}
       >
         {products.map((product) => (

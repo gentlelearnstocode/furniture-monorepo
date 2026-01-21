@@ -7,6 +7,14 @@ import { cn } from '@repo/ui/lib/utils';
 import { useLocalizedText } from '@/providers/language-provider';
 import { useTranslations } from 'next-intl';
 import { ProductCard } from './product-card';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  CarouselDots,
+} from '@repo/ui/ui/carousel';
 
 interface Product {
   id: string;
@@ -148,7 +156,7 @@ export const CatalogDetailWrapper = ({ collections }: CatalogDetailWrapperProps)
           <div className='relative mb-12'>
             <div className='flex items-center justify-center gap-6 mb-3'>
               <div className='h-px w-16 bg-gradient-to-r from-transparent to-black/20' />
-              <h2 className='text-5xl md:text-6xl font-serif text-center text-black/85 tracking-wide'>
+              <h2 className='text-2xl md:text-3xl lg:text-4xl font-serif text-center text-black/85 tracking-wide'>
                 {tc('shopTheLook')}
               </h2>
               <div className='h-px w-16 bg-gradient-to-l from-transparent to-black/20' />
@@ -158,22 +166,35 @@ export const CatalogDetailWrapper = ({ collections }: CatalogDetailWrapperProps)
             </p>
           </div>
 
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-16'>
-            {currentCollection.products.map((product) => {
-              return (
-                <ProductCard
-                  key={product.id}
-                  product={{
-                    ...product,
-                    basePrice: '0', // Fallback as it was not in the original interface but required by standard card
-                    gallery: product.gallery.map((g) => ({
-                      ...g,
-                      asset: g.asset || { url: '' },
-                    })),
-                  }}
-                />
-              );
-            })}
+          {/* Product Carousel */}
+          <div className='relative px-4 md:px-12'>
+            <Carousel
+              opts={{
+                align: 'start',
+                loop: false,
+              }}
+              className='w-full'
+            >
+              <CarouselContent className='-ml-4'>
+                {currentCollection.products.map((product) => (
+                  <CarouselItem key={product.id} className='pl-4 basis-1/2 lg:basis-1/4'>
+                    <ProductCard
+                      product={{
+                        ...product,
+                        basePrice: '0',
+                        gallery: product.gallery.map((g) => ({
+                          ...g,
+                          asset: g.asset || { url: '' },
+                        })),
+                      }}
+                    />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className='-left-2 md:-left-6 top-[38%] md:top-[40%] z-20' />
+              <CarouselNext className='-right-2 md:-right-6 top-[38%] md:top-[40%] z-20' />
+              <CarouselDots className='mt-10' />
+            </Carousel>
           </div>
         </div>
       )}
