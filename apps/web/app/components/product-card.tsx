@@ -78,7 +78,7 @@ export const ProductCard = ({ product, className, imageRatio }: ProductCardProps
           {
             'aspect-auto': imageRatio === 'original',
             'aspect-square': imageRatio === '1:1',
-            'aspect-[3/4]': imageRatio === '3:4',
+            'aspect-[3/4] max-w-[75%]': imageRatio === '3:4',
             'aspect-[4/3]': imageRatio === '4:3',
             'aspect-video': imageRatio === '16:9',
             'aspect-[4/5]': imageRatio === '4:5' || !imageRatio,
