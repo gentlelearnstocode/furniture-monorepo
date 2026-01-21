@@ -59,13 +59,6 @@ export const ProductCard = ({ product, className, imageRatio }: ProductCardProps
   const hasDiscount = !!product.discountPrice;
   const showPrice = product.showPrice ?? true;
 
-  // Default color variants if not provided
-  const colorVariants = product.colorVariants || [
-    { color: '#B80022' },
-    { color: '#93001B' },
-    { color: '#49000D' },
-  ];
-
   return (
     <Link
       href={`/product/${product.slug}`}
@@ -117,17 +110,6 @@ export const ProductCard = ({ product, className, imageRatio }: ProductCardProps
             {productDesc}
           </p>
         )}
-
-        {/* Color Dots */}
-        <div className='flex items-center gap-2 mt-2'>
-          {colorVariants.slice(0, 3).map((variant, index) => (
-            <div
-              key={index}
-              className='w-5 h-5 rounded-full border border-black/5'
-              style={{ backgroundColor: variant.color }}
-            />
-          ))}
-        </div>
 
         {/* Price Display */}
         {showPrice && (
