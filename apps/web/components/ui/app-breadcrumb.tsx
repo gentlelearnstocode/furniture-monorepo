@@ -15,24 +15,24 @@ interface AppBreadcrumbProps {
 export function AppBreadcrumb({ items, className }: AppBreadcrumbProps) {
   return (
     <div className={cn('bg-[#ebebeb] w-full', className)}>
-      <div className='container mx-auto px-4 py-3'>
-        <nav aria-label='Breadcrumb' className='flex items-center flex-wrap gap-2'>
+      <div className='container mx-auto px-4 py-2 sm:py-3'>
+        <nav aria-label='Breadcrumb' className='flex items-center flex-wrap gap-1 sm:gap-2'>
           {items.map((item, index) => {
             const isLast = index === items.length - 1;
 
             return (
-              <div key={index} className='flex items-center gap-2'>
+              <div key={index} className='flex items-center gap-1 sm:gap-2'>
                 {item.href && !isLast ? (
                   <Link
                     href={item.href}
-                    className='capitalize font-playfair text-[14px] md:text-[16px] text-[#222222]/80 hover:text-[#222222] transition-colors whitespace-nowrap'
+                    className='capitalize font-playfair text-[12px] sm:text-[14px] md:text-[16px] text-[#222222]/80 hover:text-[#222222] transition-colors whitespace-nowrap'
                   >
                     {item.label}
                   </Link>
                 ) : (
                   <span
                     className={cn(
-                      'capitalize font-playfair text-[14px] md:text-[16px] whitespace-nowrap',
+                      'capitalize font-playfair text-[12px] sm:text-[14px] md:text-[16px] whitespace-nowrap',
                       isLast ? 'text-[#222222] font-semibold' : 'text-[#222222]/80',
                     )}
                   >
@@ -40,7 +40,9 @@ export function AppBreadcrumb({ items, className }: AppBreadcrumbProps) {
                   </span>
                 )}
 
-                {!isLast && <ChevronRight size={20} className='text-[#222222]/40 shrink-0' />}
+                {!isLast && (
+                  <ChevronRight size={16} className='sm:w-5 sm:h-5 text-[#222222]/40 shrink-0' />
+                )}
               </div>
             );
           })}

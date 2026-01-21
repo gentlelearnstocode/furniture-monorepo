@@ -164,14 +164,14 @@ export default async function CatalogLevel2Page({ params, searchParams }: Props)
         ]}
       />
 
-      <div className='container mx-auto px-4 pt-4 pb-6'>
+      <div className='container mx-auto px-4 pt-2 sm:pt-4 pb-4 sm:pb-6'>
         {/* Title & Description */}
-        <div className='mb-8'>
-          <h1 className='text-xl md:text-3xl font-serif text-black/90 tracking-wide mb-4'>
+        <div className='mb-4 sm:mb-6 md:mb-8'>
+          <h1 className='text-lg sm:text-xl md:text-3xl font-serif text-black/90 tracking-wide mb-2 sm:mb-4'>
             {getLocalizedText(catalog, 'name', locale)}
           </h1>
           {getLocalizedText(catalog, 'description', locale) && (
-            <p className='text-[15px] leading-relaxed text-gray-600 max-w-4xl font-serif'>
+            <p className='text-[13px] sm:text-[15px] leading-relaxed text-gray-600 max-w-4xl font-serif'>
               {getLocalizedText(catalog, 'description', locale)}
             </p>
           )}

@@ -100,31 +100,31 @@ export const ProductCard = ({ product, className, imageRatio }: ProductCardProps
       </div>
 
       {/* Product Info */}
-      <div className='pt-2 flex flex-col items-start'>
-        <h3 className='text-[20px] md:text-[24px] font-serif font-medium text-black leading-tight group-hover:text-[#49000D] transition-colors'>
+      <div className='pt-1.5 sm:pt-2 flex flex-col items-start'>
+        <h3 className='text-[14px] sm:text-[18px] md:text-[22px] font-serif font-medium text-black leading-tight group-hover:text-[#49000D] transition-colors'>
           {productName}
         </h3>
 
         {productDesc && (
-          <p className='text-[14px] md:text-[16px] font-serif text-[#666] leading-snug'>
+          <p className='text-[11px] sm:text-[13px] md:text-[15px] font-serif text-[#666] leading-snug mt-0.5'>
             {productDesc}
           </p>
         )}
 
         {/* Price Display */}
         {showPrice && (
-          <div className='flex items-center gap-3 mt-2'>
+          <div className='flex items-center gap-2 sm:gap-3 mt-1.5 sm:mt-2'>
             {hasDiscount ? (
               <>
-                <span className='text-[16px] md:text-[18px] font-serif font-bold text-[#b80022]'>
+                <span className='text-[13px] sm:text-[15px] md:text-[17px] font-serif font-bold text-[#b80022]'>
                   ${product.discountPrice}
                 </span>
-                <span className='text-[12px] md:text-[14px] font-serif line-through text-gray-500'>
+                <span className='text-[10px] sm:text-[12px] md:text-[14px] font-serif line-through text-gray-500'>
                   ${product.basePrice}
                 </span>
               </>
             ) : (
-              <span className='text-[16px] md:text-[18px] font-serif text-black font-medium'>
+              <span className='text-[13px] sm:text-[15px] md:text-[17px] font-serif text-black font-medium'>
                 ${product.basePrice}
               </span>
             )}
