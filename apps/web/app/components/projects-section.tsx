@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { db } from '@repo/database';
 import { ArrowRight } from 'lucide-react';
 import { ProjectSlider } from './project-slider';
-import { getLocale } from '@/lib/i18n';
 import { createCachedQuery } from '@/lib/cache';
 import { getTranslations } from 'next-intl/server';
 
@@ -24,7 +23,6 @@ export const ProjectsSection = async () => {
   );
 
   const allProjects = await getProjects();
-  const locale = await getLocale();
   const t = await getTranslations('Projects');
 
   if (allProjects.length === 0) return null;

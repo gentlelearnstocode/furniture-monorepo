@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { ProductCard } from '@/app/components/product-card';
 import { useTranslations } from 'next-intl';
-import { useLanguage, useLocalizedText } from '@/providers/language-provider';
+import { useLocalizedText } from '@/providers/language-provider';
 
 import {
   Carousel,
@@ -22,7 +22,6 @@ interface SaleSectionProps {
 }
 
 export const SaleSection = ({ products, settings }: SaleSectionProps) => {
-  const { locale } = useLanguage();
   const t = useTranslations('SaleSection');
   const tl = useLocalizedText();
 
