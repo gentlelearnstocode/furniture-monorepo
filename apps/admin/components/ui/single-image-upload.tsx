@@ -11,7 +11,7 @@ import { createAssetAction } from '@/lib/actions/assets';
 
 interface SingleImageUploadProps {
   url?: string | null;
-  onChange: (assetId: string | null) => void;
+  onChange: (assetId: string | null, url?: string | null) => void;
   folder?: string;
   label?: string;
 }
@@ -58,7 +58,7 @@ export function SingleImageUpload({
 
       const asset = await createAssetAction(blob.url, file.name, file.type, file.size);
 
-      onChange(asset.id);
+      onChange(asset.id, asset.url);
       setUploadedUrl(asset.url);
       setIsRemoved(false);
       toast.success('Image uploaded successfully');
@@ -71,7 +71,7 @@ export function SingleImageUpload({
   };
 
   const onRemove = () => {
-    onChange(null);
+    onChange(null, null);
     setUploadedUrl(null);
     setIsRemoved(true);
   };

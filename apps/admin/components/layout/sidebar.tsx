@@ -81,7 +81,14 @@ export function Sidebar() {
     // { name: "Settings", href: "/settings", icon: Settings },
   ];
 
-  const systemNavigation = [{ name: 'Settings', href: '/settings', icon: Settings }];
+  const systemNavigation = [
+    {
+      name: 'Settings',
+      href: '/settings',
+      icon: Settings,
+      items: [{ name: 'Product Logo Settings', href: '/homepage/settings' }],
+    },
+  ];
 
   return (
     <SidebarUI collapsible='icon'>
@@ -176,16 +183,56 @@ export function Sidebar() {
           <SidebarGroupLabel>System</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {systemNavigation.map((item) => (
-                <SidebarMenuItem key={item.name}>
-                  <SidebarMenuButton asChild size='sm'>
-                    <Link href={item.href}>
-                      <item.icon />
-                      <span>{item.name}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {systemNavigation.map((item) => {
+                const isActive =
+                  pathname === item.href ||
+                  item.items?.some((subItem) => pathname === subItem.href);
+
+                if (item.items) {
+                  return (
+                    <Collapsible
+                      key={item.name}
+                      asChild
+                      defaultOpen={isActive}
+                      className='group/collapsible'
+                    >
+                      <SidebarMenuItem>
+                        <CollapsibleTrigger asChild>
+                          <SidebarMenuButton tooltip={item.name} size='sm'>
+                            {item.icon && <item.icon />}
+                            <span>{item.name}</span>
+                            <ChevronRight className='ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90' />
+                          </SidebarMenuButton>
+                        </CollapsibleTrigger>
+                        <CollapsibleContent>
+                          <SidebarMenuSub>
+                            {item.items.map((subItem) => (
+                              <SidebarMenuSubItem key={subItem.name}>
+                                <SidebarMenuSubButton asChild isActive={pathname === subItem.href}>
+                                  <Link href={subItem.href}>
+                                    <span>{subItem.name}</span>
+                                  </Link>
+                                </SidebarMenuSubButton>
+                              </SidebarMenuSubItem>
+                            ))}
+                          </SidebarMenuSub>
+                        </CollapsibleContent>
+                      </SidebarMenuItem>
+                    </Collapsible>
+                  );
+                }
+
+                return (
+                  <SidebarMenuItem key={item.name}>
+                    <SidebarMenuButton asChild size='sm'>
+                      <Link href={item.href}>
+                        <item.icon />
+                        <span>{item.name}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

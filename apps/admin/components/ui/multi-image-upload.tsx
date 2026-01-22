@@ -45,18 +45,47 @@ export function MultiImageUpload({ value, onChange, folder = 'general' }: MultiI
       for (const file of Array.from(files)) {
         const filename = folder ? `${folder}/${file.name}` : file.name;
 
+        // Step 1: Upload original to Vercel Blob
         const blob = await upload(filename, file, {
           access: 'public',
           handleUploadUrl: '/api/assets/upload',
           onUploadProgress: (progressEvent) => {
             setProgress((prev) => ({
               ...prev,
-              [file.name]: progressEvent.percentage,
+              [file.name]: Math.round(progressEvent.percentage * 0.8), // First 80% is upload
             }));
           },
         });
 
-        const asset = await createAssetAction(blob.url, file.name, file.type, file.size);
+        // Step 2: Process with logo overlay (if enabled)
+        let finalUrl = blob.url;
+        try {
+          setProgress((prev) => ({ ...prev, [file.name]: 85 })); // Processing indicator
+
+          const formData = new FormData();
+          formData.append('imageUrl', blob.url);
+          formData.append('filename', file.name);
+
+          const overlayResponse = await fetch('/api/process-logo-overlay', {
+            method: 'POST',
+            body: formData,
+          });
+
+          if (overlayResponse.ok) {
+            const overlayResult = await overlayResponse.json();
+            if (overlayResult.processed && overlayResult.url) {
+              finalUrl = overlayResult.url;
+            }
+          }
+        } catch (overlayError) {
+          // If overlay processing fails, continue with original image
+          console.warn('Logo overlay processing failed, using original:', overlayError);
+        }
+
+        setProgress((prev) => ({ ...prev, [file.name]: 95 })); // Almost done
+
+        // Step 3: Create asset record with the final URL
+        const asset = await createAssetAction(finalUrl, file.name, file.type, file.size);
 
         if (asset) {
           uploadedImages.push({
@@ -94,7 +123,7 @@ export function MultiImageUpload({ value, onChange, folder = 'general' }: MultiI
 
     if (removedImage?.isPrimary && newValue.length > 0) {
       const updatedValue = newValue.map((img, index) =>
-        index === 0 ? { ...img, isPrimary: true } : img
+        index === 0 ? { ...img, isPrimary: true } : img,
       );
       onChange(updatedValue);
     } else {
@@ -119,7 +148,7 @@ export function MultiImageUpload({ value, onChange, folder = 'general' }: MultiI
             aspectRatio: settings.aspectRatio,
             objectFit: settings.objectFit,
           }
-        : img
+        : img,
     );
     onChange(newValue);
   };
