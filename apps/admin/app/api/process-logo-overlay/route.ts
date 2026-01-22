@@ -122,23 +122,49 @@ export async function POST(request: NextRequest) {
     left = Math.max(0, left);
     top = Math.max(0, top);
 
+    // Determine output format based on input - preserve PNG for transparency
+    const isPng = metadata.format === 'png' || filename.toLowerCase().endsWith('.png');
+
     // Composite logo onto base image
-    const result = await baseImage
-      .composite([
-        {
-          input: processedLogo,
-          left,
-          top,
-        },
-      ])
-      .jpeg({ quality: 90 })
-      .toBuffer();
+    let result: Buffer;
+    let contentType: string;
+    let outputFilename: string;
+
+    if (isPng) {
+      result = await baseImage
+        .composite([
+          {
+            input: processedLogo,
+            left,
+            top,
+          },
+        ])
+        .png({ quality: 90 })
+        .toBuffer();
+      contentType = 'image/png';
+      outputFilename = filename.toLowerCase().endsWith('.png')
+        ? filename
+        : filename.replace(/\.[^.]+$/, '.png');
+    } else {
+      result = await baseImage
+        .composite([
+          {
+            input: processedLogo,
+            left,
+            top,
+          },
+        ])
+        .jpeg({ quality: 90 })
+        .toBuffer();
+      contentType = 'image/jpeg';
+      outputFilename = filename;
+    }
 
     // Upload the watermarked image to Vercel Blob
-    const watermarkedFilename = `watermarked/${filename}`;
+    const watermarkedFilename = `watermarked/${outputFilename}`;
     const blob = await put(watermarkedFilename, result, {
       access: 'public',
-      contentType: 'image/jpeg',
+      contentType,
     });
 
     return NextResponse.json({
