@@ -191,8 +191,8 @@ export const CatalogDetailWrapper = ({ collections }: CatalogDetailWrapperProps)
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className='-left-2 md:-left-6 top-[38%] md:top-[40%] z-20' />
-              <CarouselNext className='-right-2 md:-right-6 top-[38%] md:top-[40%] z-20' />
+              <CarouselPrevious className='-left-3 md:-left-6 top-[38%] md:top-[40%] z-20' />
+              <CarouselNext className='-right-3 md:-right-6 top-[38%] md:top-[40%] z-20' />
               <CarouselDots className='mt-10' />
             </Carousel>
           </div>

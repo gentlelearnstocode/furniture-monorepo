@@ -46,11 +46,7 @@ export function RecommendedProducts({ products, imageRatio }: RecommendedProduct
                   key={product.id}
                   className='pl-4 basis-[85%] sm:basis-1/2 lg:basis-1/4'
                 >
-                  <ProductCard
-                    product={product}
-                    imageRatio={imageRatio}
-                    className='animate-in fade-in slide-in-from-bottom-4 duration-700 h-full'
-                  />
+                  <ProductCard product={product} imageRatio={imageRatio} className='h-full' />
                 </CarouselItem>
               ))}
             </CarouselContent>

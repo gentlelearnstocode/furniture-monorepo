@@ -48,6 +48,8 @@ const Carousel = React.forwardRef<
     {
       ...opts,
       axis: orientation === 'horizontal' ? 'x' : 'y',
+      duration: 35,
+      skipSnaps: true,
     },
     plugins,
   );
@@ -103,6 +105,7 @@ const Carousel = React.forwardRef<
 
     return () => {
       api?.off('select', onSelect);
+      api?.off('reInit', onSelect);
     };
   }, [api, onSelect]);
 
@@ -147,6 +150,7 @@ const CarouselContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HT
             orientation === 'horizontal' ? '-ml-4' : '-mt-4 flex-col',
             className,
           )}
+          style={{ backfaceVisibility: 'hidden' }}
           {...props}
         />
       </div>
@@ -250,6 +254,11 @@ const CarouselDots = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLD
       onSelect(api);
       api.on('select', onSelect);
       api.on('reInit', onSelect);
+
+      return () => {
+        api?.off('select', onSelect);
+        api?.off('reInit', onSelect);
+      };
     }, [api, onSelect]);
 
     if (scrollSnaps.length <= 1) return null;

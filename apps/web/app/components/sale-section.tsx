@@ -64,15 +64,12 @@ export const SaleSection = ({ products, settings }: SaleSectionProps) => {
             <CarouselContent className='-ml-4'>
               {products.map((product) => (
                 <CarouselItem key={product.id} className='pl-4 basis-1/2 lg:basis-1/4'>
-                  <ProductCard
-                    product={product}
-                    className='animate-in fade-in slide-in-from-bottom-4 duration-700'
-                  />
+                  <ProductCard product={product} />
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className='-left-2 md:-left-6 top-[38%] md:top-[40%] z-20' />
-            <CarouselNext className='-right-2 md:-right-6 top-[38%] md:top-[40%] z-20' />
+            <CarouselPrevious className='-left-3 md:-left-6 top-[38%] md:top-[40%] z-20' />
+            <CarouselNext className='-right-3 md:-right-6 top-[38%] md:top-[40%] z-20' />
             <CarouselDots className='mt-10' />
           </Carousel>
         </div>
