@@ -53,7 +53,7 @@ export function FloatingContactWidget({ contacts }: FloatingContactWidgetProps) 
   if (activeContacts.length === 0) return null;
 
   return (
-    <div className='flex flex-col items-center gap-3'>
+    <div className='flex flex-col items-center gap-3 pointer-events-none'>
       {/* Expanded Contact Options - Stacked vertically above trigger */}
       <div
         className={cn(
@@ -128,7 +128,7 @@ export function FloatingContactWidget({ contacts }: FloatingContactWidgetProps) 
         className={cn(
           'relative w-14 h-14 rounded-full flex items-center justify-center text-white',
           'transition-all duration-300 ease-out',
-          'shadow-xl',
+          'shadow-xl pointer-events-auto',
           isOpen ? 'bg-black rotate-180' : 'bg-[#7B0C0C] hover:bg-[#900000] hover:scale-105',
         )}
         aria-label={isOpen ? 'Close contact menu' : 'Open contact menu'}
