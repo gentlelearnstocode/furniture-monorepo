@@ -5,6 +5,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { Loader2, Send } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { z } from 'zod';
 
 import { Button } from '@repo/ui/ui/button';
 import { Input } from '@repo/ui/ui/input';
@@ -14,7 +16,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/ui/select';
 
 import { submitContactForm } from './actions';
-import { contactSchema, type ContactFormValues } from './schema';
+
+import { type ContactFormValues } from './schema';
 
 const COUNTRY_CODES = [
   { code: '+84', country: 'VN', label: 'Vietnam (+84)' },
@@ -29,6 +32,20 @@ const COUNTRY_CODES = [
 
 export function ContactForm() {
   const [isPending, startTransition] = useTransition();
+  const t = useTranslations('Contact');
+
+  // Create schema with translated error messages
+  const contactSchema = z.object({
+    name: z.string().min(2, { message: t('errors.nameRequired') }),
+    phoneCountry: z.string(),
+    phoneNumber: z.string().min(8, { message: t('errors.phoneRequired') }),
+    email: z
+      .string()
+      .email({ message: t('errors.emailRequired') })
+      .optional()
+      .or(z.literal('')),
+    content: z.string().min(10, { message: t('errors.contentRequired') }),
+  });
 
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema),
@@ -45,10 +62,10 @@ export function ContactForm() {
     startTransition(async () => {
       const result = await submitContactForm(data);
       if (result.success) {
-        toast.success(result.message);
+        toast.success(t('successMessage'));
         form.reset();
       } else {
-        toast.error(result.message);
+        toast.error(t('errorMessage'));
       }
     });
   }
@@ -56,10 +73,8 @@ export function ContactForm() {
   return (
     <div className='w-full max-w-2xl mx-auto p-6 bg-white rounded-xl shadow-sm border border-gray-100'>
       <div className='mb-8 text-center'>
-        <h2 className='text-2xl font-serif font-bold text-gray-900 mb-2'>
-          Gửi tin nhắn cho chúng tôi
-        </h2>
-        <p className='text-gray-500'>Chúng tôi sẽ phản hồi bạn trong thời gian sớm nhất.</p>
+        <h2 className='text-2xl font-serif font-bold text-gray-900 mb-2'>{t('title')}</h2>
+        <p className='text-gray-500'>{t('description')}</p>
       </div>
 
       <Form {...form}>
@@ -70,20 +85,20 @@ export function ContactForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Họ và tên <span className='text-red-500'>*</span>
+                  {t('name')} <span className='text-red-500'>*</span>
                 </FormLabel>
                 <FormControl>
-                  <Input placeholder='Nhập họ và tên của bạn' {...field} />
+                  <Input placeholder={t('namePlaceholder')} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+          <div className='grid grid-cols-1 gap-6'>
             <div className='space-y-2'>
               <Label>
-                Số điện thoại <span className='text-red-500'>*</span>
+                {t('phone')} <span className='text-red-500'>*</span>
               </Label>
               <div className='flex gap-2'>
                 <FormField
@@ -117,7 +132,7 @@ export function ContactForm() {
                   render={({ field }) => (
                     <FormItem className='flex-1 space-y-0'>
                       <FormControl>
-                        <Input placeholder='Số điện thoại' {...field} />
+                        <Input placeholder={t('phonePlaceholder')} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -131,9 +146,9 @@ export function ContactForm() {
               name='email'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t('email')}</FormLabel>
                   <FormControl>
-                    <Input placeholder='example@email.com' {...field} />
+                    <Input placeholder={t('emailPlaceholder')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -147,11 +162,11 @@ export function ContactForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Nội dung <span className='text-red-500'>*</span>
+                  {t('content')} <span className='text-red-500'>*</span>
                 </FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder='Bạn cần tư vấn về sản phẩm nào?'
+                    placeholder={t('contentPlaceholder')}
                     className='min-h-[120px] resize-none'
                     {...field}
                   />
@@ -169,12 +184,12 @@ export function ContactForm() {
             {isPending ? (
               <>
                 <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-                Đang gửi...
+                {t('sending')}
               </>
             ) : (
               <>
                 <Send className='mr-2 h-4 w-4' />
-                Gửi tin nhắn
+                {t('send')}
               </>
             )}
           </Button>

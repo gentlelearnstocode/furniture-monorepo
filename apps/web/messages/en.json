@@ -122,6 +122,42 @@
     "nextCollection": "Next Collection",
     "goToCollection": "Go to {name} collection"
   },
+  "ContactPage": {
+    "metaTitle": "Contact | Furniture Store",
+    "metaDescription": "Contact us for the best advice and support.",
+    "title": "Contact Us",
+    "description": "Leave your information, our consulting team will contact you as soon as possible.",
+    "contactInfo": "Contact Information",
+    "address": "Address",
+    "phone": "Phone",
+    "email": "Email",
+    "workingHours": "Working Hours",
+    "workingTime": "Mon - Sat: 8:00 - 17:30",
+    "sunday": "Sunday: Closed",
+    "sendMessage": "Contact Us"
+  },
+  "Contact": {
+    "title": "Send us a message",
+    "description": "We will respond to you as soon as possible.",
+    "name": "Full Name",
+    "namePlaceholder": "Enter your full name",
+    "phone": "Phone Number",
+    "phonePlaceholder": "Phone number",
+    "email": "Email",
+    "emailPlaceholder": "example@email.com",
+    "content": "Content",
+    "contentPlaceholder": "Which product do you need advice on?",
+    "sending": "Sending...",
+    "send": "Send Message",
+    "successMessage": "Message sent successfully!",
+    "errorMessage": "Failed to send message. Please try again.",
+    "errors": {
+      "nameRequired": "Name must be at least 2 characters.",
+      "phoneRequired": "Invalid phone number.",
+      "emailRequired": "Invalid email.",
+      "contentRequired": "Content must be at least 10 characters."
+    }
+  },
   "Sale": {
     "title": "Special Offers",
     "description": "Discover the best deals for your home. Premium furniture pieces at exceptional prices.",

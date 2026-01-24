@@ -122,6 +122,42 @@
     "nextCollection": "Bộ sưu tập tiếp theo",
     "goToCollection": "Xem bộ sưu tập {name}"
   },
+  "ContactPage": {
+    "metaTitle": "Liên hệ | Furniture Store",
+    "metaDescription": "Liên hệ với chúng tôi để được tư vấn và hỗ trợ tốt nhất.",
+    "title": "Liên Hệ",
+    "description": "Hãy để lại thông tin, đội ngũ tư vấn của chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.",
+    "contactInfo": "Thông tin liên hệ",
+    "address": "Địa chỉ",
+    "phone": "Điện thoại",
+    "email": "Email",
+    "workingHours": "Giờ làm việc",
+    "workingTime": "Thứ 2 - Thứ 7: 8:00 - 17:30",
+    "sunday": "Chủ nhật: Nghỉ",
+    "sendMessage": "Contact Us"
+  },
+  "Contact": {
+    "title": "Gửi tin nhắn cho chúng tôi",
+    "description": "Chúng tôi sẽ phản hồi bạn trong thời gian sớm nhất.",
+    "name": "Họ và tên",
+    "namePlaceholder": "Nhập họ và tên của bạn",
+    "phone": "Số điện thoại",
+    "phonePlaceholder": "Số điện thoại",
+    "email": "Email",
+    "emailPlaceholder": "example@email.com",
+    "content": "Nội dung",
+    "contentPlaceholder": "Bạn cần tư vấn về sản phẩm nào?",
+    "sending": "Đang gửi...",
+    "send": "Contact Us",
+    "successMessage": "Gửi tin nhắn thành công!",
+    "errorMessage": "Gửi tin nhắn thất bại. Vui lòng thử lại.",
+    "errors": {
+      "nameRequired": "Tên phải có ít nhất 2 ký tự.",
+      "phoneRequired": "Số điện thoại không hợp lệ.",
+      "emailRequired": "Email không hợp lệ.",
+      "contentRequired": "Nội dung phải có ít nhất 10 ký tự."
+    }
+  },
   "Sale": {
     "title": "Chương Trình Khuyến Mãi",
     "description": "Khám phá những ưu đãi tuyệt vời nhất cho ngôi nhà của bạn. Các sản phẩm nội thất cao cấp với mức giá ưu đãi đặc biệt.",
