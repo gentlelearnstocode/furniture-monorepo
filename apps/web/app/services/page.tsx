@@ -52,7 +52,7 @@ export default async function ServicesListingPage() {
     <div className='min-h-screen bg-white'>
       {/* Hero Header */}
       <div className='bg-gray-50 py-24 border-b border-gray-100'>
-        <div className='container mx-auto px-4'>
+        <div className='container'>
           <h1 className='text-5xl md:text-7xl font-serif font-bold text-gray-900 mb-6'>
             {t('pageTitle')}
           </h1>
@@ -69,7 +69,7 @@ export default async function ServicesListingPage() {
           { label: tb('services'), href: '/services' },
         ]}
       />
-      <div className='container mx-auto px-4 pt-6 pb-12'>
+      <div className='container pt-6 pb-12'>
         {services.length === 0 ? (
           <div className='text-center py-20'>
             <p className='text-gray-500 text-lg'>{t('noResults')}</p>

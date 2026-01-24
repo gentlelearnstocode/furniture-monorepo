@@ -33,7 +33,7 @@ export const BlogsSection = async () => {
 
   return (
     <section className='py-24 bg-white'>
-      <div className='container mx-auto px-4'>
+      <div className='container'>
         {/* Section Header */}
         <div className='flex flex-col items-center mb-12'>
           <h2 className='text-2xl md:text-3xl lg:text-4xl font-serif text-[#49000D] tracking-wide uppercase'>

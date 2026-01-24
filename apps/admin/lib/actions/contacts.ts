@@ -8,7 +8,16 @@ import { revalidateStorefront } from '../revalidate-storefront';
 
 const siteContactSchema = z.object({
   id: z.string().uuid().optional(),
-  type: z.enum(['phone', 'zalo', 'facebook', 'messenger', 'email', 'whatsapp']),
+  type: z.enum([
+    'phone',
+    'zalo',
+    'facebook',
+    'messenger',
+    'email',
+    'whatsapp',
+    'telephone',
+    'mobile',
+  ]),
   label: z.string().optional(),
   value: z.string().min(1, 'Value is required'),
   isActive: z.boolean().default(true),
@@ -56,7 +65,7 @@ export async function upsertSiteContacts(data: SiteContactsUpdateInput) {
           value: contact.value,
           isActive: contact.isActive,
           position: index,
-        }))
+        })),
       );
     }
 

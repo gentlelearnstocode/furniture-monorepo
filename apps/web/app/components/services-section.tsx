@@ -23,7 +23,7 @@ export const ServicesSection = async () => {
 
   return (
     <section className='py-24 bg-gray-50'>
-      <div className='container mx-auto px-4'>
+      <div className='container'>
         <div className='max-w-3xl mb-16'>
           <h2 className='text-reveal text-3xl md:text-4xl font-serif font-bold mb-6 text-gray-900'>
             {t('title')}

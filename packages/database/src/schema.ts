@@ -724,7 +724,9 @@ export const footerSocialLinks = pgTable('footer_social_links', {
 export const siteContacts = pgTable('site_contacts', {
   id: uuid('id').defaultRandom().primaryKey(),
   type: text('type')
-    .$type<'phone' | 'zalo' | 'facebook' | 'messenger' | 'email' | 'whatsapp'>()
+    .$type<
+      'phone' | 'zalo' | 'facebook' | 'messenger' | 'email' | 'whatsapp' | 'telephone' | 'mobile'
+    >()
     .notNull(),
   label: text('label'),
   value: text('value').notNull(),

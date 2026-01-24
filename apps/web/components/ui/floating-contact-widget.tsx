@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Phone, MessageCircle, X, Facebook, Mail, MessageSquare } from 'lucide-react';
+import { Phone, MessageCircle, X, Facebook, Mail, MessageSquare, Smartphone } from 'lucide-react';
 import { cn } from '@repo/ui/lib/utils';
 
 interface FloatingContactWidgetProps {
@@ -15,6 +15,8 @@ interface FloatingContactWidgetProps {
 
 const CONTACT_ICONS: Record<string, React.ReactNode> = {
   phone: <Phone size={24} strokeWidth={1.5} />,
+  telephone: <Phone size={24} strokeWidth={1.5} />,
+  mobile: <Smartphone size={24} strokeWidth={1.5} />,
   zalo: <span className='text-sm font-bold tracking-tighter leading-none'>Zalo</span>,
   facebook: <Facebook size={24} strokeWidth={1.5} />,
   messenger: <MessageSquare size={24} strokeWidth={1.5} />,
@@ -26,6 +28,8 @@ const getContactHref = (type: string, value: string) => {
   const cleanValue = value.replace(/\s/g, '');
   switch (type) {
     case 'phone':
+    case 'telephone':
+    case 'mobile':
       return `tel:${cleanValue}`;
     case 'zalo':
       return `https://zalo.me/${cleanValue}`;
@@ -42,7 +46,7 @@ const getContactHref = (type: string, value: string) => {
 };
 
 export function FloatingContactWidget({ contacts }: FloatingContactWidgetProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [mounted, setMounted] = useState(false);
   const activeContacts = contacts.filter((c) => c.isActive);
 
@@ -100,7 +104,9 @@ export function FloatingContactWidget({ contacts }: FloatingContactWidgetProps) 
                 className='w-14 h-14 rounded-full flex items-center justify-center text-white shadow-lg transition-all duration-300 ease-out hover:scale-110 hover:shadow-xl'
                 style={{
                   backgroundColor:
-                    contact.type === 'phone'
+                    contact.type === 'phone' ||
+                    contact.type === 'telephone' ||
+                    contact.type === 'mobile'
                       ? '#C00000'
                       : contact.type === 'zalo'
                         ? '#0068FF'

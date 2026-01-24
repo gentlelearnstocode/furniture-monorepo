@@ -140,7 +140,7 @@ export const Footer = async () => {
         }}
       />
       {/* Main Footer Content */}
-      <div className='container mx-auto px-4 py-16'>
+      <div className='container py-16'>
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-12'>
           {/* Left Column - Logo, Intro, Addresses, Contacts, Contact Form */}
           <div className='space-y-8'>
@@ -312,7 +312,7 @@ export const Footer = async () => {
 
       {/* Bottom Bar */}
       <div className='border-t border-gray-300'>
-        <div className='container mx-auto px-4 py-6'>
+        <div className='container py-6'>
           <div className='flex flex-col md:flex-row items-center justify-between gap-4'>
             {/* Policy Links */}
             <div className='flex items-center gap-6 text-sm text-gray-500'>

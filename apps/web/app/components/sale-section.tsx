@@ -31,7 +31,7 @@ export const SaleSection = ({ products, settings }: SaleSectionProps) => {
 
   return (
     <section className='bg-white py-16 md:py-20'>
-      <div className='container mx-auto px-4'>
+      <div className='container'>
         {/* Section Header */}
         <div className='flex flex-col items-center mb-12'>
           <h2 className='text-3xl md:text-4xl lg:text-5xl font-serif text-[#49000D] tracking-wide uppercase'>

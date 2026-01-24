@@ -52,7 +52,7 @@ export default async function BlogListingPage() {
           { label: tb('blogs'), href: '/blogs' },
         ]}
       />
-      <div className='container mx-auto px-4 pt-6 pb-12'>
+      <div className='container pt-6 pb-12'>
         {/* Title & Description */}
         <div className='mb-8'>
           <h1 className='text-5xl md:text-6xl font-serif italic text-black/90 tracking-wide mb-4'>
@@ -72,7 +72,7 @@ export default async function BlogListingPage() {
       </div>
 
       {/* Blog Grid */}
-      <div className='container mx-auto px-4 pb-20'>
+      <div className='container pb-20'>
         {posts.length === 0 ? (
           <div className='text-center py-20'>
             <p className='text-gray-500 text-lg'>{t('noResults')}</p>

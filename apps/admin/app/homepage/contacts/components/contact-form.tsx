@@ -6,7 +6,16 @@ import { toast } from 'sonner';
 import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { z } from 'zod';
-import { Plus, Trash2, Phone, Mail, Facebook, MessageSquare, MessageCircle } from 'lucide-react';
+import {
+  Plus,
+  Trash2,
+  Phone,
+  Mail,
+  Facebook,
+  MessageSquare,
+  MessageCircle,
+  Smartphone,
+} from 'lucide-react';
 
 import { upsertSiteContacts, SiteContactsUpdateInput } from '@/lib/actions/contacts';
 
@@ -28,7 +37,16 @@ import { cn } from '@repo/ui/lib/utils';
 
 const siteContactSchema = z.object({
   id: z.string().uuid().optional(),
-  type: z.enum(['phone', 'zalo', 'facebook', 'messenger', 'email', 'whatsapp']),
+  type: z.enum([
+    'phone',
+    'zalo',
+    'facebook',
+    'messenger',
+    'email',
+    'whatsapp',
+    'telephone',
+    'mobile',
+  ]),
   label: z.string().optional(),
   value: z.string().min(1, 'Value is required'),
   isActive: z.boolean(),
@@ -44,7 +62,8 @@ interface ContactFormProps {
 }
 
 const CONTACT_TYPES = [
-  { value: 'phone', label: 'Phone Number', icon: Phone },
+  { value: 'telephone', label: 'Telephone', icon: Phone },
+  { value: 'mobile', label: 'Mobile Hotline', icon: Smartphone },
   { value: 'zalo', label: 'Zalo', icon: MessageCircle },
   { value: 'facebook', label: 'Facebook', icon: Facebook },
   { value: 'messenger', label: 'Messenger', icon: MessageSquare },
@@ -100,7 +119,7 @@ export function ContactForm({ initialData }: ContactFormProps) {
               size='sm'
               onClick={() =>
                 appendContact({
-                  type: 'phone',
+                  type: 'mobile',
                   label: '',
                   value: '',
                   isActive: true,
@@ -124,7 +143,7 @@ export function ContactForm({ initialData }: ContactFormProps) {
                   className='mt-2'
                   onClick={() =>
                     appendContact({
-                      type: 'phone',
+                      type: 'mobile',
                       label: '',
                       value: '',
                       isActive: true,
@@ -133,7 +152,7 @@ export function ContactForm({ initialData }: ContactFormProps) {
                   }
                 >
                   <Plus className='h-4 w-4 mr-1' />
-                  Add Zalo or Phone
+                  Add Zalo, Mobile or Telephone
                 </Button>
               </div>
             ) : (
@@ -149,7 +168,7 @@ export function ContactForm({ initialData }: ContactFormProps) {
                         'flex flex-col md:flex-row gap-4 p-5 rounded-xl border transition-all duration-200',
                         form.watch(`contacts.${index}.isActive`)
                           ? 'bg-white border-gray-200 shadow-sm'
-                          : 'bg-gray-50 border-gray-100 opacity-75'
+                          : 'bg-gray-50 border-gray-100 opacity-75',
                       )}
                     >
                       <div className='flex items-start justify-between md:justify-start gap-4'>
@@ -157,12 +176,13 @@ export function ContactForm({ initialData }: ContactFormProps) {
                           <div
                             className={cn(
                               'w-10 h-10 rounded-full flex items-center justify-center',
-                              type === 'phone' && 'bg-red-50 text-red-600',
+                              (type === 'phone' || type === 'telephone' || type === 'mobile') &&
+                                'bg-red-50 text-red-600',
                               type === 'zalo' && 'bg-blue-50 text-blue-600',
                               type === 'facebook' && 'bg-indigo-50 text-indigo-600',
                               type === 'messenger' && 'bg-blue-50 text-blue-500',
                               type === 'email' && 'bg-gray-50 text-gray-600',
-                              type === 'whatsapp' && 'bg-green-50 text-green-600'
+                              type === 'whatsapp' && 'bg-green-50 text-green-600',
                             )}
                           >
                             <Icon className='h-5 w-5' />
@@ -255,7 +275,10 @@ export function ContactForm({ initialData }: ContactFormProps) {
                               <FormControl>
                                 <Input
                                   placeholder={
-                                    type === 'phone' || type === 'zalo'
+                                    type === 'phone' ||
+                                    type === 'zalo' ||
+                                    type === 'mobile' ||
+                                    type === 'telephone'
                                       ? '09xxxxxxx'
                                       : 'https://...'
                                   }

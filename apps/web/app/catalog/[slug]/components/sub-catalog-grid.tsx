@@ -33,8 +33,8 @@ export const SubCatalogGrid = ({
   if (!subCatalogs || subCatalogs.length === 0) return null;
 
   return (
-    <div className='bg-gradient-to-b from-white to-[#FDFCFB] py-12'>
-      <div className='container mx-auto px-4 pb-12'>
+    <div className='bg-gradient-to-b from-white to-[#FDFCFB] py-5'>
+      <div className='container pb-12'>
         {/* Shadow line border between sections */}
         {showSeparator && (
           <div className='w-full h-px shadow-[0_2px_4px_rgba(34,34,34,0.12),0_6px_6px_rgba(34,34,34,0.10),0_14px_9px_rgba(34,34,34,0.06),0_26px_10px_rgba(34,34,34,0.02)] border-b border-black/[0.03] mb-16' />

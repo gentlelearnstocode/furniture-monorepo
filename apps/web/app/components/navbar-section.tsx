@@ -133,7 +133,7 @@ export const Navbar = ({ items }: NavbarProps) => {
       <nav
         className={cn(
           'top-0 left-0 w-full z-[100] transition-all duration-1000 ease-in-out group/nav',
-          isWhiteNavbarPath ? 'sticky' : 'absolute',
+          isWhiteNavbarPath ? 'relative' : 'absolute',
         )}
       >
         {/* Top Header Layer (Tier 1 & 2) */}
@@ -171,7 +171,7 @@ export const Navbar = ({ items }: NavbarProps) => {
             <div className='absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-transparent -z-10 h-64 transition-opacity duration-1000 pointer-events-none group-hover/nav:opacity-0' />
           )}
 
-          <div className='container mx-auto px-4'>
+          <div className='container'>
             {/* Tier 1: Hamburger, Search, Logo, Language */}
             <div className='flex items-center justify-between pt-8 pb-4'>
               {/* Left: Hamburger & Search */}
@@ -325,7 +325,7 @@ export const Navbar = ({ items }: NavbarProps) => {
             }}
           />
 
-          <div className='container mx-auto px-4 py-12'>
+          <div className='container py-12'>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12'>
               {items
                 .filter((item) => item.type === 'catalog')

@@ -101,7 +101,7 @@ export default async function ProjectDetailPage({ params }: Props) {
   return (
     <article className='min-h-screen bg-white pb-24'>
       {/* Back Link */}
-      <div className='container mx-auto px-4 pt-6 pb-6'>
+      <div className='container pt-6 pb-6'>
         <Link
           href='/projects'
           className='inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors group'
@@ -120,7 +120,7 @@ export default async function ProjectDetailPage({ params }: Props) {
       />
 
       {/* Header */}
-      <div className='container mx-auto px-4 mb-12'>
+      <div className='container mb-12'>
         <div className='max-w-4xl'>
           <span className='block text-[#7B0C0C] font-serif italic text-lg mb-4'>
             {t('showcase')}
@@ -133,7 +133,7 @@ export default async function ProjectDetailPage({ params }: Props) {
 
       {/* Featured Image */}
       {primaryImage && (
-        <div className='container mx-auto px-4 mb-16'>
+        <div className='container mb-16'>
           <div className='relative aspect-[21/9] w-full overflow-hidden rounded-sm shadow-lg bg-gray-100'>
             <Image
               src={primaryImage.url}
@@ -148,7 +148,7 @@ export default async function ProjectDetailPage({ params }: Props) {
       )}
 
       {/* Content */}
-      <div className='container mx-auto px-4 mb-20'>
+      <div className='container mb-20'>
         <div className='max-w-3xl mx-auto'>
           {contentHtml && (
             <div
@@ -169,7 +169,7 @@ export default async function ProjectDetailPage({ params }: Props) {
 
       {/* Image Gallery */}
       {galleryImages.length > 1 && (
-        <div className='container mx-auto px-4'>
+        <div className='container'>
           <div className='mb-12'>
             <h2 className='text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4'>
               {t('gallery')}

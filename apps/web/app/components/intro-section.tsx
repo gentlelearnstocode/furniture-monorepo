@@ -24,7 +24,7 @@ export const IntroSection = async () => {
         <div className='absolute inset-0 bg-black/10 mix-blend-multiply opacity-50' />
       </div>
 
-      <div className='container mx-auto px-4 relative z-10'>
+      <div className='container relative z-10'>
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center'>
           {/* Left: Intro Image - "Painting on wall" effect */}
           <div className='relative group'>

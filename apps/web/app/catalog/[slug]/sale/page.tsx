@@ -36,7 +36,7 @@ export default async function CatalogSalePage({ params }: Props) {
         ]}
       />
 
-      <div className='container mx-auto px-4 pt-12 pb-6'>
+      <div className='container pt-12 pb-6'>
         {/* Title & Description */}
         <div className='mb-8'>
           <h1 className='text-5xl md:text-6xl font-serif italic text-black/90 tracking-wide mb-4'>
@@ -56,7 +56,7 @@ export default async function CatalogSalePage({ params }: Props) {
       </div>
 
       {/* Product Grid */}
-      <div className='container mx-auto px-4 pb-20'>
+      <div className='container pb-20'>
         <div className='grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-12'>
           {saleProducts.map((product: any) => (
             <ProductCard key={product.id} product={product} />

@@ -60,7 +60,7 @@ export default async function DesignManufacturingPage() {
           }}
         />
 
-        <div className='container mx-auto px-4 pt-16 pb-0 space-y-24'>
+        <div className='container pt-16 pb-0 space-y-24'>
           {/* Header Section: Hero */}
           <section className='max-w-4xl mx-auto text-center space-y-8'>
             <h1 className='text-4xl md:text-6xl font-serif text-brand-neutral-900'>{page.title}</h1>
@@ -147,7 +147,7 @@ export default async function DesignManufacturingPage() {
         </div>
       </div>
 
-      <div className='container mx-auto px-4 py-0 space-y-24'>
+      <div className='container py-0 space-y-24'>
         {/* Footer Section: Closing Text */}
         <section className='flex flex-col gap-12'>
           <div className='w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] bg-white/40 backdrop-blur-sm p-8 md:p-12 border-y border-white/50'>
@@ -167,7 +167,7 @@ export default async function DesignManufacturingPage() {
             backgroundBlendMode: 'multiply',
           }}
         >
-          <div className='container mx-auto px-4'>
+          <div className='container'>
             {/* Section Header */}
             <div className='flex flex-col items-center mb-12'>
               <h2 className='text-[40px] md:text-[64px] font-serif font-bold text-white leading-[100%] text-center uppercase tracking-normal'>

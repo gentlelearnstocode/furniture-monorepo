@@ -164,7 +164,7 @@ export default async function CatalogLevel2Page({ params, searchParams }: Props)
         ]}
       />
 
-      <div className='container mx-auto px-4 pt-2 sm:pt-4 pb-4 sm:pb-6'>
+      <div className='container pt-2 sm:pt-4 pb-4 sm:pb-6'>
         {/* Title & Description */}
         <div className='mb-4 sm:mb-6 md:mb-8'>
           <h1 className='text-lg sm:text-xl md:text-3xl font-serif text-black/90 tracking-wide mb-2 sm:mb-4'>

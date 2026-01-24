@@ -27,7 +27,7 @@ export function RecommendedProducts({ products, imageRatio }: RecommendedProduct
 
   return (
     <section className='pt-12 pb-16 md:pt-16 md:pb-24 border-t border-black/5'>
-      <div className='container mx-auto px-4'>
+      <div className='container'>
         <h2 className='text-[26px] md:text-[32px] font-serif font-medium text-center mb-12 text-black'>
           {title}
         </h2>
