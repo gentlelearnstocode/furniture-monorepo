@@ -116,7 +116,7 @@ export function CommandMenu() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className='relative group inline-flex items-center justify-start h-10 w-full rounded-xl bg-white border border-gray-200 px-4 py-2 text-sm text-gray-500 font-medium shadow-sm transition-all hover:bg-gray-50 hover:border-brand-primary-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary-500 disabled:pointer-events-none disabled:opacity-50 sm:pr-12 md:w-48 lg:w-72'
+        className='relative group inline-flex items-center justify-start h-10 w-full rounded-xl bg-white border border-gray-200 px-4 py-2 text-sm text-gray-500 font-medium shadow-sm transition-all hover:bg-gray-50 hover:border-brand-primary-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary-500 disabled:pointer-events-none disabled:opacity-50 sm:pr-12'
       >
         <Search className='mr-2.5 h-4 w-4 shrink-0 text-gray-400 group-hover:text-brand-primary-500 transition-colors' />
         <span className='inline-flex'>Search everything...</span>
@@ -166,7 +166,7 @@ export function CommandMenu() {
                       type === 'project' &&
                         'text-amber-500 group-aria-selected/item:text-amber-600',
                       type === 'blog' && 'text-rose-500 group-aria-selected/item:text-rose-600',
-                      type === 'user' && 'text-indigo-500 group-aria-selected/item:text-indigo-600'
+                      type === 'user' && 'text-indigo-500 group-aria-selected/item:text-indigo-600',
                     )}
                   >
                     {getIcon(item.type)}
