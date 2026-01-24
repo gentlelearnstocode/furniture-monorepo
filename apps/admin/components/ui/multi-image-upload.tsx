@@ -24,13 +24,19 @@ interface MultiImageUploadProps {
   value: ImageWithSettings[];
   onChange: (value: ImageWithSettings[]) => void;
   folder?: string;
+  useLogoOverlay?: boolean;
 }
 
 interface UploadProgress {
   [fileName: string]: number;
 }
 
-export function MultiImageUpload({ value, onChange, folder = 'general' }: MultiImageUploadProps) {
+export function MultiImageUpload({
+  value,
+  onChange,
+  folder = 'general',
+  useLogoOverlay = true,
+}: MultiImageUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [progress, setProgress] = useState<UploadProgress>({});
 
@@ -59,27 +65,29 @@ export function MultiImageUpload({ value, onChange, folder = 'general' }: MultiI
 
         // Step 2: Process with logo overlay (if enabled)
         let finalUrl = blob.url;
-        try {
-          setProgress((prev) => ({ ...prev, [file.name]: 85 })); // Processing indicator
+        if (useLogoOverlay) {
+          try {
+            setProgress((prev) => ({ ...prev, [file.name]: 85 })); // Processing indicator
 
-          const formData = new FormData();
-          formData.append('imageUrl', blob.url);
-          formData.append('filename', file.name);
+            const formData = new FormData();
+            formData.append('imageUrl', blob.url);
+            formData.append('filename', file.name);
 
-          const overlayResponse = await fetch('/api/process-logo-overlay', {
-            method: 'POST',
-            body: formData,
-          });
+            const overlayResponse = await fetch('/api/process-logo-overlay', {
+              method: 'POST',
+              body: formData,
+            });
 
-          if (overlayResponse.ok) {
-            const overlayResult = await overlayResponse.json();
-            if (overlayResult.processed && overlayResult.url) {
-              finalUrl = overlayResult.url;
+            if (overlayResponse.ok) {
+              const overlayResult = await overlayResponse.json();
+              if (overlayResult.processed && overlayResult.url) {
+                finalUrl = overlayResult.url;
+              }
             }
+          } catch (overlayError) {
+            // If overlay processing fails, continue with original image
+            console.warn('Logo overlay processing failed, using original:', overlayError);
           }
-        } catch (overlayError) {
-          // If overlay processing fails, continue with original image
-          console.warn('Logo overlay processing failed, using original:', overlayError);
         }
 
         setProgress((prev) => ({ ...prev, [file.name]: 95 })); // Almost done

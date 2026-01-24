@@ -342,6 +342,7 @@ export function DynamicPageForm({ slug, title, initialData }: DynamicPageFormPro
                       value={field.value as ImageWithSettings[]}
                       onChange={field.onChange}
                       folder={`pages/${slug}`}
+                      useLogoOverlay={false}
                     />
                   </FormControl>
                   <FormMessage />
