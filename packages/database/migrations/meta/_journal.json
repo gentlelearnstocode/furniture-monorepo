@@ -120,6 +120,13 @@
       "when": 1768898138075,
       "tag": "0016_magenta_micromax",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1769233578224,
+      "tag": "0017_nosy_living_tribunal",
+      "breakpoints": true
     }
   ]
 }

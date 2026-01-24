@@ -75,6 +75,12 @@ export function Sidebar() {
     { name: 'Services', href: '/services', icon: Briefcase },
     { name: 'Projects', href: '/projects', icon: DraftingCompass },
     { name: 'Blogs', href: '/blogs', icon: Newspaper },
+    {
+      name: 'Page Management',
+      href: '/pages',
+      icon: Layers,
+      items: [{ name: 'Design & Manufacturing', href: '/pages/design-manufacturing' }],
+    },
     // { name: "Orders", href: "/orders", icon: ShoppingCart },
     // { name: "Customers", href: "/customers", icon: Users },
     ...(isAdmin ? [{ name: 'Admin Users', href: '/users', icon: UserCog }] : []),

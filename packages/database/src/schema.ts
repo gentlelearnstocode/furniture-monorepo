@@ -955,3 +955,19 @@ export const recommendedProductsRelations = relations(recommendedProducts, ({ on
 
 export type InsertRecommendedProduct = typeof recommendedProducts.$inferInsert;
 export type SelectRecommendedProduct = typeof recommendedProducts.$inferSelect;
+
+// --- Custom Pages ---
+
+export const customPages = pgTable('custom_pages', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  slug: text('slug').notNull().unique(),
+  title: text('title').notNull(),
+  titleVi: text('title_vi'),
+  content: jsonb('content').notNull(), // Stores structured content like header, body, footer
+  isActive: boolean('is_active').default(true).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export type InsertCustomPage = typeof customPages.$inferInsert;
+export type SelectCustomPage = typeof customPages.$inferSelect;

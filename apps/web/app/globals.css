@@ -89,6 +89,9 @@ a {
     font-family: 'Alex Brush', cursive;
     line-height: 1;
   }
+  .prose {
+    white-space: pre-wrap;
+  }
 }
 
 @layer base {

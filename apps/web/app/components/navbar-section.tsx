@@ -104,7 +104,8 @@ export const Navbar = ({ items }: NavbarProps) => {
     pathname.startsWith('/services/') ||
     pathname === '/blogs' ||
     pathname.startsWith('/blogs/') ||
-    pathname === '/sale';
+    pathname === '/sale' ||
+    pathname === '/design-manufacturing';
 
   const forceShow = isMenuOpen || isWhiteNavbarPath;
 
@@ -132,7 +133,7 @@ export const Navbar = ({ items }: NavbarProps) => {
       <nav
         className={cn(
           'top-0 left-0 w-full z-[100] transition-all duration-1000 ease-in-out group/nav',
-          isWhiteNavbarPath ? 'relative' : 'absolute',
+          isWhiteNavbarPath ? 'sticky' : 'absolute',
         )}
       >
         {/* Top Header Layer (Tier 1 & 2) */}
@@ -149,16 +150,19 @@ export const Navbar = ({ items }: NavbarProps) => {
           {/* Background for Top Header */}
           <div
             className={cn(
-              'absolute inset-0 -z-10 transition-opacity duration-1000 ease-in-out pointer-events-none',
-              forceShow ? 'opacity-100' : 'opacity-0 group-hover/nav:opacity-100',
+              'absolute inset-0 -z-10 transition-all duration-1000 ease-in-out pointer-events-none',
+              forceShow
+                ? 'opacity-100 backdrop-blur-md'
+                : 'opacity-0 group-hover/nav:opacity-100 group-hover/nav:backdrop-blur-md',
             )}
             style={{
-              backgroundImage:
-                'linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url(/nav-bg.png)',
+              backgroundImage: isWhiteNavbarPath
+                ? 'none'
+                : 'linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url(/nav-bg.png)',
               backgroundSize: 'cover',
               backgroundPosition: 'top',
               backgroundRepeat: 'no-repeat',
-              backgroundColor: 'white',
+              backgroundColor: isWhiteNavbarPath ? '#FEFEFE' : 'white',
             }}
           />
 
@@ -264,11 +268,12 @@ export const Navbar = ({ items }: NavbarProps) => {
                         <div
                           className='min-w-[200px] py-4 px-6 shadow-lg border border-black/5'
                           style={{
-                            backgroundImage:
-                              'linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url(/nav-bg.png)',
+                            backgroundImage: isWhiteNavbarPath
+                              ? 'none'
+                              : 'linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url(/nav-bg.png)',
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
-                            backgroundColor: 'white',
+                            backgroundColor: isWhiteNavbarPath ? '#FEFEFE' : 'white',
                           }}
                         >
                           <div className='flex flex-col gap-3'>
@@ -310,12 +315,13 @@ export const Navbar = ({ items }: NavbarProps) => {
           <div
             className='absolute inset-0 -z-10'
             style={{
-              backgroundImage:
-                'linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url(/nav-bg.png)',
+              backgroundImage: isWhiteNavbarPath
+                ? 'none'
+                : 'linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url(/nav-bg.png)',
               backgroundSize: 'cover',
               backgroundPosition: 'bottom',
               backgroundRepeat: 'no-repeat',
-              backgroundColor: 'white',
+              backgroundColor: isWhiteNavbarPath ? '#FEFEFE' : 'white',
             }}
           />
 
