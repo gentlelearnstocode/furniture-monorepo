@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
@@ -52,6 +52,13 @@ export function ProductListing({
 
   // State for layout (local preference)
   const [layout, setLayout] = useState<'2-col' | '3-col'>('3-col');
+
+  // Default to 2 columns on mobile
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      setLayout('2-col');
+    }
+  }, []);
 
   // URL params
   const currentSort = searchParams.get('sort') || '';

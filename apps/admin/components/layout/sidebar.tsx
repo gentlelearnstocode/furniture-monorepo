@@ -17,6 +17,7 @@ import {
   Briefcase,
   DraftingCompass,
   Newspaper,
+  ExternalLink,
 } from 'lucide-react';
 import Image from 'next/image';
 import { useSession, signOut } from 'next-auth/react';
@@ -303,6 +304,14 @@ export function Sidebar() {
                     </div>
                   </div>
                 </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className='text-green-600 focus:text-green-700 cursor-pointer'
+                  onClick={() => window.open(process.env.NEXT_PUBLIC_WEB_URL, '_blank')}
+                >
+                  <ExternalLink className='mr-2 h-4 w-4' />
+                  View Storefront
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className='text-red-600 focus:text-red-700 cursor-pointer'
