@@ -67,7 +67,14 @@ export function MultiImageUpload({
         let finalUrl = blob.url;
         if (useLogoOverlay) {
           try {
-            setProgress((prev) => ({ ...prev, [file.name]: 85 })); // Processing indicator
+            // Start simulated progress for processing
+            const processingInterval = setInterval(() => {
+              setProgress((prev) => {
+                const current = prev[file.name] || 80;
+                if (current >= 95) return prev;
+                return { ...prev, [file.name]: current + 1 };
+              });
+            }, 500); // Increment every 500ms
 
             const formData = new FormData();
             formData.append('imageUrl', blob.url);
@@ -77,6 +84,8 @@ export function MultiImageUpload({
               method: 'POST',
               body: formData,
             });
+
+            clearInterval(processingInterval);
 
             if (overlayResponse.ok) {
               const overlayResult = await overlayResponse.json();
@@ -90,7 +99,7 @@ export function MultiImageUpload({
           }
         }
 
-        setProgress((prev) => ({ ...prev, [file.name]: 95 })); // Almost done
+        setProgress((prev) => ({ ...prev, [file.name]: 100 })); // Done
 
         // Step 3: Create asset record with the final URL
         const asset = await createAssetAction(finalUrl, file.name, file.type, file.size);
@@ -253,7 +262,16 @@ export function MultiImageUpload({
             <Loader2 className='h-6 w-6 text-gray-400 animate-spin mb-2' />
             <div className='w-full space-y-1'>
               <Progress value={percent} className='h-1' />
-              <p className='text-[10px] text-gray-500 text-center truncate w-full'>{percent}%</p>
+              <div className='flex justify-between items-center px-1'>
+                <p className='text-[10px] text-gray-400 truncate max-w-[70%]'>
+                  {percent < 80
+                    ? 'Uploading...'
+                    : percent < 95
+                      ? 'Processing Logo...'
+                      : 'Finalizing...'}
+                </p>
+                <p className='text-[10px] text-gray-500 font-medium'>{percent}%</p>
+              </div>
             </div>
           </div>
         ))}
