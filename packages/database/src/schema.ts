@@ -799,6 +799,22 @@ export type SelectSiteHero = typeof siteHeros.$inferSelect;
 export type InsertSiteSetting = typeof siteSettings.$inferInsert;
 export type SelectSiteSetting = typeof siteSettings.$inferSelect;
 
+// --- Analytics ---
+
+export const analyticsVisits = pgTable('analytics_visits', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  path: text('path').notNull(),
+  referrer: text('referrer'),
+  deviceType: text('device_type'), // 'desktop', 'mobile', 'tablet', etc.
+  browser: text('browser'),
+  sessionId: text('session_id'),
+  ipHash: text('ip_hash'), // Anonymized IP
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export type InsertAnalyticsVisit = typeof analyticsVisits.$inferInsert;
+export type SelectAnalyticsVisit = typeof analyticsVisits.$inferSelect;
+
 export type InsertProduct = typeof products.$inferInsert;
 export type SelectProduct = typeof products.$inferSelect;
 

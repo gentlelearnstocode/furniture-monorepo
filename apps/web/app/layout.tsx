@@ -6,6 +6,7 @@ import { Navbar } from './components/navbar-section';
 import { Footer } from './components/footer-section';
 import { FloatingContactWidget } from '@/components/ui/floating-contact-widget';
 import { ScrollToTop } from '@/components/ui/scroll-to-top';
+import { AnalyticsListener } from './components/analytics-listener';
 import { db } from '@repo/database';
 import { createCachedQuery } from '@/lib/cache';
 import { getSiteContacts } from '@/lib/queries';
@@ -147,6 +148,7 @@ export default async function RootLayout({
       >
         <LanguageProvider initialLocale={locale} messages={messages}>
           <Navbar items={navItems} />
+          <AnalyticsListener />
           <main>{children}</main>
           <Footer />
           <div className='fixed bottom-6 right-6 z-50 flex items-end gap-4 pointer-events-none'>

@@ -19,6 +19,7 @@ import {
   Newspaper,
   ExternalLink,
   Inbox,
+  LineChart,
 } from 'lucide-react';
 import Image from 'next/image';
 import { useSession, signOut } from 'next-auth/react';
@@ -57,6 +58,7 @@ export function Sidebar() {
 
   const navigation = [
     { name: 'Dashboard', href: '/', icon: LayoutDashboard },
+    { name: 'Analytics', href: '/analytics', icon: LineChart },
     { name: 'Inbox', href: '/inbox', icon: Inbox },
     {
       name: 'Homepage',
