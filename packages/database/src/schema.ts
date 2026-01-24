@@ -973,3 +973,19 @@ export const customPages = pgTable('custom_pages', {
 
 export type InsertCustomPage = typeof customPages.$inferInsert;
 export type SelectCustomPage = typeof customPages.$inferSelect;
+
+// --- Inbox / Contact ---
+
+export const inboxMessages = pgTable('inbox_messages', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  name: text('name').notNull(),
+  phoneNumber: text('phone_number').notNull(),
+  email: text('email'),
+  content: text('content').notNull(),
+  isRead: boolean('is_read').default(false).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export type InsertInboxMessage = typeof inboxMessages.$inferInsert;
+export type SelectInboxMessage = typeof inboxMessages.$inferSelect;

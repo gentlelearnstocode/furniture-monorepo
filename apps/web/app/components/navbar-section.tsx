@@ -105,7 +105,8 @@ export const Navbar = ({ items }: NavbarProps) => {
     pathname === '/blogs' ||
     pathname.startsWith('/blogs/') ||
     pathname === '/sale' ||
-    pathname === '/design-manufacturing';
+    pathname === '/design-manufacturing' ||
+    pathname === '/contact-us';
 
   const forceShow = isMenuOpen || isWhiteNavbarPath;
 
