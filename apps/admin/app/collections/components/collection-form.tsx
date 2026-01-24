@@ -1,6 +1,6 @@
 'use client';
 
-import { slugify } from '@/lib/slugify';
+import { slugify } from '@/lib/utils/slugify';
 
 import { CollectionWithRelations, Product, Catalog } from '@/types';
 

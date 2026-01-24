@@ -1,6 +1,7 @@
 import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
+import { ALLOWED_CONTENT_TYPES } from '@/constants';
 
 export async function POST(request: Request): Promise<NextResponse> {
   const body = (await request.json()) as HandleUploadBody;
@@ -16,15 +17,7 @@ export async function POST(request: Request): Promise<NextResponse> {
         }
 
         return {
-          allowedContentTypes: [
-            'image/jpeg',
-            'image/png',
-            'image/gif',
-            'image/webp',
-            'video/mp4',
-            'video/webm',
-            'video/ogg',
-          ],
+          allowedContentTypes: ALLOWED_CONTENT_TYPES,
           tokenPayload: JSON.stringify({
             userId: session.user?.id,
           }),

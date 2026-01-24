@@ -12,3 +12,13 @@ export const STATUS_FILTER_OPTIONS = [
  * Default pagination limit for listing pages
  */
 export const DEFAULT_PAGE_LIMIT = 10;
+
+export const ALLOWED_CONTENT_TYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/gif',
+  'image/webp',
+  'video/mp4',
+  'video/webm',
+  'video/ogg',
+];

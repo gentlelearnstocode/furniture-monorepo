@@ -1,6 +1,6 @@
 'use client';
 
-import { slugify } from '@/lib/slugify';
+import { slugify } from '@/lib/utils/slugify';
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
