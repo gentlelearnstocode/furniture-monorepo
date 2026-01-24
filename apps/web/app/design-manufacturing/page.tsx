@@ -93,15 +93,13 @@ export default async function DesignManufacturingPage() {
               {showcaseImages
                 .filter((image: any) => !image.isPrimary)
                 .map((image: any) => (
-                  <div
-                    key={image.assetId}
-                    className='w-full relative overflow-hidden rounded-xl shadow-sm border border-brand-neutral-100 min-h-[400px] md:min-h-[600px]'
-                  >
+                  <div key={image.assetId} className='w-full relative'>
                     <Image
                       src={image.url}
                       alt='Showcase image'
-                      fill
-                      className='object-cover'
+                      width={1600}
+                      height={900}
+                      className='w-full h-auto object-contain'
                       style={{
                         objectPosition: image.focusPoint
                           ? `${image.focusPoint.x}% ${image.focusPoint.y}%`
@@ -121,12 +119,13 @@ export default async function DesignManufacturingPage() {
 
             {/* Primary Image displayed after the paragraph */}
             {showcaseImages.find((image: any) => image.isPrimary) && (
-              <div className='w-full relative overflow-hidden rounded-xl shadow-sm border border-brand-neutral-100 min-h-[400px] md:min-h-[600px]'>
+              <div className='w-full relative'>
                 <Image
                   src={showcaseImages.find((image: any) => image.isPrimary).url}
                   alt='Primary showcase image'
-                  fill
-                  className='object-cover'
+                  width={1600}
+                  height={900}
+                  className='w-full h-auto object-contain'
                   style={{
                     objectPosition: showcaseImages.find((image: any) => image.isPrimary).focusPoint
                       ? `${showcaseImages.find((image: any) => image.isPrimary).focusPoint.x}% ${
