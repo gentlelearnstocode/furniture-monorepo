@@ -14,8 +14,8 @@ interface AppBreadcrumbProps {
 
 export function AppBreadcrumb({ items, className }: AppBreadcrumbProps) {
   return (
-    <div className={cn('bg-[#ebebeb] w-full', className)}>
-      <div className='container mx-auto px-4 py-2 sm:py-3'>
+    <div className={cn('bg-transparent w-full', className)}>
+      <div className='container mx-auto py-2 sm:py-3'>
         <nav aria-label='Breadcrumb' className='flex items-center flex-wrap gap-1 sm:gap-2'>
           {items.map((item, index) => {
             const isLast = index === items.length - 1;
