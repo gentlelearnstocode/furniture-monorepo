@@ -90,7 +90,7 @@ export function useLocalizedText() {
   return function <T extends object>(entity: T, field: keyof T): string {
     if (locale === 'vi') {
       const viField = `${String(field)}Vi` as keyof T;
-      const viValue = (entity as any)[viField];
+      const viValue = (entity as T)[viField];
       if (viValue && typeof viValue === 'string' && viValue.trim() !== '') {
         return viValue;
       }

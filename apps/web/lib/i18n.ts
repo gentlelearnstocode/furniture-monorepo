@@ -8,12 +8,12 @@ export const LOCALE_COOKIE_NAME = 'locale';
  * Get the current locale from cookies (for server components).
  * Import from 'next/headers' and call this in RSC to get the current locale.
  */
-export async function getLocale(): Promise<Locale> {
+export const getLocale = async (): Promise<Locale> => {
   const { cookies } = await import('next/headers');
   const cookieStore = await cookies();
   const stored = cookieStore.get(LOCALE_COOKIE_NAME)?.value as Locale | undefined;
   return stored === 'vi' || stored === 'en' ? stored : DEFAULT_LOCALE;
-}
+};
 
 /**
  * Get localized text with fallback to English.
@@ -26,11 +26,11 @@ export async function getLocale(): Promise<Locale> {
  * @param locale - The current locale ('en' or 'vi')
  * @returns The localized string value, falling back to English if Vietnamese is not available
  */
-export function getLocalizedText<T extends Record<string, unknown>>(
+export const getLocalizedText = <T extends Record<string, unknown>>(
   entity: T,
   field: keyof T,
   locale: Locale,
-): string {
+): string => {
   if (locale === 'vi') {
     // Construct the Vietnamese field name (e.g., 'name' -> 'nameVi')
     const viField = `${String(field)}Vi` as keyof T;
@@ -42,7 +42,7 @@ export function getLocalizedText<T extends Record<string, unknown>>(
   // Fallback to English (default field)
   const value = entity[field];
   return typeof value === 'string' ? value : '';
-}
+};
 
 /**
  * Get localized HTML content with fallback to English.
@@ -53,11 +53,11 @@ export function getLocalizedText<T extends Record<string, unknown>>(
  * @param locale - The current locale ('en' or 'vi')
  * @returns The localized HTML string value, or null if not available
  */
-export function getLocalizedHtml<T extends Record<string, unknown>>(
+export const getLocalizedHtml = <T extends Record<string, unknown>>(
   entity: T,
   field: keyof T,
   locale: Locale,
-): string | null {
+): string | null => {
   if (locale === 'vi') {
     const viField = `${String(field)}Vi` as keyof T;
     const viValue = entity[viField];
@@ -67,7 +67,7 @@ export function getLocalizedHtml<T extends Record<string, unknown>>(
   }
   const value = entity[field];
   return typeof value === 'string' && value.trim() !== '' ? value : null;
-}
+};
 
 /**
  * Get multiple localized fields from an entity at once.
@@ -78,17 +78,17 @@ export function getLocalizedHtml<T extends Record<string, unknown>>(
  * @param locale - The current locale
  * @returns Record mapping field names to their localized values
  */
-export function getLocalizedFields<T extends Record<string, unknown>>(
+export const getLocalizedFields = <T extends Record<string, unknown>>(
   entity: T,
   fields: (keyof T)[],
   locale: Locale,
-): Record<string, string> {
+): Record<string, string> => {
   const result: Record<string, string> = {};
   for (const field of fields) {
     result[String(field)] = getLocalizedText(entity, field, locale);
   }
   return result;
-}
+};
 
 /**
  * Helper to check if a Vietnamese translation is available
@@ -97,11 +97,11 @@ export function getLocalizedFields<T extends Record<string, unknown>>(
  * @param field - The base field name
  * @returns true if a non-empty Vietnamese translation exists
  */
-export function hasVietnameseTranslation<T extends Record<string, unknown>>(
+export const hasVietnameseTranslation = <T extends Record<string, unknown>>(
   entity: T,
   field: keyof T,
-): boolean {
+): boolean => {
   const viField = `${String(field)}Vi` as keyof T;
   const viValue = entity[viField];
   return typeof viValue === 'string' && viValue.trim() !== '';
-}
+};

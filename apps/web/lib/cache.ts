@@ -15,17 +15,17 @@ import { unstable_cache } from 'next/cache';
  *   { revalidate: 3600, tags: ['services'] }
  * );
  */
-export function createCachedQuery<T, Args extends any[]>(
+export const createCachedQuery = <T, Args extends any[]>(
   queryFn: (...args: Args) => Promise<T>,
   keys: string[],
   options?: {
     revalidate?: number | false;
     tags?: string[];
-  }
-) {
+  },
+) => {
   return (...args: Args) =>
     unstable_cache(() => queryFn(...args), [...keys, ...args.map((a) => String(a))], {
       revalidate: options?.revalidate ?? 3600, // Default 1 hour
       tags: options?.tags ?? [],
     })();
-}
+};
