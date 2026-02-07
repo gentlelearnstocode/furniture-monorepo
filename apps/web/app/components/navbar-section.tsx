@@ -94,20 +94,10 @@ export const Navbar = ({ items }: NavbarProps) => {
   const t = useTranslations('Navbar');
   const tl = useLocalizedText();
 
-  // Catalog, product, project, service, and blog pages should use the white navbar
-  const isWhiteNavbarPath =
-    pathname.startsWith('/catalog/') ||
-    pathname.startsWith('/product/') ||
-    pathname === '/projects' ||
-    pathname.startsWith('/projects/') ||
-    pathname === '/services' ||
-    pathname.startsWith('/services/') ||
-    pathname === '/blogs' ||
-    pathname.startsWith('/blogs/') ||
-    pathname === '/sale' ||
-    pathname === '/design-manufacturing' ||
-    pathname === '/exports' ||
-    pathname === '/contact-us';
+  // The navbar should be transparent (with white text) ONLY on the homepage.
+  // On all other pages, it should be solid white with maroon text.
+  const isHomePage = pathname === '/' || pathname === '/en' || pathname === '/vi';
+  const isWhiteNavbarPath = !isHomePage;
 
   const forceShow = isMenuOpen || isWhiteNavbarPath;
 

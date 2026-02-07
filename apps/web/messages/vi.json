@@ -9,7 +9,8 @@
     "noResults": "Không tìm thấy kết quả",
     "category": "Danh mục",
     "noImage": "Không có bộ sưu tập",
-    "dateFormat": "d MMMM, yyyy"
+    "dateFormat": "d MMMM, yyyy",
+    "brandName": "THIÊN ẤN"
   },
   "Breadcrumbs": {
     "home": "Trang chủ",
@@ -162,5 +163,35 @@
     "title": "Chương Trình Khuyến Mãi",
     "description": "Khám phá những ưu đãi tuyệt vời nhất cho ngôi nhà của bạn. Các sản phẩm nội thất cao cấp với mức giá ưu đãi đặc biệt.",
     "allCategories": "Tất cả danh mục"
+  },
+  "AboutUs": {
+    "title": "Về chúng tôi",
+    "description": "Tìm hiểu thêm về hành trình và giá trị của chúng tôi.",
+    "cta": "Tải Brochure",
+    "brochure": "Brochure",
+    "home": "Trang chủ"
+  },
+  "Process": {
+    "title": "Quy Trình Tại",
+    "step1": {
+      "title": "Khám phá tại Showroom",
+      "description": "Khách hàng trải nghiệm trực tiếp các mẫu sản phẩm. Nhận tư vấn từ đội ngũ nhân viên về sản phẩm và vật liệu phù hợp."
+    },
+    "step2": {
+      "title": "Tư vấn thiết kế",
+      "description": "Chuyên viên tiếp nhận yêu cầu và mong muốn từ khách hàng. Đề xuất giải pháp thiết kế tùy chỉnh phù hợp với không gian và sở thích."
+    },
+    "step3": {
+      "title": "Thiết kế & Sản xuất",
+      "description": "Phát triển bản vẽ chi tiết dựa trên ý tưởng đã thống nhất. Sản phẩm được chế tác thủ công từ gỗ tự nhiên và vật liệu cao cấp, đảm bảo chất lượng."
+    },
+    "step4": {
+      "title": "Thi công & Lắp đặt",
+      "description": "Tiến hành thi công tại nhà hoặc công trình theo đúng tiến độ. Đảm bảo tính thẩm mỹ và độ chính xác trong từng chi tiết."
+    },
+    "step5": {
+      "title": "Bàn giao & Bảo hành",
+      "description": "Khách hàng có thể sử dụng dịch vụ chìa khóa trao tay hoặc chọn từng phần dịch vụ theo nhu cầu. Chính sách bảo hành và bảo trì dài hạn, cùng dịch vụ chăm sóc khách hàng tận tâm."
+    }
   }
 }

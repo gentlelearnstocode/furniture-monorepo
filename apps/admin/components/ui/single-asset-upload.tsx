@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ImagePlus, X, Loader2, Check, Film } from 'lucide-react';
+import { ImagePlus, X, Loader2, Check, Film, FileText } from 'lucide-react';
 import { Button } from '@repo/ui/ui/button';
 import { toast } from 'sonner';
 import Image from 'next/image';
@@ -12,8 +12,8 @@ import { createAssetAction } from '@/lib/actions/assets';
 
 interface SingleAssetUploadProps {
   url?: string | null;
-  type?: 'image' | 'video';
-  onChange: (assetId: string | null) => void;
+  type?: 'image' | 'video' | 'pdf';
+  onChange: (assetId: string | null, url?: string | null) => void;
   folder?: string;
   label?: string;
 }
@@ -58,6 +58,10 @@ export function SingleAssetUpload({
       toast.error('Please upload a video file');
       return;
     }
+    if (type === 'pdf' && file.type !== 'application/pdf') {
+      toast.error('Please upload a PDF file');
+      return;
+    }
 
     setIsUploading(true);
     setUploadProgress(0);
@@ -75,10 +79,12 @@ export function SingleAssetUpload({
 
       const asset = await createAssetAction(blob.url, file.name, file.type, file.size);
 
-      onChange(asset.id);
+      onChange(asset.id, asset.url);
       setUploadedUrl(asset.url);
       setIsRemoved(false);
-      toast.success(`${type === 'image' ? 'Image' : 'Video'} uploaded successfully`);
+      toast.success(
+        `${type === 'image' ? 'Image' : type === 'video' ? 'Video' : 'PDF'} uploaded successfully`,
+      );
     } catch (error) {
       console.error(error);
       toast.error(`Failed to upload ${type}`);
@@ -88,7 +94,7 @@ export function SingleAssetUpload({
   };
 
   const onRemove = () => {
-    onChange(null);
+    onChange(null, null);
     setUploadedUrl(null);
     setIsRemoved(true);
   };
@@ -99,7 +105,7 @@ export function SingleAssetUpload({
         <div
           className={cn(
             'relative rounded-md overflow-hidden border bg-gray-50 flex items-center justify-center group max-w-sm',
-            type === 'image' ? 'aspect-square' : 'aspect-video'
+            type === 'image' ? 'aspect-square' : 'aspect-video',
           )}
         >
           {type === 'image' ? (
@@ -110,8 +116,15 @@ export function SingleAssetUpload({
               className='object-cover'
               unoptimized
             />
-          ) : (
+          ) : type === 'video' ? (
             <video src={previewUrl} className='w-full h-full object-cover' muted loop playsInline />
+          ) : (
+            <div className='flex flex-col items-center justify-center p-8 bg-white w-full h-full border rounded-md'>
+              <FileText className='h-12 w-12 text-brand-primary-600 mb-2' />
+              <span className='text-xs text-gray-500 font-medium truncate max-w-full px-4'>
+                {previewUrl.split('/').pop()}
+              </span>
+            </div>
           )}
 
           <div className='absolute top-1 right-1 z-10'>
@@ -126,8 +139,14 @@ export function SingleAssetUpload({
             </Button>
           </div>
           <div className='absolute bottom-2 left-2 bg-black/50 text-white text-[10px] px-2 py-1 rounded flex items-center gap-1 backdrop-blur-sm'>
-            {type === 'image' ? <Check className='h-3 w-3' /> : <Film className='h-3 w-3' />}
-            {type === 'image' ? 'Image' : 'Video'}
+            {type === 'image' ? (
+              <Check className='h-3 w-3' />
+            ) : type === 'video' ? (
+              <Film className='h-3 w-3' />
+            ) : (
+              <FileText className='h-3 w-3' />
+            )}
+            {type === 'image' ? 'Image' : type === 'video' ? 'Video' : 'PDF'}
           </div>
         </div>
       ) : (
@@ -135,7 +154,9 @@ export function SingleAssetUpload({
           <label className='w-full aspect-video rounded-md border-2 border-dashed border-gray-200 flex flex-col items-center justify-center cursor-pointer hover:border-gray-300 transition-colors bg-gray-50/50'>
             <input
               type='file'
-              accept={type === 'image' ? 'image/*' : 'video/*'}
+              accept={
+                type === 'image' ? 'image/*' : type === 'video' ? 'video/*' : 'application/pdf'
+              }
               className='hidden'
               onChange={onUpload}
               disabled={isUploading}
@@ -144,8 +165,10 @@ export function SingleAssetUpload({
               <Loader2 className='h-6 w-6 text-gray-400 animate-spin mb-2' />
             ) : type === 'image' ? (
               <ImagePlus className='h-6 w-6 text-gray-400 mb-2' />
-            ) : (
+            ) : type === 'video' ? (
               <Film className='h-6 w-6 text-gray-400 mb-2' />
+            ) : (
+              <FileText className='h-6 w-6 text-gray-400 mb-2' />
             )}
             <span className='text-xs text-gray-500 font-medium'>
               {isUploading ? 'Uploading...' : label}

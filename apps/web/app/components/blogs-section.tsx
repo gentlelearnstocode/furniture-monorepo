@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { db } from '@repo/database';
 import { format } from 'date-fns';
 import { ArrowRight, Calendar } from 'lucide-react';
+import { BrandDivider } from './brand-divider';
 
 import { createCachedQuery } from '@/lib/cache';
 import { getLocale, getLocalizedText } from '@/lib/i18n';
@@ -39,19 +40,7 @@ export const BlogsSection = async () => {
           <h2 className='text-2xl md:text-3xl lg:text-4xl font-serif text-[#49000D] tracking-wide uppercase'>
             {t('title')}
           </h2>
-
-          {/* Decorative divider with symbol */}
-          <div className='flex items-center gap-3 mt-4'>
-            <div className='w-16 h-[2px] bg-[#8B0000]' />
-            <Image
-              src='/symbol.svg'
-              alt='decorative symbol'
-              width={24}
-              height={24}
-              className='opacity-80'
-            />
-            <div className='w-16 h-[2px] bg-[#8B0000]' />
-          </div>
+          <BrandDivider />
         </div>
 
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12'>

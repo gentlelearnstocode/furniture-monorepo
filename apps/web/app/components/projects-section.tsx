@@ -1,9 +1,9 @@
 import React from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { db } from '@repo/database';
 import { ArrowRight } from 'lucide-react';
 import { ProjectSlider } from './project-slider';
+import { BrandDivider } from './brand-divider';
 import { createCachedQuery } from '@/lib/cache';
 import { getTranslations } from 'next-intl/server';
 
@@ -39,18 +39,7 @@ export const ProjectsSection = async () => {
             {t('title')}
           </h2>
 
-          {/* Decorative divider with symbol */}
-          <div className='flex items-center gap-3 mt-4'>
-            <div className='w-12 h-[1px] bg-[#8B0000]/30' />
-            <Image
-              src='/symbol.svg'
-              alt='decorative symbol'
-              width={20}
-              height={20}
-              className='opacity-60'
-            />
-            <div className='w-12 h-[1px] bg-[#8B0000]/30' />
-          </div>
+          <BrandDivider variant='light' />
         </div>
 
         {/* Project Content */}

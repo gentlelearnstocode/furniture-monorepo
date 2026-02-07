@@ -1,12 +1,14 @@
-import { db } from '@repo/database';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
+
+import { db } from '@repo/database';
+import { createCachedQuery } from '@/lib/cache';
 
 import { SectionSeparator } from '../components/section-separator';
 import { ProjectSlider } from '../components/project-slider';
-import { createCachedQuery } from '@/lib/cache';
-import { getTranslations } from 'next-intl/server';
+import { AppBreadcrumb } from '../../components/ui/app-breadcrumb';
 
 async function getPageData(slug: string) {
   const page = await db.query.customPages.findFirst({
@@ -47,6 +49,12 @@ export default async function DesignManufacturingPage() {
 
   return (
     <div className='min-h-screen'>
+      <AppBreadcrumb
+        items={[
+          { label: 'Home', href: '/' },
+          { label: page.title, href: '/design-manufacturing' },
+        ]}
+      />
       <div className='relative'>
         <div
           className='absolute inset-0 -z-10'

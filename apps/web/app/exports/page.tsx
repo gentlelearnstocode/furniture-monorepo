@@ -3,8 +3,7 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 
 import { SectionSeparator } from '../components/section-separator';
-import { createCachedQuery } from '@/lib/cache';
-import { getTranslations } from 'next-intl/server';
+import { AppBreadcrumb } from '../../components/ui/app-breadcrumb';
 
 async function getPageData(slug: string) {
   const page = await db.query.customPages.findFirst({
@@ -13,27 +12,9 @@ async function getPageData(slug: string) {
   return page;
 }
 
-const getProjects = createCachedQuery(
-  async () =>
-    await db.query.projects.findMany({
-      where: (projects, { eq }) => eq(projects.isActive, true),
-      orderBy: (projects, { desc }) => [desc(projects.updatedAt)],
-      limit: 6,
-      with: {
-        image: true,
-      },
-    }),
-  ['projects-exports'],
-  { revalidate: 3600, tags: ['projects'] },
-);
-
 export default async function ExportsPage() {
   const slug = 'exports';
-  const [page, projects, t] = await Promise.all([
-    getPageData(slug),
-    getProjects(),
-    getTranslations('Projects'),
-  ]);
+  const [page] = await Promise.all([getPageData(slug)]);
 
   if (!page) {
     notFound();
@@ -45,6 +26,12 @@ export default async function ExportsPage() {
 
   return (
     <div className='min-h-screen'>
+      <AppBreadcrumb
+        items={[
+          { label: 'Home', href: '/' },
+          { label: page.title, href: '/exports' },
+        ]}
+      />
       <div className='relative'>
         <div
           className='absolute inset-0 -z-10'

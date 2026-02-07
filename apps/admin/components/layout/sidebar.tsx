@@ -87,6 +87,7 @@ export function Sidebar() {
       items: [
         { name: 'Design & Manufacturing', href: '/pages/design-manufacturing' },
         { name: 'Exports', href: '/pages/exports' },
+        { name: 'About Us', href: '/pages/about-us' },
       ],
     },
     // { name: "Orders", href: "/orders", icon: ShoppingCart },

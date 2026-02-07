@@ -150,3 +150,15 @@ export const getSaleProductsByCatalog = createCachedQuery(
   ['catalog-sale-products'],
   { revalidate: 3600, tags: ['products', 'catalogs'] },
 );
+export const getCustomPageBySlug = createCachedQuery(
+  async (slug: string) => {
+    return await db.query.customPages.findFirst({
+      where: (pages, { eq }) => eq(pages.slug, slug),
+    });
+  },
+  ['custom-page'],
+  {
+    revalidate: 3600,
+    tags: (slug: string) => ['pages', `page-${slug}`],
+  },
+);

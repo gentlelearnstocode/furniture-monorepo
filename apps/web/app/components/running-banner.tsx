@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 
 export function RunningBanner() {
   const content = (
-    <div className='relative h-[160px] w-[800px] mx-10'>
+    <div className='relative h-[80px] w-[540px] mx-10'>
       <Image
         src='/brand-text.png'
         alt='THIÊN ẤN Furniture SINCE 1997'
@@ -15,7 +15,7 @@ export function RunningBanner() {
   );
 
   return (
-    <div className='relative h-[240px] w-full overflow-hidden bg-[#333333]'>
+    <div className='relative h-[200px] w-full overflow-hidden bg-[#333333]'>
       {/* Background Gradient */}
       <div
         className='absolute inset-0 z-0'

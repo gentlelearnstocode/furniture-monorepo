@@ -140,7 +140,7 @@ export const Footer = async () => {
         }}
       />
       {/* Main Footer Content */}
-      <div className='container py-16'>
+      <div className='container pt-16 pb-4'>
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-12'>
           {/* Left Column - Logo, Intro, Addresses, Contacts, Contact Form */}
           <div className='space-y-8'>
@@ -307,6 +307,18 @@ export const Footer = async () => {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      {/* Ribbon Banner */}
+      <div className='container pb-12'>
+        <div className='relative w-full aspect-[1760/139] max-w-5xl mx-auto'>
+          <Image
+            src='/ribbons-banner.svg'
+            alt='We produce & deliver worldwide'
+            fill
+            className='object-contain'
+            priority
+          />
         </div>
       </div>
 

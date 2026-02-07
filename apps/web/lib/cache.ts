@@ -20,12 +20,16 @@ export const createCachedQuery = <T, Args extends any[]>(
   keys: string[],
   options?: {
     revalidate?: number | false;
-    tags?: string[];
+    tags?: string[] | ((...args: Args) => string[]);
   },
 ) => {
-  return (...args: Args) =>
-    unstable_cache(() => queryFn(...args), [...keys, ...args.map((a) => String(a))], {
+  return (...args: Args) => {
+    const tags =
+      typeof options?.tags === 'function' ? options.tags(...args) : (options?.tags ?? []);
+
+    return unstable_cache(() => queryFn(...args), [...keys, ...args.map((a) => String(a))], {
       revalidate: options?.revalidate ?? 3600, // Default 1 hour
-      tags: options?.tags ?? [],
+      tags,
     })();
+  };
 };

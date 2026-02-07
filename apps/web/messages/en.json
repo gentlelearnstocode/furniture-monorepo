@@ -9,7 +9,8 @@
     "noResults": "No results found",
     "category": "Category",
     "noImage": "No Image",
-    "dateFormat": "MMMM d, yyyy"
+    "dateFormat": "MMMM d, yyyy",
+    "brandName": "THIÊN ẤN"
   },
   "Breadcrumbs": {
     "home": "Home Page",
@@ -162,5 +163,35 @@
     "title": "Special Offers",
     "description": "Discover the best deals for your home. Premium furniture pieces at exceptional prices.",
     "allCategories": "All Categories"
+  },
+  "AboutUs": {
+    "title": "About Us",
+    "description": "Learn more about our journey and values.",
+    "cta": "Download Brochure",
+    "brochure": "Brochure",
+    "home": "Home Page"
+  },
+  "Process": {
+    "title": "Process at",
+    "step1": {
+      "title": "Explore at Showroom",
+      "description": "Customers directly experience product models. Receive advice from staff on suitable products and materials."
+    },
+    "step2": {
+      "title": "Design Consultation",
+      "description": "Specialists receive requests and desires from customers. Propose customized design solutions suitable for space and preferences."
+    },
+    "step3": {
+      "title": "Design & Production",
+      "description": "Develop detailed drawings based on agreed ideas. Products are handcrafted from natural wood and high-end materials, ensuring quality."
+    },
+    "step4": {
+      "title": "Construction & Installation",
+      "description": "Conduct construction at home or project according to schedule. Ensure aesthetics and accuracy in every detail."
+    },
+    "step5": {
+      "title": "Handover & Warranty",
+      "description": "Customers can use turnkey services or choose individual services according to their needs. Long-term warranty and maintenance policies, along with dedicated customer care."
+    }
   }
 }

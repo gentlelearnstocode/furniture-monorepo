@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
+import { BrandDivider } from './brand-divider';
 import { ProductCard } from '@/app/components/product-card';
 import { useTranslations } from 'next-intl';
 import { useLocalizedText } from '@/providers/language-provider';
@@ -38,18 +38,7 @@ export const SaleSection = ({ products, settings }: SaleSectionProps) => {
             {tl(settings, 'title') || t('title')}
           </h2>
 
-          {/* Decorative divider with icon */}
-          <div className='flex items-center gap-3 mt-4'>
-            <div className='w-16 h-[2px] bg-[#8B0000]' />
-            <Image
-              src='/symbol.svg'
-              alt='decorative symbol'
-              width={24}
-              height={24}
-              className='opacity-80'
-            />
-            <div className='w-16 h-[2px] bg-[#8B0000]' />
-          </div>
+          <BrandDivider />
         </div>
 
         {/* Product Carousel */}
