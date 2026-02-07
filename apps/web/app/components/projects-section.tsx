@@ -38,8 +38,7 @@ export const ProjectsSection = async () => {
           <h2 className='text-2xl md:text-3xl lg:text-4xl font-serif text-[#49000D] tracking-wide uppercase'>
             {t('title')}
           </h2>
-
-          <BrandDivider variant='light' />
+          <BrandDivider />
         </div>
 
         {/* Project Content */}

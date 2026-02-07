@@ -9,6 +9,7 @@ import { createCachedQuery } from '@/lib/cache';
 import { SectionSeparator } from '../components/section-separator';
 import { ProjectSlider } from '../components/project-slider';
 import { AppBreadcrumb } from '../../components/ui/app-breadcrumb';
+import { BrandDivider } from '../components/brand-divider';
 
 async function getPageData(slug: string) {
   const page = await db.query.customPages.findFirst({
@@ -31,8 +32,39 @@ const getProjects = createCachedQuery(
   { revalidate: 3600, tags: ['projects'] },
 );
 
-export default async function DesignManufacturingPage() {
-  const slug = 'design-manufacturing';
+interface ImageFocusPoint {
+  x: number;
+  y: number;
+}
+
+interface PageImage {
+  assetId: string;
+  url: string;
+  isPrimary?: boolean;
+  focusPoint?: ImageFocusPoint;
+}
+
+interface PageContent {
+  header: {
+    introHtml: string;
+    buttonLink?: string;
+    buttonText?: string;
+    button2Link?: string;
+    button2Text?: string;
+  };
+  body: {
+    introHtml?: string;
+    paragraphHtml?: string;
+    images?: PageImage[];
+  };
+  footer: {
+    imageUrl?: string;
+    textHtml: string;
+  };
+}
+
+export default async function DesignProjectPage() {
+  const slug = 'design-project';
   const [page, projects, t] = await Promise.all([
     getPageData(slug),
     getProjects(),
@@ -43,7 +75,7 @@ export default async function DesignManufacturingPage() {
     notFound();
   }
 
-  const content = page.content as any;
+  const content = page.content as unknown as PageContent;
   const showcaseImages = content.body.images || [];
   const footerImageUrl = content.footer.imageUrl;
 
@@ -52,7 +84,7 @@ export default async function DesignManufacturingPage() {
       <AppBreadcrumb
         items={[
           { label: 'Home', href: '/' },
-          { label: page.title, href: '/design-manufacturing' },
+          { label: page.title, href: '/design-project' },
         ]}
       />
       <div className='relative'>
@@ -67,23 +99,33 @@ export default async function DesignManufacturingPage() {
             backgroundAttachment: 'fixed',
           }}
         />
-
         <div className='container pt-16 pb-0 space-y-24'>
           {/* Header Section: Hero */}
-          <section className='max-w-4xl mx-auto text-center space-y-8'>
+          <section className='max-w-7xl mx-auto text-center space-y-8'>
             <h1 className='text-4xl md:text-6xl font-serif text-brand-neutral-900'>{page.title}</h1>
+            <BrandDivider stretch />
             <div
               className='prose prose-lg max-w-none text-brand-neutral-600 font-serif leading-relaxed'
               dangerouslySetInnerHTML={{ __html: content.header.introHtml }}
             />
-            {content.header.buttonLink && (
-              <Link
-                href={content.header.buttonLink}
-                className='inline-block bg-white border-2 border-brand-neutral-900 text-brand-neutral-900 px-10 py-6 rounded hover:bg-[#B80022] hover:border-[#B80022] hover:text-white transition-all duration-300 font-serif text-[20px] font-semibold uppercase tracking-wide'
-              >
-                {content.header.buttonText || 'Request a design consultation'}
-              </Link>
-            )}
+            <div className='w-full max-w-4xl mx-auto flex flex-col md:flex-row gap-6 justify-center items-stretch'>
+              {content.header.buttonLink && (
+                <Link
+                  href={content.header.buttonLink}
+                  className='flex-1 inline-flex justify-center items-center bg-[#F9F9F9]/80 backdrop-blur-sm border border-[#E5E5E5] text-brand-neutral-900 px-12 py-5 rounded-none hover:bg-[#B80022] hover:border-[#B80022] hover:text-white transition-all duration-300 font-serif text-[16px] uppercase tracking-wider min-w-[300px]'
+                >
+                  {content.header.buttonText || 'Request a design consultation'}
+                </Link>
+              )}
+              {content.header.button2Link && (
+                <Link
+                  href={content.header.button2Link}
+                  className='flex-1 inline-flex justify-center items-center bg-[#F9F9F9]/80 backdrop-blur-sm border border-[#E5E5E5] text-brand-neutral-900 px-12 py-5 rounded-none hover:bg-[#B80022] hover:border-[#B80022] hover:text-white transition-all duration-300 font-serif text-[16px] uppercase tracking-wider min-w-[300px]'
+                >
+                  {content.header.button2Text || 'View Projects'}
+                </Link>
+              )}
+            </div>
           </section>
 
           <SectionSeparator />
@@ -92,15 +134,15 @@ export default async function DesignManufacturingPage() {
           <section className='space-y-12'>
             {content.body.introHtml && (
               <div
-                className='max-w-4xl mx-auto prose prose-brand font-serif leading-relaxed text-brand-neutral-700'
+                className='max-w-7xl mx-auto prose prose-brand font-serif leading-relaxed text-brand-neutral-700'
                 dangerouslySetInnerHTML={{ __html: content.body.introHtml }}
               />
             )}
 
             <div className='flex flex-col gap-12'>
               {showcaseImages
-                .filter((image: any) => !image.isPrimary)
-                .map((image: any) => (
+                .filter((image) => !image.isPrimary)
+                .map((image) => (
                   <div key={image.assetId} className='w-full relative'>
                     <Image
                       src={image.url}
@@ -120,24 +162,24 @@ export default async function DesignManufacturingPage() {
 
             {content.body.paragraphHtml && (
               <div
-                className='max-w-4xl mx-auto prose prose-brand font-serif leading-relaxed text-brand-neutral-700'
+                className='max-w-7xl mx-auto prose prose-brand font-serif leading-relaxed text-brand-neutral-700'
                 dangerouslySetInnerHTML={{ __html: content.body.paragraphHtml }}
               />
             )}
 
             {/* Primary Image displayed after the paragraph */}
-            {showcaseImages.find((image: any) => image.isPrimary) && (
+            {showcaseImages.find((image) => image.isPrimary) && (
               <div className='w-full relative'>
                 <Image
-                  src={showcaseImages.find((image: any) => image.isPrimary).url}
+                  src={showcaseImages.find((image) => image.isPrimary)!.url}
                   alt='Primary showcase image'
                   width={1600}
                   height={900}
                   className='w-full h-auto object-contain'
                   style={{
-                    objectPosition: showcaseImages.find((image: any) => image.isPrimary).focusPoint
-                      ? `${showcaseImages.find((image: any) => image.isPrimary).focusPoint.x}% ${
-                          showcaseImages.find((image: any) => image.isPrimary).focusPoint.y
+                    objectPosition: showcaseImages.find((image) => image.isPrimary)!.focusPoint
+                      ? `${showcaseImages.find((image) => image.isPrimary)!.focusPoint!.x}% ${
+                          showcaseImages.find((image) => image.isPrimary)!.focusPoint!.y
                         }%`
                       : '50% 50%',
                   }}
@@ -168,31 +210,25 @@ export default async function DesignManufacturingPage() {
       </div>
 
       {projects.length > 0 && (
-        <section
-          className='w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] py-24'
-          style={{
-            background: `linear-gradient(0deg, #B80022, #B80022), linear-gradient(180deg, rgba(34, 34, 34, 0.48) 23.31%, rgba(34, 34, 34, 0.15) 59.56%, rgba(34, 34, 34, 0.48) 100%)`,
-            backgroundBlendMode: 'multiply',
-          }}
-        >
+        <section className='w-full py-24'>
           <div className='container'>
             {/* Section Header */}
             <div className='flex flex-col items-center mb-12'>
-              <h2 className='text-[40px] md:text-[64px] font-serif font-bold text-white leading-[100%] text-center uppercase tracking-normal'>
+              <h2 className='text-[40px] md:text-[64px] font-serif font-bold text-brand-neutral-900 leading-[100%] text-center uppercase tracking-normal'>
                 {t('title')}
               </h2>
 
               {/* Decorative divider with symbol */}
               <div className='flex items-center gap-3 mt-4'>
-                <div className='w-12 h-[1px] bg-white/30' />
+                <div className='w-12 h-[1px] bg-brand-neutral-900' />
                 <Image
                   src='/symbol.svg'
                   alt='decorative symbol'
                   width={20}
                   height={20}
-                  className='opacity-100 brightness-0 invert'
+                  className='opacity-100'
                 />
-                <div className='w-12 h-[1px] bg-white/30' />
+                <div className='w-12 h-[1px] bg-brand-neutral-900' />
               </div>
             </div>
 

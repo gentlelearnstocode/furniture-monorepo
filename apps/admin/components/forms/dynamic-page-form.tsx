@@ -52,6 +52,9 @@ export function DynamicPageForm({ slug, title, initialData }: DynamicPageFormPro
             buttonText: initialData.content?.header?.buttonText || '',
             buttonTextVi: initialData.content?.header?.buttonTextVi || '',
             buttonLink: initialData.content?.header?.buttonLink || '',
+            button2Text: initialData.content?.header?.button2Text || '',
+            button2TextVi: initialData.content?.header?.button2TextVi || '',
+            button2Link: initialData.content?.header?.button2Link || '',
           },
           body: {
             introHtml: initialData.content?.body?.introHtml || '',
@@ -83,6 +86,9 @@ export function DynamicPageForm({ slug, title, initialData }: DynamicPageFormPro
             buttonText: '',
             buttonTextVi: '',
             buttonLink: '',
+            button2Text: '',
+            button2TextVi: '',
+            button2Link: '',
           },
           body: {
             introHtml: '',
@@ -125,12 +131,12 @@ export function DynamicPageForm({ slug, title, initialData }: DynamicPageFormPro
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
-        {slug === 'about-us' && (
+        {['about-us', 'construction-manufacturing', 'manufacturing-services'].includes(slug) && (
           <Card>
             <CardHeader>
-              <CardTitle>About Us Resources</CardTitle>
+              <CardTitle>Page Resources</CardTitle>
               <CardDescription>
-                Manage the banner image and PDF brochure for the About Us page.
+                Manage the banner image{slug === 'about-us' && ' and PDF brochure'} for the page.
               </CardDescription>
             </CardHeader>
             <CardContent className='space-y-6'>
@@ -156,32 +162,37 @@ export function DynamicPageForm({ slug, title, initialData }: DynamicPageFormPro
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name='content.pdfId'
-                  render={() => (
-                    <FormItem>
-                      <FormLabel>PDF Brochure</FormLabel>
-                      <FormControl>
-                        <SingleAssetUpload
-                          url={form.watch('content.pdfUrl')}
-                          type='pdf'
-                          onChange={(assetId, url) => {
-                            form.setValue('content.pdfId', assetId);
-                            form.setValue('content.pdfUrl', url || null);
-                          }}
-                          folder={`pages/${slug}`}
-                          label='Upload PDF'
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        Upload the PDF file to be displayed on the About Us page.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
               </div>
+
+              {slug === 'about-us' && (
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-8 pt-6'>
+                  <FormField
+                    control={form.control}
+                    name='content.pdfId'
+                    render={() => (
+                      <FormItem>
+                        <FormLabel>PDF Brochure</FormLabel>
+                        <FormControl>
+                          <SingleAssetUpload
+                            url={form.watch('content.pdfUrl')}
+                            type='pdf'
+                            onChange={(assetId, url) => {
+                              form.setValue('content.pdfId', assetId);
+                              form.setValue('content.pdfUrl', url || null);
+                            }}
+                            folder={`pages/${slug}`}
+                            label='Upload PDF'
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Upload the PDF file to be displayed on the About Us page.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              )}
 
               <div className='border-t pt-6'>
                 <h3 className='text-lg font-medium mb-4'>Page Content (Main Description)</h3>
@@ -279,7 +290,7 @@ export function DynamicPageForm({ slug, title, initialData }: DynamicPageFormPro
           </CardContent>
         </Card>
 
-        {slug !== 'about-us' && (
+        {!['about-us', 'construction-manufacturing', 'manufacturing-services'].includes(slug) && (
           <>
             {/* Header Section */}
             <Card>
@@ -356,6 +367,64 @@ export function DynamicPageForm({ slug, title, initialData }: DynamicPageFormPro
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Button Link</FormLabel>
+                      <FormControl>
+                        <Input {...field} value={field.value || ''} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Hero Section (Button 2)</CardTitle>
+                <CardDescription>Second button settings (optional).</CardDescription>
+              </CardHeader>
+              <CardContent className='space-y-6'>
+                <Tabs defaultValue='en'>
+                  <TabsList>
+                    <TabsTrigger value='en'>English</TabsTrigger>
+                    <TabsTrigger value='vi'>Tiếng Việt</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value='en' className='space-y-4'>
+                    <FormField
+                      control={form.control}
+                      name='content.header.button2Text'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Button 2 Text</FormLabel>
+                          <FormControl>
+                            <Input {...field} value={field.value || ''} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </TabsContent>
+                  <TabsContent value='vi' className='space-y-4'>
+                    <FormField
+                      control={form.control}
+                      name='content.header.button2TextVi'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Button 2 Text (VI)</FormLabel>
+                          <FormControl>
+                            <Input {...field} value={field.value || ''} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </TabsContent>
+                </Tabs>
+                <FormField
+                  control={form.control}
+                  name='content.header.button2Link'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Button 2 Link</FormLabel>
                       <FormControl>
                         <Input {...field} value={field.value || ''} />
                       </FormControl>

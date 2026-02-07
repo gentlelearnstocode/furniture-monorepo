@@ -12,6 +12,9 @@ export const customPageSchema = z
         buttonText: z.string().optional(),
         buttonTextVi: z.string().optional(),
         buttonLink: z.string().optional(),
+        button2Text: z.string().optional(),
+        button2TextVi: z.string().optional(),
+        button2Link: z.string().optional(),
       }),
       body: z.object({
         introHtml: z.string().optional(),
@@ -21,9 +24,9 @@ export const customPageSchema = z
         images: z
           .array(
             z.object({
-              assetId: z.string().uuid(),
-              url: z.string().url(),
-              isPrimary: z.boolean(),
+              assetId: z.string(),
+              url: z.string(),
+              isPrimary: z.boolean().optional(),
               focusPoint: z.object({ x: z.number(), y: z.number() }).optional(),
               aspectRatio: z.enum(['original', '1:1', '3:4', '4:3', '16:9']).optional(),
               objectFit: z.enum(['cover', 'contain']).optional(),
@@ -45,8 +48,9 @@ export const customPageSchema = z
     isActive: z.boolean(),
   })
   .superRefine((data, ctx) => {
-    // About Us page doesn't require standard content fields
-    if (data.slug === 'about-us') return;
+    // About Us and new simple pages don't require standard content fields
+    if (['about-us', 'construction-manufacturing', 'manufacturing-services'].includes(data.slug))
+      return;
 
     // Enforce requirements for other pages
     if (!data.content.header.introHtml) {
