@@ -42,7 +42,12 @@
   },
   "Navbar": {
     "sale": "Sale",
-    "allSale": "All Sale"
+    "allSale": "All Sale",
+    "products": "Products",
+    "aboutUs": "About Us",
+    "showroom": "Showroom & Factory",
+    "designProject": "Design & Project",
+    "contactUs": "Contact Us"
   },
   "Search": {
     "placeholder": "Search products...",

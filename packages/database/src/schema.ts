@@ -915,30 +915,7 @@ export type SelectHomepageSaleProduct = typeof homepageSaleProducts.$inferSelect
 
 // --- Nav Menu Items ---
 
-export const navMenuItems = pgTable('nav_menu_items', {
-  id: uuid('id').defaultRandom().primaryKey(),
-  itemType: text('item_type').$type<'catalog' | 'subcatalog' | 'service'>().notNull(),
-  catalogId: uuid('catalog_id').references(() => catalogs.id, { onDelete: 'cascade' }),
-  serviceId: uuid('service_id').references(() => services.id, { onDelete: 'cascade' }),
-  position: integer('position').default(0).notNull(),
-  isActive: boolean('is_active').default(true).notNull(),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
-});
-
-export const navMenuItemsRelations = relations(navMenuItems, ({ one }) => ({
-  catalog: one(catalogs, {
-    fields: [navMenuItems.catalogId],
-    references: [catalogs.id],
-  }),
-  service: one(services, {
-    fields: [navMenuItems.serviceId],
-    references: [services.id],
-  }),
-}));
-
-export type InsertNavMenuItem = typeof navMenuItems.$inferInsert;
-export type SelectNavMenuItem = typeof navMenuItems.$inferSelect;
+// Table removed: navMenuItems
 
 // --- Recommended Products ---
 

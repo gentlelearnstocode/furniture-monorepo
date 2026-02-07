@@ -71,7 +71,6 @@ export function Sidebar() {
         { name: 'Intro Section', href: '/homepage/intro' },
         { name: 'Contact Management', href: '/homepage/contacts' },
         { name: 'Footer Section', href: '/homepage/footer' },
-        { name: 'Menu Management', href: '/homepage/menu' },
       ],
     },
     { name: 'Catalogs', href: '/catalogs', icon: FolderTree },

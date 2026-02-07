@@ -42,7 +42,12 @@
   },
   "Navbar": {
     "sale": "Sale",
-    "allSale": "Tất Cả Sale"
+    "allSale": "Tất Cả Sale",
+    "products": "Sản phẩm",
+    "aboutUs": "Về chúng tôi",
+    "showroom": "Showroom & Nhà máy",
+    "designProject": "Thiết kế & Dự án",
+    "contactUs": "Liên hệ"
   },
   "Search": {
     "placeholder": "Tìm kiếm sản phẩm...",

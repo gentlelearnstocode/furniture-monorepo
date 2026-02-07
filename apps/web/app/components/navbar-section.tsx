@@ -127,6 +127,7 @@ export const Navbar = ({ items }: NavbarProps) => {
           'top-0 left-0 w-full z-[100] transition-all duration-1000 ease-in-out group/nav',
           isWhiteNavbarPath ? 'relative' : 'absolute',
         )}
+        onMouseLeave={() => setIsMenuOpen(false)}
       >
         {/* Top Header Layer (Tier 1 & 2) */}
         <div
@@ -228,70 +229,100 @@ export const Navbar = ({ items }: NavbarProps) => {
                 forceShow ? '' : 'group-hover/nav:border-[#49000D]/10',
               )}
             >
-              {items.map((item) => {
-                const href =
-                  item.type === 'service' ? `/services/${item.slug}` : `/catalog/${item.slug}`;
-                const hasChildren =
-                  item.type === 'catalog' && item.children && item.children.length > 0;
+              <Link
+                href='/about-us'
+                onMouseEnter={() => setIsMenuOpen(false)}
+                className={cn(
+                  'text-[18px] font-serif font-[444] tracking-normal leading-none transition-colors duration-1000 whitespace-nowrap block uppercase relative group/link pb-1',
+                  forceShow
+                    ? 'text-[#49000D] hover:text-[#49000D]/60'
+                    : 'text-white group-hover/nav:text-[#49000D] hover:text-[#49000D]/60',
+                )}
+              >
+                {t('aboutUs')}
+                <span
+                  className={cn(
+                    'absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] transition-all duration-300 group-hover/link:w-full',
+                    forceShow ? 'bg-[#49000D]' : 'bg-white group-hover/nav:bg-[#49000D]',
+                  )}
+                />
+              </Link>
 
-                return (
-                  <div key={item.id} className='relative group/dropdown'>
-                    <Link
-                      href={href}
-                      className={cn(
-                        'text-[18px] font-serif font-[444] tracking-normal leading-none transition-colors duration-1000 whitespace-nowrap block uppercase relative group/link pb-1',
-                        forceShow
-                          ? 'text-[#49000D] hover:text-[#49000D]/60'
-                          : 'text-white group-hover/nav:text-[#49000D] hover:text-[#49000D]/60',
-                      )}
-                    >
-                      {tl(item, 'name')}
-                      <span
-                        className={cn(
-                          'absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] transition-all duration-300 group-hover/link:w-full',
-                          forceShow ? 'bg-[#49000D]' : 'bg-white group-hover/nav:bg-[#49000D]',
-                        )}
-                      />
-                    </Link>
+              <div
+                onMouseEnter={() => setIsMenuOpen(true)}
+                className={cn(
+                  'text-[18px] font-serif font-[444] tracking-normal leading-none transition-colors duration-1000 whitespace-nowrap block uppercase relative group/link pb-1 cursor-default',
+                  forceShow
+                    ? 'text-[#49000D] hover:text-[#49000D]/60'
+                    : 'text-white group-hover/nav:text-[#49000D] hover:text-[#49000D]/60',
+                )}
+              >
+                {t('products')}
+                <span
+                  className={cn(
+                    'absolute bottom-0 left-1/2 -translate-x-1/2 h-[1px] transition-all duration-300',
+                    isMenuOpen ? 'w-full' : 'w-0 group-hover/link:w-full',
+                    forceShow ? 'bg-[#49000D]' : 'bg-white group-hover/nav:bg-[#49000D]',
+                  )}
+                />
+              </div>
 
-                    {/* Hover Dropdown Menu - only for catalogs with children */}
-                    {hasChildren && (
-                      <div className='absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 invisible group-hover/dropdown:opacity-100 group-hover/dropdown:visible transition-all duration-300 z-50'>
-                        <div
-                          className='min-w-[200px] py-4 px-6 shadow-lg border border-black/5'
-                          style={{
-                            backgroundImage: isWhiteNavbarPath
-                              ? 'none'
-                              : 'linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url(/nav-bg.png)',
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                            backgroundColor: isWhiteNavbarPath ? '#FEFEFE' : 'white',
-                          }}
-                        >
-                          <div className='flex flex-col gap-3'>
-                            {item.children?.map((child) => (
-                              <Link
-                                key={child.id}
-                                href={`/catalog/${item.slug}/${child.slug}`}
-                                className='text-[16px] text-[#49000D]/70 hover:text-[#49000D] transition-colors uppercase font-serif tracking-[0.05em] whitespace-nowrap'
-                              >
-                                {tl(child, 'name')}
-                              </Link>
-                            ))}
-                            <div className='border-t border-[#49000D]/10 my-1' />
-                            <Link
-                              href={`/catalog/${item.slug}/sale`}
-                              className='text-[16px] text-red-600/80 hover:text-red-600 transition-colors uppercase font-serif tracking-[0.05em] font-medium'
-                            >
-                              {t('sale')}
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+              <Link
+                href='/showroom-factory'
+                onMouseEnter={() => setIsMenuOpen(false)}
+                className={cn(
+                  'text-[18px] font-serif font-[444] tracking-normal leading-none transition-colors duration-1000 whitespace-nowrap block uppercase relative group/link pb-1',
+                  forceShow
+                    ? 'text-[#49000D] hover:text-[#49000D]/60'
+                    : 'text-white group-hover/nav:text-[#49000D] hover:text-[#49000D]/60',
+                )}
+              >
+                {t('showroom')}
+                <span
+                  className={cn(
+                    'absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] transition-all duration-300 group-hover/link:w-full',
+                    forceShow ? 'bg-[#49000D]' : 'bg-white group-hover/nav:bg-[#49000D]',
+                  )}
+                />
+              </Link>
+
+              <Link
+                href='/design-project'
+                onMouseEnter={() => setIsMenuOpen(false)}
+                className={cn(
+                  'text-[18px] font-serif font-[444] tracking-normal leading-none transition-colors duration-1000 whitespace-nowrap block uppercase relative group/link pb-1',
+                  forceShow
+                    ? 'text-[#49000D] hover:text-[#49000D]/60'
+                    : 'text-white group-hover/nav:text-[#49000D] hover:text-[#49000D]/60',
+                )}
+              >
+                {t('designProject')}
+                <span
+                  className={cn(
+                    'absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] transition-all duration-300 group-hover/link:w-full',
+                    forceShow ? 'bg-[#49000D]' : 'bg-white group-hover/nav:bg-[#49000D]',
+                  )}
+                />
+              </Link>
+
+              <Link
+                href='/contact-us'
+                onMouseEnter={() => setIsMenuOpen(false)}
+                className={cn(
+                  'text-[18px] font-serif font-[444] tracking-normal leading-none transition-colors duration-1000 whitespace-nowrap block uppercase relative group/link pb-1',
+                  forceShow
+                    ? 'text-[#49000D] hover:text-[#49000D]/60'
+                    : 'text-white group-hover/nav:text-[#49000D] hover:text-[#49000D]/60',
+                )}
+              >
+                {t('contactUs')}
+                <span
+                  className={cn(
+                    'absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] transition-all duration-300 group-hover/link:w-full',
+                    forceShow ? 'bg-[#49000D]' : 'bg-white group-hover/nav:bg-[#49000D]',
+                  )}
+                />
+              </Link>
             </div>
           </div>
         </div>

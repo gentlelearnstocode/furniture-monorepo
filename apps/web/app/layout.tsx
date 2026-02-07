@@ -10,7 +10,6 @@ import { AnalyticsListener } from './components/analytics-listener';
 import { db } from '@repo/database';
 import { createCachedQuery } from '@/lib/cache';
 import { getSiteContacts } from '@/lib/queries';
-import { getNavMenuItems, type NavMenuItem } from '@/lib/menu';
 import { getLocale } from '@/lib/i18n';
 import { getMessages } from 'next-intl/server';
 import { LanguageProvider } from '@/providers/language-provider';
@@ -55,91 +54,34 @@ const getRootCatalogs = createCachedQuery(
   { revalidate: 3600, tags: ['catalogs'] },
 );
 
-// Transform menu items to navbar format
-function transformMenuItemsToNavbarFormat(menuItems: NavMenuItem[]) {
-  type NavItemResult = {
-    id: string;
-    name: string;
-    nameVi: string | null;
-    slug: string;
-    type: 'catalog' | 'subcatalog' | 'service';
-    image: { url: string } | null;
-    children: {
-      id: string;
-      name: string;
-      nameVi: string | null;
-      slug: string;
-      image: { url: string } | null;
-    }[];
-  };
-
-  const results: NavItemResult[] = [];
-
-  for (const item of menuItems) {
-    if (item.itemType === 'service' && item.service) {
-      results.push({
-        id: item.service.id,
-        name: item.service.title,
-        nameVi: item.service.titleVi,
-        slug: item.service.slug,
-        type: 'service',
-        image: item.service.image,
-        children: [],
-      });
-    } else if (item.catalog) {
-      results.push({
-        id: item.catalog.id,
-        name: item.catalog.name,
-        nameVi: item.catalog.nameVi,
-        slug: item.catalog.slug,
-        type: item.itemType as 'catalog' | 'subcatalog',
-        image: item.catalog.image,
-        children: (item.catalog.children || []).map((child) => ({
-          id: child.id,
-          name: child.name,
-          nameVi: child.nameVi,
-          slug: child.slug,
-          image: child.image,
-        })),
-      });
-    }
-  }
-
-  return results;
-}
-
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [menuItems, rootCatalogs, siteContacts, locale, messages] = await Promise.all([
-    getNavMenuItems(),
+  const [rootCatalogs, siteContacts, locale, messages] = await Promise.all([
     getRootCatalogs(),
     getSiteContacts(),
     getLocale(),
     getMessages(),
   ]);
 
-  // Use menu items if configured, otherwise fall back to root catalogs
-  const navItems =
-    menuItems.length > 0
-      ? transformMenuItemsToNavbarFormat(menuItems)
-      : rootCatalogs.map((catalog: any) => ({
-          id: catalog.id,
-          name: catalog.name,
-          nameVi: catalog.nameVi,
-          slug: catalog.slug,
-          type: 'catalog' as const,
-          image: catalog.image,
-          children: (catalog.children || []).map((child: any) => ({
-            id: child.id,
-            name: child.name,
-            nameVi: child.nameVi,
-            slug: child.slug,
-            image: child.image,
-          })),
-        }));
+  // Transform root catalogs to navbar format for the "Products" dropdown
+  const navItems = rootCatalogs.map((catalog: any) => ({
+    id: catalog.id,
+    name: catalog.name,
+    nameVi: catalog.nameVi,
+    slug: catalog.slug,
+    type: 'catalog' as const,
+    image: catalog.image,
+    children: (catalog.children || []).map((child: any) => ({
+      id: child.id,
+      name: child.name,
+      nameVi: child.nameVi,
+      slug: child.slug,
+      image: child.image,
+    })),
+  }));
 
   return (
     <html lang={locale}>
