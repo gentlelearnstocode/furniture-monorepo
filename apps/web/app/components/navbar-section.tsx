@@ -117,9 +117,14 @@ export const Navbar = ({ items }: NavbarProps) => {
       <nav
         className={cn('top-0 left-0 w-full z-[100]', isWhiteNavbarPath ? 'relative' : 'absolute')}
         onMouseEnter={() => setIsHeaderHovered(true)}
-        onMouseLeave={() => {
+        onMouseLeave={(e) => {
           setIsHeaderHovered(false);
-          setIsMenuOpen(false);
+          // Only close the menu if the mouse is moving outside the entire nav container
+          // and not into the absolute menu area. This prevents the "scroll up" bug.
+          const relatedTarget = e.relatedTarget as Node;
+          if (!relatedTarget || !(e.currentTarget as Node).contains(relatedTarget)) {
+            setIsMenuOpen(false);
+          }
         }}
       >
         {/* Top Header Layer (Tier 1 & 2) */}
@@ -356,6 +361,10 @@ export const Navbar = ({ items }: NavbarProps) => {
 
         {/* Sliding Menu Down (Tier 3) */}
         <div
+          onMouseEnter={() => {
+            setIsMenuOpen(true);
+            setIsHeaderHovered(true);
+          }}
           className={cn(
             'overflow-hidden absolute top-full left-0 w-full z-20 transition-all ease-out',
             isMenuOpen ? 'max-h-[1200px] opacity-100' : 'max-h-0 opacity-0',
