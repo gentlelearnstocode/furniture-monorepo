@@ -17,46 +17,37 @@ function cn(...inputs: ClassValue[]) {
 }
 
 // Language Switcher Component
-function LanguageSwitcher({ forceShow }: { forceShow: boolean }) {
+function LanguageSwitcher({
+  forceShow,
+  isHeaderHovered,
+}: {
+  forceShow: boolean;
+  isHeaderHovered: boolean;
+}) {
   const { setLocale, isEnglish, isVietnamese } = useLanguage();
 
   return (
     <div
       className={cn(
-        'flex items-center text-[18px] md:text-[24px] font-[444] tracking-normal leading-none gap-2 md:gap-3 font-serif transition-colors duration-1000',
-        forceShow ? 'text-[#49000D]' : 'text-white group-hover/nav:text-[#49000D]',
+        'flex items-center text-[18px] md:text-[24px] font-[444] tracking-normal leading-none gap-2 md:gap-3 font-serif',
+        forceShow || isHeaderHovered ? 'text-[#49000D]' : 'text-white',
       )}
     >
       <button
         onClick={() => setLocale('en')}
         className={cn(
-          'transition-colors uppercase',
-          isEnglish
-            ? 'font-bold'
-            : forceShow
-              ? 'text-[#49000D]/40 hover:text-[#49000D]'
-              : 'text-white/60 group-hover/nav:text-[#49000D]/40 hover:text-[#49000D]',
+          'transition-opacity duration-[2500ms] ease-in-out uppercase',
+          isEnglish ? 'opacity-100' : 'opacity-40 hover:opacity-80',
         )}
       >
         ENG
       </button>
-      <span
-        className={cn(
-          'transition-colors duration-1000',
-          forceShow ? 'text-[#49000D]/20' : 'text-white/40 group-hover/nav:text-[#49000D]/20',
-        )}
-      >
-        |
-      </span>
+      <span className='opacity-20 transition-opacity duration-[2500ms]'>|</span>
       <button
         onClick={() => setLocale('vi')}
         className={cn(
-          'transition-colors uppercase',
-          isVietnamese
-            ? 'font-bold'
-            : forceShow
-              ? 'text-[#49000D]/40 hover:text-[#49000D]'
-              : 'text-white/60 group-hover/nav:text-[#49000D]/40 hover:text-[#49000D]',
+          'transition-opacity duration-[2500ms] ease-in-out uppercase',
+          isVietnamese ? 'opacity-100' : 'opacity-40 hover:opacity-80',
         )}
       >
         VIE
@@ -90,6 +81,7 @@ interface NavbarProps {
 export const Navbar = ({ items }: NavbarProps) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
+  const [isHeaderHovered, setIsHeaderHovered] = React.useState(false);
   const pathname = usePathname();
   const t = useTranslations('Navbar');
   const tl = useLocalizedText();
@@ -123,17 +115,18 @@ export const Navbar = ({ items }: NavbarProps) => {
   return (
     <>
       <nav
-        className={cn(
-          'top-0 left-0 w-full z-[100] transition-all duration-1000 ease-in-out group/nav',
-          isWhiteNavbarPath ? 'relative' : 'absolute',
-        )}
-        onMouseLeave={() => setIsMenuOpen(false)}
+        className={cn('top-0 left-0 w-full z-[100]', isWhiteNavbarPath ? 'relative' : 'absolute')}
+        onMouseEnter={() => setIsHeaderHovered(true)}
+        onMouseLeave={() => {
+          setIsHeaderHovered(false);
+          setIsMenuOpen(false);
+        }}
       >
         {/* Top Header Layer (Tier 1 & 2) */}
         <div
           className={cn(
-            'relative z-30 transition-all duration-700 ease-in-out',
-            forceShow ? 'text-[#49000D]' : 'text-white hover:text-[#49000D]',
+            'relative z-30 transition-colors duration-[2500ms] ease-in-out',
+            forceShow || isHeaderHovered ? 'text-[#49000D]' : 'text-white',
             // Apply shadow on menu open OR on non-homepage pages by default
             isMenuOpen || isWhiteNavbarPath
               ? 'shadow-[0_2px_4px_rgba(34,34,34,0.12),0_6px_6px_rgba(34,34,34,0.10),0_14px_9px_rgba(34,34,34,0.06),0_26px_10px_rgba(34,34,34,0.02)] border-b border-black/[0.03]'
@@ -143,10 +136,8 @@ export const Navbar = ({ items }: NavbarProps) => {
           {/* Background for Top Header */}
           <div
             className={cn(
-              'absolute inset-0 -z-10 transition-all duration-1000 ease-in-out pointer-events-none',
-              forceShow
-                ? 'opacity-100 backdrop-blur-md'
-                : 'opacity-0 group-hover/nav:opacity-100 group-hover/nav:backdrop-blur-md',
+              'absolute inset-0 -z-10 transition-opacity duration-[2500ms] ease-in-out pointer-events-none',
+              forceShow || isHeaderHovered ? 'opacity-100 backdrop-blur-md' : 'opacity-0',
             )}
             style={{
               backgroundImage: isWhiteNavbarPath
@@ -161,7 +152,13 @@ export const Navbar = ({ items }: NavbarProps) => {
 
           {!forceShow && (
             /* Gradient Background Layer - only show when menu is closed AND not a white navbar AND on homepage */
-            <div className='absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-transparent -z-10 h-64 transition-opacity duration-1000 pointer-events-none group-hover/nav:opacity-0' />
+            <div
+              className={cn(
+                'absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-transparent -z-10 h-64 transition-opacity pointer-events-none',
+                isHeaderHovered || forceShow ? 'opacity-0' : 'opacity-100',
+              )}
+              style={{ transitionDuration: '2000ms' }}
+            />
           )}
 
           <div className='container'>
@@ -172,10 +169,10 @@ export const Navbar = ({ items }: NavbarProps) => {
                 <button
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
                   className={cn(
-                    'transition-colors duration-1000',
-                    forceShow
-                      ? 'text-[#49000D] hover:text-[#49000D]/60'
-                      : 'text-white group-hover/nav:text-[#49000D] hover:text-[#49000D]/60',
+                    'transition-colors duration-[2500ms]',
+                    forceShow || isHeaderHovered
+                      ? 'text-[#49000D] hover:opacity-70'
+                      : 'text-white hover:opacity-70',
                   )}
                 >
                   {isMenuOpen ? (
@@ -187,10 +184,10 @@ export const Navbar = ({ items }: NavbarProps) => {
                 <button
                   onClick={() => setIsSearchOpen(true)}
                   className={cn(
-                    'transition-colors duration-1000',
-                    forceShow
-                      ? 'text-[#49000D] hover:text-[#49000D]/60'
-                      : 'text-white group-hover/nav:text-[#49000D] hover:text-[#49000D]/60',
+                    'transition-colors duration-[2500ms]',
+                    forceShow || isHeaderHovered
+                      ? 'text-[#49000D] hover:opacity-70'
+                      : 'text-white hover:opacity-70',
                   )}
                 >
                   <Search size={24} strokeWidth={1} />
@@ -206,10 +203,8 @@ export const Navbar = ({ items }: NavbarProps) => {
                     width={140}
                     height={140}
                     className={cn(
-                      'h-14 md:h-24 w-auto transition-all duration-1000',
-                      forceShow
-                        ? ''
-                        : 'brightness-0 invert group-hover/nav:brightness-100 group-hover/nav:invert-0',
+                      'h-14 md:h-24 w-auto transition-all duration-[2500ms]',
+                      forceShow || isHeaderHovered ? '' : 'brightness-0 invert',
                     )}
                     priority
                   />
@@ -218,32 +213,32 @@ export const Navbar = ({ items }: NavbarProps) => {
 
               {/* Right: Language Switcher Only */}
               <div className='flex items-center justify-end flex-1'>
-                <LanguageSwitcher forceShow={forceShow} />
+                <LanguageSwitcher forceShow={forceShow} isHeaderHovered={isHeaderHovered} />
               </div>
             </div>
 
             {/* Tier 2: Navigation Links (Evenly Spread) */}
             <div
               className={cn(
-                'hidden lg:flex items-center justify-between w-full pb-6 pt-0 transition-colors duration-1000',
-                forceShow ? '' : 'group-hover/nav:border-[#49000D]/10',
+                'hidden lg:flex items-center justify-between w-full pb-6 pt-0 transition-colors duration-[2500ms]',
+                forceShow || isHeaderHovered ? '' : 'border-[#49000D]/10',
               )}
             >
               <Link
                 href='/about-us'
                 onMouseEnter={() => setIsMenuOpen(false)}
                 className={cn(
-                  'text-[18px] font-serif font-[444] tracking-normal leading-none transition-colors duration-1000 whitespace-nowrap block uppercase relative group/link pb-1',
-                  forceShow
-                    ? 'text-[#49000D] hover:text-[#49000D]/60'
-                    : 'text-white group-hover/nav:text-[#49000D] hover:text-[#49000D]/60',
+                  'text-[18px] font-serif font-[444] tracking-normal leading-none transition-colors duration-[2500ms] whitespace-nowrap block uppercase relative group/link pb-1',
+                  forceShow || isHeaderHovered
+                    ? 'text-[#49000D] hover:opacity-70'
+                    : 'text-white hover:opacity-70',
                 )}
               >
                 {t('aboutUs')}
                 <span
                   className={cn(
                     'absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] transition-all duration-300 group-hover/link:w-full',
-                    forceShow ? 'bg-[#49000D]' : 'bg-white group-hover/nav:bg-[#49000D]',
+                    forceShow || isHeaderHovered ? 'bg-[#49000D]' : 'bg-white',
                   )}
                 />
               </Link>
@@ -251,10 +246,8 @@ export const Navbar = ({ items }: NavbarProps) => {
               <div
                 onMouseEnter={() => setIsMenuOpen(true)}
                 className={cn(
-                  'text-[18px] font-serif font-[444] tracking-normal leading-none transition-colors duration-1000 whitespace-nowrap block uppercase relative group/link pb-1 cursor-default',
-                  forceShow
-                    ? 'text-[#49000D] hover:text-[#49000D]/60'
-                    : 'text-white group-hover/nav:text-[#49000D] hover:text-[#49000D]/60',
+                  'text-[18px] font-serif font-[444] tracking-normal leading-none transition-colors duration-[2500ms] whitespace-nowrap block uppercase relative group/link pb-1 cursor-default hover:opacity-70',
+                  forceShow || isHeaderHovered ? 'text-[#49000D]' : 'text-white',
                 )}
               >
                 {t('products')}
@@ -262,7 +255,7 @@ export const Navbar = ({ items }: NavbarProps) => {
                   className={cn(
                     'absolute bottom-0 left-1/2 -translate-x-1/2 h-[1px] transition-all duration-300',
                     isMenuOpen ? 'w-full' : 'w-0 group-hover/link:w-full',
-                    forceShow ? 'bg-[#49000D]' : 'bg-white group-hover/nav:bg-[#49000D]',
+                    forceShow || isHeaderHovered ? 'bg-[#49000D]' : 'bg-white',
                   )}
                 />
               </div>
@@ -271,17 +264,17 @@ export const Navbar = ({ items }: NavbarProps) => {
                 href='/showroom-factory'
                 onMouseEnter={() => setIsMenuOpen(false)}
                 className={cn(
-                  'text-[18px] font-serif font-[444] tracking-normal leading-none transition-colors duration-1000 whitespace-nowrap block uppercase relative group/link pb-1',
-                  forceShow
-                    ? 'text-[#49000D] hover:text-[#49000D]/60'
-                    : 'text-white group-hover/nav:text-[#49000D] hover:text-[#49000D]/60',
+                  'text-[18px] font-serif font-[444] tracking-normal leading-none transition-colors duration-[2500ms] whitespace-nowrap block uppercase relative group/link pb-1',
+                  forceShow || isHeaderHovered
+                    ? 'text-[#49000D] hover:opacity-70'
+                    : 'text-white hover:opacity-70',
                 )}
               >
                 {t('showroom')}
                 <span
                   className={cn(
                     'absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] transition-all duration-300 group-hover/link:w-full',
-                    forceShow ? 'bg-[#49000D]' : 'bg-white group-hover/nav:bg-[#49000D]',
+                    forceShow || isHeaderHovered ? 'bg-[#49000D]' : 'bg-white',
                   )}
                 />
               </Link>
@@ -290,17 +283,51 @@ export const Navbar = ({ items }: NavbarProps) => {
                 href='/design-project'
                 onMouseEnter={() => setIsMenuOpen(false)}
                 className={cn(
-                  'text-[18px] font-serif font-[444] tracking-normal leading-none transition-colors duration-1000 whitespace-nowrap block uppercase relative group/link pb-1',
-                  forceShow
-                    ? 'text-[#49000D] hover:text-[#49000D]/60'
-                    : 'text-white group-hover/nav:text-[#49000D] hover:text-[#49000D]/60',
+                  'text-[18px] font-serif font-[444] tracking-normal leading-none transition-colors duration-[2500ms] whitespace-nowrap block uppercase relative group/link pb-1',
+                  forceShow || isHeaderHovered
+                    ? 'text-[#49000D] hover:opacity-70'
+                    : 'text-white hover:opacity-70',
                 )}
               >
                 {t('designProject')}
                 <span
                   className={cn(
                     'absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] transition-all duration-300 group-hover/link:w-full',
-                    forceShow ? 'bg-[#49000D]' : 'bg-white group-hover/nav:bg-[#49000D]',
+                    forceShow || isHeaderHovered ? 'bg-[#49000D]' : 'bg-white',
+                  )}
+                />
+              </Link>
+
+              <Link
+                href='/exports'
+                onMouseEnter={() => setIsMenuOpen(false)}
+                className={cn(
+                  'text-[18px] font-serif font-[444] tracking-normal leading-none transition-colors duration-[2500ms] whitespace-nowrap block uppercase relative group/link pb-1 hover:opacity-70',
+                  forceShow || isHeaderHovered ? 'text-[#49000D]' : 'text-white',
+                )}
+              >
+                {t('exports')}
+                <span
+                  className={cn(
+                    'absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] transition-all duration-300 group-hover/link:w-full',
+                    forceShow || isHeaderHovered ? 'bg-[#49000D]' : 'bg-white',
+                  )}
+                />
+              </Link>
+
+              <Link
+                href='/blogs'
+                onMouseEnter={() => setIsMenuOpen(false)}
+                className={cn(
+                  'text-[18px] font-serif font-[444] tracking-normal leading-none transition-colors duration-[2500ms] whitespace-nowrap block uppercase relative group/link pb-1 hover:opacity-70',
+                  forceShow || isHeaderHovered ? 'text-[#49000D]' : 'text-white',
+                )}
+              >
+                {t('blogs')}
+                <span
+                  className={cn(
+                    'absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] transition-all duration-300 group-hover/link:w-full',
+                    forceShow || isHeaderHovered ? 'bg-[#49000D]' : 'bg-white',
                   )}
                 />
               </Link>
@@ -309,17 +336,17 @@ export const Navbar = ({ items }: NavbarProps) => {
                 href='/contact-us'
                 onMouseEnter={() => setIsMenuOpen(false)}
                 className={cn(
-                  'text-[18px] font-serif font-[444] tracking-normal leading-none transition-colors duration-1000 whitespace-nowrap block uppercase relative group/link pb-1',
-                  forceShow
-                    ? 'text-[#49000D] hover:text-[#49000D]/60'
-                    : 'text-white group-hover/nav:text-[#49000D] hover:text-[#49000D]/60',
+                  'text-[18px] font-serif font-[444] tracking-normal leading-none transition-colors duration-[2500ms] whitespace-nowrap block uppercase relative group/link pb-1',
+                  forceShow || isHeaderHovered
+                    ? 'text-[#49000D] hover:opacity-70'
+                    : 'text-white hover:opacity-70',
                 )}
               >
                 {t('contactUs')}
                 <span
                   className={cn(
                     'absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] transition-all duration-300 group-hover/link:w-full',
-                    forceShow ? 'bg-[#49000D]' : 'bg-white group-hover/nav:bg-[#49000D]',
+                    forceShow || isHeaderHovered ? 'bg-[#49000D]' : 'bg-white',
                   )}
                 />
               </Link>
@@ -330,9 +357,10 @@ export const Navbar = ({ items }: NavbarProps) => {
         {/* Sliding Menu Down (Tier 3) */}
         <div
           className={cn(
-            'overflow-hidden relative z-20 transition-all duration-1000 ease-out',
-            isMenuOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0',
+            'overflow-hidden relative z-20 transition-all ease-out',
+            isMenuOpen ? 'max-h-[1200px] opacity-100' : 'max-h-0 opacity-0',
           )}
+          style={{ transitionDuration: '2000ms' }}
         >
           {/* Background for Sliding Menu - slightly more muted to look "behind" */}
           <div
@@ -358,7 +386,7 @@ export const Navbar = ({ items }: NavbarProps) => {
                   return (
                     <div
                       key={item.id}
-                      className='flex flex-col gap-6 animate-in fade-in slide-in-from-top-4 duration-1000'
+                      className='flex flex-col gap-6 animate-in fade-in slide-in-from-top-4 duration-[2000ms] fill-mode-forwards'
                     >
                       {/* Catalog Level 1 Banner */}
                       <Link
@@ -383,7 +411,7 @@ export const Navbar = ({ items }: NavbarProps) => {
 
                       {/* Catalog Level 1 Title */}
                       <Link href={href} className='group'>
-                        <h3 className='text-[18px] md:text-[20px] font-serif font-[444] tracking-normal leading-none uppercase text-[#49000D] group-hover:text-[#49000D]/60 transition-colors'>
+                        <h3 className='text-[18px] md:text-[20px] font-serif font-[444] tracking-normal leading-none uppercase text-[#49000D] group-hover:opacity-70 transition-colors'>
                           {tl(item, 'name')}
                         </h3>
                       </Link>
@@ -409,7 +437,7 @@ export const Navbar = ({ items }: NavbarProps) => {
                     </div>
                   );
                 })}
-              <div className='flex flex-col gap-6 animate-in fade-in slide-in-from-top-4 duration-1000'>
+              <div className='flex flex-col gap-6 animate-in fade-in slide-in-from-top-4 duration-[2000ms] fill-mode-forwards'>
                 <div className='h-[24px] invisible md:block' />{' '}
                 {/* Spacer to align with titles on desktop grid */}
                 <Link
