@@ -33,17 +33,17 @@ export const BlogsSection = async () => {
   if (posts.length === 0) return null;
 
   return (
-    <section className='py-24 bg-white'>
+    <section className='py-10 bg-white'>
       <div className='container'>
         {/* Section Header */}
-        <div className='flex flex-col items-center mb-12'>
+        <div className='flex flex-col items-center mb-8'>
           <h2 className='text-2xl md:text-3xl lg:text-4xl font-serif text-[#49000D] tracking-wide uppercase'>
             {t('title')}
           </h2>
           <BrandDivider />
         </div>
 
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12'>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10'>
           {posts.map((post) => (
             <article key={post.id} className='group flex flex-col h-full'>
               <Link
@@ -95,7 +95,7 @@ export const BlogsSection = async () => {
         </div>
 
         {/* Expand Your View Link */}
-        <div className='flex justify-center mt-10'>
+        <div className='flex justify-center mt-6'>
           <Link
             href='/blogs'
             className='group flex items-center gap-2 text-[13px] font-medium tracking-wider text-gray-700 hover:text-[#49000D] transition-colors'
