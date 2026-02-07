@@ -36,7 +36,7 @@ export const BlogsSection = async () => {
     <section className='py-10 bg-white'>
       <div className='container'>
         {/* Section Header */}
-        <div className='flex flex-col items-center mb-8'>
+        <div className='flex flex-col items-center mb-6'>
           <h2 className='text-2xl md:text-3xl lg:text-4xl font-serif text-[#49000D] tracking-wide uppercase'>
             {t('title')}
           </h2>
@@ -95,7 +95,7 @@ export const BlogsSection = async () => {
         </div>
 
         {/* Expand Your View Link */}
-        <div className='flex justify-center mt-6'>
+        <div className='flex justify-center mt-8'>
           <Link
             href='/blogs'
             className='group flex items-center gap-2 text-[13px] font-medium tracking-wider text-gray-700 hover:text-[#49000D] transition-colors'

@@ -12,7 +12,7 @@ export const IntroSection = async () => {
   if (!intro) return null;
 
   return (
-    <section className='relative py-24 md:py-32 overflow-hidden'>
+    <section className='relative py-16 md:py-20 overflow-hidden'>
       {/* Background Layer */}
       <div className='absolute inset-0 z-0'>
         {intro.backgroundImage ? (
@@ -60,7 +60,7 @@ export const IntroSection = async () => {
                 {getLocalizedText(intro, 'subtitle', locale)}
               </span>
             )}
-            <h2 className='text-3xl md:text-4xl font-bold font-serif mb-8 leading-tight tracking-tight border-b border-white/20 pb-4'>
+            <h2 className='text-2xl md:text-3xl font-bold font-serif mb-6 leading-tight tracking-tight border-b border-white/20 pb-3'>
               {getLocalizedText(intro, 'title', locale)}
             </h2>
             {(() => {

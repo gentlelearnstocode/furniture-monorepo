@@ -36,10 +36,10 @@ const CatalogSection = ({
       <section
         className={cn(
           'relative w-full overflow-hidden group cursor-pointer transition-all duration-500',
-          layout === 'full' && 'h-[75vh] md:h-[85vh]',
-          layout === 'half' && 'h-[50vh] md:h-[60vh]',
-          layout === 'third' && 'h-[40vh] md:h-[50vh]',
-          layout === 'quarter' && 'h-[35vh] md:h-[45vh]',
+          layout === 'full' && 'h-[65vh] md:h-[75vh]',
+          layout === 'half' && 'h-[45vh] md:h-[55vh]',
+          layout === 'third' && 'h-[35vh] md:h-[45vh]',
+          layout === 'quarter' && 'h-[30vh] md:h-[40vh]',
         )}
       >
         {/* Background Image with Hover Zoom */}
@@ -69,7 +69,7 @@ const CatalogSection = ({
           <h3
             className={cn(
               'text-white font-serif uppercase tracking-widest mb-4 drop-shadow-xl translate-y-0 md:translate-y-4 md:group-hover:translate-y-0 transition-transform duration-500',
-              isSmall ? 'text-xl md:text-2xl' : 'text-3xl md:text-5xl',
+              isSmall ? 'text-lg md:text-xl' : 'text-2xl md:text-4xl',
             )}
           >
             {localizedName}

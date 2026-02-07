@@ -66,12 +66,12 @@ export const Hero = ({ data }: HeroProps) => {
       {(title || subtitle || (buttonText && data.buttonLink)) && (
         <div className='relative z-10 text-center text-white px-4 max-w-4xl'>
           {title && (
-            <h1 className='text-4xl md:text-6xl font-bold font-serif mb-6 leading-tight tracking-tight whitespace-pre-line'>
+            <h1 className='text-4xl md:text-5xl font-bold font-serif mb-6 leading-tight tracking-tight whitespace-pre-line'>
               {title}
             </h1>
           )}
           {subtitle && (
-            <p className='text-base md:text-lg font-light tracking-widest uppercase mb-10 text-white/90'>
+            <p className='text-base md:text-lg font-light tracking-widest uppercase mb-8 text-white/90'>
               {subtitle}
             </p>
           )}

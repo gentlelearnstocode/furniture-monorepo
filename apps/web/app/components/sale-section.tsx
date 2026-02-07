@@ -30,11 +30,11 @@ export const SaleSection = ({ products, settings }: SaleSectionProps) => {
   }
 
   return (
-    <section className='bg-white py-16 md:py-20'>
+    <section className='bg-white py-12 md:py-16'>
       <div className='container'>
         {/* Section Header */}
-        <div className='flex flex-col items-center mb-12'>
-          <h2 className='text-3xl md:text-4xl lg:text-5xl font-serif text-[#49000D] tracking-wide uppercase'>
+        <div className='flex flex-col items-center mb-8'>
+          <h2 className='text-2xl md:text-3xl lg:text-4xl font-serif text-[#49000D] tracking-wide uppercase'>
             {tl(settings, 'title') || t('title')}
           </h2>
 

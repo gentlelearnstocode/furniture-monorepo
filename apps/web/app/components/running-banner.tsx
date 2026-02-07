@@ -15,7 +15,7 @@ export function RunningBanner() {
   );
 
   return (
-    <div className='relative h-[140px] w-full overflow-hidden bg-[#333333]'>
+    <div className='relative h-[100px] w-full overflow-hidden bg-[#333333]'>
       {/* Background Gradient */}
       <div
         className='absolute inset-0 z-0'
