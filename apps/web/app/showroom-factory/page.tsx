@@ -23,14 +23,12 @@ export default async function ShowroomFactoryPage() {
 
   return (
     <div className='min-h-screen bg-white'>
-      <div className='container py-6'>
-        <AppBreadcrumb
-          items={[
-            { label: 'Home Page', href: '/' },
-            { label: 'Showroom & Factory', href: '/showroom-factory' },
-          ]}
-        />
-      </div>
+      <AppBreadcrumb
+        items={[
+          { label: 'Home Page', href: '/' },
+          { label: 'Showroom & Factory', href: '/showroom-factory' },
+        ]}
+      />
 
       {/* Header Images Grid */}
       {headerImages.length > 0 && (
@@ -66,16 +64,18 @@ export default async function ShowroomFactoryPage() {
       )}
 
       {/* Main Content with Pattern Background */}
-      <div
-        className='relative'
-        style={{
-          backgroundImage: "url('/nav-bg.png')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-        }}
-      >
-        <div className='container pb-20 space-y-24 pt-16'>
+      <div className='relative'>
+        {/* Subtle background pattern */}
+        <div
+          className='absolute inset-0 opacity-[0.2] pointer-events-none'
+          style={{
+            backgroundImage: "url('/nav-bg.png')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+          }}
+        />
+        <div className='container relative z-10 pb-20 space-y-24 pt-16'>
           {/* Intro Section */}
           <section className='mx-auto'>
             <div className='grid md:grid-cols-12 gap-10 md:gap-20 items-start'>
