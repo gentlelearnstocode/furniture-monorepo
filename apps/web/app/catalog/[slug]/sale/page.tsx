@@ -3,6 +3,8 @@ import { ProductCard } from '@/app/components/product-card';
 import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
 import { db } from '@repo/database';
 import { notFound } from 'next/navigation';
+import { getTranslations } from 'next-intl/server';
+import { getLocale, getLocalizedText } from '@/lib/i18n';
 
 export const revalidate = 3600;
 
@@ -14,6 +16,9 @@ interface Props {
 
 export default async function CatalogSalePage({ params }: Props) {
   const { slug } = await params;
+  const t = await getTranslations('Sale');
+  const tb = await getTranslations('Breadcrumbs');
+  const locale = await getLocale();
 
   // Fetch the catalog to check if it exists and get its name
   const catalog = await db.query.catalogs.findFirst({
@@ -25,32 +30,37 @@ export default async function CatalogSalePage({ params }: Props) {
   }
 
   const saleProducts = await getSaleProductsByCatalog(slug);
+  const catalogName = getLocalizedText(catalog, 'name', locale);
 
   return (
     <div className='min-h-screen bg-gradient-to-b from-[#FDFCFB] via-white to-[#FDFCFB]'>
       <AppBreadcrumb
         items={[
-          { label: 'Home Page', href: '/' },
-          { label: catalog.name, href: `/catalog/${slug}` },
-          { label: 'Sale' },
+          { label: tb('home'), href: '/' },
+          { label: catalogName, href: `/catalog/${slug}` },
+          { label: tb('sale') },
         ]}
       />
 
-      <div className='container pt-12 pb-6'>
-        {/* Title & Description */}
-        <div className='mb-8'>
-          <h1 className='text-5xl md:text-6xl font-serif italic text-black/90 tracking-wide mb-4'>
-            {catalog.name} Sale
-          </h1>
-          <p className='text-[15px] leading-relaxed text-gray-600 max-w-4xl font-serif'>
-            Special offers on our {catalog.name} collection.
+      <div className='container pt-10 pb-2'>
+        {/* Decorative section header */}
+        <div className='relative mb-8'>
+          <div className='flex items-center justify-center gap-6 mb-3'>
+            <div className='h-px w-12 bg-gradient-to-r from-transparent to-black/20' />
+            <h1 className='text-xl md:text-2xl font-serif text-center text-black/85 tracking-wide'>
+              {catalogName} {t('title')}
+            </h1>
+            <div className='h-px w-12 bg-gradient-to-l from-transparent to-black/20' />
+          </div>
+          <p className='text-center text-[14px] md:text-[15px] leading-relaxed text-gray-600 max-w-2xl mx-auto font-serif'>
+            {t('description')}
           </p>
         </div>
 
         {/* Filter Bar Stub */}
         <div className='flex items-center justify-between mb-8 pb-4 border-b border-black/5'>
           <div className='text-[13px] font-serif italic text-black/50 uppercase tracking-[0.1em]'>
-            Showing {saleProducts.length} results
+            {saleProducts.length} Results
           </div>
         </div>
       </div>

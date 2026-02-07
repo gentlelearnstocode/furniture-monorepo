@@ -51,12 +51,16 @@ export default async function SalePage({
       <AppBreadcrumb items={[{ label: tb('home'), href: '/' }, { label: tb('sale') }]} />
 
       <div className='container pt-10 pb-2'>
-        {/* Title & Description */}
-        <div className='mb-8'>
-          <h1 className='text-xl md:text-3xl lg:text-3xl font-serif text-black/90 tracking-wide mb-4'>
-            {t('title')}
-          </h1>
-          <p className='text-[14px] md:text-[15px] leading-relaxed text-gray-600 max-w-4xl font-serif'>
+        {/* Decorative section header */}
+        <div className='relative mb-8'>
+          <div className='flex items-center justify-center gap-6 mb-3'>
+            <div className='h-px w-12 bg-gradient-to-r from-transparent to-black/20' />
+            <h1 className='text-xl md:text-2xl font-serif text-center text-black/85 tracking-wide'>
+              {t('title')}
+            </h1>
+            <div className='h-px w-12 bg-gradient-to-l from-transparent to-black/20' />
+          </div>
+          <p className='text-center text-[14px] md:text-[15px] leading-relaxed text-gray-600 max-w-2xl mx-auto font-serif'>
             {t('description')}
           </p>
         </div>
