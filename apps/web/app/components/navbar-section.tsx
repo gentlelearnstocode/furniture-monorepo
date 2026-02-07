@@ -357,7 +357,7 @@ export const Navbar = ({ items }: NavbarProps) => {
         {/* Sliding Menu Down (Tier 3) */}
         <div
           className={cn(
-            'overflow-hidden relative z-20 transition-all ease-out',
+            'overflow-hidden absolute top-full left-0 w-full z-20 transition-all ease-out',
             isMenuOpen ? 'max-h-[1200px] opacity-100' : 'max-h-0 opacity-0',
           )}
           style={{ transitionDuration: '2000ms' }}
@@ -391,6 +391,7 @@ export const Navbar = ({ items }: NavbarProps) => {
                       {/* Catalog Level 1 Banner */}
                       <Link
                         href={href}
+                        onClick={() => setIsMenuOpen(false)}
                         className='hidden md:block group overflow-hidden relative aspect-[4/3]'
                       >
                         {item.image ? (
@@ -410,7 +411,7 @@ export const Navbar = ({ items }: NavbarProps) => {
                       </Link>
 
                       {/* Catalog Level 1 Title */}
-                      <Link href={href} className='group'>
+                      <Link href={href} onClick={() => setIsMenuOpen(false)} className='group'>
                         <h3 className='text-[18px] md:text-[20px] font-serif font-[444] tracking-normal leading-none uppercase text-[#49000D] group-hover:opacity-70 transition-colors'>
                           {tl(item, 'name')}
                         </h3>
@@ -422,6 +423,7 @@ export const Navbar = ({ items }: NavbarProps) => {
                           <Link
                             key={child.id}
                             href={`/catalog/${item.slug}/${child.slug}`}
+                            onClick={() => setIsMenuOpen(false)}
                             className='text-[14px] md:text-[16px] text-[#49000D]/60 hover:text-[#49000D] transition-colors uppercase font-serif tracking-[0.1em]'
                           >
                             {tl(child, 'name')}
@@ -429,6 +431,7 @@ export const Navbar = ({ items }: NavbarProps) => {
                         ))}
                         <Link
                           href={`/catalog/${item.slug}/sale`}
+                          onClick={() => setIsMenuOpen(false)}
                           className='text-[14px] md:text-[16px] text-red-600/60 hover:text-red-600 transition-colors uppercase font-serif tracking-[0.1em]'
                         >
                           {t('sale')}
@@ -442,6 +445,7 @@ export const Navbar = ({ items }: NavbarProps) => {
                 {/* Spacer to align with titles on desktop grid */}
                 <Link
                   href='/sale'
+                  onClick={() => setIsMenuOpen(false)}
                   className='text-[24px] font-serif font-[444] tracking-normal leading-none uppercase text-red-600 hover:text-red-700 transition-colors'
                 >
                   {t('allSale')}
