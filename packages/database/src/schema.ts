@@ -990,6 +990,33 @@ export const customPages = pgTable('custom_pages', {
 export type InsertCustomPage = typeof customPages.$inferInsert;
 export type SelectCustomPage = typeof customPages.$inferSelect;
 
+// --- Showrooms ---
+
+export const showrooms = pgTable('showrooms', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  title: text('title').notNull(),
+  titleVi: text('title_vi'),
+  subtitle: text('subtitle'),
+  subtitleVi: text('subtitle_vi'),
+  contentHtml: text('content_html'),
+  contentHtmlVi: text('content_html_vi'),
+  imageId: uuid('image_id').references(() => assets.id),
+  position: integer('position').default(0).notNull(),
+  isActive: boolean('is_active').default(true).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const showroomsRelations = relations(showrooms, ({ one }) => ({
+  image: one(assets, {
+    fields: [showrooms.imageId],
+    references: [assets.id],
+  }),
+}));
+
+export type InsertShowroom = typeof showrooms.$inferInsert;
+export type SelectShowroom = typeof showrooms.$inferSelect;
+
 // --- Inbox / Contact ---
 
 export const inboxMessages = pgTable('inbox_messages', {

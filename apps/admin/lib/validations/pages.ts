@@ -15,6 +15,7 @@ export const customPageSchema = z
         button2Text: z.string().optional(),
         button2TextVi: z.string().optional(),
         button2Link: z.string().optional(),
+        images: z.array(z.any()).optional(),
       }),
       body: z.object({
         introHtml: z.string().optional(),
@@ -49,7 +50,14 @@ export const customPageSchema = z
   })
   .superRefine((data, ctx) => {
     // About Us and new simple pages don't require standard content fields
-    if (['about-us', 'construction-manufacturing', 'manufacturing-services'].includes(data.slug))
+    if (
+      [
+        'about-us',
+        'construction-manufacturing',
+        'manufacturing-services',
+        'showroom-factory',
+      ].includes(data.slug)
+    )
       return;
 
     // Enforce requirements for other pages

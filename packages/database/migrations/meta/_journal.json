@@ -127,6 +127,13 @@
       "when": 1769233578224,
       "tag": "0017_nosy_living_tribunal",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1770450998503,
+      "tag": "0018_silly_expediter",
+      "breakpoints": true
     }
   ]
 }

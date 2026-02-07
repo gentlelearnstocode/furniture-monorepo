@@ -92,6 +92,7 @@ export function Sidebar() {
         },
         { name: 'Manufacturing Services', href: '/pages/manufacturing-services' },
         { name: 'Exports', href: '/pages/exports' },
+        { name: 'Showroom & Factory', href: '/pages/showroom-factory' },
         { name: 'About Us', href: '/pages/about-us' },
       ],
     },

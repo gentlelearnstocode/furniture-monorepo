@@ -162,3 +162,17 @@ export const getCustomPageBySlug = createCachedQuery(
     tags: (slug: string) => ['pages', `page-${slug}`],
   },
 );
+
+export const getShowrooms = createCachedQuery(
+  async () => {
+    return await db.query.showrooms.findMany({
+      where: (showrooms, { eq }) => eq(showrooms.isActive, true),
+      orderBy: (showrooms, { asc }) => [asc(showrooms.position)],
+      with: {
+        image: true,
+      },
+    });
+  },
+  ['showrooms-list'],
+  { revalidate: 3600, tags: ['showrooms'] },
+);
