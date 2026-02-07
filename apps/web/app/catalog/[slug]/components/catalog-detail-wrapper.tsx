@@ -79,7 +79,7 @@ export const CatalogDetailWrapper = ({ collections }: CatalogDetailWrapperProps)
     <>
       {/* Hero Slider - Collection Banners */}
       {bannerImages.length > 0 && (
-        <div className='container mt-5'>
+        <div className='container mt-10'>
           <div
             className='relative w-full aspect-[21/9] md:aspect-[24/10] overflow-hidden rounded-2xl shadow-2xl shadow-black/10 bg-gray-100 group'
             onMouseEnter={() => setIsHovered(true)}
@@ -151,9 +151,9 @@ export const CatalogDetailWrapper = ({ collections }: CatalogDetailWrapperProps)
 
       {/* Shop the look Section - Shows products from current collection */}
       {currentCollection && currentCollection.products.length > 0 && (
-        <div className='container pb-20'>
+        <div className='container pb-12 md:pb-16'>
           {/* Section Header with decorative elements */}
-          <div className='relative mb-12'>
+          <div className='relative mb-8'>
             <div className='flex items-center justify-center gap-6 mb-3'>
               <div className='h-px w-16 bg-gradient-to-r from-transparent to-black/20' />
               <h2 className='text-2xl md:text-3xl lg:text-4xl font-serif text-center text-black/85 tracking-wide'>

@@ -75,7 +75,7 @@ export default async function ShowroomFactoryPage() {
             backgroundRepeat: 'no-repeat',
           }}
         />
-        <div className='container relative z-10 pb-20 space-y-24 pt-16'>
+        <div className='container relative z-10 pb-20 space-y-16 pt-10'>
           {/* Intro Section */}
           <section className='mx-auto'>
             <div className='grid md:grid-cols-12 gap-10 md:gap-20 items-start'>
@@ -87,7 +87,7 @@ export default async function ShowroomFactoryPage() {
                   </h2>
                 </div>
 
-                <div className='text-2xl md:text-6xl lg:text-4xl leading-none'>
+                <div className='text-2xl md:text-3xl lg:text-4xl leading-none'>
                   <span className='text-[#b80022] block font-bold tracking-tight'>THIÊN ẤN</span>
                   <span className='text-[#222] block font-bold tracking-tight'>SHOWROOM</span>
                 </div>
@@ -106,7 +106,7 @@ export default async function ShowroomFactoryPage() {
           </section>
 
           {/* Showrooms List */}
-          <section className='space-y-32'>
+          <section className='space-y-20'>
             {showrooms.length > 0
               ? showrooms.map((showroom, index) => (
                   <ShowroomItem key={showroom.id} showroom={showroom} index={index} />

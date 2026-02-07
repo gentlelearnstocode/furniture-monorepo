@@ -45,10 +45,10 @@ export default async function ExportsPage() {
           }}
         />
 
-        <div className='container pt-16 pb-0 space-y-24'>
+        <div className='container pt-10 pb-0 space-y-16'>
           {/* Header Section: Hero */}
           <section className='max-w-4xl mx-auto text-center space-y-8'>
-            <h1 className='text-4xl md:text-6xl font-serif text-brand-neutral-900'>{page.title}</h1>
+            <h1 className='text-3xl md:text-5xl font-serif text-brand-neutral-900'>{page.title}</h1>
             <div
               className='prose prose-lg max-w-none text-brand-neutral-600 font-serif leading-relaxed'
               dangerouslySetInnerHTML={{ __html: content.header.introHtml }}

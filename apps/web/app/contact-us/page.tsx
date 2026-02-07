@@ -58,10 +58,10 @@ export default async function ContactResultPage() {
     <>
       <AppBreadcrumb items={breadcrumbItems} />
 
-      <div className='container mx-auto py-5 px-4 md:py-5 md:px-0'>
+      <div className='container mx-auto pt-10 pb-5 px-4 md:px-0'>
         <div className='max-w-6xl mx-auto'>
-          <div className='mb-16 text-center'>
-            <h1 className='text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-6'>
+          <div className='mb-12 text-center'>
+            <h1 className='text-3xl md:text-5xl font-serif font-bold text-gray-900 mb-6'>
               {t('title')}
             </h1>
             <p className='text-lg text-gray-600 max-w-2xl mx-auto'>{t('description')}</p>

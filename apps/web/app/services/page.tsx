@@ -51,9 +51,9 @@ export default async function ServicesListingPage() {
   return (
     <div className='min-h-screen bg-white'>
       {/* Hero Header */}
-      <div className='bg-gray-50 py-24 border-b border-gray-100'>
+      <div className='bg-gray-50 py-16 md:py-20 border-b border-gray-100'>
         <div className='container'>
-          <h1 className='text-5xl md:text-7xl font-serif font-bold text-gray-900 mb-6'>
+          <h1 className='text-3xl md:text-5xl font-serif font-bold text-gray-900 mb-6'>
             {t('pageTitle')}
           </h1>
           <p className='text-xl text-gray-600 font-light max-w-2xl leading-relaxed'>
@@ -69,7 +69,7 @@ export default async function ServicesListingPage() {
           { label: tb('services'), href: '/services' },
         ]}
       />
-      <div className='container pt-6 pb-12'>
+      <div className='container pt-10 pb-12'>
         {services.length === 0 ? (
           <div className='text-center py-20'>
             <p className='text-gray-500 text-lg'>{t('noResults')}</p>

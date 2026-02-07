@@ -50,7 +50,7 @@ export default async function AboutUsPage() {
             ]}
           />
 
-          <div className='mt-12 max-w-7xl mx-auto space-y-16 pb-10'>
+          <div className='mt-8 max-w-7xl mx-auto space-y-12 pb-10'>
             {/* Main Hero Image */}
             {bannerUrl && (
               <div className='relative w-full aspect-[16/9] md:aspect-[21/9] rounded-xl overflow-hidden shadow-xl'>
@@ -65,7 +65,7 @@ export default async function AboutUsPage() {
             )}
             {/* Brand Header */}
             <div className='flex flex-col items-center space-y-4'>
-              <h1 className='text-4xl md:text-5xl font-serif font-bold text-[#B80022] text-center uppercase tracking-wide'>
+              <h1 className='text-3xl md:text-5xl font-serif font-bold text-[#B80022] text-center uppercase tracking-wide'>
                 {tCommon('brandName')}
               </h1>
             </div>

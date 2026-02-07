@@ -37,14 +37,14 @@ export const SubCatalogGrid = ({
       <div className='container pb-12'>
         {/* Shadow line border between sections */}
         {showSeparator && (
-          <div className='w-full h-px shadow-[0_2px_4px_rgba(34,34,34,0.12),0_6px_6px_rgba(34,34,34,0.10),0_14px_9px_rgba(34,34,34,0.06),0_26px_10px_rgba(34,34,34,0.02)] border-b border-black/[0.03] mb-16' />
+          <div className='w-full h-px shadow-[0_2px_4px_rgba(34,34,34,0.12),0_6px_6px_rgba(34,34,34,0.10),0_14px_9px_rgba(34,34,34,0.06),0_26px_10px_rgba(34,34,34,0.02)] border-b border-black/[0.03] mb-12' />
         )}
 
         {/* Decorative section header */}
-        <div className='relative mb-10'>
+        <div className='relative mb-8'>
           <div className='flex items-center justify-center gap-6 mb-3'>
             <div className='h-px w-12 bg-gradient-to-r from-transparent to-black/20' />
-            <h2 className='text-2xl md:text-[24px] font-serif text-center text-black/85 tracking-wide'>
+            <h2 className='text-xl md:text-2xl font-serif text-center text-black/85 tracking-wide'>
               {tc('whatAreYouLookingFor')}
             </h2>
             <div className='h-px w-12 bg-gradient-to-l from-transparent to-black/20' />

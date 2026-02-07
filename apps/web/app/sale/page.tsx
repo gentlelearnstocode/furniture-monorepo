@@ -50,7 +50,7 @@ export default async function SalePage({
     <div className='min-h-screen bg-gradient-to-b from-[#FDFCFB] via-white to-[#FDFCFB]'>
       <AppBreadcrumb items={[{ label: tb('home'), href: '/' }, { label: tb('sale') }]} />
 
-      <div className='container pt-6 pb-2'>
+      <div className='container pt-10 pb-2'>
         {/* Title & Description */}
         <div className='mb-8'>
           <h1 className='text-xl md:text-3xl lg:text-3xl font-serif text-black/90 tracking-wide mb-4'>

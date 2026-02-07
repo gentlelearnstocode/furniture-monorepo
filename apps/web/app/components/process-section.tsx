@@ -35,10 +35,10 @@ export async function ProcessSection() {
   ];
 
   return (
-    <section className='py-10 bg-white'>
+    <section className='py-12 md:py-16 bg-white'>
       <div className='container mx-auto px-2 md:px-4'>
-        <div className='text-center mb-12'>
-          <h2 className='text-4xl md:text-5xl font-serif font-bold text-brand-neutral-900 uppercase tracking-widest'>
+        <div className='text-center mb-8'>
+          <h2 className='text-2xl md:text-3xl lg:text-4xl font-serif font-bold text-brand-neutral-900 uppercase tracking-widest'>
             {t('title')} <span className='text-[#B80022]'>{tCommon('brandName')}</span>
           </h2>
         </div>
