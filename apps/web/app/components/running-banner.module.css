@@ -16,7 +16,3 @@
   flex-wrap: nowrap;
   animation: scroll 40s linear infinite;
 }
-
-.scrollerInner:hover {
-  animation-play-state: paused;
-}
