@@ -7,6 +7,7 @@ import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
 import { createCachedQuery } from '@/lib/cache';
 import { getSiteContacts } from '@/lib/queries';
 import { getLocale, getLocalizedText } from '@/lib/i18n';
+import { getTranslations } from 'next-intl/server';
 import { eq, asc } from 'drizzle-orm';
 
 import type { Metadata } from 'next';

@@ -21,7 +21,10 @@
     "sale": "Sale",
     "allCategories": "All Categories",
     "aboutUs": "About Us",
+    "showroom": "Showroom",
+    "factory": "Factory",
     "showroomFactory": "Showroom & Factory",
+    "collections": "Collections",
     "designProject": "Design & Project",
     "exports": "Exports",
     "contactUs": "Contact Us"
@@ -182,7 +185,7 @@
     "description": "Learn more about our journey and values.",
     "cta": "Download Brochure",
     "brochure": "Brochure",
-    "home": "Home Page"
+    "home": "Home"
   },
   "Process": {
     "title": "Process at",

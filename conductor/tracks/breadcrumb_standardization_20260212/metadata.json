@@ -1,0 +1,8 @@
+{
+  "track_id": "breadcrumb_standardization_20260212",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-02-12T11:45:00Z",
+  "updated_at": "2026-02-12T11:45:00Z",
+  "description": "the translation in AppBreadcrumbs accross the application is not consistent. Some page have translation, some does not have. Some set as Home and some set as HomePage. I need u to standardlize it, this include updating translations and usage (if applicable) and/or add and update data in database (if applicable, and full right to write to database granted)"
+}

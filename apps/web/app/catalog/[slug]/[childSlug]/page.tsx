@@ -4,6 +4,7 @@ import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
 import { createCachedQuery } from '@/lib/cache';
 import { ProductListing } from '@/app/components/product-listing';
 import { getLocale, getLocalizedText } from '@/lib/i18n';
+import { getTranslations } from 'next-intl/server';
 
 // Revalidate every hour
 export const revalidate = 3600;
