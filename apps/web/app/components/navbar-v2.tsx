@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Menu, Search, X, ChevronRight } from 'lucide-react';
+import { Menu, Search, X, ChevronRight, ChevronDown } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -82,6 +82,7 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const [isProductsOpen, setIsProductsOpen] = React.useState(false);
   const [activeCatalog, setActiveCatalog] = React.useState<string | null>(null);
+  const [expandedMobileCatalog, setExpandedMobileCatalog] = React.useState<string | null>(null);
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
   const [isHeaderHovered, setIsHeaderHovered] = React.useState(false);
   const pathname = usePathname();
@@ -98,6 +99,7 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
     setIsSearchOpen(false);
     setIsProductsOpen(false);
     setActiveCatalog(null);
+    setExpandedMobileCatalog(null);
   }, [pathname]);
 
   const catalogs = items.filter((item) => item.type === 'catalog');
@@ -159,7 +161,7 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
               <div className='flex items-center gap-8 flex-1'>
                 <button
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                  className='hover:opacity-70 transition-opacity'
+                  className='lg:hidden hover:opacity-70 transition-opacity'
                 >
                   {isMobileMenuOpen ? (
                     <X size={24} strokeWidth={1} />
@@ -196,7 +198,7 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
               </div>
             </div>
 
-            {/* Tier 2: Navigation Links */}
+            {/* Tier 2: Navigation Links (Desktop) */}
             <div className='hidden lg:flex items-center justify-between w-full pb-6 pt-2'>
               {[
                 { label: t('aboutUs'), href: '/about-us' },
@@ -340,61 +342,120 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
         </div>
       </nav>
 
-      {/* Mobile Menu (simplified for now) */}
+      {/* Mobile Menu */}
       <div
         className={cn(
-          'fixed inset-0 bg-white z-[90] transition-transform duration-500 lg:hidden pt-32',
-          isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full',
+          'fixed inset-y-0 left-0 w-full md:w-[400px] bg-[#FEFEFE] z-[110] shadow-2xl transition-transform duration-500 ease-in-out lg:hidden',
+          isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full',
         )}
       >
-        <div className='container py-8 overflow-y-auto h-full'>
-          <div className='flex flex-col gap-6'>
-            <Link
-              href='/about-us'
-              className='text-[20px] font-serif uppercase text-[#49000D] border-b border-black/[0.05] pb-3'
-            >
-              {t('aboutUs')}
-            </Link>
-            <div className='flex flex-col gap-4'>
-              <span className='text-[20px] font-serif uppercase text-[#49000D]/40'>
-                {t('products')}
-              </span>
-              <div className='flex flex-col gap-4 pl-4'>
-                {catalogs.map((catalog) => (
-                  <div key={catalog.id} className='flex flex-col gap-2'>
-                    <Link
-                      href={`/catalog/${catalog.slug}`}
-                      className='text-[18px] font-serif uppercase text-[#49000D]'
-                    >
-                      {tl(catalog, 'name')}
-                    </Link>
-                    <div className='flex flex-col gap-2 pl-4'>
-                      {catalog.children?.map((child) => (
-                        <Link
-                          key={child.id}
-                          href={`/catalog/${catalog.slug}/${child.slug}`}
-                          className='text-[14px] font-serif uppercase text-[#49000D]/60'
-                        >
-                          {tl(child, 'name')}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            {['showroom', 'designProject', 'exports', 'blogs', 'contactUs'].map((key) => (
+        <div className='flex flex-col h-full'>
+          {/* Mobile Header */}
+          <div className='flex items-center justify-between px-8 py-8 border-b border-black/[0.05]'>
+            <Image src='/logo.svg' alt='Logo' width={80} height={80} className='h-12 w-auto' />
+            <button onClick={() => setIsMobileMenuOpen(false)} className='text-[#49000D] p-2'>
+              <X size={28} strokeWidth={1} />
+            </button>
+          </div>
+
+          {/* Navigation Items */}
+          <div className='flex-1 overflow-y-auto px-8 py-8'>
+            <div className='flex flex-col gap-6'>
               <Link
-                key={key}
-                href={`/${key.replace(/[A-Z]/g, (m) => '-' + m.toLowerCase())}`}
-                className='text-[20px] font-serif uppercase text-[#49000D] border-b border-black/[0.05] pb-3'
+                href='/about-us'
+                className='text-[22px] font-serif uppercase text-[#49000D] tracking-wider'
               >
-                {t(key)}
+                {t('aboutUs')}
               </Link>
-            ))}
+
+              {/* Products Accordion */}
+              <div className='flex flex-col gap-4'>
+                <div className='flex items-center justify-between text-[22px] font-serif uppercase text-[#49000D] tracking-wider opacity-40 cursor-default'>
+                  {t('products')}
+                </div>
+                <div className='flex flex-col gap-4 pl-2'>
+                  {catalogs.map((catalog) => (
+                    <div key={catalog.id} className='flex flex-col gap-3'>
+                      <button
+                        onClick={() =>
+                          setExpandedMobileCatalog(
+                            expandedMobileCatalog === catalog.id ? null : catalog.id,
+                          )
+                        }
+                        className='flex items-center justify-between w-full text-left'
+                      >
+                        <span className='text-[18px] font-serif uppercase text-[#49000D] tracking-wide'>
+                          {tl(catalog, 'name')}
+                        </span>
+                        {catalog.children && catalog.children.length > 0 && (
+                          <ChevronDown
+                            size={18}
+                            className={cn(
+                              'transition-transform duration-300 text-[#49000D]/40',
+                              expandedMobileCatalog === catalog.id ? 'rotate-180' : '',
+                            )}
+                          />
+                        )}
+                      </button>
+
+                      {/* Sub-catalogs List */}
+                      {expandedMobileCatalog === catalog.id && (
+                        <div className='flex flex-col gap-3 pl-4 animate-in fade-in slide-in-from-top-2 duration-300'>
+                          <Link
+                            href={`/catalog/${catalog.slug}`}
+                            className='text-[14px] font-serif uppercase text-[#49000D]/50 tracking-widest'
+                          >
+                            {t('viewAll')}
+                          </Link>
+                          {catalog.children?.map((child) => (
+                            <Link
+                              key={child.id}
+                              href={`/catalog/${catalog.slug}/${child.slug}`}
+                              className='text-[14px] font-serif uppercase text-[#49000D]/80 tracking-widest'
+                            >
+                              {tl(child, 'name')}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {['showroom-factory', 'design-project', 'exports', 'blogs', 'contact-us'].map(
+                (slug) => {
+                  const key = slug.replace(/-([a-z])/g, (g, p1) => (p1 ? p1.toUpperCase() : ''));
+                  return (
+                    <Link
+                      key={slug}
+                      href={`/${slug}`}
+                      className='text-[22px] font-serif uppercase text-[#49000D] tracking-wider'
+                    >
+                      {t(key as any)}
+                    </Link>
+                  );
+                },
+              )}
+            </div>
+          </div>
+
+          {/* Mobile Footer (Language) */}
+          <div className='px-8 py-8 border-t border-black/[0.05] bg-black/[0.01]'>
+            <div className='flex items-center gap-6 font-serif text-[18px] uppercase tracking-widest text-[#49000D]'>
+              <LanguageSwitcher forceShow={true} isHeaderHovered={true} />
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Overlay for mobile menu */}
+      {isMobileMenuOpen && (
+        <div
+          className='fixed inset-0 bg-black/20 backdrop-blur-sm z-[105] lg:hidden animate-in fade-in duration-500'
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
 
       <SearchDialog isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </>
