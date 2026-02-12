@@ -3,7 +3,7 @@
 ## Phase 1: Setup and Deprecation
 - [x] Task: Mark current `Navbar` as deprecated. c967a88
     - [ ] Add JSDoc `@deprecated` tag to the `Navbar` component in `apps/web/app/components/navbar-section.tsx`.
-- [ ] Task: Create `NavbarV2` skeleton.
+- [x] Task: Create `NavbarV2` skeleton. 66890e3
     - [ ] Create `apps/web/app/components/navbar-v2.tsx`.
     - [ ] Copy the base structure (Logo, Search, Language Switcher, mobile menu logic) from `Navbar`.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Setup and Deprecation' (Protocol in workflow.md)
