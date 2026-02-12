@@ -81,6 +81,7 @@ interface NavbarProps {
 export const NavbarV2 = ({ items }: NavbarProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const [isProductsOpen, setIsProductsOpen] = React.useState(false);
+  const [isMobileProductsOpen, setIsMobileProductsOpen] = React.useState(false);
   const [activeCatalog, setActiveCatalog] = React.useState<string | null>(null);
   const [expandedMobileCatalog, setExpandedMobileCatalog] = React.useState<string | null>(null);
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
@@ -98,6 +99,7 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
     setIsMobileMenuOpen(false);
     setIsSearchOpen(false);
     setIsProductsOpen(false);
+    setIsMobileProductsOpen(false);
     setActiveCatalog(null);
     setExpandedMobileCatalog(null);
   }, [pathname]);
@@ -203,7 +205,7 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
               {[
                 { label: t('aboutUs'), href: '/about-us' },
                 { label: t('products'), href: null, isProducts: true },
-                { label: t('showroom'), href: '/showroom-factory' },
+                { label: t('showroomFactory'), href: '/showroom-factory' },
                 { label: t('designProject'), href: '/design-project' },
                 { label: t('exports'), href: '/exports' },
                 { label: t('blogs'), href: '/blogs' },
@@ -214,7 +216,7 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
                 return (
                   <div
                     key={idx}
-                    className='relative'
+                    className='relative flex items-center'
                     onMouseEnter={() => {
                       if (isProducts) setIsProductsOpen(true);
                       else {
@@ -227,7 +229,7 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
                       <Link
                         href={link.href}
                         className={cn(
-                          'text-[15px] font-serif font-[444] tracking-[0.05em] uppercase relative pb-1 group/link',
+                          'text-[15px] font-serif font-[444] tracking-[0.05em] uppercase relative pb-1 group/link block',
                           'transition-colors duration-500',
                           forceShow || isHeaderHovered ? 'text-[#49000D]' : 'text-white',
                         )}
@@ -241,9 +243,9 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
                         />
                       </Link>
                     ) : (
-                      <div
+                      <span
                         className={cn(
-                          'text-[15px] font-serif font-[444] tracking-[0.05em] uppercase relative pb-1 cursor-default group/link',
+                          'text-[15px] font-serif font-[444] tracking-[0.05em] uppercase relative pb-1 cursor-default group/link block',
                           'transition-colors duration-500',
                           forceShow || isHeaderHovered ? 'text-[#49000D]' : 'text-white',
                         )}
@@ -256,7 +258,7 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
                             forceShow || isHeaderHovered ? 'bg-[#49000D]' : 'bg-white',
                           )}
                         />
-                      </div>
+                      </span>
                     )}
 
                     {/* Level 1 Dropdown (Catalogs) */}
@@ -359,68 +361,90 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
           </div>
 
           {/* Navigation Items */}
-          <div className='flex-1 overflow-y-auto px-8 py-8'>
-            <div className='flex flex-col gap-6'>
+          <div className='flex-1 overflow-y-auto px-8 py-12'>
+            <div className='flex flex-col gap-8'>
               <Link
                 href='/about-us'
+                onClick={() => setIsMobileMenuOpen(false)}
                 className='text-[22px] font-serif uppercase text-[#49000D] tracking-wider'
               >
                 {t('aboutUs')}
               </Link>
 
               {/* Products Accordion */}
-              <div className='flex flex-col gap-4'>
-                <div className='flex items-center justify-between text-[22px] font-serif uppercase text-[#49000D] tracking-wider opacity-40 cursor-default'>
-                  {t('products')}
-                </div>
-                <div className='flex flex-col gap-4 pl-2'>
-                  {catalogs.map((catalog) => (
-                    <div key={catalog.id} className='flex flex-col gap-3'>
-                      <button
-                        onClick={() =>
-                          setExpandedMobileCatalog(
-                            expandedMobileCatalog === catalog.id ? null : catalog.id,
-                          )
-                        }
-                        className='flex items-center justify-between w-full text-left'
-                      >
-                        <span className='text-[18px] font-serif uppercase text-[#49000D] tracking-wide'>
-                          {tl(catalog, 'name')}
-                        </span>
-                        {catalog.children && catalog.children.length > 0 && (
-                          <ChevronDown
-                            size={18}
-                            className={cn(
-                              'transition-transform duration-300 text-[#49000D]/40',
-                              expandedMobileCatalog === catalog.id ? 'rotate-180' : '',
-                            )}
-                          />
-                        )}
-                      </button>
-
-                      {/* Sub-catalogs List */}
-                      {expandedMobileCatalog === catalog.id && (
-                        <div className='flex flex-col gap-3 pl-4 animate-in fade-in slide-in-from-top-2 duration-300'>
+              <div className='flex flex-col'>
+                <button
+                  onClick={() => setIsMobileProductsOpen(!isMobileProductsOpen)}
+                  className='flex items-center justify-between w-full text-left text-[22px] font-serif uppercase text-[#49000D] tracking-wider'
+                >
+                  <span>{t('products')}</span>
+                  <ChevronDown
+                    size={22}
+                    className={cn(
+                      'transition-transform duration-300 text-[#49000D]/40',
+                      isMobileProductsOpen ? 'rotate-180' : '',
+                    )}
+                  />
+                </button>
+                
+                {isMobileProductsOpen && (
+                  <div className='flex flex-col gap-6 mt-6 pl-4 animate-in fade-in slide-in-from-top-2 duration-300'>
+                    {catalogs.map((catalog) => (
+                      <div key={catalog.id} className='flex flex-col gap-4 border-l border-black/[0.05] pl-4'>
+                        <div className='flex items-center justify-between w-full'>
                           <Link
                             href={`/catalog/${catalog.slug}`}
-                            className='text-[14px] font-serif uppercase text-[#49000D]/50 tracking-widest'
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className='text-[18px] font-serif uppercase text-[#49000D] tracking-wide hover:opacity-70 transition-opacity'
                           >
-                            {t('viewAll')}
+                            {tl(catalog, 'name')}
                           </Link>
-                          {catalog.children?.map((child) => (
-                            <Link
-                              key={child.id}
-                              href={`/catalog/${catalog.slug}/${child.slug}`}
-                              className='text-[14px] font-serif uppercase text-[#49000D]/80 tracking-widest'
+                          {catalog.children && catalog.children.length > 0 && (
+                            <button
+                              onClick={() =>
+                                setExpandedMobileCatalog(
+                                  expandedMobileCatalog === catalog.id ? null : catalog.id,
+                                )
+                              }
+                              className='p-2 -mr-2 text-[#49000D]/40 hover:text-[#49000D] transition-colors'
                             >
-                              {tl(child, 'name')}
-                            </Link>
-                          ))}
+                              <ChevronDown
+                                size={20}
+                                className={cn(
+                                  'transition-transform duration-300',
+                                  expandedMobileCatalog === catalog.id ? 'rotate-180' : '',
+                                )}
+                              />
+                            </button>
+                          )}
                         </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
+
+                        {/* Sub-catalogs List */}
+                        {expandedMobileCatalog === catalog.id && (
+                          <div className='flex flex-col gap-3 pl-4 animate-in fade-in slide-in-from-top-2 duration-300'>
+                            <Link
+                              href={`/catalog/${catalog.slug}`}
+                              onClick={() => setIsMobileMenuOpen(false)}
+                              className='text-[14px] font-serif uppercase text-[#49000D]/50 tracking-widest hover:text-[#49000D]'
+                            >
+                              {t('viewAll')}
+                            </Link>
+                            {catalog.children?.map((child) => (
+                              <Link
+                                key={child.id}
+                                href={`/catalog/${catalog.slug}/${child.slug}`}
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className='text-[14px] font-serif uppercase text-[#49000D]/80 tracking-widest hover:text-[#49000D]'
+                              >
+                                {tl(child, 'name')}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {['showroom-factory', 'design-project', 'exports', 'blogs', 'contact-us'].map(
@@ -430,6 +454,7 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
                     <Link
                       key={slug}
                       href={`/${slug}`}
+                      onClick={() => setIsMobileMenuOpen(false)}
                       className='text-[22px] font-serif uppercase text-[#49000D] tracking-wider'
                     >
                       {t(key as any)}
