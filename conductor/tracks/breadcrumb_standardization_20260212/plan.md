@@ -10,12 +10,12 @@ Update the translation keys to ensure consistency and completeness across all su
 ## Phase 2: Static & Main Navigation Pages
 Audit and update pages that have fixed labels or simple translations.
 
-- [ ] Task: Standardize Showroom & Factory page (`apps/web/app/showroom-factory/page.tsx`)
-- [ ] Task: Standardize About Us page (Identify and update the relevant file, likely `apps/web/app/about-us/page.tsx`)
-- [ ] Task: Standardize Contact Us page (`apps/web/app/contact-us/page.tsx`)
-- [ ] Task: Standardize Exports page (`apps/web/app/exports/page.tsx`)
-- [ ] Task: Standardize Design & Project page (`apps/web/app/design-project/page.tsx`)
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Static & Main Navigation Pages' (Protocol in workflow.md)
+- [x] Task: Standardize Showroom & Factory page (`apps/web/app/showroom-factory/page.tsx`) c47ab14
+- [x] Task: Standardize About Us page (Identify and update the relevant file, likely `apps/web/app/about-us/page.tsx`) c47ab14
+- [x] Task: Standardize Contact Us page (`apps/web/app/contact-us/page.tsx`) c47ab14
+- [x] Task: Standardize Exports page (`apps/web/app/exports/page.tsx`) c47ab14
+- [x] Task: Standardize Design & Project page (`apps/web/app/design-project/page.tsx`) c47ab14
+- [~] Task: Conductor - User Manual Verification 'Phase 2: Static & Main Navigation Pages' (Protocol in workflow.md)
 
 ## Phase 3: Dynamic Content Modules
 Update breadcrumbs for Services, Projects, and Blogs which involve both listing and detail pages.
@@ -35,9 +35,9 @@ Update breadcrumbs for Services, Projects, and Blogs which involve both listing 
 Standardize the most complex breadcrumb trails involving hierarchical data.
 
 - [ ] Task: Standardize Catalog root page
-- [ ] Task: Standardize Category detail pages
+- [x] Task: Standardize Category detail pages c47ab14
 - [ ] Task: Standardize Collection pages
-- [ ] Task: Standardize Product detail pages
+- [x] Task: Standardize Product detail pages c47ab14
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Catalog & Product Pages' (Protocol in workflow.md)
 
 ## Phase 5: Final Audit & Polish
