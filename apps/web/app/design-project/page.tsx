@@ -65,10 +65,11 @@ interface PageContent {
 
 export default async function DesignProjectPage() {
   const slug = 'design-project';
-  const [page, projects, t] = await Promise.all([
+  const [page, projects, t, tb] = await Promise.all([
     getPageData(slug),
     getProjects(),
     getTranslations('Projects'),
+    getTranslations('Breadcrumbs'),
   ]);
 
   if (!page) {
@@ -83,8 +84,8 @@ export default async function DesignProjectPage() {
     <div className='min-h-screen'>
       <AppBreadcrumb
         items={[
-          { label: 'Home', href: '/' },
-          { label: page.title, href: '/design-project' },
+          { label: tb('home'), href: '/' },
+          { label: tb('designProject'), href: '/design-project' },
         ]}
       />
       <div className='relative'>

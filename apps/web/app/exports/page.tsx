@@ -1,6 +1,7 @@
 import { db } from '@repo/database';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
+import { getTranslations } from 'next-intl/server';
 
 import { SectionSeparator } from '../components/section-separator';
 import { AppBreadcrumb } from '../../components/ui/app-breadcrumb';
@@ -14,7 +15,7 @@ async function getPageData(slug: string) {
 
 export default async function ExportsPage() {
   const slug = 'exports';
-  const [page] = await Promise.all([getPageData(slug)]);
+  const [page, tb] = await Promise.all([getPageData(slug), getTranslations('Breadcrumbs')]);
 
   if (!page) {
     notFound();
@@ -28,8 +29,8 @@ export default async function ExportsPage() {
     <div className='min-h-screen'>
       <AppBreadcrumb
         items={[
-          { label: 'Home', href: '/' },
-          { label: page.title, href: '/exports' },
+          { label: tb('home'), href: '/' },
+          { label: tb('exports'), href: '/exports' },
         ]}
       />
       <div className='relative'>

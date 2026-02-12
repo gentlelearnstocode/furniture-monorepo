@@ -11,6 +11,7 @@ import { PdfReaderWrapper } from '@/app/components/pdf-reader-wrapper';
 export default async function AboutUsPage() {
   const page = await getCustomPageBySlug('about-us');
   const t = await getTranslations('AboutUs');
+  const tb = await getTranslations('Breadcrumbs');
   const tCommon = await getTranslations('Common');
   const locale = await getLocale();
 
@@ -45,8 +46,8 @@ export default async function AboutUsPage() {
         <div className='container mx-auto px-2 md:px-4 py-8'>
           <AppBreadcrumb
             items={[
-              { label: t('home'), href: '/' },
-              { label: title || t('title'), href: '/about-us' },
+              { label: tb('home'), href: '/' },
+              { label: tb('aboutUs'), href: '/about-us' },
             ]}
           />
 

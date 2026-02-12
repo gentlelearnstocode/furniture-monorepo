@@ -43,11 +43,12 @@ const TelephoneIcon = ({ size = 20 }: { size?: number }) => (
 
 export default async function ContactResultPage() {
   const t = await getTranslations('ContactPage');
+  const tb = await getTranslations('Breadcrumbs');
   const tCommon = await getTranslations('Common');
   const locale = await getLocale();
   const { address, contacts } = await getContactInfo();
 
-  const breadcrumbItems = [{ label: tCommon('home'), href: '/' }, { label: t('title') }];
+  const breadcrumbItems = [{ label: tb('home'), href: '/' }, { label: tb('contact') }];
 
   const phones = contacts.filter(
     (c) => c.type === 'phone' || c.type === 'mobile' || c.type === 'telephone',

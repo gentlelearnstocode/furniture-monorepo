@@ -106,6 +106,7 @@ export default async function ProductDetailPage({ params }: Props) {
 
   const product = await getProductBySlug(slug);
   const contacts = await getSiteContacts();
+  const tb = await getTranslations('Breadcrumbs');
 
   if (!product) {
     notFound();
@@ -121,7 +122,7 @@ export default async function ProductDetailPage({ params }: Props) {
     <div className='min-h-screen bg-gradient-to-b from-[#FDFCFB] via-white to-[#FDFCFB]'>
       <AppBreadcrumb
         items={[
-          { label: locale === 'vi' ? 'Trang chủ' : 'Home Page', href: '/' },
+          { label: tb('home'), href: '/' },
           ...(parentCatalog
             ? [
                 {

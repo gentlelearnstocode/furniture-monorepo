@@ -107,6 +107,8 @@ export default async function CatalogLevel2Page({ params, searchParams }: Props)
   const sort = typeof search.sort === 'string' ? search.sort : undefined;
   const sale = search.sale === 'true';
 
+  const tb = await getTranslations('Breadcrumbs');
+
   // Fetch the parent catalog (level 1) and child catalog (level 2) with products
   const parentCatalog = await db.query.catalogs.findFirst({
     where: (catalogs, { eq }) => eq(catalogs.slug, slug),
@@ -158,7 +160,7 @@ export default async function CatalogLevel2Page({ params, searchParams }: Props)
     <div className='min-h-screen bg-gradient-to-b from-[#FDFCFB] via-white to-[#FDFCFB]'>
       <AppBreadcrumb
         items={[
-          { label: locale === 'vi' ? 'Trang chủ' : 'Home Page', href: '/' },
+          { label: tb('home'), href: '/' },
           { label: getLocalizedText(parentCatalog, 'name', locale), href: `/catalog/${slug}` },
           { label: getLocalizedText(catalog, 'name', locale) },
         ]}

@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { ShowroomItem } from './showroom-item';
 import { getCustomPageBySlug, getShowrooms } from '@/lib/queries';
 import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
+import { getTranslations } from 'next-intl/server';
 
 export const metadata = {
   title: 'Showroom & Factory | Furniture',
@@ -11,6 +12,7 @@ export const metadata = {
 export default async function ShowroomFactoryPage() {
   const page = await getCustomPageBySlug('showroom-factory');
   const showrooms = await getShowrooms();
+  const tb = await getTranslations('Breadcrumbs');
 
   // If page is not active or doesn't exist, return 404
   if (!page || !page.isActive) return notFound();
@@ -25,8 +27,8 @@ export default async function ShowroomFactoryPage() {
     <div className='min-h-screen bg-white'>
       <AppBreadcrumb
         items={[
-          { label: 'Home Page', href: '/' },
-          { label: 'Showroom & Factory', href: '/showroom-factory' },
+          { label: tb('home'), href: '/' },
+          { label: tb('showroom'), href: '/showroom-factory' },
         ]}
       />
 
