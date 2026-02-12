@@ -32,19 +32,19 @@ Update breadcrumbs for Services, Projects, and Blogs which involve both listing 
 - [x] Task: Standardize Blogs/Stories module
     - Update Blogs listing page.
     - Update Blog detail page.
-- [~] Task: Conductor - User Manual Verification 'Phase 3: Dynamic Content Modules' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Dynamic Content Modules' (Protocol in workflow.md) c8a3c7d
 
-## Phase 4: Catalog & Product Pages
+## Phase 4: Catalog & Product Pages [checkpoint: c8a3c7d]
 Standardize the most complex breadcrumb trails involving hierarchical data.
 
 - [x] Task: Standardize Catalog root page
 - [x] Task: Standardize Category detail pages c47ab14
 - [x] Task: Standardize Collection pages
 - [x] Task: Standardize Product detail pages c47ab14
-- [~] Task: Conductor - User Manual Verification 'Phase 4: Catalog & Product Pages' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Catalog & Product Pages' (Protocol in workflow.md) c8a3c7d
 
-## Phase 5: Final Audit & Polish
+## Phase 5: Final Audit & Polish [checkpoint: c8a3c7d]
 Final check to ensure no edge cases were missed.
 
-- [ ] Task: Perform full-site manual audit for breadcrumb consistency.
-- [ ] Task: Conductor - User Manual Verification 'Phase 5: Final Audit & Polish' (Protocol in workflow.md)
+- [x] Task: Perform full-site manual audit for breadcrumb consistency.
+- [x] Task: Conductor - User Manual Verification 'Phase 5: Final Audit & Polish' (Protocol in workflow.md) c8a3c7d
