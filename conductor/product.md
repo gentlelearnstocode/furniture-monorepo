@@ -11,7 +11,7 @@ A modern, full-stack furniture e-commerce platform built with Next.js 16, Turbor
 - **Streamline Operations:** Enable efficient management of complex product hierarchies and site content via a powerful admin portal, reducing the overhead for staff.
 
 ## Key Features
-- **Advanced Product Discovery:** Implementation of hierarchical catalogs, robust search functionality, and curated collections to help users find exactly what they need.
+- **Advanced Product Discovery:** Implementation of elegant multi-level navigation, hierarchical catalogs, robust search functionality, and curated collections to help users find exactly what they need.
 - **Integrated Admin Dashboard:** A comprehensive suite of tools for managing products, blogs, services, and global site settings from a single interface.
 - **Dynamic Storefront:** A responsive, SEO-optimized web interface featuring dynamic content such as hero sections and featured products to engage visitors.
 
