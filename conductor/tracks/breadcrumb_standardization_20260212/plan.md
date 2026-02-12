@@ -1,11 +1,11 @@
 # Implementation Plan: Breadcrumb Standardization
 
-## Phase 1: Localization & Core Setup
+## Phase 1: Localization & Core Setup [checkpoint: f8b2203]
 Update the translation keys to ensure consistency and completeness across all supported languages.
 
 - [x] Task: Update English translations (`apps/web/messages/en.json`) (Already correct)
 - [x] Task: Update Vietnamese translations (`apps/web/messages/vi.json`) e8d8d24
-- [~] Task: Conductor - User Manual Verification 'Phase 1: Localization & Core Setup' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Localization & Core Setup' (Protocol in workflow.md) f8b2203
 
 ## Phase 2: Static & Main Navigation Pages
 Audit and update pages that have fixed labels or simple translations.
