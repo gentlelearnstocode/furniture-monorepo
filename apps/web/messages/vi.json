@@ -19,7 +19,12 @@
     "blogs": "Bài viết",
     "catalog": "Danh mục",
     "sale": "Khuyến mãi",
-    "allCategories": "Tất cả danh mục"
+    "allCategories": "Tất cả danh mục",
+    "aboutUs": "Về chúng tôi",
+    "showroomFactory": "Showroom & Nhà máy",
+    "designProject": "Thiết kế & Dự án",
+    "exports": "Xuất khẩu",
+    "contactUs": "Liên hệ"
   },
   "Footer": {
     "emailPlaceholder": "Địa chỉ Email/SĐT",
