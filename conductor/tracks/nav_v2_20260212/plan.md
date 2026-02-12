@@ -21,11 +21,11 @@
     - [ ] Use subtle shadows or borders for the sub-menus.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Implement NavbarV2 Logic and UI' (Protocol in workflow.md)
 
-## Phase 3: Integration and Final Polish
-- [ ] Task: Swap `Navbar` with `NavbarV2` in `RootLayout`.
-    - [ ] Update `apps/web/app/layout.tsx` to import and use `NavbarV2`.
-- [ ] Task: Verify mobile responsiveness.
-    - [ ] Ensure the mobile menu still works correctly and provides access to all catalogs/sub-catalogs.
-- [ ] Task: Final verification and cleanup.
-    - [ ] Check for any visual regressions or broken links.
+## Phase 3: Integration and Final Polish [checkpoint: 98f4e95]
+- [x] Task: Swap `Navbar` with `NavbarV2` in `RootLayout`. 98f4e95
+    - [x] Update `apps/web/app/layout.tsx` to import and use `NavbarV2`.
+- [x] Task: Verify mobile responsiveness. 98f4e95
+    - [x] Ensure the mobile menu still works correctly and provides access to all catalogs/sub-catalogs.
+- [x] Task: Final verification and cleanup. 98f4e95
+    - [x] Check for any visual regressions or broken links.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Integration and Final Polish' (Protocol in workflow.md)
