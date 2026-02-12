@@ -45,11 +45,12 @@
     "allSale": "All Sale",
     "products": "Products",
     "aboutUs": "About Us",
-    "showroom": "Showroom & Factory",
+    "showroomFactory": "Showroom & Factory",
     "designProject": "Design & Project",
     "exports": "Exports",
     "blogs": "News & events",
-    "contactUs": "Contact Us"
+    "contactUs": "Contact Us",
+    "viewAll": "View All"
   },
   "Search": {
     "placeholder": "Search products...",

@@ -45,11 +45,12 @@
     "allSale": "Tất Cả Sale",
     "products": "Sản phẩm",
     "aboutUs": "Về chúng tôi",
-    "showroom": "Showroom & Nhà máy",
+    "showroomFactory": "Showroom & Nhà máy",
     "designProject": "Thiết kế & Dự án",
     "exports": "Xuất khẩu",
     "blogs": "Tin tức & sự kiện",
-    "contactUs": "Liên hệ"
+    "contactUs": "Liên hệ",
+    "viewAll": "Xem tất cả"
   },
   "Search": {
     "placeholder": "Tìm kiếm sản phẩm...",
