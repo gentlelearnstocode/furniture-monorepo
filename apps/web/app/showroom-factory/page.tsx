@@ -28,7 +28,7 @@ export default async function ShowroomFactoryPage() {
       <AppBreadcrumb
         items={[
           { label: tb('home'), href: '/' },
-          { label: tb('showroom'), href: '/showroom-factory' },
+          { label: tb('showroomFactory'), href: '/showroom-factory' },
         ]}
       />
 

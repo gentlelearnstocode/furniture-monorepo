@@ -44,11 +44,10 @@ const TelephoneIcon = ({ size = 20 }: { size?: number }) => (
 export default async function ContactResultPage() {
   const t = await getTranslations('ContactPage');
   const tb = await getTranslations('Breadcrumbs');
-  const tCommon = await getTranslations('Common');
   const locale = await getLocale();
   const { address, contacts } = await getContactInfo();
 
-  const breadcrumbItems = [{ label: tb('home'), href: '/' }, { label: tb('contact') }];
+  const breadcrumbItems = [{ label: tb('home'), href: '/' }, { label: tb('contactUs') }];
 
   const phones = contacts.filter(
     (c) => c.type === 'phone' || c.type === 'mobile' || c.type === 'telephone',
@@ -58,7 +57,6 @@ export default async function ContactResultPage() {
   return (
     <>
       <AppBreadcrumb items={breadcrumbItems} />
-
       <div className='container mx-auto pt-10 pb-5 px-4 md:px-0'>
         <div className='max-w-6xl mx-auto'>
           <div className='mb-12 text-center'>

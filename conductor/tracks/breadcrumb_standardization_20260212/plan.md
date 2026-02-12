@@ -20,25 +20,28 @@ Audit and update pages that have fixed labels or simple translations.
 ## Phase 3: Dynamic Content Modules
 Update breadcrumbs for Services, Projects, and Blogs which involve both listing and detail pages.
 
-- [ ] Task: Standardize Services module
+## Phase 3: Dynamic Content Modules
+Update breadcrumbs for Services, Projects, and Blogs which involve both listing and detail pages.
+
+- [x] Task: Standardize Services module
     - Update Services listing page.
     - Update Service detail page (`apps/web/app/services/[slug]/page.tsx`).
-- [ ] Task: Standardize Projects module
+- [x] Task: Standardize Projects module
     - Update Projects listing page.
     - Update Project detail page.
-- [ ] Task: Standardize Blogs/Stories module
+- [x] Task: Standardize Blogs/Stories module
     - Update Blogs listing page.
     - Update Blog detail page.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Dynamic Content Modules' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Phase 3: Dynamic Content Modules' (Protocol in workflow.md)
 
 ## Phase 4: Catalog & Product Pages
 Standardize the most complex breadcrumb trails involving hierarchical data.
 
-- [ ] Task: Standardize Catalog root page
+- [x] Task: Standardize Catalog root page
 - [x] Task: Standardize Category detail pages c47ab14
-- [ ] Task: Standardize Collection pages
+- [x] Task: Standardize Collection pages
 - [x] Task: Standardize Product detail pages c47ab14
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Catalog & Product Pages' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Phase 4: Catalog & Product Pages' (Protocol in workflow.md)
 
 ## Phase 5: Final Audit & Polish
 Final check to ensure no edge cases were missed.

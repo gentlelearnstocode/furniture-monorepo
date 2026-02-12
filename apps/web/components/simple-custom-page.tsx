@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { getCustomPageBySlug } from '@/lib/queries';
 import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
 import { BrandDivider } from '@/app/components/brand-divider';
+import { getTranslations } from 'next-intl/server';
 
 interface SimplePageContent {
   bannerUrl?: string;
@@ -13,16 +14,19 @@ interface SimplePageContent {
 
 interface SimpleCustomPageProps {
   slug: string;
-  parentLabel?: string;
+  parentLabelKey?: string;
   parentHref?: string;
 }
 
 export async function SimpleCustomPage({
   slug,
-  parentLabel = 'Design & Project',
+  parentLabelKey = 'designProject',
   parentHref = '/design-project',
 }: SimpleCustomPageProps) {
-  const page = await getCustomPageBySlug(slug);
+  const [page, tb] = await Promise.all([
+    getCustomPageBySlug(slug),
+    getTranslations('Breadcrumbs'),
+  ]);
 
   if (!page || !page.isActive) {
     notFound();
@@ -34,8 +38,8 @@ export async function SimpleCustomPage({
     <div className='min-h-screen'>
       <AppBreadcrumb
         items={[
-          { label: 'Home', href: '/' },
-          { label: parentLabel, href: parentHref },
+          { label: tb('home'), href: '/' },
+          { label: tb(parentLabelKey as any), href: parentHref },
           { label: page.title, href: `${parentHref}/${slug}` },
         ]}
       />
