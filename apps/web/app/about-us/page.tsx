@@ -10,7 +10,6 @@ import { PdfReaderWrapper } from '@/app/components/pdf-reader-wrapper';
 
 export default async function AboutUsPage() {
   const page = await getCustomPageBySlug('about-us');
-  const t = await getTranslations('AboutUs');
   const tb = await getTranslations('Breadcrumbs');
   const tCommon = await getTranslations('Common');
   const locale = await getLocale();

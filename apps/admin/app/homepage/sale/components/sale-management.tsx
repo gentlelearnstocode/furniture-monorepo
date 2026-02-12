@@ -180,7 +180,7 @@ export function SaleManagement({
         }
 
         toast.success('Sale section updated successfully');
-      } catch (_error) {
+      } catch {
         toast.error('An unexpected error occurred');
       }
     });

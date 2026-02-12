@@ -3,7 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
-import { useTransition, useEffect } from 'react';
+import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { upsertCustomPage } from '@/lib/actions/pages';
 import { customPageSchema, type CustomPageInput } from '@/lib/validations/pages';

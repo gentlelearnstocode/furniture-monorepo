@@ -13,7 +13,7 @@ interface ShowroomItemProps {
   index: number;
 }
 
-export function ShowroomItem({ showroom, index }: ShowroomItemProps) {
+export function ShowroomItem({ showroom }: ShowroomItemProps) {
   const imageUrl = typeof showroom.image === 'string' ? showroom.image : showroom.image?.url;
 
   return (
