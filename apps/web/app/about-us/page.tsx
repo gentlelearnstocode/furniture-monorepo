@@ -43,14 +43,14 @@ export default async function AboutUsPage() {
           }}
         />
 
-        <div className='container mx-auto px-2 md:px-4 py-8'>
-          <AppBreadcrumb
-            items={[
-              { label: tb('home'), href: '/' },
-              { label: tb('aboutUs'), href: '/about-us' },
-            ]}
-          />
+        <AppBreadcrumb
+          items={[
+            { label: tb('home'), href: '/' },
+            { label: tb('aboutUs'), href: '/about-us' },
+          ]}
+        />
 
+        <div className='container mx-auto px-2 md:px-4 py-8'>
           <div className='mt-8 max-w-7xl mx-auto space-y-12 pb-10'>
             {/* Main Hero Image */}
             {bannerUrl && (
