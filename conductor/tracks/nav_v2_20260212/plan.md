@@ -1,7 +1,7 @@
 # Implementation Plan: Navigation V2
 
 ## Phase 1: Setup and Deprecation
-- [ ] Task: Mark current `Navbar` as deprecated.
+- [x] Task: Mark current `Navbar` as deprecated. c967a88
     - [ ] Add JSDoc `@deprecated` tag to the `Navbar` component in `apps/web/app/components/navbar-section.tsx`.
 - [ ] Task: Create `NavbarV2` skeleton.
     - [ ] Create `apps/web/app/components/navbar-v2.tsx`.
