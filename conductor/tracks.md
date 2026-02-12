@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Refactor storefront navigation to Navigation V2**
+- [x] **Track: Refactor storefront navigation to Navigation V2**
   *Link: [./tracks/nav_v2_20260212/](./tracks/nav_v2_20260212/)*
