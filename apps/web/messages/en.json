@@ -13,13 +13,18 @@
     "brandName": "THIÊN ẤN"
   },
   "Breadcrumbs": {
-    "home": "Home Page",
+    "home": "Home",
     "services": "Services",
     "projects": "Projects",
     "blogs": "Stories",
     "catalog": "Catalog",
     "sale": "Sale",
-    "allCategories": "All Categories"
+    "allCategories": "All Categories",
+    "aboutUs": "About Us",
+    "showroomFactory": "Showroom & Factory",
+    "designProject": "Design & Project",
+    "exports": "Exports",
+    "contactUs": "Contact Us"
   },
   "Footer": {
     "emailPlaceholder": "Email/Phone Address",
