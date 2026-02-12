@@ -78,6 +78,9 @@ interface NavbarProps {
   items: NavItem[];
 }
 
+/**
+ * @deprecated Use NavbarV2 instead.
+ */
 export const Navbar = ({ items }: NavbarProps) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
