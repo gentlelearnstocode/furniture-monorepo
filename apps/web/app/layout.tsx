@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { Playfair_Display } from 'next/font/google';
 import '@repo/ui/globals.css';
-import { Navbar } from './components/navbar-section';
+import { NavbarV2 } from './components/navbar-v2';
 import { Footer } from './components/footer-section';
 import { FloatingContactWidget } from '@/components/ui/floating-contact-widget';
 import { ScrollToTop } from '@/components/ui/scroll-to-top';
@@ -89,7 +89,7 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} font-sans antialiased`}
       >
         <LanguageProvider initialLocale={locale} messages={messages}>
-          <Navbar items={navItems} />
+          <NavbarV2 items={navItems} />
           <AnalyticsListener />
           <main>{children}</main>
           <Footer />
