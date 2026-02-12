@@ -1,0 +1,8 @@
+{
+  "track_id": "nav_v2_20260212",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-02-12T00:00:00Z",
+  "updated_at": "2026-02-12T00:00:00Z",
+  "description": "Deprecate current mega-menu and implement Navigation V2 with catalogs as primary menu items and sub-catalogs on hover."
+}
