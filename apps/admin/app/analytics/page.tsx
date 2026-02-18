@@ -5,6 +5,7 @@ import { OverviewChart } from '../../components/analytics/overview-chart';
 import { TopPagesList } from '../../components/analytics/top-pages-list';
 import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/ui/card';
 import { Users, MousePointerClick } from 'lucide-react';
+import { PageHeader } from '@/components/layout/page-header';
 
 export const revalidate = 60; // Revalidate every minute
 
@@ -94,15 +95,12 @@ export default async function AnalyticsPage() {
   }));
 
   return (
-    <div className='flex-1 space-y-4 p-8 pt-6'>
-      <div className='flex items-center justify-between space-y-2'>
-        <div>
-          <h2 className='text-3xl font-bold tracking-tight'>Analytics</h2>
-          <p className='text-muted-foreground'>
-            Overview of your store&apos;s performance for the last 30 days.
-          </p>
-        </div>
-      </div>
+    <div className='space-y-6'>
+      <PageHeader
+        breadcrumbs={[{ label: 'Dashboard', href: '/' }, { label: 'Analytics' }]}
+        title='Analytics'
+        description="Overview of your store's performance for the last 30 days."
+      />
 
       <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
         <Card className='bg-blue-50/50 border-blue-100'>

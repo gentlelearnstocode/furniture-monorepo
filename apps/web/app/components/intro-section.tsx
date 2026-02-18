@@ -25,9 +25,9 @@ export const IntroSection = async () => {
       </div>
 
       <div className='container relative z-10'>
-        <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center'>
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 lg:gap-24 items-center'>
           {/* Left: Intro Image - "Painting on wall" effect */}
-          <div className='relative group'>
+          <div className='relative group px-4 sm:px-0'>
             {intro.introImage && (
               <div
                 className='relative aspect-[4/3] w-full overflow-hidden'
@@ -67,7 +67,7 @@ export const IntroSection = async () => {
               const content = getLocalizedHtml(intro, 'contentHtml', locale);
               return content ? (
                 <div
-                  className='prose prose-invert prose-sm md:prose-base max-w-none text-white/80 leading-relaxed font-light'
+                  className='prose-brand prose-invert prose-sm md:prose-base max-w-none text-white/80 leading-relaxed font-light'
                   dangerouslySetInnerHTML={{ __html: content }}
                 />
               ) : null;

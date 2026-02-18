@@ -1,6 +1,6 @@
 import { getHero } from '@/lib/actions/hero';
-import Link from 'next/link';
 import { HeroForm } from './components/hero-form';
+import { PageHeader } from '@/components/layout/page-header';
 
 export const dynamic = 'force-dynamic';
 
@@ -9,25 +9,15 @@ export default async function HeroPage() {
 
   return (
     <div className='space-y-6'>
-      <div className='flex items-center justify-between'>
-        <div>
-          <nav className='flex items-center text-sm text-gray-500 mb-1'>
-            <Link href='/' className='hover:text-gray-900 transition-colors'>
-              Dashboard
-            </Link>
-            <span className='mx-2'>/</span>
-            <Link href='/homepage' className='hover:text-gray-900 transition-colors'>
-              Homepage
-            </Link>
-            <span className='mx-2'>/</span>
-            <span className='font-medium text-gray-900'>Hero Section</span>
-          </nav>
-          <h1 className='text-3xl font-bold tracking-tight text-gray-900'>Hero Management</h1>
-          <p className='text-base text-gray-500 mt-1'>
-            Configure the first section users see on your store.
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        breadcrumbs={[
+          { label: 'Dashboard', href: '/' },
+          { label: 'Homepage', href: '/homepage' },
+          { label: 'Hero Section' },
+        ]}
+        title='Hero Management'
+        description='Configure the first section users see on your store.'
+      />
 
       <div className='max-w-6xl'>
         <HeroForm

@@ -63,10 +63,10 @@ export function ProductInfo({ product, contacts }: ProductInfoProps) {
           <div className='flex items-center gap-4'>
             {hasDiscount ? (
               <>
-                <span className='text-xl md:text-2xl font-serif font-bold text-[#49000D]'>
+                <span className='text-xl md:text-2xl font-serif font-bold text-brand-primary-900'>
                   ${displayPrice}
                 </span>
-                <span className='text-base md:text-lg font-serif line-through text-gray-400'>
+                <span className='text-base md:text-lg font-serif line-through text-brand-neutral-400'>
                   ${originalPrice}
                 </span>
               </>
@@ -102,7 +102,7 @@ export function ProductInfo({ product, contacts }: ProductInfoProps) {
               const description = tl(product, 'description');
               return description ? (
                 <div
-                  className='text-[13px] md:text-[14px] leading-relaxed text-gray-600 font-serif prose prose-sm max-w-none'
+                  className='text-[13px] md:text-[14px] leading-relaxed text-gray-600 font-serif prose-brand prose-brand-sm max-w-none'
                   dangerouslySetInnerHTML={{ __html: description }}
                 />
               ) : (
@@ -119,7 +119,7 @@ export function ProductInfo({ product, contacts }: ProductInfoProps) {
         {/* Contact Button - Opens Modal */}
         <button
           onClick={() => setIsContactModalOpen(true)}
-          className='w-full bg-[#8B0000] hover:bg-[#A00000] text-white py-4 md:py-5 px-6 md:px-8 rounded-sm flex items-center justify-center gap-2 md:gap-3 transition-all duration-300 group shadow-lg shadow-red-900/10 hover:shadow-red-900/20'
+          className='w-full bg-brand-primary-600 hover:bg-brand-primary-700 text-white py-4 md:py-5 px-6 md:px-8 rounded-sm flex items-center justify-center gap-2 md:gap-3 transition-all duration-300 group shadow-lg shadow-red-900/10 hover:shadow-red-900/20'
         >
           <ShoppingBag
             size={18}

@@ -1,9 +1,7 @@
 import { db } from '@repo/database';
 import { notFound } from 'next/navigation';
 import { CollectionForm } from '../components/collection-form';
-import { MoveLeft } from 'lucide-react';
-import Link from 'next/link';
-import { Button } from '@repo/ui/ui/button';
+import { PageHeader } from '@/components/layout/page-header';
 
 export const dynamic = 'force-dynamic';
 
@@ -36,17 +34,15 @@ export default async function EditCollectionPage({ params }: PageProps<{ id: str
 
   return (
     <div className='space-y-6'>
-      <div className='flex items-center gap-4'>
-        <Link href='/collections'>
-          <Button variant='outline' size='icon'>
-            <MoveLeft className='h-4 w-4' />
-          </Button>
-        </Link>
-        <div>
-          <h1 className='text-2xl font-bold tracking-tight'>Edit Collection</h1>
-          <p className='text-sm text-gray-500'>Update collection details and manage products.</p>
-        </div>
-      </div>
+      <PageHeader
+        breadcrumbs={[
+          { label: 'Dashboard', href: '/' },
+          { label: 'Collections', href: '/collections' },
+          { label: 'Edit' },
+        ]}
+        title='Edit Collection'
+        description='Update collection details and manage products.'
+      />
       <CollectionForm
         initialData={collection as any}
         availableProducts={allProducts}

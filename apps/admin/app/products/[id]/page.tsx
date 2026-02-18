@@ -1,11 +1,9 @@
 import { ProductForm } from '@/app/products/components/create-product-form';
 import { RecommendedProductSelector } from '@/app/products/components/recommended-product-selector';
-import { MoveLeft } from 'lucide-react';
-import Link from 'next/link';
 import { db } from '@repo/database';
-import { Button } from '@repo/ui/ui/button';
 import { notFound } from 'next/navigation';
 import { getRecommendedProducts, getAvailableProducts } from '@/lib/actions/recommended-products';
+import { PageHeader } from '@/components/layout/page-header';
 
 export const dynamic = 'force-dynamic';
 
@@ -74,17 +72,15 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
 
   return (
     <div className='space-y-8'>
-      <div className='flex items-center gap-4'>
-        <Link href='/products'>
-          <Button variant='outline' size='icon'>
-            <MoveLeft className='h-4 w-4' />
-          </Button>
-        </Link>
-        <div>
-          <h1 className='text-2xl font-bold tracking-tight'>Edit Product</h1>
-          <p className='text-sm text-gray-500'>Update product details, dimensions, and images.</p>
-        </div>
-      </div>
+      <PageHeader
+        breadcrumbs={[
+          { label: 'Dashboard', href: '/' },
+          { label: 'Products', href: '/products' },
+          { label: 'Edit' },
+        ]}
+        title='Edit Product'
+        description='Update product details, dimensions, and images.'
+      />
 
       <ProductForm
         catalogs={catalogs.map((c) => ({

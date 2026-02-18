@@ -32,6 +32,7 @@ export default async function RootLayout({
   return (
     <html lang='en' suppressHydrationWarning>
       <body className={`${inter.variable} font-sans antialiased`}>
+        <style dangerouslySetInnerHTML={{ __html: `:root { --font-sans: var(--font-inter); }` }} />
         <Providers>
           {showAdminLayout ? <AdminLayout>{children}</AdminLayout> : <main>{children}</main>}
         </Providers>

@@ -188,9 +188,9 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
                       </div>
 
                       {/* Product Info */}
-                      <div className='flex-1 min-w-0'>
-                        <h4 className='font-medium text-gray-900 truncate'>{tl(result, 'name')}</h4>
-                        <p className='text-sm text-[#49000D] font-medium'>
+                      <div className='flex-1 min-w-0 py-1'>
+                        <h4 className='font-medium text-gray-900 truncate text-sm md:text-base'>{tl(result, 'name')}</h4>
+                        <p className='text-xs md:text-sm text-brand-primary-600 font-medium mt-0.5'>
                           {formatPrice(result.price)}
                         </p>
                       </div>

@@ -157,7 +157,7 @@ export const Footer = async () => {
 
             {/* Intro Title */}
             {footerData?.intro && (
-              <h3 className='text-2xl font-serif font-bold text-[#7B0C0C] uppercase tracking-wide'>
+              <h3 className='text-2xl font-serif font-bold text-brand-primary-600 uppercase tracking-wide'>
                 {getLocalizedText(footerData, 'intro', locale)}
               </h3>
             )}
@@ -174,7 +174,7 @@ export const Footer = async () => {
               <div className='space-y-4'>
                 {addresses.map((addr) => (
                   <div key={addr.id} className='flex items-start gap-3'>
-                    <MapPin className='h-4 w-4 text-[#7B0C0C] mt-1 flex-shrink-0' />
+                    <MapPin className='h-4 w-4 text-brand-primary-600 mt-1 flex-shrink-0' />
                     <div className='text-sm text-gray-700'>
                       <span className='font-semibold'>
                         {getLocalizedText(addr, 'label', locale)}:
@@ -191,7 +191,7 @@ export const Footer = async () => {
               <div className='space-y-2'>
                 {phoneContacts.map((phone) => (
                   <div key={phone.id} className='flex items-center gap-3'>
-                    <Phone className='h-4 w-4 text-[#7B0C0C] flex-shrink-0' />
+                    <Phone className='h-4 w-4 text-brand-primary-600 flex-shrink-0' />
                     <div className='text-sm text-gray-700'>
                       {phone.label && (
                         <span className='font-semibold'>
@@ -200,7 +200,7 @@ export const Footer = async () => {
                       )}
                       <a
                         href={`tel:${phone.value.replace(/\s/g, '')}`}
-                        className='hover:text-[#7B0C0C]'
+                        className='hover:text-brand-primary-600'
                       >
                         {phone.value}
                       </a>
@@ -215,10 +215,10 @@ export const Footer = async () => {
               <div className='space-y-2'>
                 {emailContacts.map((email) => (
                   <div key={email.id} className='flex items-center gap-3'>
-                    <Mail className='h-4 w-4 text-[#7B0C0C] flex-shrink-0' />
+                    <Mail className='h-4 w-4 text-brand-primary-600 flex-shrink-0' />
                     <a
                       href={`mailto:${email.value}`}
-                      className='text-sm text-gray-700 hover:text-[#7B0C0C]'
+                      className='text-sm text-gray-700 hover:text-brand-primary-600'
                     >
                       {email.value}
                     </a>
@@ -233,11 +233,11 @@ export const Footer = async () => {
                 <input
                   type='email'
                   placeholder={t('emailPlaceholder')}
-                  className='flex-1 px-4 py-3 text-sm border border-gray-300 bg-white focus:outline-none focus:border-[#7B0C0C] placeholder:text-gray-400'
+                  className='flex-1 px-4 py-3 text-sm border border-gray-300 bg-white focus:outline-none focus:border-brand-primary-600 placeholder:text-gray-400'
                 />
                 <button
                   type='submit'
-                  className='px-6 py-3 bg-[#7B0C0C] text-white text-sm font-semibold uppercase tracking-wider hover:bg-[#5a0909] transition-colors whitespace-nowrap'
+                  className='px-6 py-3 bg-brand-primary-600 text-white text-sm font-semibold uppercase tracking-wider hover:bg-brand-primary-700 transition-colors whitespace-nowrap'
                 >
                   {t('registerButton')}
                 </button>

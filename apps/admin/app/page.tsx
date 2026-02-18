@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/ui/card';
 import { Button } from '@repo/ui/ui/button';
 import { Badge } from '@repo/ui/ui/badge';
+import { PageHeader } from '@/components/layout/page-header';
 
 export const dynamic = 'force-dynamic';
 
@@ -79,10 +80,10 @@ export default async function DashboardPage() {
 
   return (
     <div className='space-y-8 pb-10'>
-      <div>
-        <h1 className='text-3xl font-bold tracking-tight text-gray-900'>Dashboard</h1>
-        <p className='text-gray-500 mt-1'>Overview of your store performance and management.</p>
-      </div>
+      <PageHeader
+        title='Dashboard'
+        description='Overview of your store performance and management.'
+      />
 
       {/* Stats Grid */}
       <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-5'>

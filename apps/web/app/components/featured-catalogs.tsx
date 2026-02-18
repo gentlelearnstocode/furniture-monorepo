@@ -65,17 +65,17 @@ const CatalogSection = ({
         </div>
 
         {/* Centered Content - Static on Mobile, Visible on Hover on Desktop */}
-        <div className='absolute inset-0 z-20 flex flex-col items-center justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-500 px-4 text-center'>
+        <div className='absolute inset-0 z-20 flex flex-col items-center justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-500 px-6 text-center'>
           <h3
             className={cn(
-              'text-white font-serif uppercase tracking-widest mb-4 drop-shadow-xl translate-y-0 md:translate-y-4 md:group-hover:translate-y-0 transition-transform duration-500',
-              isSmall ? 'text-lg md:text-xl' : 'text-2xl md:text-4xl',
+              'text-white font-serif uppercase tracking-[0.15em] mb-4 drop-shadow-2xl translate-y-0 md:translate-y-4 md:group-hover:translate-y-0 transition-transform duration-500',
+              isSmall ? 'text-lg sm:text-xl md:text-2xl' : 'text-xl sm:text-3xl md:text-5xl lg:text-6xl',
             )}
           >
             {localizedName}
           </h3>
           <div className='flex flex-col items-center gap-2'>
-            <span className='text-white text-sm md:text-base font-medium tracking-[0.2em] uppercase border-b border-white pb-1'>
+            <span className='text-white text-xs sm:text-sm md:text-base font-medium tracking-[0.25em] uppercase border-b border-white pb-1.5'>
               {t('seeAll')}
             </span>
           </div>

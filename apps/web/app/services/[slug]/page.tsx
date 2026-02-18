@@ -8,7 +8,6 @@ import { ContactButton } from '@/components/ui/contact-button';
 import type { Metadata } from 'next';
 import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
 import { createCachedQuery } from '@/lib/cache';
-import styles from '@/app/components/article-content.module.css';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -151,7 +150,7 @@ export default async function ServiceDetailPage({ params }: Props) {
         <div className='max-w-3xl mx-auto'>
           {contentHtml && (
             <div
-              className={styles.articleContent}
+              className='prose-brand'
               dangerouslySetInnerHTML={{ __html: contentHtml }}
             />
           )}

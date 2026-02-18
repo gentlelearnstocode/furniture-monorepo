@@ -3,9 +3,7 @@ export const dynamic = 'force-dynamic';
 import { db } from '@repo/database';
 import { notFound } from 'next/navigation';
 import { CatalogForm } from '../components/catalog-form';
-import { MoveLeft } from 'lucide-react';
-import Link from 'next/link';
-import { Button } from '@repo/ui/ui/button';
+import { PageHeader } from '@/components/layout/page-header';
 
 import { PageProps } from '@/types';
 
@@ -38,17 +36,15 @@ export default async function EditCatalogPage({ params }: PageProps<{ id: string
 
   return (
     <div className='space-y-6'>
-      <div className='flex items-center gap-4'>
-        <Link href='/catalogs'>
-          <Button variant='outline' size='icon'>
-            <MoveLeft className='h-4 w-4' />
-          </Button>
-        </Link>
-        <div>
-          <h1 className='text-2xl font-bold tracking-tight'>Edit Catalog</h1>
-          <p className='text-sm text-gray-500'>Update catalog category details.</p>
-        </div>
-      </div>
+      <PageHeader
+        breadcrumbs={[
+          { label: 'Dashboard', href: '/' },
+          { label: 'Catalogs', href: '/catalogs' },
+          { label: 'Edit' },
+        ]}
+        title='Edit Catalog'
+        description='Update catalog category details.'
+      />
       <div className='max-w-4xl'>
         <CatalogForm
           initialData={catalog}

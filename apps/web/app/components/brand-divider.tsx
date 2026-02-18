@@ -25,7 +25,7 @@ export const BrandDivider = ({
     >
       <div
         className={cn(
-          'bg-[#8B0000]',
+          'bg-brand-primary-600',
           stretch ? 'flex-1' : isLight ? 'w-12' : 'w-16',
           isLight ? 'h-[1px] opacity-30' : 'h-[2px] opacity-100',
         )}
@@ -39,7 +39,7 @@ export const BrandDivider = ({
       />
       <div
         className={cn(
-          'bg-[#8B0000]',
+          'bg-brand-primary-600',
           stretch ? 'flex-1' : isLight ? 'w-12' : 'w-16',
           isLight ? 'h-[1px] opacity-30' : 'h-[2px] opacity-100',
         )}

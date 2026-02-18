@@ -28,7 +28,7 @@ export function ListingCard({
   children,
 }: ListingCardProps) {
   return (
-    <Card className='shadow-sm border-gray-200'>
+    <Card className='shadow-sm border-brand-neutral-200'>
       <CardHeader className='pb-3'>
         <div className='flex flex-col md:flex-row md:items-center justify-between gap-4'>
           <div>

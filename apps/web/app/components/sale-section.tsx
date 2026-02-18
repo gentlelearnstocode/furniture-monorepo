@@ -34,7 +34,7 @@ export const SaleSection = ({ products, settings }: SaleSectionProps) => {
       <div className='container'>
         {/* Section Header */}
         <div className='flex flex-col items-center mb-8'>
-          <h2 className='text-2xl md:text-3xl lg:text-4xl font-serif text-[#49000D] tracking-wide uppercase'>
+          <h2 className='text-2xl md:text-3xl lg:text-4xl font-serif text-brand-primary-900 tracking-wide uppercase'>
             {tl(settings, 'title') || t('title')}
           </h2>
 
@@ -67,7 +67,7 @@ export const SaleSection = ({ products, settings }: SaleSectionProps) => {
         <div className='flex justify-center mt-10'>
           <Link
             href='/sale'
-            className='group flex items-center gap-2 text-[13px] font-medium tracking-wider text-gray-700 hover:text-[#49000D] transition-colors'
+            className='group flex items-center gap-2 text-[13px] font-medium tracking-wider text-gray-700 hover:text-brand-primary-900 transition-colors'
           >
             <span>{t('expandYourView')}</span>
             <div className='w-5 h-5 rounded-full border border-current flex items-center justify-center transition-transform group-hover:translate-x-1'>

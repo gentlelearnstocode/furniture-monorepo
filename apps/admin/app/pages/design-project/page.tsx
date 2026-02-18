@@ -9,6 +9,11 @@ export default async function DesignProjectPage() {
   return (
     <div className='space-y-6'>
       <PageHeader
+        breadcrumbs={[
+          { label: 'Dashboard', href: '/' },
+          { label: 'Page Management' },
+          { label: 'Design & Project' },
+        ]}
         title='Design & Project'
         description='Customize the content of the Design & Project page.'
       />

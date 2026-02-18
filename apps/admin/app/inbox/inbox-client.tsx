@@ -57,7 +57,7 @@ export function InboxClient({ initialMessages }: InboxClientProps) {
   };
 
   return (
-    <div className='flex h-[calc(100vh-4rem)] flex-col md:flex-row bg-background'>
+    <div className='flex h-full flex-col md:flex-row bg-background'>
       {/* Left Pane: Message List */}
       <div
         className={cn(

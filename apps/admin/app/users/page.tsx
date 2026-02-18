@@ -10,6 +10,8 @@ import { UserList } from './components/user-list';
 import { eq } from 'drizzle-orm';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/ui/card';
 
+import { PageHeader } from '@/components/layout/page-header';
+
 export const dynamic = 'force-dynamic';
 
 interface UsersPageProps {
@@ -63,25 +65,19 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
 
   return (
     <div className='space-y-6'>
-      <div className='flex items-center justify-between'>
-        <div>
-          <nav className='flex items-center text-sm text-gray-500 mb-1'>
-            <Link href='/' className='hover:text-gray-900 transition-colors'>
-              Dashboard
-            </Link>
-            <span className='mx-2'>/</span>
-            <span className='font-medium text-gray-900'>Users</span>
-          </nav>
-          <h1 className='text-3xl font-bold tracking-tight text-gray-900'>Admin Users</h1>
-          <p className='text-base text-gray-500 mt-1'>Manage administrative access and roles.</p>
-        </div>
-        <Link href='/users/new'>
-          <Button size='sm' className='bg-brand-primary-600 hover:bg-brand-primary-700'>
-            <Plus className='mr-2 h-4 w-4' />
-            Add User
-          </Button>
-        </Link>
-      </div>
+      <PageHeader
+        breadcrumbs={[{ label: 'Dashboard', href: '/' }, { label: 'Admin Users' }]}
+        title='Admin Users'
+        description='Manage administrative access and roles.'
+        actions={
+          <Link href='/users/new'>
+            <Button size='sm' className='bg-brand-primary-600 hover:bg-brand-primary-700'>
+              <Plus className='mr-2 h-4 w-4' />
+              Add User
+            </Button>
+          </Link>
+        }
+      />
 
       <div className='grid gap-4 md:grid-cols-4 lg:grid-cols-4'>
         <Card className='p-4 flex flex-col justify-between'>

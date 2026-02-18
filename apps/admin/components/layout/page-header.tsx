@@ -1,15 +1,23 @@
 'use client';
 
+import React, { ReactNode } from 'react';
 import Link from 'next/link';
-import { ReactNode } from 'react';
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@repo/ui/ui/breadcrumb';
 
-interface Breadcrumb {
+interface BreadcrumbItemProps {
   label: string;
   href?: string;
 }
 
 interface PageHeaderProps {
-  breadcrumbs?: Breadcrumb[];
+  breadcrumbs?: BreadcrumbItemProps[];
   title: string;
   description?: string;
   actions?: ReactNode;
@@ -22,25 +30,29 @@ interface PageHeaderProps {
 export function PageHeader({ breadcrumbs, title, description, actions }: PageHeaderProps) {
   return (
     <div className='flex items-center justify-between'>
-      <div>
+      <div className='space-y-1.5'>
         {breadcrumbs && breadcrumbs.length > 0 && (
-          <nav className='flex items-center text-sm text-gray-500 mb-1'>
-            {breadcrumbs.map((crumb, index) => (
-              <span key={index} className='flex items-center'>
-                {crumb.href ? (
-                  <Link href={crumb.href} className='hover:text-gray-900 transition-colors'>
-                    {crumb.label}
-                  </Link>
-                ) : (
-                  <span className='font-medium text-gray-900'>{crumb.label}</span>
-                )}
-                {index < breadcrumbs.length - 1 && <span className='mx-2'>/</span>}
-              </span>
-            ))}
-          </nav>
+          <Breadcrumb className='mb-1'>
+            <BreadcrumbList>
+              {breadcrumbs.map((crumb, index) => (
+                <React.Fragment key={index}>
+                  <BreadcrumbItem>
+                    {crumb.href ? (
+                      <BreadcrumbLink asChild>
+                        <Link href={crumb.href}>{crumb.label}</Link>
+                      </BreadcrumbLink>
+                    ) : (
+                      <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
+                    )}
+                  </BreadcrumbItem>
+                  {index < breadcrumbs.length - 1 && <BreadcrumbSeparator />}
+                </React.Fragment>
+              ))}
+            </BreadcrumbList>
+          </Breadcrumb>
         )}
         <h1 className='text-3xl font-bold tracking-tight text-gray-900'>{title}</h1>
-        {description && <p className='text-base text-gray-500 mt-1'>{description}</p>}
+        {description && <p className='text-base text-gray-500'>{description}</p>}
       </div>
       {actions && <div className='flex gap-3'>{actions}</div>}
     </div>

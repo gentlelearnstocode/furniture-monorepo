@@ -34,7 +34,7 @@ export function SearchInput({ placeholder = 'Search...' }: SearchInputProps) {
 
   return (
     <div className='relative flex-1 max-w-md'>
-      <Search className='absolute left-2 top-2.5 h-4 w-4 text-gray-400' />
+      <Search className='absolute left-2 top-2.5 h-4 w-4 text-brand-neutral-400' />
       <Input
         placeholder={placeholder}
         className='pl-8'
@@ -102,7 +102,7 @@ export function FilterSelect({
     <Select defaultValue={searchParams.get(filterKey) || 'all'} onValueChange={handleFilter}>
       <SelectTrigger className='w-[180px]'>
         <div className='flex items-center gap-2'>
-          <Filter className='h-4 w-4 text-gray-500' />
+          <Filter className='h-4 w-4 text-brand-neutral-500' />
           <SelectValue placeholder={filterPlaceholder} />
         </div>
       </SelectTrigger>

@@ -1,5 +1,6 @@
 import { getSaleSettings, getSaleSectionProducts, getEligibleProducts } from '@/lib/actions/sale';
 import { SaleManagement } from './components/sale-management';
+import { PageHeader } from '@/components/layout/page-header';
 
 export const dynamic = 'force-dynamic';
 
@@ -48,13 +49,16 @@ export default async function SaleSectionPage() {
   }));
 
   return (
-    <div className='container max-w-5xl py-8'>
-      <div className='mb-8'>
-        <h1 className='text-3xl font-bold tracking-tight text-gray-900'>Homepage Sale Section</h1>
-        <p className='mt-2 text-gray-600'>
-          Manage the special sales section on your home page. Highlight your best deals here.
-        </p>
-      </div>
+    <div className='space-y-6'>
+      <PageHeader
+        breadcrumbs={[
+          { label: 'Dashboard', href: '/' },
+          { label: 'Homepage', href: '/homepage' },
+          { label: 'Sale Section' },
+        ]}
+        title='Homepage Sale Section'
+        description='Manage the special sales section on your home page. Highlight your best deals here.'
+      />
 
       <SaleManagement
         initialSettings={{ title: settings.title, isActive: settings.isActive }}

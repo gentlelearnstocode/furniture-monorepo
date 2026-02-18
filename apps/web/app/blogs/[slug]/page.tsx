@@ -8,7 +8,6 @@ import { format } from 'date-fns';
 import { Calendar, User, ChevronLeft } from 'lucide-react';
 import type { Metadata } from 'next';
 import { createCachedQuery } from '@/lib/cache';
-import styles from '@/app/components/article-content.module.css';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -153,7 +152,7 @@ export default async function BlogPostPage({ params }: Props) {
         <div className='max-w-3xl mx-auto'>
           {contentHtml && (
             <div
-              className={styles.articleContent}
+              className='prose-brand'
               dangerouslySetInnerHTML={{ __html: contentHtml }}
             />
           )}

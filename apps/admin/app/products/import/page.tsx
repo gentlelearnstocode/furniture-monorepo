@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import * as XLSX from 'xlsx';
+import { PageHeader } from '@/components/layout/page-header';
 
 type ImportStatus = 'idle' | 'uploading' | 'processing' | 'completed' | 'error';
 
@@ -127,25 +128,15 @@ export default function ProductImportPage() {
 
   return (
     <div className='space-y-6'>
-      {/* Header */}
-      <div>
-        <nav className='flex items-center text-sm text-gray-500 mb-1'>
-          <Link href='/' className='hover:text-gray-900 transition-colors'>
-            Dashboard
-          </Link>
-          <span className='mx-2'>/</span>
-          <Link href='/products' className='hover:text-gray-900 transition-colors'>
-            Products
-          </Link>
-          <span className='mx-2'>/</span>
-          <span className='font-medium text-gray-900'>Import</span>
-        </nav>
-        <h1 className='text-3xl font-bold tracking-tight text-gray-900'>Import Products</h1>
-        <p className='text-base text-gray-500 mt-1'>
-          Bulk import products from an Excel file. Images can be added via the product edit page
-          after import.
-        </p>
-      </div>
+      <PageHeader
+        breadcrumbs={[
+          { label: 'Dashboard', href: '/' },
+          { label: 'Products', href: '/products' },
+          { label: 'Import' },
+        ]}
+        title='Import Products'
+        description='Bulk import products from an Excel file. Images can be added via the product edit page after import.'
+      />
 
       <div className='grid gap-6 lg:grid-cols-2'>
         {/* Template Download Card */}
@@ -260,17 +251,17 @@ export default function ProductImportPage() {
           </CardHeader>
           <CardContent className='space-y-4'>
             <div className='grid grid-cols-3 gap-4'>
-              <div className='bg-gray-50 rounded-lg p-4 text-center'>
-                <p className='text-2xl font-bold text-gray-900'>{result.totalRows}</p>
-                <p className='text-sm text-gray-500'>Total Rows</p>
+              <div className='bg-brand-neutral-50 rounded-lg p-4 text-center'>
+                <p className='text-2xl font-bold text-brand-neutral-900'>{result.totalRows}</p>
+                <p className='text-sm text-brand-neutral-500'>Total Rows</p>
               </div>
               <div className='bg-green-50 rounded-lg p-4 text-center'>
                 <p className='text-2xl font-bold text-green-600'>{result.successCount}</p>
-                <p className='text-sm text-gray-500'>Imported</p>
+                <p className='text-sm text-brand-neutral-500'>Imported</p>
               </div>
               <div className='bg-red-50 rounded-lg p-4 text-center'>
                 <p className='text-2xl font-bold text-red-600'>{result.errorCount}</p>
-                <p className='text-sm text-gray-500'>Errors</p>
+                <p className='text-sm text-brand-neutral-500'>Errors</p>
               </div>
             </div>
 
@@ -295,10 +286,10 @@ export default function ProductImportPage() {
                   </AlertDescription>
                 </Alert>
 
-                <div className='bg-gray-50 rounded-lg p-4 max-h-48 overflow-y-auto'>
+                <div className='bg-brand-neutral-50 rounded-lg p-4 max-h-48 overflow-y-auto'>
                   <table className='w-full text-sm'>
                     <thead>
-                      <tr className='text-left border-b'>
+                      <tr className='text-left border-b border-brand-neutral-200'>
                         <th className='pb-2 font-medium'>Row</th>
                         <th className='pb-2 font-medium'>Field</th>
                         <th className='pb-2 font-medium'>Error</th>
@@ -306,16 +297,16 @@ export default function ProductImportPage() {
                     </thead>
                     <tbody>
                       {result.errors.slice(0, 10).map((error, idx) => (
-                        <tr key={idx} className='border-b last:border-0'>
+                        <tr key={idx} className='border-b border-brand-neutral-100 last:border-0'>
                           <td className='py-2'>{error.row}</td>
-                          <td className='py-2 text-gray-600'>{error.field}</td>
+                          <td className='py-2 text-brand-neutral-600'>{error.field}</td>
                           <td className='py-2 text-red-600'>{error.message}</td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                   {result.errors.length > 10 && (
-                    <p className='text-xs text-gray-500 mt-2'>
+                    <p className='text-xs text-brand-neutral-500 mt-2'>
                       ...and {result.errors.length - 10} more errors
                     </p>
                   )}

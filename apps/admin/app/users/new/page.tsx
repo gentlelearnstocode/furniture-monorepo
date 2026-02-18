@@ -3,9 +3,7 @@ export const dynamic = 'force-dynamic';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { UserForm } from '../components/user-form';
-import { MoveLeft } from 'lucide-react';
-import Link from 'next/link';
-import { Button } from '@repo/ui/ui/button';
+import { PageHeader } from '@/components/layout/page-header';
 
 export default async function NewUserPage() {
   const session = await auth();
@@ -16,19 +14,17 @@ export default async function NewUserPage() {
 
   return (
     <div className='space-y-6 max-w-2xl'>
-      <div className='flex items-center gap-4'>
-        <Link href='/users'>
-          <Button variant='outline' size='icon'>
-            <MoveLeft className='h-4 w-4' />
-          </Button>
-        </Link>
-        <div>
-          <h1 className='text-2xl font-bold tracking-tight'>Create New User</h1>
-          <p className='text-sm text-gray-500'>Grant access to a new team member.</p>
-        </div>
-      </div>
+      <PageHeader
+        breadcrumbs={[
+          { label: 'Dashboard', href: '/' },
+          { label: 'Admin Users', href: '/users' },
+          { label: 'Create' },
+        ]}
+        title='Create New User'
+        description='Grant access to a new team member.'
+      />
 
-      <div className='bg-white border rounded-lg p-6 shadow-sm'>
+      <div className='bg-white border border-brand-neutral-200 rounded-lg p-6 shadow-sm'>
         <UserForm />
       </div>
     </div>

@@ -3,6 +3,7 @@ import { ShowroomManager } from '@/components/showrooms/showroom-manager';
 import { getCustomPageBySlug } from '@/lib/actions/pages';
 import { getShowrooms } from '@/lib/actions/showrooms';
 import { Separator } from '@repo/ui/ui/separator';
+import { PageHeader } from '@/components/layout/page-header';
 
 export const metadata = {
   title: 'Showroom & Factory | Admin',
@@ -15,13 +16,18 @@ export default async function ShowroomFactoryPage() {
 
   return (
     <div className='space-y-10 pb-20'>
-      <div>
-        <h1 className='text-3xl font-bold mb-6'>Showroom & Factory Page</h1>
-        <p className='text-muted-foreground mb-8'>
-          Manage the page introduction and showroom locations.
-        </p>
+      <PageHeader
+        breadcrumbs={[
+          { label: 'Dashboard', href: '/' },
+          { label: 'Page Management' },
+          { label: 'Showroom & Factory' },
+        ]}
+        title='Showroom & Factory Page'
+        description='Manage the page introduction and showroom locations.'
+      />
 
-        <div className='bg-white rounded-lg border p-6 shadow-sm'>
+      <div className='space-y-6'>
+        <div className='bg-white rounded-lg border border-brand-neutral-200 p-6 shadow-sm'>
           <h2 className='text-xl font-semibold mb-4'>Page Header & Intro</h2>
           <ShowroomPageForm slug={pageSlug} initialData={pageData} />
         </div>
@@ -29,7 +35,7 @@ export default async function ShowroomFactoryPage() {
 
       <Separator />
 
-      <div className='bg-white rounded-lg border p-6 shadow-sm'>
+      <div className='bg-white rounded-lg border border-brand-neutral-200 p-6 shadow-sm'>
         <ShowroomManager initialItems={showrooms} />
       </div>
     </div>

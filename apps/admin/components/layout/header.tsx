@@ -18,7 +18,7 @@ import { NotificationDropdown } from './notification-dropdown';
 
 export function Header() {
   return (
-    <header className='sticky top-0 z-30 flex items-center h-16 px-4 bg-white border-b border-gray-100 shadow-sm gap-4 py-2'>
+    <header className='sticky top-0 z-30 flex items-center h-16 px-4 bg-white border-b border-brand-neutral-100 shadow-sm gap-4 py-2'>
       <div className='flex items-center gap-2'>
         <SidebarTrigger className='-ml-1' />
         <Separator orientation='vertical' className='mr-2 h-4' />

@@ -1,3 +1,5 @@
+@import "./typography.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -25,17 +27,22 @@
     --ring: 222.2 84% 4.9%;
     --radius: 0.5rem;
 
-    /* Brand Primary (Monza) */
-    --brand-primary-50: 349 55% 97%;
-    --brand-primary-100: 349 55% 93%;
-    --brand-primary-200: 349 55% 87%;
-    --brand-primary-300: 349 100% 80%;
-    --brand-primary-400: 349 55% 55%;
-    --brand-primary-500: 349 100% 36%;
-    --brand-primary-600: 349 100% 29%;
-    --brand-primary-700: 349 100% 15%;
-    --brand-primary-800: 349 100% 11%;
-    --brand-primary-900: 350 100% 8%;
+    /* Fonts */
+    --font-sans: "Inter", system-ui, sans-serif;
+    --font-serif: "Playfair Display", serif;
+    --font-brand: "Playfair Display", serif;
+
+    /* Brand Primary (Monza/Deep Red) */
+    --brand-primary-50: 0 82% 97%;
+    --brand-primary-100: 0 82% 94%;
+    --brand-primary-200: 0 82% 88%;
+    --brand-primary-300: 0 82% 77%;
+    --brand-primary-400: 0 82% 55%;
+    --brand-primary-500: 0 82% 42%;
+    --brand-primary-600: 0 82% 26%; /* #7B0C0C Primary Brand Color */
+    --brand-primary-700: 0 82% 20%;
+    --brand-primary-800: 349 100% 18%;
+    --brand-primary-900: 349 100% 14%; /* #49000D Deep Primary Brand Color */
 
     /* Brand Accent 1 (Amber Gold) */
     --brand-accent1-50: 43 100% 98%;

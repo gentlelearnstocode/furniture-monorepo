@@ -177,7 +177,7 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
     editorProps: {
       attributes: {
         class: cn(
-          'prose prose-sm max-w-none min-h-[150px] p-3 focus:outline-none focus:ring-0',
+          'prose-brand max-w-none min-h-[150px] p-3 focus:outline-none focus:ring-0',
           'prose-headings:font-bold prose-p:my-1 prose-ul:list-disc prose-ol:list-decimal',
         ),
       },

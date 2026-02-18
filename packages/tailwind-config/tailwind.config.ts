@@ -4,9 +4,9 @@ const config: Omit<Config, 'content'> = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-playfair)', 'system-ui', 'sans-serif'],
-        serif: ['var(--font-playfair)', 'serif'],
-        playfair: ['var(--font-playfair)'],
+        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        serif: ['var(--font-serif)', 'serif'],
+        brand: ['var(--font-brand)', 'serif'],
       },
       colors: {
         border: 'hsl(var(--border))',
@@ -97,6 +97,21 @@ const config: Omit<Config, 'content'> = {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+      },
+    },
+    container: {
+      center: true,
+      padding: {
+        DEFAULT: '1rem',
+        sm: '2rem',
+        lg: '4rem',
+      },
+      screens: {
+        sm: '640px',
+        md: '768px',
+        lg: '1024px',
+        xl: '1280px',
+        '2xl': '1400px',
       },
     },
   },

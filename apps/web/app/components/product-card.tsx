@@ -67,7 +67,7 @@ export const ProductCard = ({ product, className, imageRatio }: ProductCardProps
       {/* Product Image Container */}
       <div
         className={cn(
-          'relative overflow-hidden bg-[#F2F2F2] transition-colors duration-500 rounded-[12px]',
+          'relative overflow-hidden bg-brand-neutral-100 transition-colors duration-500 rounded-[12px]',
           {
             'aspect-auto': imageRatio === 'original',
             'aspect-square': imageRatio === '1:1',
@@ -89,7 +89,7 @@ export const ProductCard = ({ product, className, imageRatio }: ProductCardProps
         {/* Sale Badge - Top Left */}
         {hasDiscount && (
           <div className='absolute top-3 left-3 z-10'>
-            <div className='bg-[#B80022] text-white group-hover:bg-white group-hover:text-[#B80022] w-14 h-9 flex items-center justify-center rounded-[4px] transition-colors duration-500'>
+            <div className='bg-brand-primary-600 text-white group-hover:bg-white group-hover:text-brand-primary-600 w-14 h-9 flex items-center justify-center rounded-[4px] transition-colors duration-500'>
               <span className='text-lg font-bold font-serif italic'>%</span>
             </div>
           </div>
@@ -101,12 +101,12 @@ export const ProductCard = ({ product, className, imageRatio }: ProductCardProps
 
       {/* Product Info */}
       <div className='pt-1.5 sm:pt-2 flex flex-col items-start'>
-        <h3 className='text-[14px] sm:text-[18px] md:text-[22px] font-serif font-medium text-black leading-tight group-hover:text-[#49000D] transition-colors'>
+        <h3 className='text-[14px] sm:text-[18px] md:text-[22px] font-serif font-medium text-black leading-tight group-hover:text-brand-primary-900 transition-colors'>
           {productName}
         </h3>
 
         {productDesc && (
-          <p className='text-[11px] sm:text-[13px] md:text-[15px] font-serif text-[#666] leading-snug mt-0.5'>
+          <p className='text-[11px] sm:text-[13px] md:text-[15px] font-serif text-brand-neutral-500 leading-snug mt-0.5'>
             {productDesc}
           </p>
         )}
@@ -116,10 +116,10 @@ export const ProductCard = ({ product, className, imageRatio }: ProductCardProps
           <div className='flex items-center gap-2 sm:gap-3 mt-1.5 sm:mt-2'>
             {hasDiscount ? (
               <>
-                <span className='text-[13px] sm:text-[15px] md:text-[17px] font-serif font-bold text-[#b80022]'>
+                <span className='text-[13px] sm:text-[15px] md:text-[17px] font-serif font-bold text-brand-primary-600'>
                   ${product.discountPrice}
                 </span>
-                <span className='text-[10px] sm:text-[12px] md:text-[14px] font-serif line-through text-gray-500'>
+                <span className='text-[10px] sm:text-[12px] md:text-[14px] font-serif line-through text-brand-neutral-400'>
                   ${product.basePrice}
                 </span>
               </>

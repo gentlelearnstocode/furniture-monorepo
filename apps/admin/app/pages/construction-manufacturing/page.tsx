@@ -9,6 +9,11 @@ export default async function ConstructionManufacturingPage() {
   return (
     <div className='space-y-6'>
       <PageHeader
+        breadcrumbs={[
+          { label: 'Dashboard', href: '/' },
+          { label: 'Page Management' },
+          { label: 'Construction & Manufacturing' },
+        ]}
         title='Construction & Manufacturing'
         description='Customize the content of the Construction & Manufacturing page.'
       />

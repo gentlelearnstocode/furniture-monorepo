@@ -4,17 +4,12 @@ import React from 'react';
 import Link from 'next/link';
 import { Menu, Search, X, ChevronRight, ChevronDown } from 'lucide-react';
 import { usePathname } from 'next/navigation';
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
 import { SearchDialog } from './search-dialog';
 import { useTranslations } from 'next-intl';
 import { useLanguage, useLocalizedText } from '@/providers/language-provider';
+import { cn } from '@repo/ui/lib/utils';
 
 import Image from 'next/image';
-
-function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
 
 // Language Switcher Component
 function LanguageSwitcher({
@@ -30,7 +25,7 @@ function LanguageSwitcher({
     <div
       className={cn(
         'flex items-center text-[18px] md:text-[24px] font-[444] tracking-normal leading-none gap-2 md:gap-3 font-serif',
-        forceShow || isHeaderHovered ? 'text-[#49000D]' : 'text-white',
+        forceShow || isHeaderHovered ? 'text-brand-primary-900' : 'text-white',
       )}
     >
       <button
@@ -238,7 +233,7 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
                         <span
                           className={cn(
                             'absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] transition-all duration-300 group-hover/link:w-full',
-                            forceShow || isHeaderHovered ? 'bg-[#49000D]' : 'bg-white',
+                            forceShow || isHeaderHovered ? 'bg-brand-primary-900' : 'bg-white',
                           )}
                         />
                       </Link>
@@ -247,7 +242,7 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
                         className={cn(
                           'text-[15px] font-serif font-[444] tracking-[0.05em] uppercase relative pb-1 cursor-default group/link block',
                           'transition-colors duration-500',
-                          forceShow || isHeaderHovered ? 'text-[#49000D]' : 'text-white',
+                          forceShow || isHeaderHovered ? 'text-brand-primary-900' : 'text-white',
                         )}
                       >
                         {link.label}
@@ -255,7 +250,7 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
                           className={cn(
                             'absolute bottom-0 left-1/2 -translate-x-1/2 h-[1px] transition-all duration-300',
                             isProductsOpen ? 'w-full' : 'w-0 group-hover/link:w-full',
-                            forceShow || isHeaderHovered ? 'bg-[#49000D]' : 'bg-white',
+                            forceShow || isHeaderHovered ? 'bg-brand-primary-900' : 'bg-white',
                           )}
                         />
                       </span>
@@ -284,8 +279,8 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
                                 className={cn(
                                   'flex items-center justify-between px-6 py-3 text-[13px] uppercase font-serif tracking-[0.12em] transition-colors',
                                   activeCatalog === catalog.id
-                                    ? 'bg-black/[0.03] text-[#49000D]'
-                                    : 'text-[#49000D]/70 hover:text-[#49000D] hover:bg-black/[0.01]',
+                                    ? 'bg-black/[0.03] text-brand-primary-900'
+                                    : 'text-brand-primary-900/70 hover:text-brand-primary-900 hover:bg-black/[0.01]',
                                 )}
                               >
                                 {tl(catalog, 'name')}
@@ -309,7 +304,7 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
                                       <Link
                                         key={child.id}
                                         href={`/catalog/${catalog.slug}/${child.slug}`}
-                                        className='block px-6 py-3 text-[13px] text-[#49000D]/70 hover:text-[#49000D] hover:bg-black/[0.03] transition-colors uppercase font-serif tracking-[0.12em]'
+                                        className='block px-6 py-3 text-[13px] text-brand-primary-900/70 hover:text-brand-primary-900 hover:bg-black/[0.03] transition-colors uppercase font-serif tracking-[0.12em]'
                                       >
                                         {tl(child, 'name')}
                                       </Link>
@@ -355,7 +350,7 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
           {/* Mobile Header */}
           <div className='flex items-center justify-between px-8 py-8 border-b border-black/[0.05]'>
             <Image src='/logo.svg' alt='Logo' width={80} height={80} className='h-12 w-auto' />
-            <button onClick={() => setIsMobileMenuOpen(false)} className='text-[#49000D] p-2'>
+            <button onClick={() => setIsMobileMenuOpen(false)} className='text-brand-primary-900 p-2'>
               <X size={28} strokeWidth={1} />
             </button>
           </div>
@@ -366,7 +361,7 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
               <Link
                 href='/about-us'
                 onClick={() => setIsMobileMenuOpen(false)}
-                className='text-[22px] font-serif uppercase text-[#49000D] tracking-wider'
+                className='text-[22px] font-serif uppercase text-brand-primary-900 tracking-wider'
               >
                 {t('aboutUs')}
               </Link>
@@ -375,13 +370,13 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
               <div className='flex flex-col'>
                 <button
                   onClick={() => setIsMobileProductsOpen(!isMobileProductsOpen)}
-                  className='flex items-center justify-between w-full text-left text-[22px] font-serif uppercase text-[#49000D] tracking-wider'
+                  className='flex items-center justify-between w-full text-left text-[22px] font-serif uppercase text-brand-primary-900 tracking-wider'
                 >
                   <span>{t('products')}</span>
                   <ChevronDown
                     size={22}
                     className={cn(
-                      'transition-transform duration-300 text-[#49000D]/40',
+                      'transition-transform duration-300 text-brand-primary-900/40',
                       isMobileProductsOpen ? 'rotate-180' : '',
                     )}
                   />
@@ -395,7 +390,7 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
                           <Link
                             href={`/catalog/${catalog.slug}`}
                             onClick={() => setIsMobileMenuOpen(false)}
-                            className='text-[18px] font-serif uppercase text-[#49000D] tracking-wide hover:opacity-70 transition-opacity'
+                            className='text-[18px] font-serif uppercase text-brand-primary-900 tracking-wide hover:opacity-70 transition-opacity'
                           >
                             {tl(catalog, 'name')}
                           </Link>
@@ -406,7 +401,7 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
                                   expandedMobileCatalog === catalog.id ? null : catalog.id,
                                 )
                               }
-                              className='p-2 -mr-2 text-[#49000D]/40 hover:text-[#49000D] transition-colors'
+                              className='p-2 -mr-2 text-brand-primary-900/40 hover:text-brand-primary-900 transition-colors'
                             >
                               <ChevronDown
                                 size={20}
@@ -425,7 +420,7 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
                             <Link
                               href={`/catalog/${catalog.slug}`}
                               onClick={() => setIsMobileMenuOpen(false)}
-                              className='text-[14px] font-serif uppercase text-[#49000D]/50 tracking-widest hover:text-[#49000D]'
+                              className='text-[14px] font-serif uppercase text-brand-primary-900/50 tracking-widest hover:text-brand-primary-900'
                             >
                               {t('viewAll')}
                             </Link>
@@ -434,7 +429,7 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
                                 key={child.id}
                                 href={`/catalog/${catalog.slug}/${child.slug}`}
                                 onClick={() => setIsMobileMenuOpen(false)}
-                                className='text-[14px] font-serif uppercase text-[#49000D]/80 tracking-widest hover:text-[#49000D]'
+                                className='text-[14px] font-serif uppercase text-brand-primary-900/80 tracking-widest hover:text-brand-primary-900'
                               >
                                 {tl(child, 'name')}
                               </Link>
@@ -455,7 +450,7 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
                       key={slug}
                       href={`/${slug}`}
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className='text-[22px] font-serif uppercase text-[#49000D] tracking-wider'
+                      className='text-[22px] font-serif uppercase text-brand-primary-900 tracking-wider'
                     >
                       {t(key as any)}
                     </Link>
@@ -467,7 +462,7 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
 
           {/* Mobile Footer (Language) */}
           <div className='px-8 py-8 border-t border-black/[0.05] bg-black/[0.01]'>
-            <div className='flex items-center gap-6 font-serif text-[18px] uppercase tracking-widest text-[#49000D]'>
+            <div className='flex items-center gap-6 font-serif text-[18px] uppercase tracking-widest text-brand-primary-900'>
               <LanguageSwitcher forceShow={true} isHeaderHovered={true} />
             </div>
           </div>

@@ -1,5 +1,6 @@
 import { getFeaturedLayout, getAvailableCatalogs } from '@/lib/actions/featured-layout';
 import { LayoutBuilder } from './components/layout-builder';
+import { PageHeader } from '@/components/layout/page-header';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,14 +31,16 @@ export default async function FeaturedCatalogLayoutPage() {
   }));
 
   return (
-    <div className='container max-w-5xl py-8'>
-      <div className='mb-8'>
-        <h1 className='text-3xl font-bold tracking-tight text-gray-900'>Featured Catalog Layout</h1>
-        <p className='mt-2 text-gray-600'>
-          Configure how catalogs are displayed on your homepage. Drag rows to reorder, and assign
-          catalogs to each slot.
-        </p>
-      </div>
+    <div className='space-y-6'>
+      <PageHeader
+        breadcrumbs={[
+          { label: 'Dashboard', href: '/' },
+          { label: 'Homepage', href: '/homepage' },
+          { label: 'Featured Layout' },
+        ]}
+        title='Featured Catalog Layout'
+        description='Configure how catalogs are displayed on your homepage. Drag rows to reorder, and assign catalogs to each slot.'
+      />
 
       <LayoutBuilder initialRows={transformedRows} availableCatalogs={availableCatalogs} />
     </div>
