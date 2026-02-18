@@ -8,7 +8,9 @@
 ## Frontend & Applications
 - **Framework:** [Next.js 16 (App Router)](https://nextjs.org/) - React framework for production-grade web applications.
 - **Styling:** [Tailwind CSS 3.4](https://tailwindcss.com/) - Utility-first CSS framework for rapid UI development.
+- **Design Tokens:** Standardized CSS variable scale for Brand Colors (#7B0C0C scale) and Functional Neutral colors.
 - **UI Component Library:** [Radix UI](https://www.radix-ui.com/) + [shadcn/ui](https://ui.shadcn.com/) - Accessible, unstyled primitives paired with beautiful, reusable components.
+- **Typography:** Centralized brand typography engine (`prose-brand`) in shared UI package using Playfair Display (Serif) for brand content and Inter (Sans) for functional UI.
 - **Rich Text Editor:** [TipTap](https://tiptap.dev/) - Headless WYSIWYG editor for the admin portal.
 
 ## Backend & Data
