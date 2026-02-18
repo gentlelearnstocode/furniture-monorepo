@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: UI Audit and Alignment**
+- [~] **Track: UI Audit and Alignment**
 *Link: [./tracks/ui_audit_20260218/](./tracks/ui_audit_20260218/)*

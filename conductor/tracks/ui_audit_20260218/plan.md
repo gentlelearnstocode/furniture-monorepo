@@ -1,11 +1,11 @@
 # Implementation Plan: UI Audit and Alignment (`ui_audit_20260218`)
 
 ## Phase 1: Audit and Documentation
-- [ ] Task: Audit the Admin Portal (`apps/admin`) for UI misalignments and document findings in `ui-audit-report.md`
-- [ ] Task: Audit the Web Storefront (`apps/web`) for UI misalignments and document findings in `ui-audit-report.md`
-- [ ] Task: Identify discrepancies between Admin CMS previews and Web Storefront rendering
-- [ ] Task: Finalize the `ui-audit-report.md` with prioritized fix recommendations
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Audit and Documentation' (Protocol in workflow.md)
+- [x] Task: Audit the Admin Portal (`apps/admin`) for UI misalignments and document findings in `ui-audit-report.md`
+- [x] Task: Audit the Web Storefront (`apps/web`) for UI misalignments and document findings in `ui-audit-report.md`
+- [x] Task: Identify discrepancies between Admin CMS previews and Web Storefront rendering
+- [x] Task: Finalize the `ui-audit-report.md` with prioritized fix recommendations
+- [~] Task: Conductor - User Manual Verification 'Phase 1: Audit and Documentation' (Protocol in workflow.md)
 
 ## Phase 2: Core UI Components and Styling Consistency
 - [ ] Task: Harmonize spacing, margins, and padding in shared `@repo/ui` components

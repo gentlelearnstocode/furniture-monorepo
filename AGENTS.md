@@ -12,7 +12,7 @@
 | **Type**            | Turborepo monorepo                                  |
 | **Stack**           | Next.js 16, TypeScript 5.9, PostgreSQL, Drizzle ORM |
 | **Package Manager** | pnpm 9.0                                            |
-| **Apps**            | `web` (port 3000), `admin` (port 3001)              |
+| **Apps**            | `web` (port 4000), `admin` (port 4001)              |
 
 ---
 
@@ -21,14 +21,16 @@
 ```
 furniture-monorepo/
 ├── apps/
-│   ├── admin/                 # Admin CMS (port 3001)
+│   ├── admin/                 # Admin CMS (port 4001)
 │   │   ├── app/               # Next.js App Router pages
 │   │   ├── components/        # Admin-specific components
 │   │   └── lib/
 │   │       ├── actions/       # Server actions for CRUD
 │   │       └── validations/   # Zod validation schemas
-│   └── web/                   # Customer storefront (port 3000)
+│   └── web/                   # Customer storefront (port 4000)
 │       ├── app/               # Next.js App Router pages
+│       ├── i18n/              # next-intl configuration
+│       ├── messages/          # Translation JSONs (en.json, vi.json)
 │       └── lib/               # Web utilities
 ├── packages/
 │   ├── database/              # @repo/database - Drizzle ORM
@@ -48,49 +50,44 @@ furniture-monorepo/
 
 ## 🗄️ Database Schema
 
+### Localization Pattern
+
+Most text fields support bilingual content using the suffix `Vi` for Vietnamese:
+- `name` (English, primary) / `nameVi` (Vietnamese)
+- `description` / `descriptionVi`
+- `contentHtml` / `contentHtmlVi`
+
 ### Core Entities
 
-| Table         | Purpose              | Key Fields                                                  |
-| ------------- | -------------------- | ----------------------------------------------------------- |
-| `products`    | Product catalog      | `name`, `slug`, `catalogId`, `basePrice`, `descriptionHtml` |
-| `catalogs`    | Two-level categories | `name`, `slug`, `parentId`, `level` (1 or 2), `imageId`     |
-| `collections` | Curated groups       | `name`, `slug`, `imageId`                                   |
-| `assets`      | Media files          | `filename`, `contentType`, `url`, `width`, `height`         |
-| `services`    | Company services     | `title`, `slug`, `descriptionHtml`, `isActive`              |
-| `projects`    | Portfolio items      | `title`, `slug`, `descriptionHtml`                          |
-| `posts`       | Blog articles        | `title`, `slug`, `content`                                  |
-| `users`       | Admin accounts       | `email`, `password`, `role`                                 |
+| Table         | Purpose                 | Key Fields                                                  |
+| ------------- | ----------------------- | ----------------------------------------------------------- |
+| `products`    | Product catalog         | `name`, `slug`, `catalogId`, `basePrice`, `description`     |
+| `catalogs`    | Two-level hierarchy     | `name`, `slug`, `parentId`, `level` (1 or 2)                |
+| `collections` | Curated groupings       | `name`, `slug`, `bannerId`                                  |
+| `assets`      | Media library           | `url`, `filename`, `mimeType`, `size`                       |
+| `showrooms`   | Physical displays       | `title`, `subtitle`, `contentHtml`, `imageId`               |
+| `projects`    | Portfolio showcase      | `title`, `slug`, `contentHtml`                              |
+| `services`    | Company services        | `title`, `slug`, `descriptionHtml`                          |
+| `posts`       | Blog articles           | `title`, `slug`, `contentHtml`, `excerpt`                   |
+| `inbox`       | Customer inquiries      | `name`, `phoneNumber`, `email`, `content`                   |
+| `custom_pages`| Static content pages    | `slug`, `title`, `content` (jsonb)                          |
+| `notifications`| System alerts          | `type`, `title`, `message`, `isRead`                        |
 
-### Catalog Hierarchy
+### Asset Gallery Pattern
 
-```
-Level 1 Catalog (parent)
-└── Level 2 Catalog (child, parentId → Level 1)
-    └── Products (catalogId → Level 2)
-```
+Images are linked via join tables that include display metadata:
+- `product_assets`, `service_assets`, `project_assets`, `post_assets`
+- **Fields**: `assetId`, `position`, `isPrimary`
+- **Focus Point**: `focusPoint: { x: number, y: number }` (0-100 percentage)
+- **Customization**: `aspectRatio` (original, 1:1, 3:4, etc.), `objectFit` (cover, contain)
 
-### Join Tables
+### Site Configuration
 
-| Table                 | Links                                |
-| --------------------- | ------------------------------------ |
-| `collection_products` | collections ↔ products              |
-| `catalog_collections` | catalogs ↔ collections              |
-| `product_assets`      | products ↔ assets (with `position`) |
-| `variant_assets`      | variants ↔ assets                   |
-| `service_assets`      | services ↔ assets                   |
-| `project_assets`      | projects ↔ assets                   |
-| `post_assets`         | posts ↔ assets                      |
-
-### Site Configuration Tables
-
-| Table              | Purpose                           |
-| ------------------ | --------------------------------- |
-| `site_settings`    | Global settings                   |
-| `site_heros`       | Homepage hero section             |
-| `site_intros`      | Homepage intro section            |
-| `site_footers`     | Footer content                    |
-| `footer_addresses` | Footer address list               |
-| `footer_contacts`  | Footer contact info (phone/email) |
+- `site_heros`: Homepage banner sliders
+- `site_intros`: "About Us" section on homepage
+- `site_footer`: Global footer settings, addresses, and contacts
+- `featured_catalog_rows`: Customizable homepage grid for catalogs
+- `site_contacts`: Floating contact buttons (Zalo, Phone, etc.)
 
 ---
 
@@ -100,10 +97,10 @@ Level 1 Catalog (parent)
 
 ```typescript
 // Database client and ORM functions
-import { db, eq, and, desc, asc } from '@repo/database';
+import { db, eq, and, desc, asc, relations } from '@repo/database';
 
 // Schema tables and types
-import { products, catalogs, SelectProduct } from '@repo/database/schema';
+import { products, catalogs, SelectProduct, InsertProduct } from '@repo/database/schema';
 ```
 
 ### UI Components
@@ -111,18 +108,10 @@ import { products, catalogs, SelectProduct } from '@repo/database/schema';
 ```typescript
 // Individual UI components
 import { Button } from '@repo/ui/ui/button';
-import { Card, CardContent, CardHeader } from '@repo/ui/ui/card';
-import { Input } from '@repo/ui/ui/input';
 import { Form, FormField, FormItem, FormLabel } from '@repo/ui/ui/form';
 
 // Utilities
 import { cn } from '@repo/ui/lib/utils';
-```
-
-### Assets
-
-```typescript
-import logo from '@repo/assets/logo.png';
 ```
 
 ---
@@ -132,80 +121,61 @@ import logo from '@repo/assets/logo.png';
 ### Server Actions (Admin)
 
 Location: `apps/admin/lib/actions/`
+Always use `'use server'` and `revalidatePath()`.
 
 ```typescript
 'use server';
 
 import { db, eq } from '@repo/database';
-import { products, InsertProduct } from '@repo/database/schema';
+import { products } from '@repo/database/schema';
 import { revalidatePath } from 'next/cache';
 
-export async function createProduct(data: InsertProduct) {
-  const [product] = await db.insert(products).values(data).returning();
+export async function updateProduct(id: string, data: Partial<InsertProduct>) {
+  await db.update(products).set(data).where(eq(products.id, id));
   revalidatePath('/products');
-  return product;
+  revalidatePath(`/products/${id}`);
 }
 ```
 
 ### Validation Schemas (Admin)
 
 Location: `apps/admin/lib/validations/`
+Includes support for both languages.
 
 ```typescript
 import { z } from 'zod';
 
 export const productSchema = z.object({
   name: z.string().min(1, 'Name is required'),
-  slug: z.string().min(1, 'Slug is required'),
+  nameVi: z.string().optional(),
+  slug: z.string().regex(/^[a-z0-9-]+$/),
   basePrice: z.coerce.number().min(0),
-  isActive: z.boolean().default(true),
 });
-
-export type ProductFormValues = z.infer<typeof productSchema>;
 ```
 
-### Form Components (Admin)
+### i18n (Web)
 
-```typescript
-'use client';
+Uses `next-intl`. Translations are in `apps/web/messages/[locale].json`.
+Access via `useTranslations` (Client) or `getTranslations` (Server).
 
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { productSchema, ProductFormValues } from '@/lib/validations/product';
+---
 
-export function ProductForm({ initialData }: { initialData?: ProductFormValues }) {
-  const form = useForm<ProductFormValues>({
-    resolver: zodResolver(productSchema),
-    defaultValues: initialData ?? { name: '', slug: '' },
-  });
-  // ...
-}
-```
+## 🚀 Commands Reference
 
-### Data Fetching
+```bash
+# Development (Individual Ports)
+pnpm dev:web      # http://localhost:4000
+pnpm dev:admin    # http://localhost:4001
 
-```typescript
-// Server component data fetching
-import { db, eq, desc } from '@repo/database';
-import { products, catalogs, assets } from '@repo/database/schema';
+# Database Management
+pnpm db:push      # Push schema to DB (sync)
+pnpm db:generate  # Generate migration SQL
+pnpm --filter @repo/database drizzle-kit studio # UI for DB
 
-// Simple query
-const allProducts = await db.query.products.findMany({
-  where: eq(products.isActive, true),
-  orderBy: desc(products.createdAt),
-});
-
-// With relations
-const productWithImages = await db.query.products.findFirst({
-  where: eq(products.slug, slug),
-  with: {
-    catalog: true,
-    assets: {
-      with: { asset: true },
-      orderBy: (a, { asc }) => asc(a.position),
-    },
-  },
-});
+# Quality Control
+pnpm lint         # Run ESLint
+pnpm check-types  # Run TSC
+pnpm format       # Run Prettier
 ```
 
 ---
@@ -215,149 +185,55 @@ const productWithImages = await db.query.products.findFirst({
 | Pattern           | Example                   | Usage                  |
 | ----------------- | ------------------------- | ---------------------- |
 | `page.tsx`        | `products/page.tsx`       | Next.js page component |
-| `layout.tsx`      | `products/layout.tsx`     | Next.js layout         |
 | `[slug]/page.tsx` | `catalog/[slug]/page.tsx` | Dynamic route          |
 | `*-form.tsx`      | `product-form.tsx`        | Form component         |
-| `*.ts`            | `products.ts`             | Server actions         |
-
----
-
-## 🚀 Commands Reference
-
-### Development
-
-```bash
-# Start all apps
-pnpm dev
-
-# Start individual apps
-pnpm dev:web      # Web on :3000
-pnpm dev:admin    # Admin on :3001
-
-# Type checking
-pnpm check-types
-
-# Linting
-pnpm lint
-```
-
-### Database
-
-```bash
-# Push schema changes (no migration files)
-pnpm db:push
-
-# Generate migration files
-pnpm db:generate
-
-# Direct drizzle-kit access
-pnpm --filter @repo/database drizzle-kit studio
-```
-
-### Building
-
-```bash
-# Build all
-pnpm build
-
-# Production start
-pnpm start
-pnpm start:web
-pnpm start:admin
-```
+| `actions.ts`      | `lib/actions/products.ts` | Server actions         |
 
 ---
 
 ## ⚠️ Important Considerations
 
-### When Modifying Schema
-
-1. Edit `packages/database/src/schema.ts`
-2. Add relations if needed
-3. Export new types (InsertX, SelectX)
-4. Run `pnpm db:push` to apply changes
-5. Update server actions and validations as needed
-
-### When Adding New Features
-
-1. **Database**: Add tables/relations in `schema.ts`
-2. **Validation**: Create Zod schema in `lib/validations/`
-3. **Actions**: Create server actions in `lib/actions/`
-4. **UI**: Create form/list components in appropriate `app/` folder
-5. **Routes**: Follow Next.js App Router conventions
-
-### Asset Handling
-
-- Use Vercel Blob for file uploads
-- Assets stored in `assets` table with metadata
-- Link assets via join tables (`product_assets`, etc.)
-- `position` field for ordering, `isPrimary` for featured images
-
-### Authentication
-
-- NextAuth.js v5 (beta) with Drizzle adapter
-- Protected routes via middleware
-- User roles stored in `users` table
+1. **Schema Changes**: Always edit `packages/database/src/schema.ts` first.
+2. **Media**: Use `Vercel Blob` for storage. Assets should be added to the `assets` table first, then linked to entities.
+3. **Translations**: When adding a new field that requires translation, add both `fieldName` and `fieldNameVi` to the schema and Zod validation.
+4. **Ordering**: Use the `position` or `displayOrder` fields for manual sorting in the UI.
+5. **Caching**: Use `revalidatePath` or `revalidateTag` in server actions to ensure the web storefront reflects admin changes.
 
 ---
 
 ## 🎨 UI Component Library
 
-Available components in `@repo/ui/ui/*`:
-
-| Category       | Components                                                  |
-| -------------- | ----------------------------------------------------------- |
-| **Layout**     | Card, Separator, Sidebar, Sheet                             |
-| **Forms**      | Input, Textarea, Select, Checkbox, Switch, RadioGroup, Form |
-| **Actions**    | Button, DropdownMenu, AlertDialog                           |
-| **Display**    | Table, Badge, Avatar, Skeleton, Progress                    |
-| **Feedback**   | Sonner (toast notifications), Tooltip                       |
-| **Navigation** | Breadcrumb, Collapsible                                     |
-
----
-
-## 🔄 State Management
-
-- **No global state library** - Server Components + Server Actions pattern
-- **Form state**: React Hook Form
-- **URL state**: Next.js `searchParams` for filters/pagination
-- **Server state**: Direct database queries in Server Components
-- **Mutations**: Server Actions with `revalidatePath()`
+Shared components in `@repo/ui/ui/*` (based on shadcn/ui):
+- **Forms**: Input, Textarea, Select, Checkbox, Switch, DatePicker
+- **Feedback**: Sonner (Toasts), Skeleton, Progress
+- **Layout**: Card, Dialog, Sheet, Tabs, Accordion
+- **Admin Specific**: Rich Text Editor (TipTap), Drag & Drop (dnd-kit)
 
 ---
 
 ## 📝 Helpful Queries
 
-### Get products with all relations
+### Fetch Product with Full Relations
 
 ```typescript
-const products = await db.query.products.findMany({
+const item = await db.query.products.findFirst({
+  where: eq(products.slug, slug),
   with: {
     catalog: { with: { parent: true } },
-    assets: { with: { asset: true } },
-    variants: { with: { optionValues: true, assets: true } },
-    collections: { with: { collection: true } },
+    gallery: { with: { asset: true }, orderBy: (a, { asc }) => asc(a.position) },
+    variants: { with: { optionValues: { with: { optionValue: { with: { option: true } } } } } },
+    recommendations: { with: { recommendedProduct: true } },
   },
 });
 ```
 
-### Get active services
+### Fetch Multi-level Catalog Tree
 
 ```typescript
-const services = await db.query.services.findMany({
-  where: eq(services.isActive, true),
-  with: { gallery: { with: { asset: true } } },
-});
-```
-
-### Get catalog hierarchy
-
-```typescript
-// Level 1 catalogs with children
-const catalogs = await db.query.catalogs.findMany({
+const tree = await db.query.catalogs.findMany({
   where: eq(catalogs.level, 1),
   with: {
-    children: true,
+    children: { with: { image: true } },
     image: true,
   },
 });
@@ -367,18 +243,7 @@ const catalogs = await db.query.catalogs.findMany({
 
 ## 🛠️ Debugging Tips
 
-1. **Database queries**: Use `drizzle-kit studio` for visual DB exploration
-2. **Server Actions**: Check server logs for errors
-3. **Type errors**: Run `pnpm check-types` to catch issues
-4. **Build issues**: Run `pnpm build` to verify production build
-
----
-
-## 📚 Additional Resources
-
-- [Drizzle ORM Docs](https://orm.drizzle.team/)
-- [Next.js App Router](https://nextjs.org/docs/app)
-- [Turborepo Docs](https://turbo.build/repo/docs)
-- [shadcn/ui Components](https://ui.shadcn.com/)
-- [React Hook Form](https://react-hook-form.com/)
-- [Zod Validation](https://zod.dev/)
+1. **DB Studio**: Use `pnpm --filter @repo/database drizzle-kit studio` to inspect data.
+2. **Server Logs**: Admin actions output errors to the terminal; check for database constraint violations.
+3. **i18n Keys**: If a translation is missing on the web app, check the JSON files in `apps/web/messages/`.
+4. **Vercel Blob**: If uploads fail, verify `BLOB_READ_WRITE_TOKEN` in the `.env` file.

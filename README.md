@@ -28,18 +28,19 @@ A modern, full-stack furniture e-commerce platform built with Next.js 16, Turbor
 
 This monorepo contains the ThienAn Furniture e-commerce platform, consisting of:
 
-- **Web Application** (`apps/web`): Customer-facing storefront
+- **Web Application** (`apps/web`): Customer-facing storefront with internationalization (EN/VI)
 - **Admin Portal** (`apps/admin`): Content management and product administration
 
 The platform supports:
 
-- Product and catalog management with two-level hierarchies
-- Collections and curated product groupings
-- Blog/post management
-- Service showcases
-- Project portfolios
-- User authentication and management
-- SEO-optimized content
+- **Bilingual Content**: Fully localized management (English/Vietnamese) for all products, blogs, and pages
+- **Product Management**: Multi-variant products with dynamic pricing, inventory, and image focus/cropping controls
+- **Catalog Hierarchy**: Two-level category structure (Level 1 → Level 2) with featured layout management
+- **Lead Generation**: Customer contact inbox for inquiries and quote requests
+- **Portfolio & Showcases**: Professional project portfolios, service catalogs, and showroom displays
+- **Content CMS**: Blog/post management and custom page builder for static content
+- **Admin Operations**: Product import from Excel, real-time notifications, and site-wide analytics
+- **SEO Optimization**: Metadata controls for all core entities
 
 ---
 
@@ -48,11 +49,11 @@ The platform supports:
 ```
 furniture-monorepo/
 ├── apps/
-│   ├── admin/              # Admin portal (Next.js, port 3001)
-│   └── web/                # Customer storefront (Next.js, port 3000)
+│   ├── admin/              # Admin portal (Next.js, port 4001)
+│   └── web/                # Customer storefront (Next.js, port 4000)
 ├── packages/
 │   ├── assets/             # Shared static assets
-│   ├── database/           # Drizzle ORM schema and client
+│   ├── database/           # Drizzle ORM schema, migrations, and client
 │   ├── eslint-config/      # Shared ESLint configuration
 │   ├── tailwind-config/    # Shared Tailwind CSS configuration
 │   ├── typescript-config/  # Shared TypeScript configuration
@@ -93,6 +94,7 @@ furniture-monorepo/
 | **Forms**      | React Hook Form 7 + Zod 4 |
 | **Icons**      | Lucide React              |
 | **Rich Text**  | TipTap (admin only)       |
+| **i18n**       | next-intl (web only)      |
 
 ### Authentication & Storage
 
@@ -159,8 +161,8 @@ furniture-monorepo/
    pnpm dev
 
    # Or start individually
-   pnpm dev:web    # Web on http://localhost:3000
-   pnpm dev:admin  # Admin on http://localhost:3001
+   pnpm dev:web    # Web on http://localhost:4000
+   pnpm dev:admin  # Admin on http://localhost:4001
    ```
 
 ---
@@ -172,8 +174,8 @@ furniture-monorepo/
 | Script             | Description                        |
 | ------------------ | ---------------------------------- |
 | `pnpm dev`         | Start all apps in development mode |
-| `pnpm dev:web`     | Start web app only (port 3000)     |
-| `pnpm dev:admin`   | Start admin app only (port 3001)   |
+| `pnpm dev:web`     | Start web app only (port 4000)     |
+| `pnpm dev:admin`   | Start admin app only (port 4001)   |
 | `pnpm build`       | Build all apps for production      |
 | `pnpm start`       | Start all built apps               |
 | `pnpm lint`        | Run ESLint across all packages     |
@@ -190,24 +192,20 @@ furniture-monorepo/
 
 The database schema is defined in `packages/database/src/schema.ts` and includes:
 
-| Entity            | Description                                      |
-| ----------------- | ------------------------------------------------ |
-| **Products**      | Main product catalog with variants and options   |
-| **Catalogs**      | Two-level category hierarchy (Level 1 → Level 2) |
-| **Collections**   | Curated product groupings linked to catalogs     |
-| **Assets**        | Uploaded media files (images, videos)            |
-| **Services**      | Company service offerings                        |
-| **Projects**      | Portfolio/showcase projects                      |
-| **Posts/Blogs**   | Blog articles and content                        |
-| **Users**         | Admin user accounts                              |
-| **Site Settings** | Hero, intro, and footer configurations           |
+| Category        | Entities                                                                        |
+| --------------- | ------------------------------------------------------------------------------- |
+| **Catalog**     | Products, Variants, Options, Catalogs, Collections, Recommendations             |
+| **Marketing**   | Hero, Intro, Sale Sections, Featured Layouts, Showrooms, Projects, Blogs        |
+| **Operations**  | Inbox Messages, Notifications, Product Import Jobs, Analytics Visits            |
+| **Settings**    | Site Settings, Site Footer, Site Contacts, Custom Pages                         |
+| **Foundation**  | Users, Accounts, Sessions, Verification Tokens, Assets                          |
 
-### Key Relationships
+### Key Features
 
-- Products belong to a catalog (Level 2)
-- Collections can belong to multiple catalogs
-- Products can belong to multiple collections
-- Assets are linked via join tables (product_assets, variant_assets, etc.)
+- **Multi-language**: Most text fields have `Vi` counterparts (e.g., `name` and `nameVi`)
+- **Self-referencing**: Catalogs use `parentId` for a two-level hierarchy
+- **Asset Links**: Images are linked via join tables (e.g., `product_assets`) with metadata for `focusPoint` and `aspectRatio`
+- **Import/Export**: Tracking for Excel-based product imports
 
 ### Database Commands
 
@@ -218,28 +216,8 @@ pnpm db:push
 # Generate migration files
 pnpm db:generate
 
-# Run in database package directly
-pnpm --filter @repo/database drizzle-kit push
-```
-
----
-
-## Environment Variables
-
-### Required Variables
-
-| Variable                | App   | Description                  |
-| ----------------------- | ----- | ---------------------------- |
-| `POSTGRES_URL`          | Both  | PostgreSQL connection string |
-| `AUTH_SECRET`           | Admin | NextAuth.js secret key       |
-| `BLOB_READ_WRITE_TOKEN` | Admin | Vercel Blob storage token    |
-
-### Local Development
-
-For local development with Docker PostgreSQL:
-
-```
-POSTGRES_URL="postgres://postgres:postgres@localhost:5432/thienan_furniture"
+# View database in Drizzle Studio
+pnpm --filter @repo/database drizzle-kit studio
 ```
 
 ---
@@ -250,54 +228,50 @@ POSTGRES_URL="postgres://postgres:postgres@localhost:5432/thienan_furniture"
 
 Customer-facing storefront featuring:
 
-- Product browsing by catalog/collection
-- Product detail pages with variants
-- Blog/article pages
-- Service and project showcases
-- SEO-optimized pages
+- **Catalog Explorer**: Browse products by catalog hierarchy or collections
+- **Product Gallery**: Detailed pages with variant switching and pricing
+- **Interactive PDF**: View catalogs using an interactive flipbook/PDF viewer
+- **i18n Support**: Full support for English and Vietnamese switching
+- **Showcases**: Projects, services, and showroom displays
 
 **Key Directories:**
 
 ```
 apps/web/
 ├── app/
-│   ├── blogs/          # Blog listing and detail pages
-│   ├── catalog/        # Catalog and subcatalog pages
-│   ├── collections/    # Collection pages
+│   ├── catalog/        # Multi-level catalog routing
 │   ├── product/        # Product detail pages
-│   └── components/     # Shared web components
-└── lib/                # Utilities
+│   ├── showroom-factory/ # Showroom display pages
+│   ├── contact-us/     # Customer inquiry form
+│   └── messages/       # i18n JSON files (en.json, vi.json)
+└── components/         # Web-specific UI components
 ```
 
 ### Admin App (`apps/admin`)
 
-Content management portal with:
+Full CMS for managing all site content:
 
-- Dashboard overview
-- Product CRUD with image uploads
-- Catalog and collection management
-- Blog/post editor (TipTap rich text)
-- Service and project management
-- User management
-- Site settings (hero, intro, footer)
+- **Dashboard**: Overview of analytics and recent activities
+- **Product CMS**: Rich product management with batch import and asset optimization
+- **Inbox**: Centralized view for managing customer inquiries
+- **Homepage Builder**: Modular management of Hero, Intro, Sale, and Featured sections
+- **Notifications**: Real-time system alerts for entity changes
+- **Rich Editor**: TipTap-based editor for blog and page content
 
 **Key Directories:**
 
 ```
 apps/admin/
 ├── app/
-│   ├── products/       # Product management
-│   ├── catalogs/       # Catalog management
-│   ├── collections/    # Collection management
-│   ├── blogs/          # Blog post management
-│   ├── services/       # Service management
-│   ├── projects/       # Project management
-│   ├── users/          # User management
-│   └── homepage/       # Site settings (hero, intro, footer)
-├── components/         # Admin UI components
-└── lib/
-    ├── actions/        # Server actions
-    └── validations/    # Zod schemas
+│   ├── products/       # Advanced product management
+│   ├── catalogs/       # Hierarchy and layout management
+│   ├── homepage/       # Modular section builders
+│   ├── inbox/          # Message management
+│   └── (dashboard)/    # Analytics and overview
+├── lib/
+│   ├── actions/        # Extensive server actions library
+│   └── validations/    # Shared Zod schemas for all forms
+└── components/         # Admin UI components (dnd-kit integration)
 ```
 
 ---
