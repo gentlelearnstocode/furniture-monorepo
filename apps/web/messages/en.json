@@ -1,4 +1,14 @@
 {
+  "Metadata": {
+    "home": {
+      "title": "Thien An Furniture | Excellence Since 1997",
+      "description": "Luxury furniture and decor for your home. Discover craftsmanship in every detail."
+    },
+    "aboutUs": {
+      "title": "About Us | Thien An Furniture",
+      "description": "The journey of building Thien An Furniture brand since 1997."
+    }
+  },
   "Common": {
     "home": "Home",
     "seeAll": "See All",

@@ -1,3 +1,5 @@
+import { getLocale as getIntlLocale } from 'next-intl/server';
+
 export type Locale = 'en' | 'vi';
 
 export const DEFAULT_LOCALE: Locale = 'vi';
@@ -5,99 +7,58 @@ export const DEFAULT_LOCALE: Locale = 'vi';
 export const LOCALE_COOKIE_NAME = 'locale';
 
 /**
- * Get the current locale from cookies (for server components).
- * Import from 'next/headers' and call this in RSC to get the current locale.
+ * Get the current locale (server-side).
+ * In RSC, this uses next-intl/server's getLocale.
  */
 export const getLocale = async (): Promise<Locale> => {
-  const { cookies } = await import('next/headers');
-  const cookieStore = await cookies();
-  const stored = cookieStore.get(LOCALE_COOKIE_NAME)?.value as Locale | undefined;
-  return stored === 'vi' || stored === 'en' ? stored : DEFAULT_LOCALE;
+  return (await getIntlLocale()) as Locale;
 };
 
 /**
- * Get localized text with fallback to English.
- * Usage: getLocalizedText(product, 'name', locale)
- * Will return product.nameVi if locale === 'vi' and nameVi exists,
- * otherwise falls back to product.name
+ * Get localized content with fallback logic.
  *
- * @param entity - The entity object containing both English and Vietnamese fields
- * @param field - The base field name (English version)
- * @param locale - The current locale ('en' or 'vi')
- * @returns The localized string value, falling back to English if Vietnamese is not available
+ * @param entity - The entity object
+ * @param field - The base field name (English)
+ * @param locale - The current locale
+ * @returns The localized value, falling back to the base field
  */
-export const getLocalizedText = <T extends Record<string, unknown>>(
+export const getLocalized = <T extends Record<string, any>>(
   entity: T,
   field: keyof T,
-  locale: Locale,
+  locale: string | Locale,
 ): string => {
   if (locale === 'vi') {
-    // Construct the Vietnamese field name (e.g., 'name' -> 'nameVi')
     const viField = `${String(field)}Vi` as keyof T;
     const viValue = entity[viField];
     if (viValue && typeof viValue === 'string' && viValue.trim() !== '') {
       return viValue;
     }
   }
-  // Fallback to English (default field)
   const value = entity[field];
   return typeof value === 'string' ? value : '';
 };
 
 /**
- * Get localized HTML content with fallback to English.
- * Same as getLocalizedText but returns null if no content available.
- *
- * @param entity - The entity object containing both English and Vietnamese fields
- * @param field - The base field name (English version)
- * @param locale - The current locale ('en' or 'vi')
- * @returns The localized HTML string value, or null if not available
+ * Legacy alias for getLocalized
  */
-export const getLocalizedHtml = <T extends Record<string, unknown>>(
-  entity: T,
-  field: keyof T,
-  locale: Locale,
-): string | null => {
-  if (locale === 'vi') {
-    const viField = `${String(field)}Vi` as keyof T;
-    const viValue = entity[viField];
-    if (viValue && typeof viValue === 'string' && viValue.trim() !== '') {
-      return viValue;
-    }
-  }
-  const value = entity[field];
-  return typeof value === 'string' && value.trim() !== '' ? value : null;
-};
+export const getLocalizedText = getLocalized;
 
 /**
- * Get multiple localized fields from an entity at once.
- * Returns an object with the localized values.
- *
- * @param entity - The entity object
- * @param fields - Array of base field names to localize
- * @param locale - The current locale
- * @returns Record mapping field names to their localized values
+ * Get localized HTML content. Returns null if empty.
  */
-export const getLocalizedFields = <T extends Record<string, unknown>>(
+export const getLocalizedHtml = <T extends Record<string, any>>(
   entity: T,
-  fields: (keyof T)[],
-  locale: Locale,
-): Record<string, string> => {
-  const result: Record<string, string> = {};
-  for (const field of fields) {
-    result[String(field)] = getLocalizedText(entity, field, locale);
-  }
-  return result;
+  field: keyof T,
+  locale: string | Locale,
+): string | null => {
+  const value = getLocalized(entity, field, locale);
+  return value.trim() !== '' ? value : null;
 };
 
 /**
  * Helper to check if a Vietnamese translation is available
- *
- * @param entity - The entity object
- * @param field - The base field name
- * @returns true if a non-empty Vietnamese translation exists
  */
-export const hasVietnameseTranslation = <T extends Record<string, unknown>>(
+export const hasVietnameseTranslation = <T extends Record<string, any>>(
   entity: T,
   field: keyof T,
 ): boolean => {

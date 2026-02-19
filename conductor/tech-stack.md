@@ -18,3 +18,4 @@
 - **ORM:** [Drizzle ORM 0.45](https://orm.drizzle.team/) - TypeScript ORM with a focus on performance and developer experience.
 - **Authentication:** [NextAuth.js 5 (beta)](https://authjs.dev/) - Flexible authentication for Next.js applications.
 - **File Storage:** [Vercel Blob](https://vercel.com/docs/storage/vercel-blob) - Efficient storage for images and media assets.
+- **I18n:** `next-intl` v4 - Internationalization with URL-based routing (`[locale]` segment) and `proxy.ts` for request interception (Next.js 16).

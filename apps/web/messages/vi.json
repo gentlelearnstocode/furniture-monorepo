@@ -1,4 +1,14 @@
 {
+  "Metadata": {
+    "home": {
+      "title": "Thien An Furniture | Sự tinh tế từ năm 1997",
+      "description": "Nội thất cao cấp và trang trí cho ngôi nhà của bạn. Khám phá sự tinh xảo trong từng chi tiết."
+    },
+    "aboutUs": {
+      "title": "Về chúng tôi | Thien An Furniture",
+      "description": "Hành trình xây dựng thương hiệu Thien An Furniture từ năm 1997."
+    }
+  },
   "Common": {
     "home": "Trang chủ",
     "seeAll": "Xem tất cả",
