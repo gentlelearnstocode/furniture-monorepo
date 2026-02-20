@@ -13,14 +13,14 @@
 - [x] Task: Verify types with `pnpm check-types` in affected applications (301a930)
 - [x] Task: Conductor - User Manual Verification 'Core Entities Implementation' (Protocol in workflow.md) (3bf2b38)
 
-## Phase 3: Auth, Users & Content Implementation
-- [~] Task: Define Auth, User, Blog, Project, and Service types in `@repo/shared`
-- [ ] Task: Update `apps/web` to use shared types for these categories
-- [ ] Task: Update `apps/admin` to use shared types for these categories
-- [ ] Task: Verify types with `pnpm check-types`
-- [ ] Task: Conductor - User Manual Verification 'Auth, Users & Content Implementation' (Protocol in workflow.md)
+## Phase 3: Auth, Users & Content Implementation [checkpoint: 10e13e6]
+- [x] Task: Define Auth, User, Blog, Project, and Service types in `@repo/shared` (10e13e6)
+- [x] Task: Update `apps/web` to use shared types for these categories (30e1169)
+- [x] Task: Update `apps/admin` to use shared types for these categories (10e13e6)
+- [x] Task: Verify types with `pnpm check-types` (10e13e6)
+- [x] Task: Conductor - User Manual Verification 'Auth, Users & Content Implementation' (Protocol in workflow.md) (10e13e6)
 
 ## Phase 4: Zod Schema Synchronization & Final Validation
-- [ ] Task: Identify and move common Zod schemas to `@repo/shared`
+- [~] Task: Identify and move common Zod schemas to `@repo/shared`
 - [ ] Task: Final monorepo-wide type check and linting
 - [ ] Task: Conductor - User Manual Verification 'Zod Schema Synchronization & Final Validation' (Protocol in workflow.md)
