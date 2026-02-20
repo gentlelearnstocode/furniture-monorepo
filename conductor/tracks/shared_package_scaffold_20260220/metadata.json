@@ -1,8 +1,0 @@
-{
-  "track_id": "shared_package_scaffold_20260220",
-  "type": "chore",
-  "status": "new",
-  "created_at": "2026-02-20T10:00:00Z",
-  "updated_at": "2026-02-20T10:00:00Z",
-  "description": "scaffold a package called shared, this will be used to host shared types between web and admin, but for the current track, lets just create that package"
-}
