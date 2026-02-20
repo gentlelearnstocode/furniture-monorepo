@@ -1,14 +1,14 @@
 # Implementation Plan: Audit and Implement Shared Types
 
-## Phase 1: Audit & Discovery
+## Phase 1: Audit & Discovery [checkpoint: 47f2f7a]
 - [x] Task: Audit `apps/web` for type definitions and usage patterns (3cc349e)
 - [x] Task: Audit `apps/admin` for type definitions and usage patterns (3cc349e)
 - [x] Task: Create a type mapping report (documenting commonalities and differences) (3cc349e)
-- [~] Task: Conductor - User Manual Verification 'Audit & Discovery' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Audit & Discovery' (Protocol in workflow.md) (47f2f7a)
 
 ## Phase 2: Core Entities Implementation (Product, Catalog, Collection)
-- [ ] Task: Define core entity types in `@repo/shared/src/types`
-- [ ] Task: Update `apps/web` to use shared core entity types
+- [x] Task: Define core entity types in `@repo/shared/src/types` (923cdc3)
+- [~] Task: Update `apps/web` to use shared core entity types
 - [ ] Task: Update `apps/admin` to use shared core entity types
 - [ ] Task: Verify types with `pnpm check-types` in affected applications
 - [ ] Task: Conductor - User Manual Verification 'Core Entities Implementation' (Protocol in workflow.md)
