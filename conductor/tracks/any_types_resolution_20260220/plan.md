@@ -1,7 +1,7 @@
 # Implementation Plan: Resolve all 'any' types
 
 ## Phase 1: Audit & Infrastructure
-- [ ] Task: Generate a comprehensive list of all remaining `any` usages in the monorepo
+- [~] Task: Generate a comprehensive list of all remaining `any` usages in the monorepo
 - [ ] Task: Define common utility types in `@repo/shared/src/types/common.ts` (e.g., `TranslationFunction`, `NextPageProps`)
 - [ ] Task: Conductor - User Manual Verification 'Audit & Infrastructure' (Protocol in workflow.md)
 
