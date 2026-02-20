@@ -11,10 +11,10 @@
     - [x] Create `packages/shared/tsconfig.json` extending `@repo/typescript-config`
 
 ### Task 1.2: Initialize Source Files
-- [ ] Task: Create entry points
-    - [ ] Create `packages/shared/src/types/index.ts` (empty)
-    - [ ] Create `packages/shared/src/utils/index.ts` (empty)
-    - [ ] Create `packages/shared/src/index.ts` exporting from types and utils
+- [x] Task: Create entry points (1ec01eb)
+    - [x] Create `packages/shared/src/types/index.ts` (empty)
+    - [x] Create `packages/shared/src/utils/index.ts` (empty)
+    - [x] Create `packages/shared/src/index.ts` exporting from types and utils
 
 ### Task 1.3: Workspace Integration
 - [ ] Task: Link package and verify
