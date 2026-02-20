@@ -4,6 +4,7 @@
 - **Monorepo Manager:** [Turborepo 2.6](https://turbo.build/repo) - High-performance build system for JavaScript/TypeScript monorepos.
 - **Package Manager:** [pnpm 9.0](https://pnpm.io/) - Fast, disk space efficient package manager.
 - **Language:** [TypeScript 5.9](https://www.typescriptlang.org/) - Strict type checking for robust development.
+- **Shared Package (@repo/shared):** Centralized repository for shared TypeScript types and utility functions across the monorepo applications (admin, web).
 
 ## Frontend & Applications
 - **Framework:** [Next.js 16 (App Router)](https://nextjs.org/) - React framework for production-grade web applications.
