@@ -15,7 +15,7 @@ import { unstable_cache } from 'next/cache';
  *   { revalidate: 3600, tags: ['services'] }
  * );
  */
-export const createCachedQuery = <T, Args extends any[]>(
+export const createCachedQuery = <T, Args extends unknown[]>(
   queryFn: (...args: Args) => Promise<T>,
   keys: string[],
   options?: {

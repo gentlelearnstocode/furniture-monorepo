@@ -22,6 +22,7 @@ export const getLocale = async (): Promise<Locale> => {
  * @param locale - The current locale
  * @returns The localized value, falling back to the base field
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getLocalized = <T extends Record<string, any>>(
   entity: T,
   field: keyof T,
@@ -46,6 +47,7 @@ export const getLocalizedText = getLocalized;
 /**
  * Get localized HTML content. Returns null if empty.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getLocalizedHtml = <T extends Record<string, any>>(
   entity: T,
   field: keyof T,
@@ -58,6 +60,7 @@ export const getLocalizedHtml = <T extends Record<string, any>>(
 /**
  * Helper to check if a Vietnamese translation is available
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const hasVietnameseTranslation = <T extends Record<string, any>>(
   entity: T,
   field: keyof T,

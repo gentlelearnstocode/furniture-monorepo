@@ -29,15 +29,7 @@ import { GripVertical, Trash2, Save, Loader2, PackageSearch } from 'lucide-react
 import { updateSaleSettings, reorderSaleProducts } from '@/lib/actions/sale';
 import { SaleProductSelector } from './sale-product-selector';
 import { cn } from '@repo/ui/lib/utils';
-
-type Product = {
-  id: string;
-  name: string;
-  shortDescription?: string | null;
-  basePrice: string;
-  discountPrice?: string | null;
-  gallery: { asset: { url: string } }[];
-};
+import { type Product } from '@repo/shared';
 
 type SaleProduct = {
   id: string;

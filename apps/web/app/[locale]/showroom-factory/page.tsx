@@ -6,6 +6,7 @@ import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { getLocalized } from '@/lib/i18n';
 import type { Metadata } from 'next';
+import { type ShowroomPageContent, type ShowcaseImage } from '@repo/shared';
 
 interface Props {
   params: Promise<{ locale: string }>;
@@ -32,9 +33,9 @@ export default async function ShowroomFactoryPage({ params }: Props) {
   if (!page || !page.isActive) return notFound();
 
   // Cast content to expected shape
-  const content = page.content as any;
-  const header = content?.header || {};
-  const introHtml = header.introHtml;
+  const content = page.content as ShowroomPageContent;
+  const header = content?.header || { introHtml: '', images: [] };
+  const introHtml = getLocalized(header, 'introHtml', locale);
   const headerImages = header.images || [];
 
   return (
@@ -60,7 +61,7 @@ export default async function ShowroomFactoryPage({ params }: Props) {
           <div className='absolute inset-0 bg-black/40' />
 
           <div className='relative z-10 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-[1440px] mx-auto p-4 md:p-8 items-start'>
-            {headerImages.slice(0, 4).map((img: any, idx: number) => (
+            {headerImages.slice(0, 4).map((img: ShowcaseImage, idx: number) => (
               <div
                 key={idx}
                 className={`relative aspect-[9/16] md:aspect-[3/5] w-full overflow-hidden rounded-sm shadow-2xl transition-all duration-500 

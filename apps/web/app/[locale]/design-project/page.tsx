@@ -104,13 +104,13 @@ export default async function DesignProjectPage({ params }: Props) {
   const showcaseImages = content.body.images || [];
   const footerImageUrl = content.footer.imageUrl;
 
-  const title = getLocalized(page as any, 'title', locale);
-  const headerIntroHtml = getLocalized(content.header as any, 'introHtml', locale);
-  const bodyIntroHtml = getLocalized(content.body as any, 'introHtml', locale);
-  const bodyParagraphHtml = getLocalized(content.body as any, 'paragraphHtml', locale);
-  const footerTextHtml = getLocalized(content.footer as any, 'textHtml', locale);
-  const buttonText = getLocalized(content.header as any, 'buttonText', locale) || 'Request a design consultation';
-  const button2Text = getLocalized(content.header as any, 'button2Text', locale) || 'View Projects';
+  const title = getLocalized(page as unknown as Record<string, unknown>, 'title', locale);
+  const headerIntroHtml = getLocalized(content.header as unknown as Record<string, unknown>, 'introHtml', locale);
+  const bodyIntroHtml = getLocalized(content.body as unknown as Record<string, unknown>, 'introHtml', locale);
+  const bodyParagraphHtml = getLocalized(content.body as unknown as Record<string, unknown>, 'paragraphHtml', locale);
+  const footerTextHtml = getLocalized(content.footer as unknown as Record<string, unknown>, 'textHtml', locale);
+  const buttonText = getLocalized(content.header as unknown as Record<string, unknown>, 'buttonText', locale) || 'Request a design consultation';
+  const button2Text = getLocalized(content.header as unknown as Record<string, unknown>, 'button2Text', locale) || 'View Projects';
 
   return (
     <div className='min-h-screen'>

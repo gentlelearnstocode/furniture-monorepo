@@ -10,6 +10,7 @@ import { StatsCard } from '@/components/listing/stats-card';
 import { ListingCard } from '@/components/listing/listing-card';
 import { parseListingParams } from '@/lib/listing-params';
 import { STATUS_FILTER_OPTIONS } from '@/constants';
+import { type CollectionWithRelations } from '@repo/shared';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,13 +32,13 @@ export default async function CollectionsPage({ searchParams }: CollectionsPageP
     filters.push(eq(collections.isActive, status === 'active'));
   }
 
-  const { data: allCollections, meta } = await getListingData(collections, {
+  const { data: allCollections, meta } = await getListingData<CollectionWithRelations>(collections, {
     page,
     limit: 10,
     search,
     searchColumns: [collections.name, collections.slug],
     filters,
-    orderBy: (t: any, { desc }: any) => [desc(t.createdAt)],
+    orderBy: (t, { desc }) => [desc(t.createdAt)],
     with: {
       banner: true,
       createdBy: true,

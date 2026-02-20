@@ -11,6 +11,8 @@ import { StatsCard } from '@/components/listing/stats-card';
 import { ListingCard } from '@/components/listing/listing-card';
 import { parseListingParams } from '@/lib/listing-params';
 import { STATUS_FILTER_OPTIONS } from '@/constants';
+import { type Product } from '@repo/shared';
+import { type DrizzleWhereOperators } from '@repo/shared';
 
 export const dynamic = 'force-dynamic';
 
@@ -36,18 +38,18 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     filters.push(eq(products.isActive, status === 'active'));
   }
 
-  const { data: allProducts, meta } = await getListingData(products, {
+  const { data: allProducts, meta } = await getListingData<Product>(products, {
     page,
     limit: 10,
     search,
     searchColumns: [products.name, products.slug],
     filters,
-    orderBy: (t: any, { desc }: any) => [desc(t.createdAt)],
+    orderBy: (t, { desc }) => [desc(t.createdAt)],
     with: {
       catalog: true,
       createdBy: true,
       gallery: {
-        where: (productAssets: any, { eq }: any) => eq(productAssets.isPrimary, true),
+        where: (productAssets: Record<string, unknown>, { eq }: DrizzleWhereOperators) => eq(productAssets.isPrimary, true),
         with: {
           asset: true,
         },

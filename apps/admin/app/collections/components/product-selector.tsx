@@ -18,13 +18,7 @@ import { Input } from '@repo/ui/ui/input';
 import { Checkbox } from '@repo/ui/ui/checkbox';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@repo/ui/ui/table';
 import { cn } from '@repo/ui/lib/utils';
-
-interface Product {
-  id: string;
-  name: string;
-  slug: string;
-  basePrice: string | number;
-}
+import { type Product } from '@repo/shared';
 
 interface ProductSelectorProps {
   availableProducts: Product[];
@@ -145,7 +139,7 @@ export function ProductSelector({ availableProducts, value, onChange }: ProductS
                             </div>
                           </TableCell>
                           <TableCell className='text-right text-sm'>
-                            ${parseFloat(product.basePrice as any).toFixed(2)}
+                            ${parseFloat(String(product.basePrice)).toFixed(2)}
                           </TableCell>
                         </TableRow>
                       ))

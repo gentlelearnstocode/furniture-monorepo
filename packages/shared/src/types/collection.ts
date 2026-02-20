@@ -1,6 +1,7 @@
 import { EntityBase, LocalizedFields } from './common';
 import { Product } from './product';
 import { Catalog } from './catalog';
+import { User } from './user';
 
 export interface Collection<T = Product> extends EntityBase, LocalizedFields {
   name: string;
@@ -12,6 +13,8 @@ export interface Collection<T = Product> extends EntityBase, LocalizedFields {
   showOnHome?: boolean;
   homeLayout?: 'full' | 'half' | 'third';
   products?: T[];
+  createdById?: string | null;
+  createdBy?: User | null;
 }
 
 export interface CollectionProductRelation {

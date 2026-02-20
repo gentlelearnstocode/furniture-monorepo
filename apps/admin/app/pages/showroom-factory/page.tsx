@@ -29,7 +29,7 @@ export default async function ShowroomFactoryPage() {
       <div className='space-y-6'>
         <div className='bg-white rounded-lg border border-brand-neutral-200 p-6 shadow-sm'>
           <h2 className='text-xl font-semibold mb-4'>Page Header & Intro</h2>
-          <ShowroomPageForm slug={pageSlug} initialData={pageData} />
+          <ShowroomPageForm slug={pageSlug} initialData={pageData || undefined} />
         </div>
       </div>
 

@@ -9,6 +9,7 @@ import { PageHeader } from '@/components/layout/page-header';
 import { StatsCard } from '@/components/listing/stats-card';
 import { ListingCard } from '@/components/listing/listing-card';
 import { parseListingParams } from '@/lib/listing-params';
+import { type Catalog } from '@repo/shared';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,13 +31,13 @@ export default async function CatalogsPage({ searchParams }: CatalogsPageProps) 
     filters.push(eq(catalogs.level, Number(level)));
   }
 
-  const { data: allCatalogs, meta } = await getListingData(catalogs, {
+  const { data: allCatalogs, meta } = await getListingData<Catalog>(catalogs, {
     page,
     limit: 10,
     search,
     searchColumns: [catalogs.name, catalogs.slug],
     filters,
-    orderBy: (t: any, { desc }: any) => [desc(t.createdAt)],
+    orderBy: (t, { desc }) => [desc(t.createdAt)],
     with: {
       parent: true,
       image: true,

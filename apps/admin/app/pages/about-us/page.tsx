@@ -16,7 +16,7 @@ export default async function AboutUsAdminPage() {
         title='About Us Page'
         description='Customize the content of the About Us page.'
       />
-      <DynamicPageForm slug='about-us' title='About Us' initialData={page} />
+      <DynamicPageForm slug='about-us' title='About Us' initialData={page || undefined} />
     </div>
   );
 }

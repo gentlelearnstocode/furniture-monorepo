@@ -6,3 +6,7 @@ export * from './collection';
 export * from './project';
 export * from './service';
 export * from './blog';
+export * from './layout';
+export * from './pages';
+export * from './notification';
+export * from './showroom';

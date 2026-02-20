@@ -17,7 +17,7 @@ export default async function DesignProjectPage() {
         title='Design & Project'
         description='Customize the content of the Design & Project page.'
       />
-      <DynamicPageForm slug={slug} title='Design & Project' initialData={page} />
+      <DynamicPageForm slug={slug} title='Design & Project' initialData={page || undefined} />
     </div>
   );
 }

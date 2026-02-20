@@ -20,9 +20,10 @@ import {
   DropdownMenuTrigger,
 } from '@repo/ui/ui/dropdown-menu';
 import { DeleteCollectionItem } from './delete-collection-item';
+import { type CollectionWithRelations } from '@repo/shared';
 
 interface CollectionListProps {
-  collections: any[];
+  collections: CollectionWithRelations[];
   meta: {
     totalItems: number;
     totalPages: number;
@@ -158,7 +159,7 @@ export function CollectionList({ collections, meta }: CollectionListProps) {
   );
 }
 
-function CollectionActions({ collection }: { collection: any }) {
+function CollectionActions({ collection }: { collection: CollectionWithRelations }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

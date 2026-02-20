@@ -17,7 +17,7 @@ export default async function ExportsPage() {
         title='Exports'
         description='Customize the content of the Exports page.'
       />
-      <DynamicPageForm slug={slug} title='Exports' initialData={page} />
+      <DynamicPageForm slug={slug} title='Exports' initialData={page || undefined} />
     </div>
   );
 }

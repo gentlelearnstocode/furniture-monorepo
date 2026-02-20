@@ -15,17 +15,18 @@ import { formatDistanceToNow } from 'date-fns';
 import Link from 'next/link';
 import { cn } from '@repo/ui/lib/utils';
 import { toast } from 'sonner';
+import { type Notification, type NotificationType } from '@repo/shared';
 
 export function NotificationDropdown() {
-  const [notifications, setNotifications] = useState<any[]>([]);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
   const fetchNotifications = async () => {
     try {
-      const data = await getNotifications();
+      const data = (await getNotifications()) as Notification[];
       setNotifications(data);
-      setUnreadCount(data.filter((n: any) => !n.isRead).length);
+      setUnreadCount(data.filter((n) => !n.isRead).length);
     } catch (error) {
       console.error('Failed to fetch notifications:', error);
     } finally {
@@ -57,7 +58,7 @@ export function NotificationDropdown() {
     }
   };
 
-  const getIcon = (type: string) => {
+  const getIcon = (type: NotificationType) => {
     switch (type) {
       case 'entity_created':
         return <Package className='h-4 w-4 text-green-500' />;
@@ -131,7 +132,7 @@ export function NotificationDropdown() {
                   <p className='text-xs text-gray-600 line-clamp-2'>{notification.message}</p>
                   <div className='flex items-center justify-between mt-1'>
                     <span className='text-[10px] text-gray-400'>
-                      {formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true })}
+                      {formatDistanceToNow(new Date(notification.createdAt || new Date()), { addSuffix: true })}
                     </span>
                     {notification.link && (
                       <Link

@@ -1,4 +1,5 @@
 import { EntityBase, LocalizedFields } from './common';
+import { User } from './user';
 
 export interface Project extends EntityBase, LocalizedFields {
   title: string;
@@ -10,4 +11,6 @@ export interface Project extends EntityBase, LocalizedFields {
     altText?: string | null;
   } | null;
   isActive: boolean;
+  createdById?: string | null;
+  createdBy?: User | null;
 }

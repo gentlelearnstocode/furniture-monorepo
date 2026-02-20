@@ -1,6 +1,6 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { useForm, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { useTransition } from 'react';
@@ -15,6 +15,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/ui/ui/tabs';
 import { RichTextEditor } from '@/components/ui/rich-text-editor';
 import { MultiImageUpload, type ImageWithSettings } from '@/components/ui/multi-image-upload';
+import { type CustomPage, type ShowroomPageContent } from '@repo/shared';
+import { type CustomPageInput } from '@/lib/validations/pages';
 
 // Simplified schema without buttons
 const showroomPageSchema = z.object({
@@ -28,7 +30,7 @@ const showroomPageSchema = z.object({
         .object({
           introHtml: z.string().optional(),
           introHtmlVi: z.string().optional(),
-          images: z.array(z.any()).optional(), // For the collage
+          images: z.array(z.custom<ImageWithSettings>()).optional(), // For the collage
         })
         .optional(),
     })
@@ -39,15 +41,17 @@ type ShowroomPageInput = z.infer<typeof showroomPageSchema>;
 
 interface ShowroomPageFormProps {
   slug: string;
-  initialData?: any;
+  initialData?: CustomPage;
 }
 
 export function ShowroomPageForm({ slug, initialData }: ShowroomPageFormProps) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
+  const initialContent = initialData?.content as ShowroomPageContent | undefined;
+
   const form = useForm<ShowroomPageInput>({
-    resolver: zodResolver(showroomPageSchema) as any,
+    resolver: zodResolver(showroomPageSchema) as unknown as Resolver<ShowroomPageInput>,
     defaultValues: {
       slug,
       title: initialData?.title || '',
@@ -55,9 +59,9 @@ export function ShowroomPageForm({ slug, initialData }: ShowroomPageFormProps) {
       isActive: initialData?.isActive ?? true,
       content: {
         header: {
-          introHtml: initialData?.content?.header?.introHtml || '',
-          introHtmlVi: initialData?.content?.header?.introHtmlVi || '',
-          images: initialData?.content?.header?.images || [],
+          introHtml: initialContent?.header?.introHtml || '',
+          introHtmlVi: initialContent?.header?.introHtmlVi || '',
+          images: (initialContent?.header?.images || []) as ImageWithSettings[],
         },
       },
     },
@@ -66,7 +70,7 @@ export function ShowroomPageForm({ slug, initialData }: ShowroomPageFormProps) {
   function onSubmit(data: ShowroomPageInput) {
     startTransition(async () => {
       // Ensure required structure for customPageSchema
-      const payload: any = {
+      const payload = {
         ...data,
         content: {
           header: {
@@ -78,7 +82,7 @@ export function ShowroomPageForm({ slug, initialData }: ShowroomPageFormProps) {
         },
       };
 
-      const result = await upsertCustomPage(payload);
+      const result = await upsertCustomPage(payload as CustomPageInput);
       if (result?.error) {
         toast.error(result.error);
       } else {

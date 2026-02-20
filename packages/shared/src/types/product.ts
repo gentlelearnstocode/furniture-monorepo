@@ -1,4 +1,6 @@
 import { EntityBase, LocalizedFields } from './common';
+import { Catalog } from './catalog';
+import { User } from './user';
 
 export type AspectRatio = 'original' | '1:1' | '3:4' | '4:3' | '16:9' | '4:5';
 export type ObjectFit = 'cover' | 'contain';
@@ -46,4 +48,7 @@ export interface Product extends EntityBase, LocalizedFields {
     objectFit?: ObjectFit | string | null;
     position?: number;
   }[];
+  catalog?: Catalog | null;
+  createdById?: string | null;
+  createdBy?: User | null;
 }

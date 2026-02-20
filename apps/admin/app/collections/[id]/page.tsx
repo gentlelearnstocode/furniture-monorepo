@@ -2,6 +2,7 @@ import { db } from '@repo/database';
 import { notFound } from 'next/navigation';
 import { CollectionForm } from '../components/collection-form';
 import { PageHeader } from '@/components/layout/page-header';
+import { type CollectionWithRelations } from '@repo/shared';
 
 export const dynamic = 'force-dynamic';
 
@@ -44,7 +45,7 @@ export default async function EditCollectionPage({ params }: PageProps<{ id: str
         description='Update collection details and manage products.'
       />
       <CollectionForm
-        initialData={collection as any}
+        initialData={collection as unknown as CollectionWithRelations}
         availableProducts={allProducts}
         availableCatalogs={allCatalogs}
       />

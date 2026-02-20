@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import { useLanguage, useLocalizedText } from '@/providers/language-provider';
 import { cn } from '@repo/ui/lib/utils';
 import { Link, usePathname, useRouter } from '@/i18n/routing';
+import { type Catalog } from '@repo/shared';
 
 import Image from 'next/image';
 
@@ -56,22 +57,8 @@ function LanguageSwitcher({
   );
 }
 
-interface NavItem {
-  id: string;
-  name: string;
-  nameVi: string | null;
-  slug: string;
+interface NavItem extends Catalog {
   type: 'catalog' | 'subcatalog' | 'service';
-  image?: {
-    url: string;
-  } | null;
-  children?: {
-    id: string;
-    name: string;
-    nameVi: string | null;
-    slug: string;
-    image?: { url: string } | null;
-  }[];
 }
 
 interface NavbarProps {
@@ -143,7 +130,7 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
               backgroundSize: 'cover',
               backgroundPosition: 'top',
               backgroundRepeat: 'no-repeat',
-              backgroundColor: isWhiteNavbarPath ? '#FEFEFE' : 'white',
+              backgroundColor: isWhiteNavbarPath ? '#FEFEFE' : '#FEFEFE',
             }}
           />
 
@@ -457,7 +444,7 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
                       onClick={() => setIsMobileMenuOpen(false)}
                       className='text-[22px] font-serif uppercase text-brand-primary-900 tracking-wider'
                     >
-                      {t(key as any)}
+                      {t(key as Parameters<typeof t>[0])}
                     </Link>
                   );
                 },

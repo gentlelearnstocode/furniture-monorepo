@@ -11,6 +11,7 @@ import { routing } from '@/i18n/routing';
 import type { Metadata } from 'next';
 import { getLocalizedText } from '@/lib/i18n';
 import { eq, asc } from 'drizzle-orm';
+import { type Product, type AspectRatio, type ObjectFit } from '@repo/shared';
 
 interface Props {
   params: Promise<{
@@ -154,14 +155,14 @@ export default async function ProductDetailPage({ params }: Props) {
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20'>
           {/* Left: Gallery */}
           <ProductGallery
-            images={product.gallery
-              .filter((g: any) => g.asset?.url)
-              .map((g: any) => ({
-                url: g.asset.url,
+            images={(product.gallery || [])
+              .filter((g) => g.asset?.url)
+              .map((g) => ({
+                url: g.asset!.url,
                 displaySettings: {
                   focusPoint: g.focusPoint || undefined,
-                  aspectRatio: g.aspectRatio || undefined,
-                  objectFit: g.objectFit || undefined,
+                  aspectRatio: (g.aspectRatio as AspectRatio) || undefined,
+                  objectFit: (g.objectFit as ObjectFit) || undefined,
                 },
               }))}
             name={getLocalizedText(product, 'name', locale)}
@@ -169,12 +170,12 @@ export default async function ProductDetailPage({ params }: Props) {
           />
 
           {/* Right: Info */}
-          <ProductInfo product={product as any} contacts={contacts as any} />
+          <ProductInfo product={product as Product} contacts={contacts} />
         </div>
       </div>
 
       {/* Recommended Products */}
-      <RecommendedProducts products={recommended} imageRatio={product.catalog?.productImageRatio} />
+      <RecommendedProducts products={recommended as Product[]} imageRatio={product.catalog?.productImageRatio} />
     </div>
   );
 }

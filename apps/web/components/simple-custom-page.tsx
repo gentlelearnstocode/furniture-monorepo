@@ -5,6 +5,7 @@ import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
 import { BrandDivider } from '@/app/[locale]/components/brand-divider';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { getLocalized } from '@/lib/i18n';
+import { type CustomPage } from '@repo/shared';
 
 interface SimplePageContent {
   bannerUrl?: string;
@@ -30,7 +31,7 @@ export async function SimpleCustomPage({
   setRequestLocale(locale);
 
   const [page, tb] = await Promise.all([
-    getCustomPageBySlug(slug),
+    getCustomPageBySlug(slug) as Promise<CustomPage | undefined>,
     getTranslations({ locale, namespace: 'Breadcrumbs' }),
   ]);
 
@@ -38,16 +39,16 @@ export async function SimpleCustomPage({
     notFound();
   }
 
-  const title = getLocalized(page as any, 'title', locale);
+  const title = getLocalized(page as unknown as Record<string, unknown>, 'title', locale);
   const content = page.content as unknown as SimplePageContent;
-  const paragraphHtml = getLocalized(content.body as any, 'paragraphHtml', locale);
+  const paragraphHtml = getLocalized(content.body as unknown as Record<string, unknown>, 'paragraphHtml', locale);
 
   return (
     <div className='min-h-screen'>
       <AppBreadcrumb
         items={[
           { label: tb('home'), href: '/' },
-          { label: tb(parentLabelKey as any), href: parentHref },
+          { label: tb(parentLabelKey as Parameters<typeof tb>[0]), href: parentHref },
           { label: title, href: `${parentHref}/${slug}` },
         ]}
       />

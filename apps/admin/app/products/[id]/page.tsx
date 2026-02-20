@@ -4,6 +4,7 @@ import { db } from '@repo/database';
 import { notFound } from 'next/navigation';
 import { getRecommendedProducts, getAvailableProducts } from '@/lib/actions/recommended-products';
 import { PageHeader } from '@/components/layout/page-header';
+import { type ProductDimensions, type CreateProductInput } from '@repo/shared';
 
 export const dynamic = 'force-dynamic';
 
@@ -53,12 +54,12 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
     descriptionVi: product.descriptionVi || undefined,
     shortDescription: product.shortDescription || undefined,
     shortDescriptionVi: product.shortDescriptionVi || undefined,
-    basePrice: parseFloat(product.basePrice as any),
-    discountPrice: product.discountPrice ? parseFloat(product.discountPrice as any) : undefined,
+    basePrice: parseFloat(String(product.basePrice)),
+    discountPrice: product.discountPrice ? parseFloat(String(product.discountPrice)) : undefined,
     showPrice: product.showPrice,
     catalogId: product.catalogId || undefined,
     isActive: product.isActive,
-    dimensions: product.dimensions as any,
+    dimensions: product.dimensions as unknown as ProductDimensions,
     images: product.gallery.map((g) => ({
       assetId: g.assetId,
       url: g.asset.url,
@@ -87,7 +88,7 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
           id: c.id,
           name: c.parent ? `${c.parent.name} > ${c.name}` : c.name,
         }))}
-        initialData={initialData as any}
+        initialData={initialData as CreateProductInput & { id: string }}
       />
 
       {/* Recommended Products Section */}
@@ -95,7 +96,7 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
         <div>
           <h2 className='text-xl font-semibold tracking-tight'>Recommended Products</h2>
           <p className='text-sm text-gray-500'>
-            Select products to recommend on this product's detail page.
+            Select products to recommend on this product&apos;s detail page.
           </p>
         </div>
         <RecommendedProductSelector

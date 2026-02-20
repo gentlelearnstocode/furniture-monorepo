@@ -64,7 +64,7 @@ export default async function Home({ params }: Props) {
         }
       />
       <IntroSection />
-      <SaleSection products={saleProducts} settings={saleSettings} />
+      {saleSettings && <SaleSection products={saleProducts} settings={saleSettings} />}
       {/* <ServicesSection /> */}
       <FeaturedCatalogs />
       <RunningBanner />

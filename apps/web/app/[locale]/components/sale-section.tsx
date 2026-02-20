@@ -6,6 +6,7 @@ import { BrandDivider } from './brand-divider';
 import { ProductCard } from '@/app/[locale]/components/product-card';
 import { useTranslations } from 'next-intl';
 import { useLocalizedText } from '@/providers/language-provider';
+import { type Product, type SaleSectionSettings } from '@repo/shared';
 
 import {
   Carousel,
@@ -17,8 +18,8 @@ import {
 } from '@repo/ui/ui/carousel';
 
 interface SaleSectionProps {
-  products: any[];
-  settings: any;
+  products: Product[];
+  settings: SaleSectionSettings;
 }
 
 export const SaleSection = ({ products, settings }: SaleSectionProps) => {

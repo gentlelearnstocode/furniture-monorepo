@@ -9,6 +9,7 @@ import { ProcessSection } from '@/app/[locale]/components/process-section';
 import { PdfReaderWrapper } from '@/app/[locale]/components/pdf-reader-wrapper';
 import { getLocalized } from '@/lib/i18n';
 import type { Metadata } from 'next';
+import { type CustomPage, type AboutUsPageContent } from '@repo/shared';
 
 interface Props {
   params: Promise<{ locale: string }>;
@@ -28,23 +29,20 @@ export default async function AboutUsPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const page = await getCustomPageBySlug('about-us');
+  const page = (await getCustomPageBySlug('about-us')) as CustomPage | undefined;
   const tb = await getTranslations('Breadcrumbs');
   const tCommon = await getTranslations('Common');
 
-  const title = getLocalized(page as any, 'title', locale);
-  const content = (page?.content || {}) as {
-    bannerUrl?: string;
-    pdfUrl?: string;
-    body?: {
-      paragraphHtml?: string;
-      paragraphHtmlVi?: string;
-    };
-  };
+  const title = getLocalized(page || { title: '' }, 'title', locale);
+  const content = (page?.content || {}) as AboutUsPageContent;
   const bannerUrl = content.bannerUrl;
   const pdfUrl = content.pdfUrl;
 
-  const paragraphHtml = getLocalized(content?.body as any, 'paragraphHtml', locale);
+  const paragraphHtml = getLocalized(
+    (content?.body || { paragraphHtml: '' }) as Record<string, unknown>,
+    'paragraphHtml',
+    locale,
+  );
 
   return (
     <main className='relative min-h-screen bg-white'>

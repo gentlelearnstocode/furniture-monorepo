@@ -1,17 +1,23 @@
 import { SQL, and, ilike, or, sql } from 'drizzle-orm';
 import { db } from '@repo/database';
+import { type AnyPgColumn, type AnyPgTable } from 'drizzle-orm/pg-core';
 
 interface ListingOptions {
   page?: number;
   limit?: number;
   search?: string;
-  searchColumns?: any[];
+  searchColumns?: AnyPgColumn[];
   filters?: SQL[];
-  orderBy?: any;
+  orderBy?: SQL | SQL[] | ((t: any, operators: DrizzleOrderByOperators) => SQL | SQL[]);
   queryName?: string;
 }
 
-export async function getListingData(table: any, options: ListingOptions & { with?: any } = {}) {
+import { type DrizzleOrderByOperators } from '@repo/shared';
+
+export async function getListingData<T = unknown>(
+  table: AnyPgTable,
+  options: ListingOptions & { with?: Record<string, unknown> } = {},
+) {
   const {
     page = 1,
     limit = 10,
@@ -25,11 +31,11 @@ export async function getListingData(table: any, options: ListingOptions & { wit
 
   const offset = (page - 1) * limit;
 
-  const tableName = queryName || (table as any)[Symbol.for('drizzle:Name')];
+  const tableName = queryName || (table as unknown as Record<symbol, string>)[Symbol.for('drizzle:Name')];
 
-  if (!tableName || !(db.query as any)[tableName]) {
+  if (!tableName || !(db.query as unknown as Record<string, unknown>)[tableName]) {
     throw new Error(
-      `Table "${tableName}" not found in db.query structure. Please ensure it is exported from the schema.`
+      `Table "${tableName}" not found in db.query structure. Please ensure it is exported from the schema.`,
     );
   }
 
@@ -42,12 +48,18 @@ export async function getListingData(table: any, options: ListingOptions & { wit
 
   const where = conditions.length > 0 ? and(...conditions) : undefined;
 
+  const query = (db.query as unknown as Record<string, { findMany: (args: unknown) => Promise<T[]> }>)[tableName];
+
+  if (!query) {
+    throw new Error(`Query for table "${tableName}" is undefined.`);
+  }
+
   const [data, countResult] = await Promise.all([
-    (db.query as any)[tableName].findMany({
+    query.findMany({
       where,
       limit,
       offset,
-      orderBy,
+      orderBy: orderBy as any,
       with: withRelations,
     }),
     db

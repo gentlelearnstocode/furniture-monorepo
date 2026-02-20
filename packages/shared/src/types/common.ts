@@ -6,6 +6,9 @@ export interface LocalizedFields {
   descriptionVi?: string | null;
   shortDescriptionVi?: string | null;
   titleVi?: string | null;
+  introHtmlVi?: string | null;
+  paragraphHtmlVi?: string | null;
+  textHtmlVi?: string | null;
 }
 
 /**
@@ -20,7 +23,7 @@ export interface EntityBase {
 /**
  * Type for next-intl translation function
  */
-export type TranslationFunction = (key: string, values?: Record<string, any>) => string;
+export type TranslationFunction = (key: string, values?: Record<string, unknown>) => string;
 
 /**
  * Common Next.js Page Props
@@ -34,6 +37,18 @@ export interface NextPageProps<T = Record<string, string>> {
  * Helper types for Drizzle queries commonly used in admin actions
  */
 export interface DrizzleOrderByOperators {
-  asc: (column: any) => any;
-  desc: (column: any) => any;
+  asc: (column: unknown) => unknown;
+  desc: (column: unknown) => unknown;
+}
+
+export interface DrizzleWhereOperators {
+  eq: (column: unknown, value: unknown) => unknown;
+  ne: (column: unknown, value: unknown) => unknown;
+  gt: (column: unknown, value: unknown) => unknown;
+  gte: (column: unknown, value: unknown) => unknown;
+  lt: (column: unknown, value: unknown) => unknown;
+  lte: (column: unknown, value: unknown) => unknown;
+  inArray: (column: unknown, values: unknown[]) => unknown;
+  isNull: (column: unknown) => unknown;
+  isNotNull: (column: unknown) => unknown;
 }

@@ -6,14 +6,7 @@ import { Input } from '@repo/ui/ui/input';
 import { Button } from '@repo/ui/ui/button';
 import { Search, Plus, Check } from 'lucide-react';
 import Image from 'next/image';
-
-type Product = {
-  id: string;
-  name: string;
-  basePrice: string;
-  discountPrice?: string | null;
-  gallery: { asset: { url: string } }[];
-};
+import { type Product } from '@repo/shared';
 
 interface SaleProductSelectorProps {
   eligibleProducts: Product[];
@@ -36,7 +29,7 @@ export function SaleProductSelector({
     <Card className='flex flex-col h-full'>
       <CardHeader>
         <CardTitle>Select Products</CardTitle>
-        <CardDescription>Only products with a "Discount Price" set can be added.</CardDescription>
+        <CardDescription>Only products with a &quot;Discount Price&quot; set can be added.</CardDescription>
         <div className='relative mt-2'>
           <Search className='absolute left-2 top-2.5 h-4 w-4 text-gray-500' />
           <Input
@@ -72,7 +65,7 @@ export function SaleProductSelector({
                   </div>
                   <div className='flex-1 min-w-0'>
                     <p className='text-sm font-medium truncate'>{product.name}</p>
-                    <p className='text-xs text-green-600'>${product.discountPrice}</p>
+                    <p className='text-xs text-green-600'>${String(product.discountPrice)}</p>
                   </div>
                   <Button
                     variant={isSelected ? 'secondary' : 'outline'}

@@ -19,10 +19,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@repo/ui/ui/dropdown-menu';
+import { type BlogPost } from '@repo/shared';
 import { DeleteBlogItem } from './delete-blog-item';
 
 interface BlogListProps {
-  posts: any[];
+  posts: BlogPost[];
   meta: {
     totalItems: number;
     totalPages: number;
@@ -148,7 +149,7 @@ export function BlogList({ posts, meta }: BlogListProps) {
   );
 }
 
-function BlogActions({ post }: { post: any }) {
+function BlogActions({ post }: { post: BlogPost }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

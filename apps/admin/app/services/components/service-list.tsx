@@ -20,9 +20,10 @@ import {
   DropdownMenuTrigger,
 } from '@repo/ui/ui/dropdown-menu';
 import { DeleteServiceItem } from './delete-service-item';
+import { type Service } from '@repo/shared';
 
 interface ServiceListProps {
-  services: any[];
+  services: Service[];
   meta: {
     totalItems: number;
     totalPages: number;
@@ -112,7 +113,7 @@ export function ServiceList({ services, meta }: ServiceListProps) {
                   <TableCell>
                     {service.createdBy ? (
                       <span className='text-sm text-gray-600'>
-                        {service.createdBy.name || service.createdBy.email}
+                        {service.createdBy.name || service.createdBy.username}
                       </span>
                     ) : (
                       <span className='text-gray-400 text-xs'>-</span>
@@ -152,7 +153,7 @@ export function ServiceList({ services, meta }: ServiceListProps) {
   );
 }
 
-function ServiceActions({ service }: { service: any }) {
+function ServiceActions({ service }: { service: Service }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

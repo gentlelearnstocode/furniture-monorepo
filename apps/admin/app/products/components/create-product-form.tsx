@@ -2,7 +2,7 @@
 
 import { slugify } from '@/lib/utils/slugify';
 
-import { useForm } from 'react-hook-form';
+import { useForm, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { useTransition } from 'react';
@@ -28,6 +28,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/ui/ui/tabs';
 
 import { MultiImageUpload } from '@/components/ui/multi-image-upload';
 import { RichTextEditor } from '@/components/ui/rich-text-editor';
+import { type ImageWithSettings } from '@/components/ui/multi-image-upload';
 
 interface CatalogOption {
   id: string;
@@ -43,14 +44,14 @@ export function ProductForm({ catalogs, initialData }: ProductFormProps) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
-  const form = useForm({
-    resolver: zodResolver(createProductSchema),
+  const form = useForm<CreateProductInput>({
+    resolver: zodResolver(createProductSchema) as unknown as Resolver<CreateProductInput>,
     defaultValues: initialData
       ? {
           ...initialData,
-          basePrice: parseFloat(initialData.basePrice as any),
+          basePrice: parseFloat(String(initialData.basePrice)),
           discountPrice: initialData.discountPrice
-            ? parseFloat(initialData.discountPrice as any)
+            ? parseFloat(String(initialData.discountPrice))
             : undefined,
           showPrice: initialData.showPrice ?? true,
           description: initialData.description || '',
@@ -173,7 +174,7 @@ export function ProductForm({ catalogs, initialData }: ProductFormProps) {
                     min='0'
                     placeholder='0.00'
                     {...field}
-                    value={field.value as any}
+                    value={field.value as unknown as string}
                   />
                 </FormControl>
                 <FormMessage />
@@ -200,7 +201,7 @@ export function ProductForm({ catalogs, initialData }: ProductFormProps) {
                       isDiscountDisabled ? 'Set base price first' : 'Leave empty for no discount'
                     }
                     {...field}
-                    value={(field.value as any) ?? ''}
+                    value={(field.value as unknown as string) ?? ''}
                     onChange={(e) => {
                       const val = e.target.value === '' ? null : parseFloat(e.target.value);
                       field.onChange(val);
@@ -383,7 +384,7 @@ export function ProductForm({ catalogs, initialData }: ProductFormProps) {
                       step='0.1'
                       placeholder='0.0'
                       {...field}
-                      value={field.value as any}
+                      value={field.value as unknown as string}
                     />
                   </FormControl>
                   <FormMessage />
@@ -402,7 +403,7 @@ export function ProductForm({ catalogs, initialData }: ProductFormProps) {
                       step='0.1'
                       placeholder='0.0'
                       {...field}
-                      value={field.value as any}
+                      value={field.value as unknown as string}
                     />
                   </FormControl>
                   <FormMessage />
@@ -421,7 +422,7 @@ export function ProductForm({ catalogs, initialData }: ProductFormProps) {
                       step='0.1'
                       placeholder='0.0'
                       {...field}
-                      value={field.value as any}
+                      value={field.value as unknown as string}
                     />
                   </FormControl>
                   <FormMessage />
@@ -434,7 +435,7 @@ export function ProductForm({ catalogs, initialData }: ProductFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className='text-xs'>Unit</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} defaultValue={field.value as string}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder='Unit' />
@@ -463,7 +464,7 @@ export function ProductForm({ catalogs, initialData }: ProductFormProps) {
               <FormItem>
                 <FormControl>
                   <MultiImageUpload
-                    value={field.value as any}
+                    value={field.value as ImageWithSettings[]}
                     onChange={field.onChange}
                     folder={`products/${form.getValues('slug') || 'general'}`}
                   />

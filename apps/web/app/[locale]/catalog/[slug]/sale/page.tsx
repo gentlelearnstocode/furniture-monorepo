@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 import { getLocalizedText } from '@/lib/i18n';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import type { Metadata } from 'next';
+import { type Product } from '@repo/shared';
 
 export const revalidate = 3600;
 
@@ -88,7 +89,7 @@ export default async function CatalogSalePage({ params }: Props) {
       {/* Product Grid */}
       <div className='container pb-20'>
         <div className='grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-12'>
-          {saleProducts.map((product: any) => (
+          {saleProducts.map((product: Product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>

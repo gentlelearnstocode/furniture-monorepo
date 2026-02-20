@@ -27,11 +27,12 @@ import { RichTextEditor } from '@/components/ui/rich-text-editor';
 import { SingleImageUpload } from '@/components/ui/single-image-upload';
 import { MultiImageUpload, type ImageWithSettings } from '@/components/ui/multi-image-upload';
 import { SingleAssetUpload } from '@/components/ui/single-asset-upload';
+import { type CustomPage } from '@repo/shared';
 
 interface DynamicPageFormProps {
   slug: string;
   title: string;
-  initialData?: any;
+  initialData?: CustomPage;
 }
 
 export function DynamicPageForm({ slug, title, initialData }: DynamicPageFormProps) {

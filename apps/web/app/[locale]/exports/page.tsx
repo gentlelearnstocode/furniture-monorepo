@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { getLocalized } from '@/lib/i18n';
 import type { Metadata } from 'next';
+import { type ExportsPageContent, type CustomPage, type ShowcaseImage } from '@repo/shared';
 
 import { SectionSeparator } from '../components/section-separator';
 import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
@@ -22,9 +23,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 async function getPageData(slug: string) {
-  const page = await db.query.customPages.findFirst({
+  const page = (await db.query.customPages.findFirst({
     where: (pages, { eq, and }) => and(eq(pages.slug, slug), eq(pages.isActive, true)),
-  });
+  })) as CustomPage | undefined;
   return page;
 }
 
@@ -39,15 +40,15 @@ export default async function ExportsPage({ params }: Props) {
     notFound();
   }
 
-  const content = page.content as any;
+  const content = page.content as ExportsPageContent;
   const showcaseImages = content.body.images || [];
   const footerImageUrl = content.footer.imageUrl;
 
-  const title = getLocalized(page as any, 'title', locale);
-  const headerIntroHtml = getLocalized(content.header as any, 'introHtml', locale);
-  const bodyIntroHtml = getLocalized(content.body as any, 'introHtml', locale);
-  const bodyParagraphHtml = getLocalized(content.body as any, 'paragraphHtml', locale);
-  const footerTextHtml = getLocalized(content.footer as any, 'textHtml', locale);
+  const title = getLocalized(page, 'title', locale);
+  const headerIntroHtml = getLocalized(content.header, 'introHtml', locale);
+  const bodyIntroHtml = getLocalized(content.body, 'introHtml', locale);
+  const bodyParagraphHtml = getLocalized(content.body, 'paragraphHtml', locale);
+  const footerTextHtml = getLocalized(content.footer, 'textHtml', locale);
 
   return (
     <div className='min-h-screen'>
@@ -93,8 +94,8 @@ export default async function ExportsPage({ params }: Props) {
 
             <div className='flex flex-col gap-12'>
               {showcaseImages
-                .filter((image: any) => !image.isPrimary)
-                .map((image: any) => (
+                .filter((image: ShowcaseImage) => !image.isPrimary)
+                .map((image: ShowcaseImage) => (
                   <div key={image.assetId} className='w-full relative'>
                     <Image
                       src={image.url}
@@ -120,24 +121,27 @@ export default async function ExportsPage({ params }: Props) {
             )}
 
             {/* Primary Image displayed after the paragraph */}
-            {showcaseImages.find((image: any) => image.isPrimary) && (
-              <div className='w-full relative'>
-                <Image
-                  src={showcaseImages.find((image: any) => image.isPrimary).url}
-                  alt='Primary showcase image'
-                  width={1600}
-                  height={900}
-                  className='w-full h-auto object-contain'
-                  style={{
-                    objectPosition: showcaseImages.find((image: any) => image.isPrimary).focusPoint
-                      ? `${showcaseImages.find((image: any) => image.isPrimary).focusPoint.x}% ${
-                          showcaseImages.find((image: any) => image.isPrimary).focusPoint.y
-                        }%`
-                      : '50% 50%',
-                  }}
-                />
-              </div>
-            )}
+            {(() => {
+              const primaryImage = showcaseImages.find((image: ShowcaseImage) => image.isPrimary);
+              if (!primaryImage) return null;
+
+              return (
+                <div className='w-full relative'>
+                  <Image
+                    src={primaryImage.url}
+                    alt='Primary showcase image'
+                    width={1600}
+                    height={900}
+                    className='w-full h-auto object-contain'
+                    style={{
+                      objectPosition: primaryImage.focusPoint
+                        ? `${primaryImage.focusPoint.x}% ${primaryImage.focusPoint.y}%`
+                        : '50% 50%',
+                    }}
+                  />
+                </div>
+              );
+            })()}
           </section>
 
           {/* Footer Image moved inside the patterned container */}

@@ -21,6 +21,13 @@ const PageContent = React.forwardRef<HTMLDivElement, { children: React.ReactNode
 
 PageContent.displayName = 'PageContent';
 
+interface PageFlipRef {
+  pageFlip: () => {
+    flipNext: () => void;
+    flipPrev: () => void;
+  };
+}
+
 export default function PdfBookReader({ pdfUrl }: PdfBookReaderProps) {
   useEffect(() => {
     // Setup pdfjs worker only on client
@@ -29,7 +36,7 @@ export default function PdfBookReader({ pdfUrl }: PdfBookReaderProps) {
 
   const [numPages, setNumPages] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState(0);
-  const bookRef = useRef<any>(null); // react-pageflip doesn't export a clear ref type easily
+  const bookRef = useRef<PageFlipRef>(null); // react-pageflip doesn't export a clear ref type easily
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1200,
   );

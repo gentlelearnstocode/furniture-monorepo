@@ -10,9 +10,10 @@ import { Pagination } from '@/components/ui/pagination';
 import { BulkActions } from '@/components/ui/bulk-actions';
 import { bulkDeleteCatalogs } from '@/lib/actions/catalogs';
 import { CatalogActions } from './catalog-actions';
+import { type Catalog } from '@repo/shared';
 
 interface CatalogListProps {
-  catalogs: any[];
+  catalogs: Catalog[];
   meta: {
     totalItems: number;
     totalPages: number;

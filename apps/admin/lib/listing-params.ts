@@ -14,7 +14,7 @@ interface ListingParams {
  * @param options - Optional configuration
  * @returns Parsed and typed parameters
  */
-export async function parseListingParams<T extends Record<string, any>>(
+export async function parseListingParams<T extends Record<string, unknown>>(
   searchParams: Promise<T>,
   options?: {
     defaultPage?: number;
@@ -32,7 +32,7 @@ export async function parseListingParams<T extends Record<string, any>>(
   // Add any additional filter keys
   filterKeys.forEach((key) => {
     if (resolved[key]) {
-      params[key] = resolved[key];
+      params[key] = resolved[key] as string | number;
     }
   });
 

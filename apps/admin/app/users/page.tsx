@@ -9,6 +9,7 @@ import { SearchInput, FilterSelect } from '@/components/ui/listing-controls';
 import { UserList } from './components/user-list';
 import { eq } from 'drizzle-orm';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/ui/card';
+import { type UserRole, type User } from '@repo/shared';
 
 import { PageHeader } from '@/components/layout/page-header';
 
@@ -38,19 +39,19 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
 
   const filters = [];
   if (role && role !== 'all') {
-    filters.push(eq(users.role, role as any));
+    filters.push(eq(users.role, role as UserRole));
   }
   if (status && status !== 'all') {
     filters.push(eq(users.isActive, status === 'active'));
   }
 
-  const { data: allUsers, meta } = await getListingData(users, {
+  const { data: allUsers, meta } = await getListingData<User>(users, {
     page,
     limit: 10,
     search,
     searchColumns: [users.name, users.username, users.email],
     filters,
-    orderBy: (t: any, { desc }: any) => [desc(t.createdAt)],
+    orderBy: (t, { desc }) => [desc(t.createdAt)],
   });
 
   const roleOptions = [

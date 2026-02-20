@@ -6,6 +6,7 @@ import { cn } from '@repo/ui/lib/utils';
 import { asc } from 'drizzle-orm';
 import { getLocale, getLocalizedText, type Locale } from '@/lib/i18n';
 import { getTranslations } from 'next-intl/server';
+import { type TranslationFunction, type FeaturedCatalogRow, type FeaturedCatalogItem } from '@repo/shared';
 
 // Catalog Section component - same design as old CollectionSection
 const CatalogSection = ({
@@ -25,7 +26,7 @@ const CatalogSection = ({
   isFirst?: boolean;
   layout?: 'full' | 'half' | 'third' | 'quarter';
   locale: Locale;
-  t: any;
+  t: TranslationFunction;
 }) => {
   const isSmall = layout === 'half' || layout === 'third' || layout === 'quarter';
 
@@ -123,7 +124,7 @@ export const FeaturedCatalogs = async () => {
   // Cached custom layout configuration
   const getFeaturedLayout = createCachedQuery(
     async () =>
-      await db.query.featuredCatalogRows.findMany({
+      (await db.query.featuredCatalogRows.findMany({
         orderBy: [asc(featuredCatalogRows.position)],
         with: {
           items: {
@@ -137,7 +138,7 @@ export const FeaturedCatalogs = async () => {
             orderBy: (items, { asc }) => [asc(items.position)],
           },
         },
-      }),
+      })) as FeaturedCatalogRow[],
     ['featured-catalogs-layout'],
     { revalidate: 3600, tags: ['catalogs', 'featured-layout'] },
   );
@@ -159,7 +160,7 @@ export const FeaturedCatalogs = async () => {
   // Try to fetch custom layout configuration
   const layoutRows = await getFeaturedLayout();
   const locale = await getLocale();
-  const t = await getTranslations('FeaturedCatalogs');
+  const t = (await getTranslations('FeaturedCatalogs')) as unknown as TranslationFunction;
 
   // If custom layout exists and has items, use it
   if (layoutRows.length > 0 && layoutRows.some((row) => row.items.length > 0)) {
@@ -167,7 +168,7 @@ export const FeaturedCatalogs = async () => {
 
     return (
       <div>
-        {layoutRows.map((row: any) => {
+        {layoutRows.map((row: FeaturedCatalogRow) => {
           // Skip empty rows
           if (row.items.length === 0) return null;
 
@@ -176,7 +177,7 @@ export const FeaturedCatalogs = async () => {
 
           return (
             <div key={row.id} className='grid grid-cols-12'>
-              {row.items.map((item: any) => {
+              {row.items.map((item: FeaturedCatalogItem) => {
                 if (!item.catalog) return null;
 
                 const isFirst = isFirstCatalog;

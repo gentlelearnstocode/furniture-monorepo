@@ -17,7 +17,7 @@ export default async function ConstructionManufacturingPage() {
         title='Construction & Manufacturing'
         description='Customize the content of the Construction & Manufacturing page.'
       />
-      <DynamicPageForm slug={slug} title='Construction & Manufacturing' initialData={page} />
+      <DynamicPageForm slug={slug} title='Construction & Manufacturing' initialData={page || undefined} />
     </div>
   );
 }

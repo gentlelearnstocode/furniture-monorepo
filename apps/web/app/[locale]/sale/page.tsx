@@ -99,7 +99,7 @@ export default async function SalePage({ params, searchParams }: Props) {
                 value: '/sale',
               },
               ...catalogs.map((c) => ({
-                label: getLocalized(c as any, 'name', locale),
+                label: getLocalized(c as unknown as Record<string, unknown>, 'name', locale),
                 value: `/sale?catalog=${c.slug}`,
               })),
             ]}

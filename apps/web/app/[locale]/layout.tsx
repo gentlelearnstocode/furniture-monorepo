@@ -11,6 +11,7 @@ import { db } from '@repo/database';
 import { createCachedQuery } from '@/lib/cache';
 import { getSiteContacts } from '@/lib/queries';
 import { Locale } from '@/lib/i18n';
+import { type Catalog } from '@repo/shared';
 import { setRequestLocale, getMessages } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
 import { notFound } from 'next/navigation';
@@ -41,7 +42,7 @@ export const revalidate = 3600;
 
 const getRootCatalogs = createCachedQuery(
   async () => {
-    return await db.query.catalogs.findMany({
+    return (await db.query.catalogs.findMany({
       where: (catalogs, { isNull }) => isNull(catalogs.parentId),
       with: {
         children: {
@@ -51,7 +52,7 @@ const getRootCatalogs = createCachedQuery(
         image: true,
       },
       orderBy: (catalogs, { asc }) => [asc(catalogs.name)],
-    });
+    })) as Catalog[];
   },
   ['root-catalogs'],
   { revalidate: 3600, tags: ['catalogs'] },
@@ -71,7 +72,7 @@ export default async function RootLayout({
   const { locale } = await params;
 
   // Validate that the incoming `locale` parameter is valid
-  if (!routing.locales.includes(locale as any)) {
+  if (!routing.locales.includes(locale as Locale)) {
     notFound();
   }
 
@@ -85,14 +86,14 @@ export default async function RootLayout({
   ]);
 
   // Transform root catalogs to navbar format for the "Products" dropdown
-  const navItems = rootCatalogs.map((catalog: any) => ({
+  const navItems = rootCatalogs.map((catalog: Catalog) => ({
     id: catalog.id,
     name: catalog.name,
     nameVi: catalog.nameVi,
     slug: catalog.slug,
     type: 'catalog' as const,
     image: catalog.image,
-    children: (catalog.children || []).map((child: any) => ({
+    children: (catalog.children || []).map((child: Catalog) => ({
       id: child.id,
       name: child.name,
       nameVi: child.nameVi,

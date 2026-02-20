@@ -11,9 +11,10 @@ import { BulkActions } from '@/components/ui/bulk-actions';
 import { bulkDeleteProducts } from '@/lib/actions/products';
 import { Settings, Percent, EyeOff } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@repo/ui/ui/tooltip';
+import { type Product } from '@repo/shared';
 
 interface ProductListProps {
-  products: any[];
+  products: Product[];
   meta: {
     totalItems: number;
     totalPages: number;

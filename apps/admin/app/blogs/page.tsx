@@ -10,6 +10,7 @@ import { StatsCard } from '@/components/listing/stats-card';
 import { ListingCard } from '@/components/listing/listing-card';
 import { parseListingParams } from '@/lib/listing-params';
 import { STATUS_FILTER_OPTIONS } from '@/constants';
+import { type BlogPost } from '@repo/shared';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,13 +32,13 @@ export default async function BlogsPage({ searchParams }: BlogsPageProps) {
     filters.push(eq(posts.isActive, status === 'active'));
   }
 
-  const { data: allPosts, meta } = await getListingData(posts, {
+  const { data: allPosts, meta } = await getListingData<BlogPost>(posts, {
     page,
     limit: 10,
     search,
     searchColumns: [posts.title, posts.slug],
     filters,
-    orderBy: (t: any, { desc }: any) => [desc(t.updatedAt)],
+    orderBy: (t, { desc }) => [desc(t.updatedAt)],
     with: {
       featuredImage: true,
       createdBy: true,

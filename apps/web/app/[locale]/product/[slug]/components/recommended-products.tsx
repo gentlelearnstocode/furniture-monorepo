@@ -2,6 +2,7 @@
 
 import { ProductCard } from '@/app/[locale]/components/product-card';
 import { useTranslations } from 'next-intl';
+import { type Product } from '@repo/shared';
 import {
   Carousel,
   CarouselContent,
@@ -12,7 +13,7 @@ import {
 } from '@repo/ui/ui/carousel';
 
 interface RecommendedProductsProps {
-  products: any[];
+  products: Product[];
   imageRatio?: string | null;
 }
 

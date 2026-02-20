@@ -6,25 +6,12 @@ import { cn } from '@repo/ui/lib/utils';
 import { useLanguage, useLocalizedText } from '@/providers/language-provider';
 import { useTranslations } from 'next-intl';
 import { ContactModal } from '@/components/ui/contact-modal';
+import { type Product } from '@repo/shared';
+import { type SelectSiteContact } from '@repo/database';
 
 interface ProductInfoProps {
-  product: {
-    name: string;
-    nameVi?: string | null;
-    description: string | null;
-    descriptionVi?: string | null;
-    shortDescription: string | null;
-    shortDescriptionVi?: string | null;
-    basePrice: string;
-    discountPrice?: string | null;
-    showPrice?: boolean;
-  };
-  contacts: {
-    type: string;
-    label: string | null;
-    labelVi?: string | null;
-    value: string;
-  }[];
+  product: Product;
+  contacts: SelectSiteContact[];
 }
 
 export function ProductInfo({ product, contacts }: ProductInfoProps) {

@@ -1,6 +1,7 @@
 import { getSaleSettings, getSaleSectionProducts, getEligibleProducts } from '@/lib/actions/sale';
 import { SaleManagement } from './components/sale-management';
 import { PageHeader } from '@/components/layout/page-header';
+import { type Product } from '@repo/shared';
 
 export const dynamic = 'force-dynamic';
 
@@ -24,29 +25,32 @@ export default async function SaleSectionPage() {
       shortDescription: p.product.shortDescription,
       basePrice: p.product.basePrice,
       discountPrice: p.product.discountPrice,
-      gallery: p.product.gallery.map((g: any) => ({
+      gallery: p.product.gallery.map((g) => ({
+        isPrimary: g.isPrimary,
         asset: {
           url: g.asset.url,
         },
       })),
-    },
+    } as Product,
   }));
 
   // Transform eligibleProducts
-  const transformedEligible = eligibleProducts.map((p: any) => ({
+  const transformedEligible = eligibleProducts.map((p) => ({
     id: p.id,
     name: p.name,
+    slug: p.slug,
     basePrice: p.basePrice,
     discountPrice: p.discountPrice,
     gallery:
       p.gallery
-        ?.filter((g: any) => g.isPrimary)
-        .map((g: any) => ({
+        ?.filter((g) => g.isPrimary)
+        .map((g) => ({
+          isPrimary: g.isPrimary,
           asset: {
             url: g.asset.url,
           },
         })) || [],
-  }));
+  } as Product));
 
   return (
     <div className='space-y-6'>
@@ -62,7 +66,7 @@ export default async function SaleSectionPage() {
 
       <SaleManagement
         initialSettings={{ title: settings.title, isActive: settings.isActive }}
-        initialSaleProducts={transformedSaleProducts as any}
+        initialSaleProducts={transformedSaleProducts}
         eligibleProducts={transformedEligible}
       />
     </div>

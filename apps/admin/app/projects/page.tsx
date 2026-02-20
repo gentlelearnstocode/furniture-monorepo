@@ -10,6 +10,7 @@ import { StatsCard } from '@/components/listing/stats-card';
 import { ListingCard } from '@/components/listing/listing-card';
 import { parseListingParams } from '@/lib/listing-params';
 import { STATUS_FILTER_OPTIONS } from '@/constants';
+import { type Project } from '@repo/shared';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,13 +32,13 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
     filters.push(eq(projects.isActive, status === 'active'));
   }
 
-  const { data: allProjects, meta } = await getListingData(projects, {
+  const { data: allProjects, meta } = await getListingData<Project>(projects, {
     page,
     limit: 10,
     search,
     searchColumns: [projects.title, projects.slug],
     filters,
-    orderBy: (t: any, { desc }: any) => [desc(t.createdAt)],
+    orderBy: (t, { desc }) => [desc(t.createdAt)],
     with: {
       image: true,
       createdBy: true,

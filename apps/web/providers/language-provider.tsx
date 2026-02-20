@@ -52,6 +52,7 @@ export function useLanguage(): LanguageContextType {
  */
 export function useLocalizedText() {
   const { locale } = useLanguage();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return <T extends Record<string, any>>(entity: T, field: keyof T): string => {
     return getLocalized(entity, field, locale);
   };

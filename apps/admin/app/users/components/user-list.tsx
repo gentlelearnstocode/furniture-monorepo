@@ -9,9 +9,10 @@ import { Pagination } from '@/components/ui/pagination';
 import { BulkActions } from '@/components/ui/bulk-actions';
 import { bulkDeleteUsers, toggleUserStatus, deleteUser } from '@/lib/actions/users';
 import { Button } from '@repo/ui/ui/button';
+import { type User } from '@repo/shared';
 
 interface UserListProps {
-  users: any[];
+  users: User[];
   meta: {
     totalItems: number;
     totalPages: number;

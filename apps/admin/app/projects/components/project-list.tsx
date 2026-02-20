@@ -20,9 +20,10 @@ import {
   DropdownMenuTrigger,
 } from '@repo/ui/ui/dropdown-menu';
 import { DeleteProjectItem } from './delete-project-item';
+import { type Project } from '@repo/shared';
 
 interface ProjectListProps {
-  projects: any[];
+  projects: Project[];
   meta: {
     totalItems: number;
     totalPages: number;
@@ -152,7 +153,7 @@ export function ProjectList({ projects, meta }: ProjectListProps) {
   );
 }
 
-function ProjectActions({ project }: { project: any }) {
+function ProjectActions({ project }: { project: Project }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

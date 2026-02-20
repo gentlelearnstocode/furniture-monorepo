@@ -13,11 +13,10 @@ import {
 } from '@repo/ui/ui/dropdown-menu';
 import { DeleteProductButton } from './delete-product-button';
 
+import { type Product } from '@repo/shared';
+
 interface ProductActionsProps {
-  product: {
-    id: string;
-    name: string;
-  };
+  product: Product;
 }
 
 export function ProductActions({ product }: ProductActionsProps) {

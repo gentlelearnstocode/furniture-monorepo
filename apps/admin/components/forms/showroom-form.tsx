@@ -1,9 +1,9 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { useTransition } from 'react';
+import { useForm, type Resolver } from 'react-hook-form';
 import { upsertShowroom } from '@/lib/actions/showrooms';
 import { showroomSchema, type ShowroomInput } from '@/lib/validations/showrooms';
 
@@ -15,23 +15,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/ui/ui/tabs';
 
 import { RichTextEditor } from '@/components/ui/rich-text-editor';
 import { SingleImageUpload } from '@/components/ui/single-image-upload';
+import { type Showroom } from '@repo/shared';
 
 import { useState } from 'react';
 
 interface ShowroomFormProps {
-  initialData?: {
-    id?: string;
-    title: string;
-    titleVi?: string | null;
-    subtitle?: string | null;
-    subtitleVi?: string | null;
-    contentHtml?: string | null;
-    contentHtmlVi?: string | null;
-    imageId?: string | null;
-    position: number;
-    isActive: boolean;
-    image?: { url: string } | null;
-  };
+  initialData?: Showroom;
   onSuccess?: () => void;
   onCancel?: () => void;
 }
@@ -41,7 +30,7 @@ export function ShowroomForm({ initialData, onSuccess, onCancel }: ShowroomFormP
   const [imageUrl, setImageUrl] = useState<string | undefined>(initialData?.image?.url);
 
   const form = useForm<ShowroomInput>({
-    resolver: zodResolver(showroomSchema) as any, // Bypass strict type checking for optional fields
+    resolver: zodResolver(showroomSchema) as unknown as Resolver<ShowroomInput>,
     defaultValues: {
       id: initialData?.id,
       title: initialData?.title || '',

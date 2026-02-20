@@ -4,6 +4,7 @@ export type UserRole = 'admin' | 'editor';
 
 export interface User extends EntityBase {
   name: string | null;
+  email?: string | null;
   username: string;
   role: UserRole;
   isActive: boolean;
