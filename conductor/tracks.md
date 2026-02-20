@@ -6,5 +6,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: scaffold a package called shared, this will be used to host shared types between web and admin, but for the current track, lets just create that package**
+- [~] **Track: scaffold a package called shared, this will be used to host shared types between web and admin, but for the current track, lets just create that package**
 *Link: [./tracks/shared_package_scaffold_20260220/](./tracks/shared_package_scaffold_20260220/)*
