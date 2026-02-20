@@ -5,30 +5,10 @@ import { useRouter } from '@/i18n/routing';
 import { useSearchParams } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
+import { type Product } from '@repo/shared';
 
 import { ProductCard } from '@/app/[locale]/components/product-card';
 import { ProductListToolbar } from '@/app/[locale]/components/product-list-toolbar';
-
-// Define the product type based on the schema and query
-export type Product = {
-  id: string;
-  name: string;
-  nameVi?: string | null;
-  slug: string;
-  shortDescription?: string | null;
-  shortDescriptionVi?: string | null;
-  basePrice: string; // Decimal is string in JS usually
-  discountPrice: string | null;
-  showPrice: boolean;
-  gallery: {
-    isPrimary: boolean;
-    asset: { url: string };
-    focusPoint?: { x: number; y: number } | null;
-    aspectRatio?: 'original' | '1:1' | '3:4' | '4:3' | '16:9' | string | null;
-    objectFit?: 'cover' | 'contain' | string | null;
-    position: number;
-  }[];
-};
 
 interface ProductListingProps {
   products: Product[];

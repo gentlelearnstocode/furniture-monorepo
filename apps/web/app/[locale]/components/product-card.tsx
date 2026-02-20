@@ -2,6 +2,7 @@
 
 import { Link } from '@/i18n/routing';
 import { cn } from '@/lib/utils';
+import { type Product } from '@repo/shared';
 import {
   StyledImage,
   getDisplaySettings,
@@ -11,28 +12,7 @@ import {
 import { useLocalizedText } from '@/providers/language-provider';
 
 interface ProductCardProps {
-  product: {
-    id: string;
-    name: string;
-    nameVi?: string | null;
-    slug: string;
-    shortDescription?: string | null;
-    shortDescriptionVi?: string | null;
-    basePrice: string;
-    discountPrice?: string | null;
-    showPrice?: boolean;
-    gallery: {
-      isPrimary: boolean;
-      asset: {
-        url: string;
-      };
-      // Display settings from admin
-      focusPoint?: { x: number; y: number } | null;
-      aspectRatio?: string | null;
-      objectFit?: string | null;
-    }[];
-    colorVariants?: { color: string }[];
-  };
+  product: Product;
   className?: string;
   imageRatio?: string | null;
 }
@@ -42,7 +22,7 @@ export const ProductCard = ({ product, className, imageRatio }: ProductCardProps
   const productName = tl(product, 'name');
   const productDesc = tl(product, 'shortDescription');
 
-  const primaryAsset = product.gallery.find((g) => g.isPrimary) || product.gallery[0];
+  const primaryAsset = product.gallery?.find((g) => g.isPrimary) || product.gallery?.[0];
   const imageUrl =
     primaryAsset?.asset?.url ||
     'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=800';

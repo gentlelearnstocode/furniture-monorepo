@@ -5,19 +5,8 @@ import Image from 'next/image';
 import { Link } from '@/i18n/routing';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@repo/ui/lib/utils';
+import { type Project } from '@repo/shared';
 import { useLocalizedText } from '@/providers/language-provider';
-
-// Define a minimal interface for what we need
-export interface Project {
-  id: string;
-  title: string;
-  titleVi?: string | null;
-  slug: string;
-  image: {
-    url: string;
-    altText?: string | null;
-  } | null;
-}
 
 interface ProjectSliderProps {
   projects: Project[];

@@ -122,12 +122,14 @@ export default async function CatalogPage({ params }: Props) {
     id: string;
     name: string;
     nameVi: string | null;
+    slug: string;
     bannerUrl: string | null;
     products: {
       id: string;
       name: string;
       nameVi: string | null;
       slug: string;
+      basePrice: string | number;
       shortDescription: string | null;
       shortDescriptionVi: string | null;
       gallery: {
@@ -149,12 +151,14 @@ export default async function CatalogPage({ params }: Props) {
       id: cc.collection.id,
       name: cc.collection.name,
       nameVi: cc.collection.nameVi,
+      slug: cc.collection.slug,
       bannerUrl: cc.collection.banner?.url || null,
       products: cc.collection.products.map((cp) => ({
         id: cp.product.id,
         name: cp.product.name,
         nameVi: cp.product.nameVi,
         slug: cp.product.slug,
+        basePrice: cp.product.basePrice,
         shortDescription: cp.product.shortDescription,
         shortDescriptionVi: cp.product.shortDescriptionVi,
         gallery: cp.product.gallery.map((g) => ({
@@ -174,12 +178,14 @@ export default async function CatalogPage({ params }: Props) {
         id: catalog.id,
         name: catalog.name,
         nameVi: catalog.nameVi,
+        slug: catalog.slug,
         bannerUrl: null, // Level 2 catalogs don't have banner images in the same way
         products: catalog.products.map((product) => ({
           id: product.id,
           name: product.name,
           nameVi: product.nameVi,
           slug: product.slug,
+          basePrice: product.basePrice,
           shortDescription: product.shortDescription,
           shortDescriptionVi: product.shortDescriptionVi,
           gallery: product.gallery.map((g) => ({

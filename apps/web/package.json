@@ -13,6 +13,7 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@repo/database": "workspace:^",
+    "@repo/shared": "workspace:*",
     "@repo/ui": "workspace:*",
     "@types/uuid": "^11.0.0",
     "clsx": "^2.1.1",

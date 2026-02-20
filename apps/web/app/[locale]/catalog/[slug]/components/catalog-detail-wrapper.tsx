@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@repo/ui/lib/utils';
 import { useLocalizedText } from '@/providers/language-provider';
 import { useTranslations } from 'next-intl';
+import { type Product, type Collection } from '@repo/shared';
 import { ProductCard } from './product-card';
 import {
   Carousel,
@@ -15,33 +16,6 @@ import {
   CarouselPrevious,
   CarouselDots,
 } from '@repo/ui/ui/carousel';
-
-interface Product {
-  id: string;
-  name: string;
-  nameVi: string | null;
-  slug: string;
-  shortDescription?: string | null;
-  shortDescriptionVi?: string | null;
-  gallery: {
-    isPrimary: boolean;
-    asset: {
-      url: string;
-    } | null;
-    // Display settings from admin
-    focusPoint: { x: number; y: number } | null;
-    aspectRatio: string | null;
-    objectFit: string | null;
-  }[];
-}
-
-interface Collection {
-  id: string;
-  name: string;
-  nameVi: string | null;
-  bannerUrl: string | null;
-  products: Product[];
-}
 
 interface CatalogDetailWrapperProps {
   collections: Collection[];
@@ -150,7 +124,7 @@ export const CatalogDetailWrapper = ({ collections }: CatalogDetailWrapperProps)
       )}
 
       {/* Shop the look Section - Shows products from current collection */}
-      {currentCollection && currentCollection.products.length > 0 && (
+      {currentCollection && currentCollection.products && currentCollection.products.length > 0 && (
         <div className='container pb-12 md:pb-16'>
           {/* Section Header with decorative elements */}
           <div className='relative mb-8'>
@@ -176,13 +150,13 @@ export const CatalogDetailWrapper = ({ collections }: CatalogDetailWrapperProps)
               className='w-full'
             >
               <CarouselContent className='-ml-4'>
-                {currentCollection.products.map((product) => (
+                {currentCollection.products.map((product: Product) => (
                   <CarouselItem key={product.id} className='pl-4 basis-1/2 lg:basis-1/4'>
                     <ProductCard
                       product={{
                         ...product,
                         basePrice: '0',
-                        gallery: product.gallery.map((g) => ({
+                        gallery: product.gallery?.map((g) => ({
                           ...g,
                           asset: g.asset || { url: '' },
                         })),

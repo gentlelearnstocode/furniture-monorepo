@@ -26,22 +26,24 @@ export interface ProductDimensions {
 export interface Product extends EntityBase, LocalizedFields {
   name: string;
   slug: string;
-  description: string | null;
-  shortDescription: string | null;
+  description?: string | null;
+  shortDescription?: string | null;
   basePrice: number | string;
   discountPrice?: number | string | null;
-  catalogId: string | null;
-  isActive: boolean;
+  catalogId?: string | null;
+  isActive?: boolean;
   showPrice?: boolean;
   dimensions?: ProductDimensions | unknown;
   images?: ProductImage[];
+  colorVariants?: { color: string }[];
   gallery?: {
     isPrimary: boolean;
     asset: {
       url: string;
-    };
+    } | null;
     focusPoint?: { x: number; y: number } | null;
-    aspectRatio?: string | null;
-    objectFit?: string | null;
+    aspectRatio?: AspectRatio | string | null;
+    objectFit?: ObjectFit | string | null;
+    position?: number;
   }[];
 }

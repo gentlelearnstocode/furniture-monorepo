@@ -13,6 +13,6 @@ export interface LocalizedFields {
  */
 export interface EntityBase {
   id: string;
-  createdAt: Date | string;
-  updatedAt: Date | string;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
 }

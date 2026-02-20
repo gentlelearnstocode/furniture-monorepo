@@ -1,7 +1,8 @@
 import { getSaleProducts, getSaleProductsByCatalog } from '@/lib/queries';
 import { db } from '@repo/database';
 import { AppBreadcrumb } from '@/components/ui/app-breadcrumb';
-import { ProductListing, type Product } from '@/app/[locale]/components/product-listing';
+import { ProductListing } from '@/app/[locale]/components/product-listing';
+import { type Product } from '@repo/shared';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getLocalized } from '@/lib/i18n';
 import type { Metadata } from 'next';
