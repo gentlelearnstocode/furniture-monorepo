@@ -1,0 +1,8 @@
+{
+  "track_id": "shared_types_audit_20260220",
+  "type": "refactor",
+  "status": "new",
+  "created_at": "2026-02-20T10:00:00Z",
+  "updated_at": "2026-02-20T10:00:00Z",
+  "description": "audit both web and admin, check for any type usages. Then create new shared types in shared package to replace any usages across the app"
+}
