@@ -17,9 +17,9 @@
     - [x] Create `packages/shared/src/index.ts` exporting from types and utils
 
 ### Task 1.3: Workspace Integration
-- [ ] Task: Link package and verify
-    - [ ] Run `pnpm install` from root to link the new package
-    - [ ] Verify the package is recognized in the monorepo
+- [x] Task: Link package and verify (f931106)
+    - [x] Run `pnpm install` from root to link the new package
+    - [x] Verify the package is recognized in the monorepo
 
 ### Phase Completion
 - [ ] Task: Conductor - User Manual Verification 'Infrastructure Setup' (Protocol in workflow.md)
