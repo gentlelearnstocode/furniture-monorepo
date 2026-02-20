@@ -4,7 +4,3 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
----
-
-- [x] **Track: continue resolve all any types**
-*Link: [./tracks/any_types_resolution_20260220/](./tracks/any_types_resolution_20260220/)*
