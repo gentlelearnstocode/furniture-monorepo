@@ -18,7 +18,7 @@
 - [x] Task: Verify with monorepo-wide `pnpm check-types` and `pnpm lint` (6d60b16)
 - [x] Task: Conductor - User Manual Verification 'Resolve any in apps/admin & packages' (Protocol in workflow.md) (6d60b16)
 
-## Phase 4: Final Verification [checkpoint: 6d60b16]
+## Phase 4: Final Verification [checkpoint: f142023]
 - [x] Task: Ensure zero "Unexpected any" warnings in the entire monorepo (6d60b16)
-- [x] Task: Final monorepo-wide build check (6d60b16)
-- [x] Task: Conductor - User Manual Verification 'Final Verification' (Protocol in workflow.md) (6d60b16)
+- [x] Task: Final monorepo-wide build check (f142023)
+- [x] Task: Conductor - User Manual Verification 'Final Verification' (Protocol in workflow.md) (f142023)
