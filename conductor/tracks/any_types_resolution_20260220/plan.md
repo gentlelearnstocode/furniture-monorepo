@@ -1,0 +1,24 @@
+# Implementation Plan: Resolve all 'any' types
+
+## Phase 1: Audit & Infrastructure
+- [ ] Task: Generate a comprehensive list of all remaining `any` usages in the monorepo
+- [ ] Task: Define common utility types in `@repo/shared/src/types/common.ts` (e.g., `TranslationFunction`, `NextPageProps`)
+- [ ] Task: Conductor - User Manual Verification 'Audit & Infrastructure' (Protocol in workflow.md)
+
+## Phase 2: Resolve 'any' in apps/web
+- [ ] Task: Replace `any` in `apps/web/app/[locale]/layout.tsx` and core components
+- [ ] Task: Replace `any` in entity-specific pages (Product, Catalog, Collection)
+- [ ] Task: Replace `any` in content pages (Blog, Projects, Services)
+- [ ] Task: Verify with `pnpm --filter web check-types` and linting
+- [ ] Task: Conductor - User Manual Verification 'Resolve any in apps/web' (Protocol in workflow.md)
+
+## Phase 3: Resolve 'any' in apps/admin & packages
+- [ ] Task: Replace `any` in `apps/admin` (actions, components, validations)
+- [ ] Task: Replace `any` in `packages/*` (if any remain)
+- [ ] Task: Verify with monorepo-wide `pnpm check-types` and `pnpm lint`
+- [ ] Task: Conductor - User Manual Verification 'Resolve any in apps/admin & packages' (Protocol in workflow.md)
+
+## Phase 4: Final Verification
+- [ ] Task: Ensure zero "Unexpected any" warnings in the entire monorepo
+- [ ] Task: Final monorepo-wide build check
+- [ ] Task: Conductor - User Manual Verification 'Final Verification' (Protocol in workflow.md)
