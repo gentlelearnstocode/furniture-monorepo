@@ -6,15 +6,15 @@
 - [x] Task: Create a type mapping report (documenting commonalities and differences) (3cc349e)
 - [x] Task: Conductor - User Manual Verification 'Audit & Discovery' (Protocol in workflow.md) (47f2f7a)
 
-## Phase 2: Core Entities Implementation (Product, Catalog, Collection)
+## Phase 2: Core Entities Implementation (Product, Catalog, Collection) [checkpoint: 3bf2b38]
 - [x] Task: Define core entity types in `@repo/shared/src/types` (923cdc3)
 - [x] Task: Update `apps/web` to use shared core entity types (30e1169)
 - [x] Task: Update `apps/admin` to use shared core entity types (301a930)
 - [x] Task: Verify types with `pnpm check-types` in affected applications (301a930)
-- [~] Task: Conductor - User Manual Verification 'Core Entities Implementation' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Core Entities Implementation' (Protocol in workflow.md) (3bf2b38)
 
 ## Phase 3: Auth, Users & Content Implementation
-- [ ] Task: Define Auth, User, Blog, Project, and Service types in `@repo/shared`
+- [~] Task: Define Auth, User, Blog, Project, and Service types in `@repo/shared`
 - [ ] Task: Update `apps/web` to use shared types for these categories
 - [ ] Task: Update `apps/admin` to use shared types for these categories
 - [ ] Task: Verify types with `pnpm check-types`
