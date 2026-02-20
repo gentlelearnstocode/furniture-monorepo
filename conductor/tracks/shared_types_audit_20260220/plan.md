@@ -8,8 +8,8 @@
 
 ## Phase 2: Core Entities Implementation (Product, Catalog, Collection)
 - [x] Task: Define core entity types in `@repo/shared/src/types` (923cdc3)
-- [~] Task: Update `apps/web` to use shared core entity types
-- [ ] Task: Update `apps/admin` to use shared core entity types
+- [x] Task: Update `apps/web` to use shared core entity types (30e1169)
+- [~] Task: Update `apps/admin` to use shared core entity types
 - [ ] Task: Verify types with `pnpm check-types` in affected applications
 - [ ] Task: Conductor - User Manual Verification 'Core Entities Implementation' (Protocol in workflow.md)
 

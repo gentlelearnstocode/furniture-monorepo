@@ -2,7 +2,7 @@ import { EntityBase, LocalizedFields } from './common';
 import { Product } from './product';
 import { Catalog } from './catalog';
 
-export interface Collection extends EntityBase, LocalizedFields {
+export interface Collection<T = Product> extends EntityBase, LocalizedFields {
   name: string;
   slug: string;
   description?: string | null;
@@ -11,10 +11,21 @@ export interface Collection extends EntityBase, LocalizedFields {
   isActive?: boolean;
   showOnHome?: boolean;
   homeLayout?: 'full' | 'half' | 'third';
-  products?: Product[];
+  products?: T[];
 }
 
-export interface CollectionWithRelations extends Collection {
+export interface CollectionProductRelation {
+  productId: string;
+  collectionId: string;
+  product?: Product;
+}
+
+export interface CollectionWithRelations extends Collection<CollectionProductRelation> {
+  banner?: {
+    id: string;
+    url: string;
+    alt?: string | null;
+  } | null;
   catalogs?: {
     catalogId: string;
     collectionId: string;

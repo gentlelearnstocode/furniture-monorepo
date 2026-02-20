@@ -1,8 +1,1 @@
-export interface Catalog {
-  id: string;
-  name: string;
-  slug: string;
-  description: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-}
+export type { Catalog } from '@repo/shared';
