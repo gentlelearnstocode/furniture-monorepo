@@ -5,13 +5,14 @@ import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { customPageSchema, type CustomPageInput } from '@/lib/validations/pages';
 import { revalidateStorefront } from '../revalidate-storefront';
+import { type CustomPage } from '@repo/shared';
 
-export async function getCustomPageBySlug(slug: string) {
+export async function getCustomPageBySlug(slug: string): Promise<CustomPage | null> {
   try {
     const page = await db.query.customPages.findFirst({
       where: (pages, { eq }) => eq(pages.slug, slug),
     });
-    return page;
+    return (page as CustomPage) || null;
   } catch (error) {
     console.error(`Failed to fetch custom page ${slug}:`, error);
     return null;

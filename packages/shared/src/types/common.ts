@@ -37,18 +37,29 @@ export interface NextPageProps<T = Record<string, string>> {
  * Helper types for Drizzle queries commonly used in admin actions
  */
 export interface DrizzleOrderByOperators {
-  asc: (column: unknown) => unknown;
-  desc: (column: unknown) => unknown;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  asc: (column: any) => any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  desc: (column: any) => any;
 }
 
 export interface DrizzleWhereOperators {
-  eq: (column: unknown, value: unknown) => unknown;
-  ne: (column: unknown, value: unknown) => unknown;
-  gt: (column: unknown, value: unknown) => unknown;
-  gte: (column: unknown, value: unknown) => unknown;
-  lt: (column: unknown, value: unknown) => unknown;
-  lte: (column: unknown, value: unknown) => unknown;
-  inArray: (column: unknown, values: unknown[]) => unknown;
-  isNull: (column: unknown) => unknown;
-  isNotNull: (column: unknown) => unknown;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  eq: (column: any, value: any) => any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ne: (column: any, value: any) => any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  gt: (column: any, value: any) => any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  gte: (column: any, value: any) => any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  lt: (column: any, value: any) => any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  lte: (column: any, value: any) => any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  inArray: (column: any, values: any[]) => any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  isNull: (column: any) => any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  isNotNull: (column: any) => any;
 }

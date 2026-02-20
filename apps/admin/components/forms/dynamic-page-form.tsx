@@ -62,7 +62,10 @@ export function DynamicPageForm({ slug, title, initialData }: DynamicPageFormPro
             introHtmlVi: initialData.content?.body?.introHtmlVi || '',
             paragraphHtml: initialData.content?.body?.paragraphHtml || '',
             paragraphHtmlVi: initialData.content?.body?.paragraphHtmlVi || '',
-            images: initialData.content?.body?.images || [],
+            images: (initialData.content?.body?.images || []).map((img) => ({
+              ...img,
+              focusPoint: img.focusPoint || undefined,
+            })),
           },
           footer: {
             textHtml: initialData.content?.footer?.textHtml || '',
