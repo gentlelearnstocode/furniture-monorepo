@@ -20,7 +20,7 @@
 - [x] Task: Verify types with `pnpm check-types` (10e13e6)
 - [x] Task: Conductor - User Manual Verification 'Auth, Users & Content Implementation' (Protocol in workflow.md) (10e13e6)
 
-## Phase 4: Zod Schema Synchronization & Final Validation
-- [~] Task: Identify and move common Zod schemas to `@repo/shared`
-- [ ] Task: Final monorepo-wide type check and linting
-- [ ] Task: Conductor - User Manual Verification 'Zod Schema Synchronization & Final Validation' (Protocol in workflow.md)
+## Phase 4: Zod Schema Synchronization & Final Validation [checkpoint: 2c28a6d]
+- [x] Task: Identify and move common Zod schemas to `@repo/shared` (2c28a6d)
+- [x] Task: Final monorepo-wide type check and linting (2c28a6d)
+- [x] Task: Conductor - User Manual Verification 'Zod Schema Synchronization & Final Validation' (Protocol in workflow.md) (2c28a6d)
