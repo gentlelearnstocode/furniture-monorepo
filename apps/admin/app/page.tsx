@@ -12,7 +12,6 @@ import {
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/ui/card';
 import { Button } from '@repo/ui/ui/button';
-import { Badge } from '@repo/ui/ui/badge';
 import { PageHeader } from '@/components/layout/page-header';
 
 export const dynamic = 'force-dynamic';
@@ -197,36 +196,6 @@ export default async function DashboardPage() {
               </Link>
             </CardContent>
             <ArrowUpRight className='absolute -bottom-4 -right-4 h-24 w-24 text-brand-primary-800 opacity-50 rotate-12' />
-          </Card>
-
-          <Card className='border-none shadow-sm bg-emerald-900 text-white overflow-hidden relative'>
-            <CardHeader>
-              <CardTitle className='text-lg'>Store Status</CardTitle>
-              <CardDescription className='text-emerald-100'>
-                Live system performance.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className='space-y-4 relative z-10'>
-              <div className='flex items-center justify-between text-sm'>
-                <span className='text-emerald-200'>Database</span>
-                <Badge className='bg-emerald-400 text-emerald-950 hover:bg-emerald-400'>
-                  Connected
-                </Badge>
-              </div>
-              <div className='flex items-center justify-between text-sm'>
-                <span className='text-emerald-200'>Search Engine</span>
-                <Badge className='bg-emerald-400 text-emerald-950 hover:bg-emerald-400'>
-                  Active
-                </Badge>
-              </div>
-              <div className='flex items-center justify-between text-sm'>
-                <span className='text-emerald-200'>Auth Service</span>
-                <Badge className='bg-emerald-400 text-emerald-950 hover:bg-emerald-400'>
-                  Stable
-                </Badge>
-              </div>
-            </CardContent>
-            <ArrowUpRight className='absolute -bottom-4 -right-4 h-24 w-24 text-emerald-800 opacity-50 rotate-12' />
           </Card>
         </div>
       </div>

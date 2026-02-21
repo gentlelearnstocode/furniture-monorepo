@@ -7,6 +7,7 @@ import { MapPin, Phone, Mail, Facebook, Youtube, Linkedin, Twitter } from 'lucid
 import { createCachedQuery } from '@/lib/cache';
 import { getTranslations } from 'next-intl/server';
 import { getLocale, getLocalizedText } from '@/lib/i18n';
+import { FooterSubscribeForm } from './footer-subscribe-form';
 
 export const Footer = async () => {
   const t = await getTranslations('Footer');
@@ -229,19 +230,10 @@ export const Footer = async () => {
 
             {/* Newsletter Signup / Contact Form */}
             <div className='pt-6'>
-              <form className='flex flex-col sm:flex-row gap-2'>
-                <input
-                  type='email'
-                  placeholder={t('emailPlaceholder')}
-                  className='flex-1 px-4 py-3 text-sm border border-gray-300 bg-white focus:outline-none focus:border-brand-primary-600 placeholder:text-gray-400'
-                />
-                <button
-                  type='submit'
-                  className='px-6 py-3 bg-brand-primary-600 text-white text-sm font-semibold uppercase tracking-wider hover:bg-brand-primary-700 transition-colors whitespace-nowrap'
-                >
-                  {t('registerButton')}
-                </button>
-              </form>
+              <FooterSubscribeForm
+                placeholder={t('emailPlaceholder')}
+                buttonText={t('registerButton')}
+              />
             </div>
           </div>
 

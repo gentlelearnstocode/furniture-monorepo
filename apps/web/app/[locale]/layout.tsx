@@ -17,6 +17,7 @@ import { routing } from '@/i18n/routing';
 import { notFound } from 'next/navigation';
 import { LanguageProvider } from '@/providers/language-provider';
 import { Suspense } from 'react';
+import { Toaster } from '@repo/ui/ui/sonner';
 
 const geistSans = localFont({
   src: '../fonts/GeistVF.woff',
@@ -118,6 +119,27 @@ export default async function RootLayout({
             <ScrollToTop />
             <FloatingContactWidget contacts={siteContacts} />
           </div>
+          <Toaster
+            position='bottom-right'
+            toastOptions={{
+              classNames: {
+                toast:
+                  'group toast group-[.toaster]:bg-white group-[.toaster]:text-brand-neutral-900 group-[.toaster]:border-gray-200 group-[.toaster]:shadow-2xl font-sans rounded-none border',
+                description: 'group-[.toast]:text-gray-500 text-sm',
+                actionButton:
+                  'group-[.toast]:bg-brand-primary-600 group-[.toast]:text-white uppercase tracking-wider text-xs font-semibold rounded-none',
+                cancelButton:
+                  'group-[.toast]:bg-gray-100 group-[.toast]:text-gray-600 rounded-none',
+                success:
+                  'group-[.toaster]:border-green-200 group-[.toaster]:text-green-700 group-[.toaster]:bg-green-50',
+                error:
+                  'group-[.toaster]:border-red-200 group-[.toaster]:text-brand-primary-700 group-[.toaster]:bg-red-50',
+                info: 'group-[.toaster]:border-blue-200 group-[.toaster]:text-blue-700 group-[.toaster]:bg-blue-50',
+                warning:
+                  'group-[.toaster]:border-amber-200 group-[.toaster]:text-amber-700 group-[.toaster]:bg-amber-50',
+              },
+            }}
+          />
         </LanguageProvider>
       </body>
     </html>

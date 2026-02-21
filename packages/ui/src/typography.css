@@ -12,7 +12,7 @@
   --prose-accent-soft: hsl(var(--brand-primary-50));
 
   /* Base typography */
-  font-family: var(--font-serif), Georgia, 'Times New Roman', serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-size: 1.125rem;
   line-height: 1.9;
   color: var(--prose-body);
@@ -44,7 +44,7 @@
 .prose-brand h2,
 .prose-brand h3,
 .prose-brand h4 {
-  font-family: var(--font-serif), Georgia, 'Times New Roman', serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-weight: 700;
   color: var(--prose-headings);
   margin-top: 2.5rem;
