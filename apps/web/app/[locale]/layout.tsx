@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
-import { Playfair_Display } from 'next/font/google';
 import '@repo/ui/globals.css';
 import { NavbarV2 } from './components/navbar-v2';
 import { Footer } from './components/footer-section';
@@ -28,9 +27,30 @@ const geistMono = localFont({
   variable: '--font-geist-mono',
 });
 
-const playfair = Playfair_Display({
-  subsets: ['latin', 'vietnamese'],
-  variable: '--font-playfair',
+const uvnHongHa = localFont({
+  src: [
+    {
+      path: '../fonts/UVNHongHa_R.ttf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../fonts/UVNHongHa_B.ttf',
+      weight: '700',
+      style: 'normal',
+    },
+    {
+      path: '../fonts/UVNHongHa_I.ttf',
+      weight: '400',
+      style: 'italic',
+    },
+    {
+      path: '../fonts/UVNHongHa_BI.ttf',
+      weight: '700',
+      style: 'italic',
+    },
+  ],
+  variable: '--font-uvn-hongha',
 });
 
 export const metadata: Metadata = {
@@ -106,7 +126,7 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} font-sans antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${uvnHongHa.variable} font-sans antialiased`}
       >
         <LanguageProvider initialLocale={locale as Locale} messages={messages}>
           <NavbarV2 items={navItems} />

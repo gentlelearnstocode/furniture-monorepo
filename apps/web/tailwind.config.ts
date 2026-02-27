@@ -7,9 +7,10 @@ const config: Pick<Config, 'content' | 'presets' | 'theme'> = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-playfair)', 'serif'],
-        serif: ['var(--font-playfair)', 'serif'],
-        playfair: ['var(--font-playfair)'],
+        sans: ['var(--font-uvn-hongha)', 'sans-serif'],
+        serif: ['var(--font-uvn-hongha)', 'serif'],
+        playfair: ['var(--font-uvn-hongha)'],
+        uvnhongha: ['var(--font-uvn-hongha)', 'sans-serif'],
       },
     },
   },

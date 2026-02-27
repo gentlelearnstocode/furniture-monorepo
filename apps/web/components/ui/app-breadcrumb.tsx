@@ -25,14 +25,14 @@ export function AppBreadcrumb({ items, className }: AppBreadcrumbProps) {
                 {item.href && !isLast ? (
                   <Link
                     href={item.href}
-                    className='capitalize font-playfair text-[12px] sm:text-[14px] md:text-[16px] text-[#222222]/80 hover:text-[#222222] transition-colors whitespace-nowrap'
+                    className='capitalize font-uvnhongha text-[12px] sm:text-[14px] md:text-[16px] text-[#222222]/80 hover:text-[#222222] transition-colors whitespace-nowrap'
                   >
                     {item.label}
                   </Link>
                 ) : (
                   <span
                     className={cn(
-                      'capitalize font-playfair text-[12px] sm:text-[14px] md:text-[16px] whitespace-nowrap',
+                      'capitalize font-uvnhongha text-[12px] sm:text-[14px] md:text-[16px] whitespace-nowrap',
                       isLast ? 'text-[#222222] font-semibold' : 'text-[#222222]/80',
                     )}
                   >
