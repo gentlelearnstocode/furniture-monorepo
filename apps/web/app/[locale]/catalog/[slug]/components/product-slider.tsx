@@ -45,7 +45,7 @@ export const ProductSlider = ({ images }: ProductSliderProps) => {
           key={index}
           className={cn(
             'absolute inset-0 transition-all duration-[1200ms] ease-out',
-            index === currentIndex ? 'opacity-100 z-10 scale-100' : 'opacity-0 z-0 scale-105'
+            index === currentIndex ? 'opacity-100 z-10 scale-100' : 'opacity-0 z-0 scale-105',
           )}
         >
           <Image
@@ -67,23 +67,23 @@ export const ProductSlider = ({ images }: ProductSliderProps) => {
         <>
           <button
             onClick={prevSlide}
-            className='absolute left-6 md:left-10 top-1/2 -translate-y-1/2 z-20 w-14 h-14 rounded-full border border-white/30 bg-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-white hover:text-black hover:border-white hover:scale-110 transition-all duration-300 opacity-0 group-hover:opacity-100 shadow-lg'
+            className='absolute left-4 md:left-10 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-14 md:h-14 rounded-full border border-white/30 bg-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-white hover:text-black hover:border-white hover:scale-110 transition-all duration-300 opacity-0 group-hover:opacity-100 shadow-lg'
             aria-label='Previous slide'
           >
-            <ChevronLeft size={26} strokeWidth={1.5} />
+            <ChevronLeft className='w-5 h-5 md:w-6 md:h-6' strokeWidth={1.5} />
           </button>
           <button
             onClick={nextSlide}
-            className='absolute right-6 md:right-10 top-1/2 -translate-y-1/2 z-20 w-14 h-14 rounded-full border border-white/30 bg-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-white hover:text-black hover:border-white hover:scale-110 transition-all duration-300 opacity-0 group-hover:opacity-100 shadow-lg'
+            className='absolute right-4 md:right-10 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-14 md:h-14 rounded-full border border-white/30 bg-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-white hover:text-black hover:border-white hover:scale-110 transition-all duration-300 opacity-0 group-hover:opacity-100 shadow-lg'
             aria-label='Next slide'
           >
-            <ChevronRight size={26} strokeWidth={1.5} />
+            <ChevronRight className='w-5 h-5 md:w-6 md:h-6' strokeWidth={1.5} />
           </button>
         </>
       )}
 
       {/* Pagination dots */}
-      <div className='absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 z-20 flex gap-2.5 bg-black/20 backdrop-blur-md px-4 py-2.5 rounded-full'>
+      <div className='absolute bottom-4 md:bottom-10 left-1/2 -translate-x-1/2 z-20 flex gap-2 md:gap-2.5 bg-black/20 backdrop-blur-md px-3 py-2 md:px-4 md:py-2.5 rounded-full'>
         {images.map((_, index) => (
           <button
             key={index}
@@ -91,8 +91,8 @@ export const ProductSlider = ({ images }: ProductSliderProps) => {
             className={cn(
               'rounded-full transition-all duration-500 hover:scale-110',
               index === currentIndex
-                ? 'bg-white w-10 h-2.5 shadow-lg shadow-white/30'
-                : 'bg-white/50 w-2.5 h-2.5 hover:bg-white/70'
+                ? 'bg-white w-8 h-2 md:w-10 md:h-2.5 shadow-lg shadow-white/30'
+                : 'bg-white/50 w-2 h-2 md:w-2.5 md:h-2.5 hover:bg-white/70',
             )}
             aria-label={`Go to slide ${index + 1}`}
           />
