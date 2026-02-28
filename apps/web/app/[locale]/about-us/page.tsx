@@ -83,7 +83,7 @@ export default async function AboutUsPage({ params }: Props) {
             )}
             {/* Brand Header */}
             <div className='flex flex-col items-center space-y-4'>
-              <h1 className='text-3xl md:text-5xl font-serif font-bold text-[#B80022] text-center uppercase tracking-wide'>
+              <h1 className='text-3xl md:text-5xl font-serif font-bold text-[#B80022] text-center tracking-wide'>
                 {tCommon('brandName')}
               </h1>
             </div>

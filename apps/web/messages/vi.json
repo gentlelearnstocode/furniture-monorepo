@@ -5,7 +5,7 @@
       "description": "Nội thất cao cấp và trang trí cho ngôi nhà của bạn. Khám phá sự tinh xảo trong từng chi tiết."
     },
     "aboutUs": {
-      "title": "Về chúng tôi | Nội Thất THIÊN ẤN Furniture",
+      "title": "Giới thiệu | Nội Thất THIÊN ẤN Furniture",
       "description": "Hành trình xây dựng thương hiệu Thien An Furniture từ năm 1997."
     }
   },
@@ -20,7 +20,7 @@
     "category": "Danh mục",
     "noImage": "Không có bộ sưu tập",
     "dateFormat": "d MMMM, yyyy",
-    "brandName": "THIÊN ẤN"
+    "brandName": "Nội Thất THIÊN ẤN Furniture"
   },
   "Breadcrumbs": {
     "home": "Trang chủ",
@@ -30,7 +30,7 @@
     "catalog": "Danh mục",
     "sale": "Khuyến mãi",
     "allCategories": "Tất cả danh mục",
-    "aboutUs": "Về chúng tôi",
+    "aboutUs": "Giới thiệu",
     "showroom": "Showroom",
     "factory": "Nhà máy",
     "showroomFactory": "Showroom & Nhà máy",
@@ -62,7 +62,7 @@
     "sale": "Sale",
     "allSale": "Tất Cả Sale",
     "products": "Sản phẩm",
-    "aboutUs": "Về chúng tôi",
+    "aboutUs": "Giới thiệu",
     "showroomFactory": "Showroom & Nhà máy",
     "designProject": "Thiết kế & Dự án",
     "exports": "Xuất khẩu",
@@ -103,7 +103,7 @@
     "noResults": "Hiện chưa có dịch vụ nào. Vui lòng quay lại sau!"
   },
   "Projects": {
-    "title": "Dự Án Đã Làm",
+    "title": "Dự Án",
     "expandYourView": "Xem Thêm Dự Án",
     "gallery": "Thư viện dự án",
     "showcase": "Giới thiệu dự án",
@@ -159,8 +159,8 @@
     "phone": "Điện thoại",
     "email": "Email",
     "workingHours": "Giờ làm việc",
-    "workingTime": "Thứ 2 - Thứ 7: 8:00 - 17:30",
-    "sunday": "Chủ nhật: Nghỉ",
+    "workingTime": "Thứ 2 - Thứ 7: 8:00 - 18:00",
+    "sunday": "Chủ nhật: 9:30 - 16:30",
     "sendMessage": "Contact Us"
   },
   "Contact": {
@@ -191,7 +191,7 @@
     "allCategories": "Tất cả danh mục"
   },
   "AboutUs": {
-    "title": "Về chúng tôi",
+    "title": "Giới thiệu",
     "description": "Tìm hiểu thêm về hành trình và giá trị của chúng tôi.",
     "cta": "Tải Brochure",
     "brochure": "Brochure",

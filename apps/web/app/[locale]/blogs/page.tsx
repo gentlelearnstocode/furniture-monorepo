@@ -61,7 +61,7 @@ export default async function BlogListingPage({ params }: Props) {
       <div className='container pt-10 pb-12'>
         {/* Title & Description */}
         <div className='mb-8'>
-          <h1 className='text-3xl md:text-5xl font-serif text-black/90 tracking-wide mb-4'>
+          <h1 className='text-2xl md:text-3xl font-serif text-black/90 tracking-wide mb-4'>
             {t('pageTitle')}
           </h1>
           <p className='text-[15px] leading-relaxed text-gray-600 max-w-4xl font-serif'>
@@ -120,7 +120,7 @@ export default async function BlogListingPage({ params }: Props) {
                 </div>
 
                 <Link href={`/blogs/${post.slug}`}>
-                  <h2 className='text-2xl font-serif font-bold text-gray-900 mb-4 group-hover:text-[#7B0C0C] transition-colors line-clamp-2'>
+                  <h2 className='text-lg md:text-xl font-serif font-bold text-gray-900 mb-3 group-hover:text-[#7B0C0C] transition-colors line-clamp-2'>
                     {getLocalizedText(post, 'title', locale)}
                   </h2>
                 </Link>

@@ -83,7 +83,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function BlogPostPage({ params }: Props) {
   const { slug, locale } = await params;
   setRequestLocale(locale);
-  
+
   const post = await getPostBySlug(slug)();
   const t = await getTranslations('Blogs');
   const tb = await getTranslations('Breadcrumbs');
@@ -119,7 +119,7 @@ export default async function BlogPostPage({ params }: Props) {
       {/* Header */}
       <div className='container mb-12'>
         <div className='max-w-4xl'>
-          <h1 className='text-4xl md:text-6xl font-serif font-bold text-gray-900 mb-8 leading-tight'>
+          <h1 className='text-2xl md:text-4xl font-serif font-bold text-gray-900 mb-6 leading-tight'>
             {title}
           </h1>
           <div className='flex items-center gap-6 text-sm font-medium text-gray-400 uppercase tracking-widest'>
@@ -156,10 +156,7 @@ export default async function BlogPostPage({ params }: Props) {
       <div className='container mb-20'>
         <div className='max-w-3xl mx-auto'>
           {contentHtml && (
-            <div
-              className='prose-brand'
-              dangerouslySetInnerHTML={{ __html: contentHtml }}
-            />
+            <div className='prose-brand' dangerouslySetInnerHTML={{ __html: contentHtml }} />
           )}
         </div>
       </div>

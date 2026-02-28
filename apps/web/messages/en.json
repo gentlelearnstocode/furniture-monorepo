@@ -20,7 +20,7 @@
     "category": "Category",
     "noImage": "No Image",
     "dateFormat": "MMMM d, yyyy",
-    "brandName": "THIÊN ẤN"
+    "brandName": "THIÊN ẤN Furniture"
   },
   "Breadcrumbs": {
     "home": "Home",
@@ -159,8 +159,8 @@
     "phone": "Phone",
     "email": "Email",
     "workingHours": "Working Hours",
-    "workingTime": "Mon - Sat: 8:00 - 17:30",
-    "sunday": "Sunday: Closed",
+    "workingTime": "Mon - Sat: 8:00 - 18:00",
+    "sunday": "Sunday: 9:30 - 16:30",
     "sendMessage": "Contact Us"
   },
   "Contact": {
