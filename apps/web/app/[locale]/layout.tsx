@@ -54,7 +54,7 @@ const uvnHongHa = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'Thien An Furniture | Excellence Since 1997',
+  title: 'Thiên Ấn Furniture | Excellence Since 1997',
   description: 'Luxury furniture and decor for your home.',
 };
 

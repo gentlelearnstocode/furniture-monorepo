@@ -6,7 +6,7 @@ export function RunningBanner() {
   const content = (
     <div className='relative h-[50px] w-[340px] mx-8'>
       <Image
-        src='/brand-text.png'
+        src='/brand-text.svg'
         alt='THIÊN ẤN Furniture SINCE 1997'
         fill
         className='object-contain'
