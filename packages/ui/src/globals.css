@@ -1,4 +1,4 @@
-@import "./typography.css";
+@import './typography.css';
 
 @tailwind base;
 @tailwind components;
@@ -28,9 +28,9 @@
     --radius: 0.5rem;
 
     /* Fonts */
-    --font-sans: "Inter", system-ui, sans-serif;
-    --font-serif: "Playfair Display", serif;
-    --font-brand: "Playfair Display", serif;
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-serif: 'Playfair Display', serif;
+    --font-brand: 'Playfair Display', serif;
 
     /* Brand Primary (Monza/Deep Red) */
     --brand-primary-50: 0 82% 97%;
