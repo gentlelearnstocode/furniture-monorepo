@@ -32,8 +32,8 @@
     "allCategories": "Tất cả danh mục",
     "aboutUs": "Giới thiệu",
     "showroom": "Showroom",
-    "factory": "Nhà máy",
-    "showroomFactory": "Showroom & Nhà máy",
+    "factory": "Xưởng Sản Xuất",
+    "showroomFactory": "Showroom & Xưởng Sản Xuất",
     "collections": "Bộ sưu tập",
     "designProject": "Thiết kế & Dự án",
     "exports": "Xuất khẩu",
@@ -63,7 +63,7 @@
     "allSale": "Tất Cả Sale",
     "products": "Sản phẩm",
     "aboutUs": "Giới thiệu",
-    "showroomFactory": "Showroom & Nhà máy",
+    "showroomFactory": "Showroom & Xưởng Sản Xuất",
     "designProject": "Thiết kế & Dự án",
     "exports": "Xuất khẩu",
     "blogs": "Tin tức & sự kiện",
@@ -150,7 +150,7 @@
     "goToCollection": "Xem bộ sưu tập {name}"
   },
   "ContactPage": {
-    "metaTitle": "Liên hệ | Furniture Store",
+    "metaTitle": "Liên hệ | Nội Thất THIÊN ẤN Furniture",
     "metaDescription": "Liên hệ với chúng tôi để được tư vấn và hỗ trợ tốt nhất.",
     "title": "Liên Hệ",
     "description": "Hãy để lại thông tin, đội ngũ tư vấn của chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.",
@@ -221,9 +221,9 @@
     }
   },
   "Showroom": {
-    "factory": "NHÀ MÁY",
+    "factory": "XƯỞNG SẢN XUẤT",
     "showroom": "SHOWROOM",
-    "title": "SHOWROOM & NHÀ MÁY",
+    "title": "SHOWROOM & XƯỞNG SẢN XUẤT",
     "explore": "KHÁM PHÁ",
     "description": "Khám phá không gian trưng bày tinh tế và quy trình sản xuất hiện đại của chúng tôi."
   }

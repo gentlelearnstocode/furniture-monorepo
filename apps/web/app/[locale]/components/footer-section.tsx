@@ -306,8 +306,8 @@ export const Footer = async () => {
         </div>
       </div>
       {/* Ribbon Banner */}
-      <div className='container pb-12'>
-        <div className='relative w-full aspect-[1760/139] max-w-5xl mx-auto'>
+      <div className='container-fluid pb-12 px-4'>
+        <div className='relative w-full aspect-[1760/139] max-w-7xl mx-auto'>
           <Image
             src='/ribbons-banner.svg'
             alt='We produce & deliver worldwide'

@@ -100,7 +100,7 @@ export default async function ShowroomFactoryPage({ params }: Props) {
           <section className='mx-auto'>
             <div className='grid md:grid-cols-12 gap-10 md:gap-20 items-start'>
               {/* Left Column: Title & Brand Block */}
-              <div className='md:col-span-12 lg:col-span-5 space-y-6'>
+              <div className='md:col-span-12 lg:col-span-5 space-y-10'>
                 <div className='space-y-2'>
                   <h2 className='text-2xl md:text-xl text-neutral-400 uppercase tracking-wide'>
                     {ts('explore')}
@@ -111,7 +111,9 @@ export default async function ShowroomFactoryPage({ params }: Props) {
                   <span className='text-[#b80022] block font-bold tracking-tight'>
                     {tCommon('brandName')}
                   </span>
-                  <span className='text-[#222] block font-bold tracking-tight'>{ts('title')}</span>
+                  <span className='text-[#222] block font-bold tracking-tight text-lg md:text-xl lg:text-2xl'>
+                    {ts('title')}
+                  </span>
                 </div>
               </div>
 

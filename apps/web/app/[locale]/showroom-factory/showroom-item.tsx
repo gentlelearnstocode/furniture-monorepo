@@ -38,7 +38,7 @@ export function ShowroomItem({ showroom }: ShowroomItemProps) {
       </div>
 
       <div className='grid md:grid-cols-12 gap-10 md:gap-20 items-start'>
-        <div className='md:col-span-12 lg:col-span-5 space-y-6'>
+        <div className='md:col-span-12 lg:col-span-5 space-y-10'>
           <div className='space-y-2'>
             <h3 className='text-2xl md:text-xl text-neutral-400 uppercase tracking-wide'>
               {showroom.title}
@@ -50,11 +50,11 @@ export function ShowroomItem({ showroom }: ShowroomItemProps) {
             )}
           </div>
 
-          <div className='text-2xl md:text-6xl lg:text-4xl leading-none pt-1'>
+          <div className='text-2xl md:text-3xl lg:text-4xl leading-none pt-1'>
             <span className='text-[#b80022] block font-bold tracking-tight'>
               THIÊN ẤN Furniture
             </span>
-            <span className='text-[#222] block font-bold tracking-tight uppercase'>
+            <span className='text-[#222] block font-bold tracking-tight uppercase text-lg md:text-xl lg:text-2xl'>
               {showroom.type === 'factory' ? t('factory') : t('showroom')}
             </span>
           </div>
