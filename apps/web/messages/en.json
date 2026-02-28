@@ -219,5 +219,12 @@
       "title": "Handover & Warranty",
       "description": "Customers can use turnkey services or choose individual services according to their needs. Long-term warranty and maintenance policies, along with dedicated customer care."
     }
+  },
+  "Showroom": {
+    "factory": "FACTORY",
+    "showroom": "SHOWROOM",
+    "title": "SHOWROOM & FACTORY",
+    "explore": "EXPLORE",
+    "description": "Explore our exquisite showroom and state-of-the-art manufacturing factory."
   }
 }

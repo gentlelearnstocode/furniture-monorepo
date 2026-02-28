@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 interface ShowroomItemProps {
   showroom: {
@@ -16,6 +17,7 @@ interface ShowroomItemProps {
 
 export function ShowroomItem({ showroom }: ShowroomItemProps) {
   const imageUrl = typeof showroom.image === 'string' ? showroom.image : showroom.image?.url;
+  const t = useTranslations('Showroom');
 
   return (
     <div className='group space-y-12'>
@@ -49,9 +51,11 @@ export function ShowroomItem({ showroom }: ShowroomItemProps) {
           </div>
 
           <div className='text-2xl md:text-6xl lg:text-4xl leading-none pt-1'>
-            <span className='text-[#b80022] block font-bold tracking-tight'>THIÊN ẤN</span>
+            <span className='text-[#b80022] block font-bold tracking-tight'>
+              THIÊN ẤN Furniture
+            </span>
             <span className='text-[#222] block font-bold tracking-tight uppercase'>
-              {showroom.type === 'factory' ? 'FACTORY' : 'SHOWROOM'}
+              {showroom.type === 'factory' ? t('factory') : t('showroom')}
             </span>
           </div>
         </div>

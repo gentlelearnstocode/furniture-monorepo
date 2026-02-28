@@ -15,9 +15,10 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'Breadcrumbs' });
+  const ts = await getTranslations({ locale, namespace: 'Showroom' });
   return {
-    title: `${t('showroomFactory')} | Thien An Furniture`,
-    description: 'Explore our exquisite showroom and state-of-the-art manufacturing factory.',
+    title: `${t('showroomFactory')} | THIÊN ẤN Furniture`,
+    description: ts('description'),
   };
 }
 
@@ -28,6 +29,7 @@ export default async function ShowroomFactoryPage({ params }: Props) {
   const page = await getCustomPageBySlug('showroom-factory');
   const showrooms = await getShowrooms();
   const tb = await getTranslations('Breadcrumbs');
+  const ts = await getTranslations('Showroom');
 
   // If page is not active or doesn't exist, return 404
   if (!page || !page.isActive) return notFound();
@@ -100,13 +102,15 @@ export default async function ShowroomFactoryPage({ params }: Props) {
               <div className='md:col-span-12 lg:col-span-5 space-y-6'>
                 <div className='space-y-2'>
                   <h2 className='text-2xl md:text-xl text-neutral-400 uppercase tracking-wide'>
-                    KHÁM PHÁ
+                    {ts('explore')}
                   </h2>
                 </div>
 
                 <div className='text-2xl md:text-3xl lg:text-4xl leading-none'>
-                  <span className='text-[#b80022] block font-bold tracking-tight'>THIÊN ẤN</span>
-                  <span className='text-[#222] block font-bold tracking-tight'>SHOWROOM</span>
+                  <span className='text-[#b80022] block font-bold tracking-tight'>
+                    THIÊN ẤN Furniture
+                  </span>
+                  <span className='text-[#222] block font-bold tracking-tight'>{ts('title')}</span>
                 </div>
               </div>
 

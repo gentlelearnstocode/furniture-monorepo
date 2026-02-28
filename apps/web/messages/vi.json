@@ -219,5 +219,12 @@
       "title": "Bàn giao & Bảo hành",
       "description": "Khách hàng có thể sử dụng dịch vụ chìa khóa trao tay hoặc chọn từng phần dịch vụ theo nhu cầu. Chính sách bảo hành và bảo trì dài hạn, cùng dịch vụ chăm sóc khách hàng tận tâm."
     }
+  },
+  "Showroom": {
+    "factory": "NHÀ MÁY",
+    "showroom": "SHOWROOM",
+    "title": "SHOWROOM & NHÀ MÁY",
+    "explore": "KHÁM PHÁ",
+    "description": "Khám phá không gian trưng bày tinh tế và quy trình sản xuất hiện đại của chúng tôi."
   }
 }
