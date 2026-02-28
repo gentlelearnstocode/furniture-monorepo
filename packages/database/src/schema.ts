@@ -975,6 +975,7 @@ export const showrooms = pgTable('showrooms', {
   titleVi: text('title_vi'),
   subtitle: text('subtitle'),
   subtitleVi: text('subtitle_vi'),
+  type: text('type').$type<'showroom' | 'factory'>().default('showroom').notNull(),
   contentHtml: text('content_html'),
   contentHtmlVi: text('content_html_vi'),
   imageId: uuid('image_id').references(() => assets.id),

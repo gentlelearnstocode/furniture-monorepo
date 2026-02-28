@@ -16,6 +16,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/ui/ui/tabs';
 import { RichTextEditor } from '@/components/ui/rich-text-editor';
 import { SingleImageUpload } from '@/components/ui/single-image-upload';
 import { type Showroom } from '@repo/shared';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/ui/select';
 
 import { useState } from 'react';
 
@@ -37,6 +38,7 @@ export function ShowroomForm({ initialData, onSuccess, onCancel }: ShowroomFormP
       titleVi: initialData?.titleVi || '',
       subtitle: initialData?.subtitle || '',
       subtitleVi: initialData?.subtitleVi || '',
+      type: (initialData?.type as 'showroom' | 'factory') || 'showroom',
       contentHtml: initialData?.contentHtml || '',
       contentHtmlVi: initialData?.contentHtmlVi || '',
       imageId: initialData?.imageId || '',
@@ -71,6 +73,28 @@ export function ShowroomForm({ initialData, onSuccess, onCancel }: ShowroomFormP
               <div className='space-y-1 leading-none'>
                 <FormLabel>Active Status</FormLabel>
               </div>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name='type'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Type</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder='Select type' />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value='showroom'>Showroom</SelectItem>
+                  <SelectItem value='factory'>Factory</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormMessage />
             </FormItem>
           )}
         />

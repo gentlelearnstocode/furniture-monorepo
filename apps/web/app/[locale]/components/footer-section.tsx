@@ -158,7 +158,7 @@ export const Footer = async () => {
 
             {/* Intro Title */}
             {footerData?.intro && (
-              <h3 className='text-2xl font-serif font-bold text-brand-primary-600 uppercase tracking-wide'>
+              <h3 className='text-2xl font-serif font-bold text-brand-primary-600 tracking-wide'>
                 {getLocalizedText(footerData, 'intro', locale)}
               </h3>
             )}

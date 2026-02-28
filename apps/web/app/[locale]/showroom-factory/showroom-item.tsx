@@ -7,6 +7,7 @@ interface ShowroomItemProps {
     id: string;
     title: string;
     subtitle?: string | null;
+    type?: string | null;
     contentHtml?: string | null;
     image?: string | { url: string } | null;
   };
@@ -49,7 +50,9 @@ export function ShowroomItem({ showroom }: ShowroomItemProps) {
 
           <div className='text-2xl md:text-6xl lg:text-4xl leading-none pt-1'>
             <span className='text-[#b80022] block font-bold tracking-tight'>THIÊN ẤN</span>
-            <span className='text-[#222] block font-bold tracking-tight'>SHOWROOM</span>
+            <span className='text-[#222] block font-bold tracking-tight uppercase'>
+              {showroom.type === 'factory' ? 'FACTORY' : 'SHOWROOM'}
+            </span>
           </div>
         </div>
 

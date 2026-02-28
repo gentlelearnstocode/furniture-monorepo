@@ -3,6 +3,7 @@
 import { db, siteSettings } from '@repo/database';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
+import { revalidateStorefront } from '../revalidate-storefront';
 
 // Logo overlay settings type
 export interface LogoOverlaySettings {
@@ -77,6 +78,7 @@ export async function updateLogoOverlaySettings(
     }
 
     revalidatePath('/homepage/settings');
+    await revalidateStorefront(['settings']);
     return { success: true };
   } catch (error) {
     console.error('[updateLogoOverlaySettings] Error:', error);

@@ -38,6 +38,7 @@ interface ShowroomItemType {
   titleVi: string | null;
   subtitle: string | null;
   subtitleVi: string | null;
+  type: 'showroom' | 'factory';
   contentHtml: string | null;
   contentHtmlVi: string | null;
   imageId: string | null;
@@ -99,6 +100,9 @@ function SortableShowroomItem({
       <div className='flex-1 min-w-0'>
         <div className='flex items-center gap-2'>
           <h4 className='font-medium truncate'>{item.title}</h4>
+          <Badge variant='outline' className='text-xs uppercase'>
+            {item.type}
+          </Badge>
           {!item.isActive && (
             <Badge variant='secondary' className='text-xs'>
               Inactive

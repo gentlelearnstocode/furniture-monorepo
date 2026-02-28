@@ -7,6 +7,7 @@ import type { Metadata } from 'next';
 
 import { db } from '@repo/database';
 import { createCachedQuery } from '@/lib/cache';
+import { getCustomPageBySlug } from '@/lib/queries';
 
 import { SectionSeparator } from '../components/section-separator';
 import { ProjectSlider } from '../components/project-slider';
@@ -24,13 +25,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${t('designProject')} | Thien An Furniture`,
     description: 'Bespoke interior design and high-quality manufacturing services.',
   };
-}
-
-async function getPageData(slug: string) {
-  const page = await db.query.customPages.findFirst({
-    where: (pages, { eq, and }) => and(eq(pages.slug, slug), eq(pages.isActive, true)),
-  });
-  return page;
 }
 
 const getProjects = createCachedQuery(
@@ -90,7 +84,7 @@ export default async function DesignProjectPage({ params }: Props) {
 
   const slug = 'design-project';
   const [page, projects, t, tb] = await Promise.all([
-    getPageData(slug),
+    getCustomPageBySlug(slug),
     getProjects(),
     getTranslations('Projects'),
     getTranslations('Breadcrumbs'),
@@ -105,12 +99,32 @@ export default async function DesignProjectPage({ params }: Props) {
   const footerImageUrl = content.footer.imageUrl;
 
   const title = getLocalized(page as unknown as Record<string, unknown>, 'title', locale);
-  const headerIntroHtml = getLocalized(content.header as unknown as Record<string, unknown>, 'introHtml', locale);
-  const bodyIntroHtml = getLocalized(content.body as unknown as Record<string, unknown>, 'introHtml', locale);
-  const bodyParagraphHtml = getLocalized(content.body as unknown as Record<string, unknown>, 'paragraphHtml', locale);
-  const footerTextHtml = getLocalized(content.footer as unknown as Record<string, unknown>, 'textHtml', locale);
-  const buttonText = getLocalized(content.header as unknown as Record<string, unknown>, 'buttonText', locale) || 'Request a design consultation';
-  const button2Text = getLocalized(content.header as unknown as Record<string, unknown>, 'button2Text', locale) || 'View Projects';
+  const headerIntroHtml = getLocalized(
+    content.header as unknown as Record<string, unknown>,
+    'introHtml',
+    locale,
+  );
+  const bodyIntroHtml = getLocalized(
+    content.body as unknown as Record<string, unknown>,
+    'introHtml',
+    locale,
+  );
+  const bodyParagraphHtml = getLocalized(
+    content.body as unknown as Record<string, unknown>,
+    'paragraphHtml',
+    locale,
+  );
+  const footerTextHtml = getLocalized(
+    content.footer as unknown as Record<string, unknown>,
+    'textHtml',
+    locale,
+  );
+  const buttonText =
+    getLocalized(content.header as unknown as Record<string, unknown>, 'buttonText', locale) ||
+    'Request a design consultation';
+  const button2Text =
+    getLocalized(content.header as unknown as Record<string, unknown>, 'button2Text', locale) ||
+    'View Projects';
 
   return (
     <div className='min-h-screen'>
@@ -141,11 +155,11 @@ export default async function DesignProjectPage({ params }: Props) {
               className='prose prose-lg max-w-none text-brand-neutral-600 font-serif leading-relaxed'
               dangerouslySetInnerHTML={{ __html: headerIntroHtml }}
             />
-            <div className='w-full max-w-4xl mx-auto flex flex-col md:flex-row gap-6 justify-center items-stretch'>
+            <div className='w-full flex flex-col md:flex-row gap-6 justify-center items-stretch'>
               {content.header.buttonLink && (
                 <Link
                   href={content.header.buttonLink}
-                  className='flex-1 inline-flex justify-center items-center bg-[#F9F9F9]/80 backdrop-blur-sm border border-[#E5E5E5] text-brand-neutral-900 px-12 py-5 rounded-none hover:bg-[#B80022] hover:border-[#B80022] hover:text-white transition-all duration-300 font-serif text-[16px] uppercase tracking-wider min-w-[300px]'
+                  className='flex-1 inline-flex justify-center items-center bg-[#F9F9F9]/80 backdrop-blur-sm border border-[#E5E5E5] text-brand-neutral-900 px-12 py-5 rounded-none hover:bg-[#B80022] hover:border-[#B80022] hover:text-white transition-all duration-300 font-serif text-[16px] uppercase tracking-wider'
                 >
                   {buttonText}
                 </Link>
@@ -153,7 +167,7 @@ export default async function DesignProjectPage({ params }: Props) {
               {content.header.button2Link && (
                 <Link
                   href={content.header.button2Link}
-                  className='flex-1 inline-flex justify-center items-center bg-[#F9F9F9]/80 backdrop-blur-sm border border-[#E5E5E5] text-brand-neutral-900 px-12 py-5 rounded-none hover:bg-[#B80022] hover:border-[#B80022] hover:text-white transition-all duration-300 font-serif text-[16px] uppercase tracking-wider min-w-[300px]'
+                  className='flex-1 inline-flex justify-center items-center bg-[#F9F9F9]/80 backdrop-blur-sm border border-[#E5E5E5] text-brand-neutral-900 px-12 py-5 rounded-none hover:bg-[#B80022] hover:border-[#B80022] hover:text-white transition-all duration-300 font-serif text-[16px] uppercase tracking-wider'
                 >
                   {button2Text}
                 </Link>

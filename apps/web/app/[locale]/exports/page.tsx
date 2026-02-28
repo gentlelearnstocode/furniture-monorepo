@@ -1,9 +1,9 @@
-import { db } from '@repo/database';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { getLocalized } from '@/lib/i18n';
 import type { Metadata } from 'next';
+import { getCustomPageBySlug } from '@/lib/queries';
 import { type ExportsPageContent, type CustomPage, type ShowcaseImage } from '@repo/shared';
 
 import { SectionSeparator } from '../components/section-separator';
@@ -22,19 +22,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-async function getPageData(slug: string) {
-  const page = (await db.query.customPages.findFirst({
-    where: (pages, { eq, and }) => and(eq(pages.slug, slug), eq(pages.isActive, true)),
-  })) as CustomPage | undefined;
-  return page;
-}
-
 export default async function ExportsPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
 
   const slug = 'exports';
-  const [page, tb] = await Promise.all([getPageData(slug), getTranslations('Breadcrumbs')]);
+  const [page, tb] = await Promise.all([
+    getCustomPageBySlug(slug) as Promise<CustomPage | undefined>,
+    getTranslations('Breadcrumbs'),
+  ]);
 
   if (!page) {
     notFound();
