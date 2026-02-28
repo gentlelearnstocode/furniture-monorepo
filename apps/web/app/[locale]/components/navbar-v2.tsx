@@ -199,6 +199,9 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
                 { label: t('contactUs'), href: '/contact-us' },
               ].map((link, idx) => {
                 const isProducts = link.isProducts;
+                const isActive = isProducts
+                  ? pathname.startsWith('/catalog') || pathname.startsWith('/sale')
+                  : link.href && (pathname === link.href || pathname.startsWith(`${link.href}/`));
 
                 return (
                   <div
@@ -224,7 +227,8 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
                         {link.label}
                         <span
                           className={cn(
-                            'absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] transition-all duration-300 group-hover/link:w-full',
+                            'absolute bottom-0 left-1/2 -translate-x-1/2 h-[1px] transition-all duration-300',
+                            isActive ? 'w-full' : 'w-0 group-hover/link:w-full',
                             forceShow || isHeaderHovered ? 'bg-brand-primary-900' : 'bg-white',
                           )}
                         />
@@ -241,7 +245,7 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
                         <span
                           className={cn(
                             'absolute bottom-0 left-1/2 -translate-x-1/2 h-[1px] transition-all duration-300',
-                            isProductsOpen ? 'w-full' : 'w-0 group-hover/link:w-full',
+                            isActive || isProductsOpen ? 'w-full' : 'w-0 group-hover/link:w-full',
                             forceShow || isHeaderHovered ? 'bg-brand-primary-900' : 'bg-white',
                           )}
                         />
@@ -342,7 +346,10 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
           {/* Mobile Header */}
           <div className='flex items-center justify-between px-8 py-8 border-b border-black/[0.05]'>
             <Image src='/logo.svg' alt='Logo' width={80} height={80} className='h-12 w-auto' />
-            <button onClick={() => setIsMobileMenuOpen(false)} className='text-brand-primary-900 p-2'>
+            <button
+              onClick={() => setIsMobileMenuOpen(false)}
+              className='text-brand-primary-900 p-2'
+            >
               <X size={28} strokeWidth={1} />
             </button>
           </div>
@@ -373,11 +380,14 @@ export const NavbarV2 = ({ items }: NavbarProps) => {
                     )}
                   />
                 </button>
-                
+
                 {isMobileProductsOpen && (
                   <div className='flex flex-col gap-6 mt-6 pl-4 animate-in fade-in slide-in-from-top-2 duration-300'>
                     {catalogs.map((catalog) => (
-                      <div key={catalog.id} className='flex flex-col gap-4 border-l border-black/[0.05] pl-4'>
+                      <div
+                        key={catalog.id}
+                        className='flex flex-col gap-4 border-l border-black/[0.05] pl-4'
+                      >
                         <div className='flex items-center justify-between w-full'>
                           <Link
                             href={`/catalog/${catalog.slug}`}
