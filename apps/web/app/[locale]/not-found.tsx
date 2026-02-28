@@ -43,7 +43,7 @@ export default function NotFound() {
       </div>
 
       <div className='mt-20 border-t border-gray-100 pt-8 w-full max-w-2xl text-[10px] uppercase tracking-[0.2em] text-gray-400'>
-        Thien An Furniture &copy; 1997 - {new Date().getFullYear()}
+        Thiên Ấn Furniture &copy; 1997 - {new Date().getFullYear()}
       </div>
     </div>
   );

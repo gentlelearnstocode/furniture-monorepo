@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const name = getLocalizedText(catalog, 'name', locale);
 
   return {
-    title: `${name} | Thien An Furniture`,
+    title: `${name} | Thiên Ấn Furniture`,
     description: `Browse our ${name} collection - handcrafted luxury furniture.`,
   };
 }
@@ -131,7 +131,7 @@ const getChildCatalog = (
 export default async function CatalogLevel2Page({ params, searchParams }: Props) {
   const { slug, childSlug, locale } = await params;
   setRequestLocale(locale);
-  
+
   const search = await searchParams;
 
   const sort = typeof search.sort === 'string' ? search.sort : undefined;
@@ -208,7 +208,13 @@ export default async function CatalogLevel2Page({ params, searchParams }: Props)
         </div>
 
         {/* Product Listing (Toolbar + Grid) */}
-        <Suspense fallback={<div className='h-96 flex items-center justify-center font-serif italic text-gray-400'>Loading products...</div>}>
+        <Suspense
+          fallback={
+            <div className='h-96 flex items-center justify-center font-serif italic text-gray-400'>
+              Loading products...
+            </div>
+          }
+        >
           <ProductListing
             products={products}
             catalogOptions={parentCatalog.children.map((child) => ({

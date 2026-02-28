@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const name = getLocalizedText(catalog, 'name', locale);
 
   return {
-    title: `${name} | Thien An Furniture`,
+    title: `${name} | Thiên Ấn Furniture`,
     description: `Browse our ${name} collection - handcrafted luxury furniture.`,
   };
 }
@@ -107,7 +107,7 @@ const getCatalogBySlug = (slug: string) =>
 export default async function CatalogPage({ params }: Props) {
   const { slug, locale } = await params;
   setRequestLocale(locale);
-  
+
   const tb = await getTranslations('Breadcrumbs');
 
   // Fetch the catalog and its linked collections/products

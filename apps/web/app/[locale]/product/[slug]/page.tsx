@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description = getLocalizedText(product, 'shortDescription', locale);
 
   return {
-    title: `${name} | Thien An Furniture`,
+    title: `${name} | Thiên Ấn Furniture`,
     description: description || `Explore ${name} - high-quality handcrafted furniture by Thien An.`,
   };
 }
@@ -108,7 +108,7 @@ const getRecommendedProducts = createCachedQuery(
 export default async function ProductDetailPage({ params }: Props) {
   const { slug, locale } = await params;
   setRequestLocale(locale);
-  
+
   const product = await getProductBySlug(slug);
   const contacts = await getSiteContacts();
   const tb = await getTranslations('Breadcrumbs');
@@ -175,7 +175,10 @@ export default async function ProductDetailPage({ params }: Props) {
       </div>
 
       {/* Recommended Products */}
-      <RecommendedProducts products={recommended as Product[]} imageRatio={product.catalog?.productImageRatio} />
+      <RecommendedProducts
+        products={recommended as Product[]}
+        imageRatio={product.catalog?.productImageRatio}
+      />
     </div>
   );
 }

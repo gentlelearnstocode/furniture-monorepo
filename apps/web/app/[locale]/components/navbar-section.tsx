@@ -212,7 +212,7 @@ export const Navbar = ({ items }: NavbarProps) => {
                 <Link href='/' className='group flex flex-col items-center'>
                   <Image
                     src='/logo.svg'
-                    alt='Thien An Furniture'
+                    alt='Thiên Ấn Furniture'
                     width={140}
                     height={140}
                     className={cn(

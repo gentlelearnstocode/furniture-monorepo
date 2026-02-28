@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'Breadcrumbs' });
   return {
-    title: `${t('designProject')} | Thien An Furniture`,
+    title: `${t('designProject')} | Thiên Ấn Furniture`,
     description: 'Bespoke interior design and high-quality manufacturing services.',
   };
 }

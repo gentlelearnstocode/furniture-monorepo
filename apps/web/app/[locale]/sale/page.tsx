@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'Sale' });
   return {
-    title: `${t('title')} | Thien An Furniture`,
+    title: `${t('title')} | Thiên Ấn Furniture`,
     description: t('description'),
   };
 }
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function SalePage({ params, searchParams }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
-  
+
   const { sort, catalog: catalogSlug } = await searchParams;
   const t = await getTranslations('Sale');
   const tb = await getTranslations('Breadcrumbs');
@@ -65,10 +65,7 @@ export default async function SalePage({ params, searchParams }: Props) {
 
   return (
     <div className='min-h-screen bg-gradient-to-b from-[#FDFCFB] via-white to-[#FDFCFB]'>
-      <AppBreadcrumb items={[
-        { label: tb('home'), href: '/' },
-        { label: tb('sale') }
-      ]} />
+      <AppBreadcrumb items={[{ label: tb('home'), href: '/' }, { label: tb('sale') }]} />
 
       <div className='container pt-10 pb-2'>
         {/* Decorative section header */}
@@ -88,7 +85,13 @@ export default async function SalePage({ params, searchParams }: Props) {
 
       {/* Product Listing (Toolbar + Grid) */}
       <div className='container pb-20'>
-        <Suspense fallback={<div className='h-96 flex items-center justify-center font-serif italic text-gray-400'>Loading products...</div>}>
+        <Suspense
+          fallback={
+            <div className='h-96 flex items-center justify-center font-serif italic text-gray-400'>
+              Loading products...
+            </div>
+          }
+        >
           <ProductListing
             products={products as Product[]}
             showSaleToggle={false}

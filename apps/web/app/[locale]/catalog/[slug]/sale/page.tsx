@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'Sale' });
 
   return {
-    title: `${catalogName} ${t('title')} | Thien An Furniture`,
+    title: `${catalogName} ${t('title')} | Thiên Ấn Furniture`,
     description: t('description'),
   };
 }
@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function CatalogSalePage({ params }: Props) {
   const { slug, locale } = await params;
   setRequestLocale(locale);
-  
+
   const t = await getTranslations('Sale');
   const tb = await getTranslations('Breadcrumbs');
 

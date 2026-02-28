@@ -74,7 +74,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const excerpt = getLocalizedText(post, 'excerpt', locale);
 
   return {
-    title: seoTitle || `${title} | Thien An Furniture Blog`,
+    title: seoTitle || `${title} | Thiên Ấn Furniture Blog`,
     description: seoDescription || excerpt,
     keywords: getLocalizedText(post, 'seoKeywords', locale),
   };

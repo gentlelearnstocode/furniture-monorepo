@@ -149,7 +149,7 @@ export const Footer = async () => {
             <Link href='/' className='inline-block'>
               <Image
                 src='/logo.svg'
-                alt='Thien An Furniture'
+                alt='Thiên Ấn Furniture'
                 width={120}
                 height={80}
                 className='h-16 md:h-28 w-auto'

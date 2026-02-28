@@ -76,7 +76,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'Projects' });
 
   return {
-    title: seoTitle || `${title} | Thien An Furniture Projects`,
+    title: seoTitle || `${title} | Thiên Ấn Furniture Projects`,
     description: seoDescription || t('exploreProject', { title }),
     keywords: getLocalizedText(project, 'seoKeywords', locale),
   };
@@ -155,10 +155,7 @@ export default async function ProjectDetailPage({ params }: Props) {
       <div className='container mb-20'>
         <div className='max-w-3xl mx-auto'>
           {contentHtml && (
-            <div
-              className='prose-brand'
-              dangerouslySetInnerHTML={{ __html: contentHtml }}
-            />
+            <div className='prose-brand' dangerouslySetInnerHTML={{ __html: contentHtml }} />
           )}
 
           <div className='mt-12 flex justify-center'>
