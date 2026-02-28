@@ -30,6 +30,7 @@ export default async function ShowroomFactoryPage({ params }: Props) {
   const showrooms = await getShowrooms();
   const tb = await getTranslations('Breadcrumbs');
   const ts = await getTranslations('Showroom');
+  const tCommon = await getTranslations('Common');
 
   // If page is not active or doesn't exist, return 404
   if (!page || !page.isActive) return notFound();
@@ -108,7 +109,7 @@ export default async function ShowroomFactoryPage({ params }: Props) {
 
                 <div className='text-2xl md:text-3xl lg:text-4xl leading-none'>
                   <span className='text-[#b80022] block font-bold tracking-tight'>
-                    THIÊN ẤN Furniture
+                    {tCommon('brandName')}
                   </span>
                   <span className='text-[#222] block font-bold tracking-tight'>{ts('title')}</span>
                 </div>
