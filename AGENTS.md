@@ -1,249 +1,283 @@
-# AI Agent Context Guide
+# AGENTS.md
 
-> **Purpose**: This document provides AI coding agents (Antigravity, Copilot, Cursor, etc.) with essential context for working effectively in this codebase.
+Guide for AI coding agents working in this repository.
 
----
+## Project Overview
 
-## 🎯 Quick Context
+ThienAn Furniture is a bilingual (EN/VI) furniture e-commerce platform built as a monorepo using Turborepo. It consists of:
 
-| Aspect              | Details                                             |
-| ------------------- | --------------------------------------------------- |
-| **Project**         | ThienAn Furniture - E-commerce platform             |
-| **Type**            | Turborepo monorepo                                  |
-| **Stack**           | Next.js 16, TypeScript 5.9, PostgreSQL, Drizzle ORM |
-| **Package Manager** | pnpm 9.0                                            |
-| **Apps**            | `web` (port 4000), `admin` (port 4001)              |
+- **apps/admin**: Admin portal for managing products, content, and settings (Next.js 16, port 4001)
+- **apps/web**: Customer-facing storefront with i18n support (Next.js 16, port 4000)
+- **packages/database**: Drizzle ORM schema and database client (PostgreSQL/Neon)
+- **packages/ui**: Shared UI components (Radix UI + shadcn/ui)
+- **packages/shared**: Shared types and Zod validation schemas
+- **packages/eslint-config**: Shared ESLint configurations
+- **packages/typescript-config**: Shared TypeScript configurations
 
----
+## Build/Lint/Test Commands
 
-## 📁 Project Structure
+### Root Commands
 
-```
-furniture-monorepo/
-├── apps/
-│   ├── admin/                 # Admin CMS (port 4001)
-│   │   ├── app/               # Next.js App Router pages
-│   │   ├── components/        # Admin-specific components
-│   │   └── lib/
-│   │       ├── actions/       # Server actions for CRUD
-│   │       └── validations/   # Zod validation schemas
-│   └── web/                   # Customer storefront (port 4000)
-│       ├── app/               # Next.js App Router pages
-│       ├── i18n/              # next-intl configuration
-│       ├── messages/          # Translation JSONs (en.json, vi.json)
-│       └── lib/               # Web utilities
-├── packages/
-│   ├── database/              # @repo/database - Drizzle ORM
-│   │   └── src/
-│   │       ├── client.ts      # Database client export
-│   │       └── schema.ts      # All table definitions
-│   ├── ui/                    # @repo/ui - Shared components
-│   │   └── src/components/ui/ # shadcn/ui components
-│   ├── assets/                # @repo/assets - Static files
-│   ├── tailwind-config/       # @repo/tailwind-config
-│   ├── typescript-config/     # @repo/typescript-config
-│   └── eslint-config/         # @repo/eslint-config
-└── docker-compose.yml         # Local PostgreSQL
+```bash
+pnpm dev              # Start all apps in development mode
+pnpm dev:web          # Start web app only (port 4000)
+pnpm dev:admin        # Start admin app only (port 4001)
+pnpm build            # Build all apps for production
+pnpm start            # Start all built apps
+pnpm lint             # Run ESLint across all packages (zero warnings policy)
+pnpm check-types      # Run TypeScript type checking
+pnpm format           # Format code with Prettier
 ```
 
----
+### App-Specific Commands
 
-## 🗄️ Database Schema
+```bash
+pnpm --filter web lint          # Lint web app only
+pnpm --filter admin lint        # Lint admin app only
+pnpm --filter web check-types   # Type check web app
+pnpm --filter admin check-types # Type check admin app
+```
 
-### Localization Pattern
+### Database Commands (run in packages/database)
 
-Most text fields support bilingual content using the suffix `Vi` for Vietnamese:
-- `name` (English, primary) / `nameVi` (Vietnamese)
-- `description` / `descriptionVi`
-- `contentHtml` / `contentHtmlVi`
+```bash
+cd packages/database
+pnpm push              # Push schema to database (development)
+pnpm generate          # Generate Drizzle migrations
+pnpm migrate           # Run migrations
+```
 
-### Core Entities
+### UI Component Commands
 
-| Table         | Purpose                 | Key Fields                                                  |
-| ------------- | ----------------------- | ----------------------------------------------------------- |
-| `products`    | Product catalog         | `name`, `slug`, `catalogId`, `basePrice`, `description`     |
-| `catalogs`    | Two-level hierarchy     | `name`, `slug`, `parentId`, `level` (1 or 2)                |
-| `collections` | Curated groupings       | `name`, `slug`, `bannerId`                                  |
-| `assets`      | Media library           | `url`, `filename`, `mimeType`, `size`                       |
-| `showrooms`   | Physical displays       | `title`, `subtitle`, `contentHtml`, `imageId`               |
-| `projects`    | Portfolio showcase      | `title`, `slug`, `contentHtml`                              |
-| `services`    | Company services        | `title`, `slug`, `descriptionHtml`                          |
-| `posts`       | Blog articles           | `title`, `slug`, `contentHtml`, `excerpt`                   |
-| `inbox`       | Customer inquiries      | `name`, `phoneNumber`, `email`, `content`                   |
-| `custom_pages`| Static content pages    | `slug`, `title`, `content` (jsonb)                          |
-| `notifications`| System alerts          | `type`, `title`, `message`, `isRead`                        |
+```bash
+pnpm --filter @repo/ui add:component <name>  # Add shadcn/ui component
+```
 
-### Asset Gallery Pattern
+### Testing
 
-Images are linked via join tables that include display metadata:
-- `product_assets`, `service_assets`, `project_assets`, `post_assets`
-- **Fields**: `assetId`, `position`, `isPrimary`
-- **Focus Point**: `focusPoint: { x: number, y: number }` (0-100 percentage)
-- **Customization**: `aspectRatio` (original, 1:1, 3:4, etc.), `objectFit` (cover, contain)
+No test framework is currently configured. When adding tests, update this section.
 
-### Site Configuration
+## Code Style Guidelines
 
-- `site_heros`: Homepage banner sliders
-- `site_intros`: "About Us" section on homepage
-- `site_footer`: Global footer settings, addresses, and contacts
-- `featured_catalog_rows`: Customizable homepage grid for catalogs
-- `site_contacts`: Floating contact buttons (Zalo, Phone, etc.)
+### Package Manager
 
----
+Always use `pnpm`. Never use npm or yarn.
 
-## 📦 Import Patterns
+```bash
+pnpm install
+pnpm add <package>
+pnpm --filter <app> <command>
+```
 
-### Database
+### Imports
+
+Organize imports in this order:
+
+1. React/Next.js imports
+2. Third-party libraries
+3. Internal packages (`@repo/*`)
+4. Local imports (`@/*`)
+5. Relative imports
 
 ```typescript
-// Database client and ORM functions
-import { db, eq, and, desc, asc, relations } from '@repo/database';
-
-// Schema tables and types
-import { products, catalogs, SelectProduct, InsertProduct } from '@repo/database/schema';
+import { revalidatePath } from "next/cache";
+import { z } from "zod";
+import { db, products } from "@repo/database";
+import { createProductSchema } from "@/lib/validations/products";
+import { formatPrice } from "./utils";
 ```
 
-### UI Components
+### File Naming
+
+- **Components**: PascalCase for the component, kebab-case for the file
+  - `button.tsx` exports `Button`
+  - `product-card.tsx` exports `ProductCard`
+- **Utilities**: camelCase (`format-price.ts`)
+- **Server Actions**: camelCase (`products.ts`)
+- **Types**: camelCase (`product.ts`)
+- **Pages**: Next.js convention (`page.tsx`, `layout.tsx`)
+
+### TypeScript
+
+- Strict mode is enabled
+- Use explicit return types for exported functions
+- Prefer interfaces for object types, types for unions/primitives
+- Use `z.infer<typeof schema>` for types derived from Zod schemas
 
 ```typescript
-// Individual UI components
-import { Button } from '@repo/ui/ui/button';
-import { Form, FormField, FormItem, FormLabel } from '@repo/ui/ui/form';
+// Good
+export interface Product {
+  id: string;
+  name: string;
+}
 
-// Utilities
-import { cn } from '@repo/ui/lib/utils';
+export type Status = "active" | "inactive";
+
+export type CreateProductInput = z.infer<typeof createProductSchema>;
+
+// Avoid
+type Product = { id: string; name: string };
 ```
 
----
+### React Components
 
-## 🔧 Common Patterns
-
-### Server Actions (Admin)
-
-Location: `apps/admin/lib/actions/`
-Always use `'use server'` and `revalidatePath()`.
+- Use arrow functions for components
+- Use `React.forwardRef` for components that need refs
+- Destructure props in the function signature
 
 ```typescript
-'use server';
+type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  variant?: 'default' | 'destructive' | 'outline';
+};
 
-import { db, eq } from '@repo/database';
-import { products } from '@repo/database/schema';
-import { revalidatePath } from 'next/cache';
+const Button = ({ variant = 'default', className, ...props }: ButtonProps) => {
+  return <button className={cn(baseStyles, variants[variant], className)} {...props} />;
+};
 
-export async function updateProduct(id: string, data: Partial<InsertProduct>) {
-  await db.update(products).set(data).where(eq(products.id, id));
-  revalidatePath('/products');
-  revalidatePath(`/products/${id}`);
+export { Button };
+```
+
+### Server Actions
+
+- Always start with `'use server'`
+- Use Zod for validation
+- Return `{ error: string }` or `{ success: true, data: T }`
+- Handle errors with try/catch
+
+```typescript
+"use server";
+
+import { createProductSchema } from "@/lib/validations/products";
+import { db, products } from "@repo/database";
+
+export async function createProduct(data: unknown) {
+  const validated = createProductSchema.safeParse(data);
+
+  if (!validated.success) {
+    return { error: "Invalid fields" };
+  }
+
+  try {
+    const [product] = await db
+      .insert(products)
+      .values(validated.data)
+      .returning();
+    revalidatePath("/products");
+    return { success: true as const, data: product };
+  } catch (error) {
+    return { error: "Failed to create product" };
+  }
 }
 ```
 
-### Validation Schemas (Admin)
+### Database
 
-Location: `apps/admin/lib/validations/`
-Includes support for both languages.
+- Import from `@repo/database`
+- Use Drizzle query builder for complex queries
 
 ```typescript
-import { z } from 'zod';
+import { db, products, eq } from "@repo/database";
 
-export const productSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  nameVi: z.string().optional(),
-  slug: z.string().regex(/^[a-z0-9-]+$/),
-  basePrice: z.coerce.number().min(0),
+// Simple query
+const product = await db.query.products.findFirst({
+  where: eq(products.slug, slug),
+});
+
+// With relations
+const product = await db.query.products.findFirst({
+  where: eq(products.id, id),
+  with: {
+    catalog: true,
+    gallery: { with: { asset: true } },
+  },
 });
 ```
 
-### i18n (Web)
+### Forms
 
-Uses `next-intl`. Translations are in `apps/web/messages/[locale].json`.
-Access via `useTranslations` (Client) or `getTranslations` (Server).
+- Use React Hook Form + Zod + @hookform/resolvers
 
----
+```typescript
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createProductSchema, type CreateProductInput } from "@repo/shared";
 
-## 🚀 Commands Reference
+const form = useForm<CreateProductInput>({
+  resolver: zodResolver(createProductSchema),
+  defaultValues: { name: "", isActive: true },
+});
+```
+
+### Styling
+
+- Use Tailwind CSS
+- Use `cn()` utility for conditional classes (from `@repo/ui/lib/utils`)
+- Follow shadcn/ui patterns for component variants
+
+```typescript
+import { cn } from '@repo/ui/lib/utils';
+
+<div className={cn('base-class', isActive && 'active-class', className)} />
+```
+
+### Internationalization (Web App Only)
+
+- Use `next-intl` for translations
+- Store translations in `apps/web/app/[locale]/messages/`
+- Use `setRequestLocale` in page components
+
+```typescript
+import { setRequestLocale, getTranslations } from 'next-intl/server';
+
+export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations({ locale, namespace: 'HomePage' });
+  return <h1>{t('title')}</h1>;
+}
+```
+
+### Error Handling
+
+- Server actions: return `{ error: string }`
+- Client: use `sonner` for toast notifications
+
+```typescript
+import { toast } from "sonner";
+
+const result = await createProduct(data);
+if (result.error) {
+  toast.error(result.error);
+} else {
+  toast.success("Product created");
+}
+```
+
+## Important Rules
+
+1. **Check package.json first** for available scripts
+2. **Never start the dev server** - assume it's already running at ports 4000 (web) and 4001 (admin)
+3. **Run database commands** from `packages/database` directory
+4. **ESLint has zero warnings policy** - always pass `--max-warnings 0`
+5. **Always run lint and typecheck** after making changes:
+   ```bash
+   pnpm lint && pnpm check-types
+   ```
+
+## Common Patterns
+
+### Adding a New Entity
+
+1. Add schema to `packages/database/src/schema.ts`
+2. Add types to `packages/shared/src/types/`
+3. Add Zod schema to `packages/shared/src/validation/`
+4. Create server actions in `apps/admin/lib/actions/`
+5. Create admin pages in `apps/admin/app/`
+
+### Adding a UI Component
 
 ```bash
-# Development (Individual Ports)
-pnpm dev:web      # http://localhost:4000
-pnpm dev:admin    # http://localhost:4001
-
-# Database Management
-pnpm db:push      # Push schema to DB (sync)
-pnpm db:generate  # Generate migration SQL
-pnpm --filter @repo/database drizzle-kit studio # UI for DB
-
-# Quality Control
-pnpm lint         # Run ESLint
-pnpm check-types  # Run TSC
-pnpm format       # Run Prettier
+pnpm --filter @repo/ui add:component <component-name>
 ```
 
----
-
-## 📄 File Naming Conventions
-
-| Pattern           | Example                   | Usage                  |
-| ----------------- | ------------------------- | ---------------------- |
-| `page.tsx`        | `products/page.tsx`       | Next.js page component |
-| `[slug]/page.tsx` | `catalog/[slug]/page.tsx` | Dynamic route          |
-| `*-form.tsx`      | `product-form.tsx`        | Form component         |
-| `actions.ts`      | `lib/actions/products.ts` | Server actions         |
-
----
-
-## ⚠️ Important Considerations
-
-1. **Schema Changes**: Always edit `packages/database/src/schema.ts` first.
-2. **Media**: Use `Vercel Blob` for storage. Assets should be added to the `assets` table first, then linked to entities.
-3. **Translations**: When adding a new field that requires translation, add both `fieldName` and `fieldNameVi` to the schema and Zod validation.
-4. **Ordering**: Use the `position` or `displayOrder` fields for manual sorting in the UI.
-5. **Caching**: Use `revalidatePath` or `revalidateTag` in server actions to ensure the web storefront reflects admin changes.
-
----
-
-## 🎨 UI Component Library
-
-Shared components in `@repo/ui/ui/*` (based on shadcn/ui):
-- **Forms**: Input, Textarea, Select, Checkbox, Switch, DatePicker
-- **Feedback**: Sonner (Toasts), Skeleton, Progress
-- **Layout**: Card, Dialog, Sheet, Tabs, Accordion
-- **Admin Specific**: Rich Text Editor (TipTap), Drag & Drop (dnd-kit)
-
----
-
-## 📝 Helpful Queries
-
-### Fetch Product with Full Relations
-
-```typescript
-const item = await db.query.products.findFirst({
-  where: eq(products.slug, slug),
-  with: {
-    catalog: { with: { parent: true } },
-    gallery: { with: { asset: true }, orderBy: (a, { asc }) => asc(a.position) },
-    variants: { with: { optionValues: { with: { optionValue: { with: { option: true } } } } } },
-    recommendations: { with: { recommendedProduct: true } },
-  },
-});
-```
-
-### Fetch Multi-level Catalog Tree
-
-```typescript
-const tree = await db.query.catalogs.findMany({
-  where: eq(catalogs.level, 1),
-  with: {
-    children: { with: { image: true } },
-    image: true,
-  },
-});
-```
-
----
-
-## 🛠️ Debugging Tips
-
-1. **DB Studio**: Use `pnpm --filter @repo/database drizzle-kit studio` to inspect data.
-2. **Server Logs**: Admin actions output errors to the terminal; check for database constraint violations.
-3. **i18n Keys**: If a translation is missing on the web app, check the JSON files in `apps/web/messages/`.
-4. **Vercel Blob**: If uploads fail, verify `BLOB_READ_WRITE_TOKEN` in the `.env` file.
+Then import from `@repo/ui/ui/<component-name>`.

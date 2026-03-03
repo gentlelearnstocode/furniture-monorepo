@@ -1,61 +1,25 @@
-import type { Metadata } from 'next';
-import localFont from 'next/font/local';
-import '@repo/ui/globals.css';
-import { NavbarV2 } from './components/navbar-v2';
-import { Footer } from './components/footer-section';
-import { FloatingContactWidget } from '@/components/ui/floating-contact-widget';
-import { ScrollToTop } from '@/components/ui/scroll-to-top';
-import { AnalyticsListener } from './components/analytics-listener';
-import { db } from '@repo/database';
-import { createCachedQuery } from '@/lib/cache';
-import { getSiteContacts } from '@/lib/queries';
-import { Locale } from '@/lib/i18n';
-import { type Catalog } from '@repo/shared';
-import { setRequestLocale, getMessages } from 'next-intl/server';
-import { routing } from '@/i18n/routing';
-import { notFound } from 'next/navigation';
-import { LanguageProvider } from '@/providers/language-provider';
-import { Suspense } from 'react';
-import { Toaster } from '@repo/ui/ui/sonner';
-
-const geistSans = localFont({
-  src: '../fonts/GeistVF.woff',
-  variable: '--font-geist-sans',
-});
-const geistMono = localFont({
-  src: '../fonts/GeistMonoVF.woff',
-  variable: '--font-geist-mono',
-});
-
-const uvnHongHa = localFont({
-  src: [
-    {
-      path: '../fonts/UVNHongHa_R.ttf',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: '../fonts/UVNHongHa_B.ttf',
-      weight: '700',
-      style: 'normal',
-    },
-    {
-      path: '../fonts/UVNHongHa_I.ttf',
-      weight: '400',
-      style: 'italic',
-    },
-    {
-      path: '../fonts/UVNHongHa_BI.ttf',
-      weight: '700',
-      style: 'italic',
-    },
-  ],
-  variable: '--font-uvn-hongha',
-});
+import type { Metadata } from "next";
+import "@repo/ui/globals.css";
+import { NavbarV2 } from "./components/navbar-v2";
+import { Footer } from "./components/footer-section";
+import { FloatingContactWidget } from "@/components/ui/floating-contact-widget";
+import { ScrollToTop } from "@/components/ui/scroll-to-top";
+import { AnalyticsListener } from "./components/analytics-listener";
+import { db } from "@repo/database";
+import { createCachedQuery } from "@/lib/cache";
+import { getSiteContacts } from "@/lib/queries";
+import { Locale } from "@/lib/i18n";
+import { type Catalog } from "@repo/shared";
+import { setRequestLocale, getMessages } from "next-intl/server";
+import { routing } from "@/i18n/routing";
+import { notFound } from "next/navigation";
+import { LanguageProvider } from "@/providers/language-provider";
+import { Suspense } from "react";
+import { Toaster } from "@repo/ui/ui/sonner";
 
 export const metadata: Metadata = {
-  title: 'Thiên Ấn Furniture | Excellence Since 1997',
-  description: 'Luxury furniture and decor for your home.',
+  title: "Thiên Ấn Furniture | Excellence Since 1997",
+  description: "Luxury furniture and decor for your home.",
 };
 
 // Revalidate every hour (catalogs don't change frequently)
@@ -75,8 +39,8 @@ const getRootCatalogs = createCachedQuery(
       orderBy: (catalogs, { asc }) => [asc(catalogs.name)],
     })) as Catalog[];
   },
-  ['root-catalogs'],
-  { revalidate: 3600, tags: ['catalogs'] },
+  ["root-catalogs"],
+  { revalidate: 3600, tags: ["catalogs"] },
 );
 
 export function generateStaticParams() {
@@ -112,7 +76,7 @@ export default async function RootLayout({
     name: catalog.name,
     nameVi: catalog.nameVi,
     slug: catalog.slug,
-    type: 'catalog' as const,
+    type: "catalog" as const,
     image: catalog.image,
     children: (catalog.children || []).map((child: Catalog) => ({
       id: child.id,
@@ -125,9 +89,7 @@ export default async function RootLayout({
 
   return (
     <html lang={locale}>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${uvnHongHa.variable} font-sans antialiased`}
-      >
+      <body className="font-sans antialiased">
         <LanguageProvider initialLocale={locale as Locale} messages={messages}>
           <NavbarV2 items={navItems} />
           <Suspense fallback={null}>
@@ -135,28 +97,28 @@ export default async function RootLayout({
           </Suspense>
           <main>{children}</main>
           <Footer />
-          <div className='fixed bottom-6 right-6 z-50 flex items-end gap-4 pointer-events-none'>
+          <div className="fixed bottom-6 right-6 z-50 flex items-end gap-4 pointer-events-none">
             <ScrollToTop />
             <FloatingContactWidget contacts={siteContacts} />
           </div>
           <Toaster
-            position='bottom-right'
+            position="bottom-right"
             toastOptions={{
               classNames: {
                 toast:
-                  'group toast group-[.toaster]:bg-white group-[.toaster]:text-brand-neutral-900 group-[.toaster]:border-gray-200 group-[.toaster]:shadow-2xl font-sans rounded-none border',
-                description: 'group-[.toast]:text-gray-500 text-sm',
+                  "group toast group-[.toaster]:bg-white group-[.toaster]:text-brand-neutral-900 group-[.toaster]:border-gray-200 group-[.toaster]:shadow-2xl font-sans rounded-none border",
+                description: "group-[.toast]:text-gray-500 text-sm",
                 actionButton:
-                  'group-[.toast]:bg-brand-primary-600 group-[.toast]:text-white uppercase tracking-wider text-xs font-semibold rounded-none',
+                  "group-[.toast]:bg-brand-primary-600 group-[.toast]:text-white uppercase tracking-wider text-xs font-semibold rounded-none",
                 cancelButton:
-                  'group-[.toast]:bg-gray-100 group-[.toast]:text-gray-600 rounded-none',
+                  "group-[.toast]:bg-gray-100 group-[.toast]:text-gray-600 rounded-none",
                 success:
-                  'group-[.toaster]:border-green-200 group-[.toaster]:text-green-700 group-[.toaster]:bg-green-50',
+                  "group-[.toaster]:border-green-200 group-[.toaster]:text-green-700 group-[.toaster]:bg-green-50",
                 error:
-                  'group-[.toaster]:border-red-200 group-[.toaster]:text-brand-primary-700 group-[.toaster]:bg-red-50',
-                info: 'group-[.toaster]:border-blue-200 group-[.toaster]:text-blue-700 group-[.toaster]:bg-blue-50',
+                  "group-[.toaster]:border-red-200 group-[.toaster]:text-brand-primary-700 group-[.toaster]:bg-red-50",
+                info: "group-[.toaster]:border-blue-200 group-[.toaster]:text-blue-700 group-[.toaster]:bg-blue-50",
                 warning:
-                  'group-[.toaster]:border-amber-200 group-[.toaster]:text-amber-700 group-[.toaster]:bg-amber-50',
+                  "group-[.toaster]:border-amber-200 group-[.toaster]:text-amber-700 group-[.toaster]:bg-amber-50",
               },
             }}
           />
