@@ -67,7 +67,7 @@ export default async function AboutUsPage({ params }: Props) {
           ]}
         />
 
-        <div className='container mx-auto px-2 md:px-4 py-8'>
+        <div className='container mx-auto px-2 md:px-4 py-2'>
           <div className='mt-8 max-w-7xl mx-auto space-y-12 pb-10'>
             {/* Main Hero Image */}
             {bannerUrl && (
@@ -83,8 +83,9 @@ export default async function AboutUsPage({ params }: Props) {
             )}
             {/* Brand Header */}
             <div className='flex flex-col items-center space-y-4'>
-              <h1 className='text-3xl md:text-5xl font-serif font-bold text-[#B80022] text-center tracking-wide'>
+              <h1 className='text-3xl md:text-5xl font-serif font-bold text-[#B80022] text-center'>
                 {tCommon('brandName')}
+                <sup className='text-[0.4em] -top-[1.1em] ml-0.5'>®</sup>
               </h1>
             </div>
             <BrandDivider stretch />

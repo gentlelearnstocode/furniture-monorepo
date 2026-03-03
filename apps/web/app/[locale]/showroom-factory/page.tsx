@@ -110,8 +110,9 @@ export default async function ShowroomFactoryPage({ params }: Props) {
                 <div className='text-2xl md:text-3xl lg:text-4xl leading-none'>
                   <span className='text-[#b80022] block font-bold tracking-tight'>
                     {tCommon('brandName')}
+                    <sup className='text-[0.4em] -top-[1.1em] ml-0.5'>®</sup>
                   </span>
-                  <span className='text-[#222] block font-bold tracking-tight text-lg md:text-xl lg:text-2xl'>
+                  <span className='text-[#222] block font-bold tracking-tight text-lg md:text-md lg:text-md'>
                     {ts('title')}
                   </span>
                 </div>

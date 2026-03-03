@@ -54,7 +54,7 @@ export function ShowroomItem({ showroom }: ShowroomItemProps) {
             <span className='text-[#b80022] block font-bold tracking-tight'>
               THIÊN ẤN Furniture
             </span>
-            <span className='text-[#222] block font-bold tracking-tight uppercase text-lg md:text-xl lg:text-2xl'>
+            <span className='text-[#222] block font-bold tracking-tight uppercase text-lg md:text-md lg:text-xl'>
               {showroom.type === 'factory' ? t('factory') : t('showroom')}
             </span>
           </div>

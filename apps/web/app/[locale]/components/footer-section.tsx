@@ -164,6 +164,7 @@ export const Footer = async () => {
             {footerData?.intro && (
               <h3 className='text-2xl font-serif font-bold text-brand-primary-600 tracking-wide'>
                 {getLocalizedText(footerData, 'intro', locale)}
+                <sup className='text-[0.4em] -top-[1.1em] ml-0.5'>®</sup>
               </h3>
             )}
 
@@ -339,7 +340,11 @@ export const Footer = async () => {
 
             {/* Copyright */}
             <div className='text-sm text-gray-500'>
-              ©1997 <span className='font-semibold text-gray-900'>THIÊN ẤN Furniture.</span>{' '}
+              ©1997{' '}
+              <span className='font-semibold text-gray-900'>
+                THIÊN ẤN Furniture
+                <sup className='text-[0.4em] -top-[1.1em] ml-0.5'>®</sup>
+              </span>{' '}
               {t('allRightsReserved')}
             </div>
 

@@ -63,10 +63,10 @@ export default async function ProjectsListingPage({ params }: Props) {
           { label: tb('projects'), href: '/projects' },
         ]}
       />
-      <div className='container pt-10 pb-12'>
+      <div className='container pt-2 pb-2'>
         {/* Title & Description */}
         <div className='mb-8'>
-          <h1 className='text-3xl md:text-5xl font-serif text-black/90 tracking-wide mb-4'>
+          <h1 className='text-2xl md:text-3xl font-serif text-black/90 tracking-wide mb-4'>
             {t('pageTitle')}
           </h1>
           <p className='text-[15px] leading-relaxed text-gray-600 max-w-4xl font-serif'>
